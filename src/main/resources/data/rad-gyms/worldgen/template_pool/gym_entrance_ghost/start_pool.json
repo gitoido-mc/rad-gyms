@@ -1,0 +1,15 @@
+{
+  "name": "rad-gyms:gym_entrance_ghost/start_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad-gyms:gym_entrance_ghost",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

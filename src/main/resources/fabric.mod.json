@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "rad-gyms",
+	"version": "${version}",
+	"name": "Rad Gyms",
+	"description": "Adds roguelike gyms in Cobblemon. RCT Api based mod.",
+	"authors": [
+		"Gitoido"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/rad-gyms/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "lol.gito.radgyms.RadGyms",
+				"adapter": "kotlin"
+			}
+		],
+		"fabric-datagen": [
+			{
+				"value": "lol.gito.radgyms.RadGymsDataGenerator",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"mixins": [
+		"rad-gyms.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-language-kotlin": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

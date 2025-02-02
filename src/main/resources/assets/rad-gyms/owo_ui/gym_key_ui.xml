@@ -1,0 +1,113 @@
+<owo-ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/wisp-forest/owo-lib/1.20/owo-ui.xsd">
+    <components>
+        <flow-layout direction="vertical">
+            <children>
+                <flow-layout direction="horizontal">
+                    <children>
+                        <flow-layout direction="vertical">
+                            <children>
+                                <label>
+                                    <text translate="true">rad-gyms.gui.common.set-gym-level</text>
+                                    <max-width>250</max-width>
+                                    <horizontal-text-alignment>center</horizontal-text-alignment>
+                                    <sizing>
+                                        <horizontal method="fill">100</horizontal>
+                                    </sizing>
+                                    <margins>
+                                        <top>5</top>
+                                        <bottom>10</bottom>
+                                    </margins>
+                                </label>
+                                <flow-layout direction="horizontal">
+                                    <children>
+                                        <button id="dec-ten">
+                                            <text translate="true">rad-gyms.gui.common.decrease-ten</text>
+                                            <sizing>
+                                                <horizontal method="fixed">24</horizontal>
+                                            </sizing>
+                                        </button>
+                                        <button id="dec">
+                                            <text translate="true">rad-gyms.gui.common.decrease</text>
+                                            <sizing>
+                                                <horizontal method="fixed">16</horizontal>
+                                            </sizing>
+                                        </button>
+                                        <discrete-slider min="1" max="100" id="gym_slider">
+                                            <sizing>
+                                                <horizontal method="fill">65</horizontal>
+                                                <vertical method="fixed">20</vertical>
+                                            </sizing>
+                                            <margins>
+                                                <horizontal>5</horizontal>
+                                            </margins>
+                                        </discrete-slider>
+                                        <button id="inc">
+                                            <text translate="true">rad-gyms.gui.common.increase</text>
+                                            <sizing>
+                                                <horizontal method="fixed">16</horizontal>
+                                            </sizing>
+                                        </button>
+                                        <button id="inc-ten">
+                                            <text translate="true">rad-gyms.gui.common.increase-ten</text>
+                                            <sizing>
+                                                <horizontal method="fixed">24</horizontal>
+                                            </sizing>
+                                        </button>
+                                    </children>
+                                    <sizing>
+                                        <vertical method="fixed">20</vertical>
+                                        <horizontal method="fill">100</horizontal>
+                                    </sizing>
+                                </flow-layout>
+                                <flow-layout direction="horizontal">
+                                    <children>
+                                        <button id="start">
+                                            <text translate="true">rad-gyms.gui.common.start</text>
+                                            <sizing>
+                                                <horizontal method="fill">45</horizontal>
+                                                <vertical method="fixed">20</vertical>
+                                            </sizing>
+                                        </button>
+                                        <button id="cancel">
+                                            <text translate="true">rad-gyms.gui.common.cancel</text>
+                                            <sizing>
+                                                <horizontal method="fill">45</horizontal>
+                                                <vertical method="fixed">20</vertical>
+                                            </sizing>
+                                        </button>
+                                    </children>
+                                    <gap>20</gap>
+                                    <margins>
+                                        <top>10</top>
+                                    </margins>
+                                    <sizing>
+                                        <horizontal method="fill">100</horizontal>
+                                        <vertical method="fixed">20</vertical>
+                                    </sizing>
+                                </flow-layout>
+                            </children>
+                            <sizing>
+                                <vertical method="fixed">80</vertical>
+                                <horizontal method="fixed">250</horizontal>
+                            </sizing>
+                        </flow-layout>
+                    </children>
+                    <vertical-alignment>center</vertical-alignment>
+                    <horizontal-alignment>center</horizontal-alignment>
+                    <padding>
+                        <all>10</all>
+                    </padding>
+                    <surface>
+                        <panel dark="true"/>
+                    </surface>
+                </flow-layout>
+            </children>
+            <vertical-alignment>center</vertical-alignment>
+            <horizontal-alignment>center</horizontal-alignment>
+            <surface>
+                <vanilla-translucent/>
+            </surface>
+        </flow-layout>
+    </components>
+</owo-ui>

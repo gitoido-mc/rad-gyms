@@ -1,0 +1,85 @@
+{
+  "structures": [
+    {
+      "structure": "rad-gyms:gym_entrance_bug",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_dark",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_dragon",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_electric",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_fairy",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_fighting",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_fire",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_flying",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_ghost",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_grass",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_ground",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_ice",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_normal",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_poison",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_psychic",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_rock",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_steel",
+      "weight": 1
+    },
+    {
+      "structure": "rad-gyms:gym_entrance_water",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 107771334,
+
+    "spacing": 25,
+
+    "separation": 20,
+
+    "type": "minecraft:random_spread"
+  }
+}

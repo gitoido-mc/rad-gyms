@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "lol.gito.radgyms.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "RadGymsPlayerDataSaverMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

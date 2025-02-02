@@ -1,0 +1,99 @@
+{
+  "interior_template": "rad-gyms:gym_interior_default",
+  "exit_block_pos": [16, 3, 16],
+  "player_spawn_relative": {
+    "pos": [16.5, 3, 5],
+    "yaw": -90.0
+  },
+  "trainers": [
+    {
+      "id": "rad_gym_default_trainer_junior",
+      "name": "rad-gyms.npc.trainer_junior",
+      "spawn_relative": {
+        "pos": [1, 1, 1],
+        "yaw": 120.0
+      },
+      "ai": {
+        "type": "rct",
+        "data": {
+          "maxSelectMargin": 0.15
+        }
+      },
+      "battleRules": {
+        "maxItemUses": 5
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "count_per_level_threshold": [
+        [20, 2],
+        [30, 3],
+        [80, 4]
+      ],
+      "team_type": "GENERATED"
+    },
+    {
+      "id": "rad_gym_default_trainer_senior",
+      "name": "rad-gyms.npc.trainer_senior",
+      "requires": "rad_gym_default_trainer_junior",
+      "team_type": "GENERATED",
+      "spawn_relative": {
+        "pos": [1, 1, 1],
+        "yaw": 120.0
+      },
+      "ai": {
+        "type": "rct",
+        "data": {
+          "maxSelectMargin": 0.15
+        }
+      },
+      "battleRules": {
+        "maxItemUses": 5
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "count_per_level_threshold": [
+        [20, 3],
+        [30, 4],
+        [80, 5]
+      ]
+    },
+    {
+      "id": "rad_gym_default_trainer_leader",
+      "name": "rad-gyms.npc.leader",
+      "requires": "rad_gym_default_trainer_senior",
+      "spawn_relative": {
+        "pos": [1, 1, 1],
+        "yaw": 120.0
+      },
+      "team_type": "GENERATED",
+      "ai": {
+        "type": "rct",
+        "data": {
+          "maxSelectMargin": 0.15
+        }
+      },
+      "battleRules": {
+        "maxItemUses": 5
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "count_per_level_threshold": [
+        [20, 4],
+        [30, 5],
+        [80, 6]
+      ]
+    }
+  ]
+}
