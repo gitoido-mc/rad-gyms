@@ -2,7 +2,7 @@
   "interior_template": "rad-gyms:gym_interior_default",
   "exit_block_pos": [16, 3, 16],
   "player_spawn_relative": {
-    "pos": [16.5, 3, 5],
+    "pos": [-15, 3, -25],
     "yaw": -90.0
   },
   "trainers": [
@@ -10,8 +10,8 @@
       "id": "rad_gym_default_trainer_junior",
       "name": "rad-gyms.npc.trainer_junior",
       "spawn_relative": {
-        "pos": [1, 1, 1],
-        "yaw": 120.0
+        "pos": [-25.5, 3, -14.5],
+        "yaw": -90.0
       },
       "ai": {
         "type": "rct",
@@ -41,8 +41,8 @@
       "requires": "rad_gym_default_trainer_junior",
       "team_type": "GENERATED",
       "spawn_relative": {
-        "pos": [1, 1, 1],
-        "yaw": 120.0
+        "pos": [-4.5, 3, -14.5],
+        "yaw": 90.0
       },
       "ai": {
         "type": "rct",
@@ -70,8 +70,8 @@
       "name": "rad-gyms.npc.leader",
       "requires": "rad_gym_default_trainer_senior",
       "spawn_relative": {
-        "pos": [1, 1, 1],
-        "yaw": 120.0
+        "pos": [-15, 3, -4],
+        "yaw": 180.0
       },
       "team_type": "GENERATED",
       "ai": {

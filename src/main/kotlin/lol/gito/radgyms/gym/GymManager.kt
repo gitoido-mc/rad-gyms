@@ -7,6 +7,7 @@ import lol.gito.radgyms.world.StructureManager
 import lol.gito.radgyms.world.dimension.DimensionManager
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.util.math.BlockPos
 import kotlin.time.TimeSource.Monotonic.markNow
 
 object GymManager {
@@ -20,7 +21,7 @@ object GymManager {
             else -> level
         }
 
-        val gymDimension = player.getServer()?.getWorld(DimensionManager.RADGYMS_LEVEL_KEY)
+        val gymDimension = player.getServer()?.getWorld(DimensionManager.RADGYMS_LEVEL_KEY) ?: return false
 
         if (world.registryKey != DimensionManager.RADGYMS_LEVEL_KEY) {
             val playerDim = world.registryKey.value.toString()
@@ -28,17 +29,25 @@ object GymManager {
             val gymType = if (type in GYM_TEMPLATES.keys) type else GYM_TEMPLATES.keys.random()
             val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(it, gymLevel, type) }
 
-            if (gym?.structure != null) {
-                StructureManager.placeStructure(
-                    world,
-                    PlayerSpawnHelper.getUniquePlayerCoords(player, world),
-                    gym.structure!!
-                )
+            if (gym != null) {
+                buildFromTemplate(gym, gymDimension, PlayerSpawnHelper.getUniquePlayerCoords(player, gymDimension))
+            } else {
+                RadGyms.LOGGER.warn("Gym $gymType could not be loaded")
+                return false
             }
-
         }
 
         return false;
+    }
+
+    private fun buildFromTemplate(template: GymTemplate, world: ServerWorld, coords: BlockPos) {
+        if (template.structure != null) {
+            StructureManager.placeStructure(
+                world,
+                coords,
+                template.structure!!
+            )
+        }
     }
 
     fun register() {

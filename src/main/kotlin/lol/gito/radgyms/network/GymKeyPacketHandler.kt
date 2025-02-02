@@ -15,7 +15,7 @@ object GymKeyPacketHandler {
 
         if (stack.item == ItemRegistry.GYM_KEY) {
             player.sendMessage(Text.literal("packet received, level is ${level}. player: ${player.name}{"))
-            if (GymManager.initInstance(player, world, level, ElementalTypes.all().random())) {
+            if (GymManager.initInstance(player, world, level, ElementalTypes.all().random().toString())) {
                 stack.decrement(1)
             }
         } else {

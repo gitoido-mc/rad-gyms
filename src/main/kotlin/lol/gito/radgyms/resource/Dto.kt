@@ -61,7 +61,7 @@ data class GymTrainer(
     val ai: GymTrainerAI,
     val bag: List<GymTrainerBagItem>,
     @SerialName("count_per_level_threshold")
-    val levelToCount: List<Pair<Int, Int>>,
+    val levelToCount: List<List<Int>>,
     val battleRules: GymTrainerBattleRules? = null,
     val team: List<GymTrainerTeamMember>? = null,
 ) {

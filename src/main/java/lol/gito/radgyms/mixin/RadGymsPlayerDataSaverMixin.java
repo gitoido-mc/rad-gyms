@@ -5,7 +5,6 @@ import lol.gito.radgyms.nbt.EntityDataSaver;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,8 +17,7 @@ public abstract class RadGymsPlayerDataSaverMixin implements EntityDataSaver {
     @Unique
     private NbtCompound persistentData;
 
-    @Unique
-    public @NotNull NbtCompound radgyms$getPersistentData() {
+    public NbtCompound getPersistentData() {
         if (this.persistentData == null) {
             this.persistentData = new NbtCompound();
         }

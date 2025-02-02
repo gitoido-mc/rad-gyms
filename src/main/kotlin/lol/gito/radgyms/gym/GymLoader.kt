@@ -24,8 +24,7 @@ class GymLoader {
             for (item in manager.findResources("gyms") { path -> path.endsWith(".json") }) {
                 try {
                     val stream = manager.getResourceOrThrow(item.key).inputStream
-                    val gymDto = Json.decodeFromStream<Gym>(stream)
-                    GymManager.GYM_TEMPLATES[item.key.toString()] = gymDto
+                    GymManager.GYM_TEMPLATES[item.key.toString()] = Json.decodeFromStream<Gym>(stream)
                     RadGyms.LOGGER.info("Loaded ${item.key} gym config")
                 } catch (e: Exception){
                     RadGyms.LOGGER.warn("Could not parse ${item.key} data", e)
