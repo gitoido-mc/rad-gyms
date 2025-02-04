@@ -1,6 +1,7 @@
 package lol.gito.radgyms.network
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.modIdentifier
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.item.ItemRegistry
@@ -15,7 +16,10 @@ object GymKeyPacketHandler {
 
         if (stack.item == ItemRegistry.GYM_KEY) {
             player.sendMessage(Text.literal("packet received, level is ${level}. player: ${player.name}{"))
-            if (GymManager.initInstance(player, world, level, ElementalTypes.all().random().toString())) {
+
+            val type = ElementalTypes.all().random().name
+            RadGyms.LOGGER.info("Chosen type: $type")
+            if (GymManager.initInstance(player, world, level, type)) {
                 stack.decrement(1)
             }
         } else {

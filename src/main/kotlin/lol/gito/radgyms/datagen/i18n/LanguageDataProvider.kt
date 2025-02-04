@@ -42,5 +42,13 @@ class LanguageDataProvider(
             RadGyms.modIdentifier("message.error.common.no-response"),
             "Cannot acquire server response, try again"
         )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.error.gym_entrance.not-sneaking"),
+            "You need to sneak to break gym entrance"
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.gym_entrance_breaking"),
+            "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance"
+        )
     }
 }

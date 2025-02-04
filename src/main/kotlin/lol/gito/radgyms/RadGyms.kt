@@ -4,6 +4,8 @@ import com.gitlab.srcmc.rctapi.api.RCTApi
 import io.wispforest.owo.network.OwoNetChannel
 import lol.gito.radgyms.block.BlockManager
 import lol.gito.radgyms.command.CommandManager
+import lol.gito.radgyms.entity.EntityManager
+import lol.gito.radgyms.event.GymDimensionEvents
 import lol.gito.radgyms.gym.GymLoader
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.item.ItemGroupManager
@@ -13,7 +15,11 @@ import lol.gito.radgyms.pokemon.SpeciesManager
 import lol.gito.radgyms.rct.RCTEventManager
 import lol.gito.radgyms.rct.RCTCommandManager
 import lol.gito.radgyms.world.dimension.DimensionManager
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
+import net.minecraft.client.render.entity.VillagerEntityRenderer
 import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,6 +37,7 @@ object RadGyms : ModInitializer {
 
         // Data
         SpeciesManager.register()
+        EntityManager.register()
         GymManager.register()
         GYM_LOADER.register()
 
@@ -47,10 +54,18 @@ object RadGyms : ModInitializer {
         RCTCommandManager.register()
 
         // Events
+        GymDimensionEvents.register()
         RCTEventManager.register()
 
         // Network
         NetworkStackProcessor.register()
+
+        onInitializeClient()
+    }
+
+    @Environment(EnvType.CLIENT)
+    fun onInitializeClient() {
+        EntityRendererRegistry.register(EntityManager.GYM_TRAINER) {context -> VillagerEntityRenderer(context) }
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

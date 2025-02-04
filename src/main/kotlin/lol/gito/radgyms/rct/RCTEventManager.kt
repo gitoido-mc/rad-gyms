@@ -1,5 +1,10 @@
 package lol.gito.radgyms.rct
 
+import com.cobblemon.mod.common.api.Priority
+import com.cobblemon.mod.common.api.battles.model.actor.ActorType
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
+import com.gitlab.srcmc.rctapi.api.events.Events
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.RCT
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -17,20 +22,20 @@ object RCTEventManager {
 
     @Suppress("UNUSED_PARAMETER")
     private fun onPlayerJoin(handler: ServerPlayNetworkHandler, sender: PacketSender, server: MinecraftServer) {
-        val player = handler.player
-        RadGyms.LOGGER.info("registering player from RCT trainer mod registry")
-        RCT.trainerRegistry.registerPlayer(player.uuid.toString(), player)
+        RadGyms.LOGGER.info("Adding player ${handler.player.name} in RadGyms trainer registry")
+        RCT.trainerRegistry.registerPlayer(handler.player.uuid.toString(), handler.player)
     }
 
     @Suppress("UNUSED_PARAMETER")
     private fun onPlayerDisconnect(handler: ServerPlayNetworkHandler, server: MinecraftServer) {
-        RadGyms.LOGGER.info("unregistering player from RCT trainer mod registry")
+        RadGyms.LOGGER.info("Removing player ${handler.player.name} from RCT trainer mod registry")
         RCT.trainerRegistry.unregisterById(handler.player.uuid.toString())
     }
 
+
     fun register() {
-        ServerLifecycleEvents.SERVER_STARTING.register(RCTEventManager::onServerStart)
-        ServerPlayConnectionEvents.JOIN.register(RCTEventManager::onPlayerJoin)
-        ServerPlayConnectionEvents.DISCONNECT.register(RCTEventManager::onPlayerDisconnect)
+        ServerLifecycleEvents.SERVER_STARTING.register(::onServerStart)
+        ServerPlayConnectionEvents.JOIN.register(::onPlayerJoin)
+        ServerPlayConnectionEvents.DISCONNECT.register(::onPlayerDisconnect)
     }
 }

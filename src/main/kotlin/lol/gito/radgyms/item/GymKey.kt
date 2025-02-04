@@ -1,6 +1,7 @@
 package lol.gito.radgyms.item
 
 import lol.gito.radgyms.gui.GuiHandler
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack

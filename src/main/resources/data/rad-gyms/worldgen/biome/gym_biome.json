@@ -23,12 +23,6 @@
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": "minecraft:music.nether.basalt_deltas"
-    },
-    "particle": {
-      "options": {
-        "type": "minecraft:ash"
-      },
-      "probability": 0.118093334
     }
   },
   "spawn_costs": {},

@@ -30,7 +30,11 @@ data class GymTrainerTeamMember(
 
 @Serializable
 data class GymTrainerAIData(
-    val maxSelectMargin: Double
+    val moveBias: Double? = null,
+    val statusMoveBias: Double? = null,
+    val switchBias: Double? = null,
+    val itemBias: Double? = null,
+    val maxSelectMargin: Double? = null,
 )
 
 @Serializable
@@ -41,7 +45,7 @@ data class GymTrainerBattleRules(
 @Serializable
 data class GymTrainerAI(
     val type: String,
-    val data: GymTrainerAIData
+    val data: GymTrainerAIData? = null,
 )
 
 @Serializable
@@ -64,6 +68,7 @@ data class GymTrainer(
     val levelToCount: List<List<Int>>,
     val battleRules: GymTrainerBattleRules? = null,
     val team: List<GymTrainerTeamMember>? = null,
+    val requires: String? = null,
 ) {
     init {
         if (teamType == GymTeamType.FIXED) {
