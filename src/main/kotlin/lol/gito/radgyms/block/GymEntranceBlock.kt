@@ -2,6 +2,7 @@ package lol.gito.radgyms.block
 
 import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.block.entity.GymEntranceEntity
+import lol.gito.radgyms.gui.GuiHandler
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
@@ -23,7 +24,7 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
         return BlockRenderType.MODEL
     }
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity? {
+    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
         return GymEntranceEntity(pos, state)
     }
 
@@ -38,9 +39,10 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
             return super.onUse(state, world, pos, player, hit)
         }
 
-        val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
-
-        gymEntrance.incrementPlayerUseCount(player)
+        if (world.isClient) {
+            val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
+            GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos)
+        }
 
         return ActionResult.SUCCESS
     }

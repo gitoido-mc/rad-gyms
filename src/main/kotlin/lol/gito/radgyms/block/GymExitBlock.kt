@@ -16,6 +16,7 @@ class GymExitBlock(settings: Settings) : Block(settings) {
         player: PlayerEntity,
         hit: BlockHitResult
     ): ActionResult {
+        // @TODO: exit gym functionality
         return super.onUse(state, world, pos, player, hit)
     }
 }

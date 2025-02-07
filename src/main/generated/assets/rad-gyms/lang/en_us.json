@@ -14,7 +14,8 @@
   "rad-gyms.message.error.gym_entrance.not-sneaking": "You need to sneak to break gym entrance",
   "rad-gyms.message.error.key.not-in-main-hand": "Gym key must be in your main hand!",
   "rad-gyms.message.info.gym_entrance_breaking": "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance",
-  "rad-gyms.message.info.trainer_required": "We already fought. Go fight %s",
+  "rad-gyms.message.info.trainer_defeated": "You won! Go challenge next trainer.",
+  "rad-gyms.message.info.trainer_required": "Go fight %s before challenging me.",
   "rad-gyms.npc.leader": "Gym leader",
   "rad-gyms.npc.trainer_junior": "Junior gym trainer",
   "rad-gyms.npc.trainer_senior": "Senior gym trainer"

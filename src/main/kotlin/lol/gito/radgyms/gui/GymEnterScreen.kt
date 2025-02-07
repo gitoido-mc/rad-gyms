@@ -1,20 +1,24 @@
 package lol.gito.radgyms.gui
 
-import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.api.types.ElementalTypes
 import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.ButtonComponent
 import io.wispforest.owo.ui.component.DiscreteSliderComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.block.entity.GymEntranceEntity
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.math.BlockPos
 import org.lwjgl.glfw.GLFW
 
-class GymKeyScreen(
-    val player: PlayerEntity
+class GymEnterScreen(
+    val player: PlayerEntity,
+    val type: String? = null,
+    val blockPos: BlockPos? = null
 ) : BaseUIModelScreen<FlowLayout>(
     FlowLayout::class.java,
-    DataSource.asset(RadGyms.modIdentifier("gym_key_ui"))
+    DataSource.asset(RadGyms.modIdentifier("gym_enter_ui"))
 ) {
     private var gymLevel: Double = 1.0
         set(value) {
@@ -73,8 +77,20 @@ class GymKeyScreen(
             if (level < 5) {
                 level = 5
             }
-            RadGyms.LOGGER.info("Sending GymKey(level:$level) C2S packet from ${player.name}")
-            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymKeyPacketMessage(level))
+
+            val chosenType = when (type) {
+                null -> ElementalTypes.all().random().name
+                else -> type
+            }
+
+            if (blockPos != null && player.world.getBlockEntity(blockPos) is GymEntranceEntity) {
+                val gymEntrance: GymEntranceEntity = player.world.getBlockEntity(blockPos) as GymEntranceEntity
+                RadGyms.LOGGER.info("Gym Entrance: $gymEntrance")
+                gymEntrance.incrementPlayerUseCount(player)
+            }
+
+            RadGyms.LOGGER.info("Sending GymKey(level:$level, type:$type, key: ${blockPos == null}) C2S packet from ${player.name}")
+            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymEnter(level = level, type = chosenType, key = blockPos == null))
         } catch (e: Exception) {
             RadGyms.LOGGER.info(e.toString())
         }

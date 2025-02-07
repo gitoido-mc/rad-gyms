@@ -1,5 +1,6 @@
 package lol.gito.radgyms.block.entity
 
+import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.RadGyms
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -20,7 +21,7 @@ class GymEntranceEntity(
     private val gymTypeKey = "type"
 
     private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
-    private lateinit var gymType: String
+    var gymType: String = ElementalTypes.all().random().name
 
     fun incrementPlayerUseCount(player: PlayerEntity) {
         val useCounter = playerUseCounter.getOrDefault(player.uuid.toString(), 0)
@@ -36,8 +37,8 @@ class GymEntranceEntity(
             data.putInt(key, value)
         }
 
-        nbt.putString(this.gymTypeKey, gymType)
-        nbt.put(this.playerUsageDataKey, data)
+        nbt.putString(gymTypeKey, gymType)
+        nbt.put(playerUsageDataKey, data)
         RadGyms.LOGGER.info(data.toString())
 
         super.writeNbt(nbt, registryLookup)
@@ -47,7 +48,7 @@ class GymEntranceEntity(
         super.readNbt(nbt, registryLookup)
 
         val data = nbt.getCompound(playerUsageDataKey)
-        gymType = data.getString(this.gymTypeKey)
+        gymType = nbt.getString(gymTypeKey)
 
         for (key: String in data.keys) {
             playerUseCounter[key] = data.getInt(key)

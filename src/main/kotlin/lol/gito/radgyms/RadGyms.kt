@@ -35,7 +35,6 @@ object RadGyms : ModInitializer {
         LOGGER.info("Initializing the mod")
 
         // Data
-        SpeciesManager.register()
         EntityManager.register()
         GymManager.register()
         GYM_LOADER.register()

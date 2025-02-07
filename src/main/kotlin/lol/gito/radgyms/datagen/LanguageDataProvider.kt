@@ -55,7 +55,7 @@ class LanguageDataProvider(
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.trainer_required"),
-            "We already fought. Go fight %s"
+            "Go fight %s before challenging me."
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.trainer_defeated"),

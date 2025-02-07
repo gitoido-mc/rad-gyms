@@ -1,17 +1,22 @@
 package lol.gito.radgyms.nbt
 
+import lol.gito.radgyms.RadGyms
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtInt
 import net.minecraft.util.math.BlockPos
 
 object GymsNbtData {
+    private val visitedCountKey: String = RadGyms.modIdentifier("visited_count").toTranslationKey()
+    private val returnDimensionKey: String = RadGyms.modIdentifier("return_dim").toTranslationKey()
+    private val returnCoordsKey: String = RadGyms.modIdentifier("return_coords").toTranslationKey()
+
     fun incrementVisitCount(player: EntityDataSaver): Int {
         val nbt: NbtCompound = player.getPersistentData()
-        var count: Int = nbt.getInt("gyms_visited_count")
+        var count: Int = nbt.getInt(visitedCountKey)
 
         count++
 
-        nbt.putInt("gyms_visited_count", count)
+        nbt.putInt(visitedCountKey, count)
 
         return count
     }
@@ -19,8 +24,8 @@ object GymsNbtData {
     fun getReturnDimension(player: EntityDataSaver): String? {
         val nbt: NbtCompound = player.getPersistentData()
 
-        if (nbt.contains("gyms_return_dim")) {
-            return nbt.getString("gyms_return_dim")
+        if (nbt.contains(returnDimensionKey)) {
+            return nbt.getString(returnDimensionKey)
         }
         return null
     }
@@ -28,11 +33,11 @@ object GymsNbtData {
     fun setReturnDimension(player: EntityDataSaver, dim: String?): String? {
         val nbt: NbtCompound = player.getPersistentData()
         if (dim != null) {
-            val nbtDim = nbt.getString("gyms_return_dim")
-            nbt.putString("gyms_return_dim", nbtDim)
+            val nbtDim = nbt.getString(returnDimensionKey)
+            nbt.putString(returnDimensionKey, nbtDim)
             return nbtDim
         } else {
-            nbt.remove("gyms_return_dim")
+            nbt.remove(returnDimensionKey)
         }
 
         return null
@@ -41,8 +46,8 @@ object GymsNbtData {
     fun getReturnCoordinates(player: EntityDataSaver): BlockPos? {
         val nbt: NbtCompound = player.getPersistentData()
 
-        if (nbt.contains("gyms_return_coords")) {
-            val data = nbt.getIntArray("gyms_return_coords")
+        if (nbt.contains(returnCoordsKey)) {
+            val data = nbt.getIntArray(returnCoordsKey)
 
             return BlockPos(
                 data[0],
@@ -56,13 +61,13 @@ object GymsNbtData {
 
     fun setReturnCoordinates(player: EntityDataSaver, coords: BlockPos?): BlockPos? {
         val nbt: NbtCompound = player.getPersistentData()
-        
+
         if (coords != null) {
             val nbtPos = intArrayOf(coords.x, coords.y, coords.z)
-            nbt.putIntArray("gyms_return_coords", nbtPos)
+            nbt.putIntArray(returnCoordsKey, nbtPos)
             return coords
         } else {
-            nbt.remove("gyms_return_coords")
+            nbt.remove(returnCoordsKey)
         }
 
         return null

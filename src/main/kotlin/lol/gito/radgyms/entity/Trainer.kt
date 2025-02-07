@@ -62,7 +62,7 @@ class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : Villag
                     player.sendMessage(
                         Text.translatable(
                             "rad-gyms.message.info.trainer_required",
-                            trainerToFight.name.toString().lowercase()
+                            trainerToFight.name
                         ),
                         true
                     )

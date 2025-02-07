@@ -96,6 +96,7 @@ object GymManager {
         requiredUUID: UUID?
     ) {
         val trainerEntity = Trainer(EntityManager.GYM_TRAINER, gymDimension)
+        trainerEntity.uuid = trainerUUID
         trainerEntity.headYaw = trainer.npc.yaw
         trainerEntity.bodyYaw = trainer.npc.yaw
         trainerEntity.customName = trainer.npc.name

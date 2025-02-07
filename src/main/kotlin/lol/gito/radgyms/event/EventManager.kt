@@ -114,10 +114,14 @@ object EventManager {
         }
 
         val loser = event.losers.first()
+        RadGyms.LOGGER.info(event.losers.joinToString("\n"))
         val rctRegistry = RCT.trainerRegistry
         val rctTrainer = rctRegistry.getById(loser.uuid.toString())
-        if (loser.type == ActorType.NPC && rctTrainer.entity is Trainer) {
 
+
+
+        if (loser.type == ActorType.NPC && rctTrainer.entity is Trainer) {
+            (rctTrainer.entity as Trainer).defeated = true
         }
     }
 
