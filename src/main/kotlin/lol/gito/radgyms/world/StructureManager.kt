@@ -24,7 +24,7 @@ object StructureManager {
                 RadGyms.LOGGER.info("Error placing structure: $structureId")
             } else {
                 structTemplateManager.unloadTemplate(Identifier.of(structureId))
-                RadGyms.LOGGER.info("Successfully placed structure: $structureId at ${pos.x},${pos.y},${pos.z}");
+                RadGyms.LOGGER.info("Successfully placed structure: $structureId at ${pos.x},${pos.y},${pos.z}")
             }
         } else {
             RadGyms.LOGGER.info("Failed to load structure: $structureId")

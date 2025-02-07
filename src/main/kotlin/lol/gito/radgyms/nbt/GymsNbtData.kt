@@ -1,6 +1,7 @@
 package lol.gito.radgyms.nbt
 
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.NbtInt
 import net.minecraft.util.math.BlockPos
 
 object GymsNbtData {
@@ -26,10 +27,8 @@ object GymsNbtData {
 
     fun setReturnDimension(player: EntityDataSaver, dim: String?): String? {
         val nbt: NbtCompound = player.getPersistentData()
-        var nbtDim: String = nbt.getString("gyms_return_dim")
-
         if (dim != null) {
-            nbtDim = dim
+            val nbtDim = nbt.getString("gyms_return_dim")
             nbt.putString("gyms_return_dim", nbtDim)
             return nbtDim
         } else {
@@ -57,10 +56,9 @@ object GymsNbtData {
 
     fun setReturnCoordinates(player: EntityDataSaver, coords: BlockPos?): BlockPos? {
         val nbt: NbtCompound = player.getPersistentData()
-        var nbtPos: IntArray = nbt.getIntArray("gyms_return_coords")
-
+        
         if (coords != null) {
-            nbtPos = intArrayOf(coords.x, coords.y, coords.z)
+            val nbtPos = intArrayOf(coords.x, coords.y, coords.z)
             nbt.putIntArray("gyms_return_coords", nbtPos)
             return coords
         } else {

@@ -1,4 +1,4 @@
-package lol.gito.radgyms.datagen.i18n
+package lol.gito.radgyms.datagen
 
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.block.BlockRegistry
@@ -34,6 +34,9 @@ class LanguageDataProvider(
         translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease-ten"), "-10")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.start"), "Start gym")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.cancel"), "Cancel")
+        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_junior"), "Junior gym trainer")
+        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_senior"), "Senior gym trainer")
+        translationBuilder.add(RadGyms.modIdentifier("npc.leader"), "Gym leader")
         translationBuilder.add(
             RadGyms.modIdentifier("message.error.key.not-in-main-hand"),
             "Gym key must be in your main hand!"
@@ -49,6 +52,14 @@ class LanguageDataProvider(
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.gym_entrance_breaking"),
             "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance"
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.trainer_required"),
+            "We already fought. Go fight %s"
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.trainer_defeated"),
+            "You won! Go challenge next trainer."
         )
     }
 }

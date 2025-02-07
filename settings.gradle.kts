@@ -1,4 +1,4 @@
-rootProject.name = "radgyms"
+rootProject.name = "Rad Gyms [Cobblemon]"
 
 pluginManagement {
 	repositories {

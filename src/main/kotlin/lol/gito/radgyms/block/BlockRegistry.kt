@@ -13,8 +13,9 @@ class BlockRegistry: BlockRegistryContainer {
         @JvmField
         val GYM_ENTRANCE = GymEntranceBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK))
 
+
         @JvmField
-        val GYM_EXIT = GymEntranceBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK))
+        val GYM_EXIT = GymExitBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK))
     }
 
     override fun createBlockItem(block: Block, identifier: String): BlockItem {

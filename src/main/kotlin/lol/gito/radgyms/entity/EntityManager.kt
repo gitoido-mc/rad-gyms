@@ -15,7 +15,7 @@ object EntityManager {
     )
 
     fun register() {
-        RadGyms.LOGGER.info("Registering entities")
+        RadGyms.LOGGER.info("Registering mod entities")
         FabricDefaultAttributeRegistry.register(GYM_TRAINER, Trainer.createAttributes())
     }
 }

@@ -10,7 +10,8 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
 
-object NetworkStackProcessor {
+@Suppress("EmptyMethod")
+object NetworkStackHandler {
     val GYM_KEY_PACKET_ID = modIdentifier("net.gym_key")
     val GYM_ENTRANCE_PACKET_ID = modIdentifier("net.gym_entrance")
     val GYM_LEAVE_PACKET_ID = modIdentifier("net.gym_leave")
@@ -34,6 +35,7 @@ object NetworkStackProcessor {
     )
 
     fun register() {
+        RadGyms.LOGGER.info("Registering network stack handler")
         RadGyms.CHANNEL.registerServerbound(GymKeyPacketMessage::class.java, ::handleGymKeyPacket)
     }
 

@@ -11,21 +11,28 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import java.util.*
 
-class Trainer : VillagerEntity
-{
-    var trainerId: UUID? = null
-    var required: UUID? = null
+class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : VillagerEntity(entityType, world) {
+    private val trainerIdKey = "trainerId"
+    private val requiresKey = "requires"
+    private val defeatedKey = "isDefeated"
+    private val leaderKey = "isLeader"
 
-    override fun getMaxLookYawChange(): Int = 360
-    override fun isSilent(): Boolean = true
-    override fun isPushable(): Boolean = false
-    override fun damage(source: DamageSource, amount: Float): Boolean = false
+    var trainerId: UUID? = null
+    var requires: UUID? = null
+    var defeated: Boolean = false
+    var leader: Boolean = false
+
+    init {
+        this.world = world
+        this.setPersistent()
+    }
 
     companion object {
         fun createAttributes(): DefaultAttributeContainer.Builder {
@@ -33,10 +40,10 @@ class Trainer : VillagerEntity
         }
     }
 
-    constructor(entityType: EntityType<out VillagerEntity>, world: World) : super(entityType, world) {
-        this.world = world
-        this.setPersistent();
-    }
+    override fun getMaxLookYawChange(): Int = 360
+    override fun isSilent(): Boolean = true
+    override fun isPushable(): Boolean = false
+    override fun damage(source: DamageSource, amount: Float): Boolean = false
 
     override fun tickMovement() {
         super.tickMovement()
@@ -45,17 +52,46 @@ class Trainer : VillagerEntity
 
     override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
         if (player is ServerPlayerEntity && world is ServerWorld) {
-            val playerTrainer = RadGyms.RCT.trainerRegistry.getById(player.uuid.toString())
-            val npcTrainer = RadGyms.RCT.trainerRegistry.getById(trainerId.toString())
+            val trainerRegistry = RadGyms.RCT.trainerRegistry
+            if (requires != null) {
+                val trainerToFight: Trainer = trainerRegistry
+                    .getById(requires.toString())
+                    .entity as Trainer
 
-            RadGyms.RCT.battleManager.start(
+                if (!trainerToFight.defeated) {
+                    player.sendMessage(
+                        Text.translatable(
+                            "rad-gyms.message.info.trainer_required",
+                            trainerToFight.name.toString().lowercase()
+                        ),
+                        true
+                    )
+                    return ActionResult.FAIL
+                }
+            }
+
+            if (defeated) {
+                player.sendMessage(
+                    Text.translatable(
+                        "rad-gyms.message.info.trainer_defeated"
+                    ),
+                    true
+                )
+                return ActionResult.FAIL
+            }
+
+            val rctBattleManager = RadGyms.RCT.battleManager
+            val playerTrainer = trainerRegistry.getById(player.uuid.toString())
+            val npcTrainer = trainerRegistry.getById(trainerId.toString())
+
+            rctBattleManager.start(
                 listOf(playerTrainer),
                 listOf(npcTrainer),
                 BattleFormat.GEN_9_SINGLES,
                 BattleRules()
-            );
+            )
 
-            return ActionResult.SUCCESS;
+            return ActionResult.SUCCESS
         }
 
         return super.interactMob(player, hand)
@@ -63,11 +99,14 @@ class Trainer : VillagerEntity
 
     override fun writeNbt(nbt: NbtCompound): NbtCompound {
         super.writeNbt(nbt)
+        nbt.putBoolean(leaderKey, leader)
+        nbt.putBoolean(defeatedKey, defeated)
+
         if (trainerId != null) {
-            nbt.putUuid(RadGyms.modIdentifier("trainer_id").toString(), trainerId)
+            nbt.putUuid(trainerIdKey, trainerId)
         }
-        if (required != null) {
-            nbt.putUuid(RadGyms.modIdentifier("required_trainer_id").toString(), trainerId)
+        if (requires != null) {
+            nbt.putUuid(requiresKey, trainerId)
         }
 
         return nbt
@@ -75,7 +114,9 @@ class Trainer : VillagerEntity
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
-        trainerId = nbt.getUuid(RadGyms.modIdentifier("trainer_id").toString())
-        required = nbt.getUuid(RadGyms.modIdentifier("required_trainer_id").toString())
+        trainerId = nbt.getUuid(trainerIdKey)
+        requires = nbt.getUuid(requiresKey)
+        defeated = nbt.getBoolean(defeatedKey)
+        leader = nbt.getBoolean(leaderKey)
     }
 }

@@ -3,18 +3,17 @@ package lol.gito.radgyms
 import com.gitlab.srcmc.rctapi.api.RCTApi
 import io.wispforest.owo.network.OwoNetChannel
 import lol.gito.radgyms.block.BlockManager
+import lol.gito.radgyms.block.entity.BlockEntityRegistry
 import lol.gito.radgyms.command.CommandManager
 import lol.gito.radgyms.entity.EntityManager
-import lol.gito.radgyms.event.GymDimensionEvents
+import lol.gito.radgyms.event.EventManager
 import lol.gito.radgyms.gym.GymLoader
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.item.ItemGroupManager
 import lol.gito.radgyms.item.ItemManager
-import lol.gito.radgyms.network.NetworkStackProcessor
-import lol.gito.radgyms.pokemon.SpeciesManager
-import lol.gito.radgyms.rct.RCTEventManager
-import lol.gito.radgyms.rct.RCTCommandManager
-import lol.gito.radgyms.world.dimension.DimensionManager
+import lol.gito.radgyms.network.NetworkStackHandler
+import lol.gito.radgyms.gym.SpeciesManager
+import lol.gito.radgyms.world.DimensionManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.api.ModInitializer
@@ -33,7 +32,7 @@ object RadGyms : ModInitializer {
 
 
     override fun onInitialize() {
-        LOGGER.info("Initializing Rad Gyms mod")
+        LOGGER.info("Initializing the mod")
 
         // Data
         SpeciesManager.register()
@@ -51,24 +50,22 @@ object RadGyms : ModInitializer {
 
         // Commands
         CommandManager.register()
-        RCTCommandManager.register()
 
         // Events
-        GymDimensionEvents.register()
-        RCTEventManager.register()
+        EventManager.register()
 
         // Network
-        NetworkStackProcessor.register()
+        NetworkStackHandler.register()
 
         onInitializeClient()
     }
 
     @Environment(EnvType.CLIENT)
     fun onInitializeClient() {
+        LOGGER.info("Initializing client")
         EntityRendererRegistry.register(EntityManager.GYM_TRAINER) {context -> VillagerEntityRenderer(context) }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
     fun modIdentifier(name: String): Identifier {
         return Identifier.of(MOD_ID, name)
     }

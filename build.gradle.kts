@@ -13,11 +13,12 @@ version = property("mod_version")!!
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://maven.wispforest.io/releases/")
-    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
-    maven("https://maven.impactdev.net/repository/development/")
     maven("https://www.cursemaven.com")
     maven("https://api.modrinth.com/maven")
+    maven("https://maven.architectury.dev/")
+    maven("https://maven.wispforest.io/releases/")
+    maven("https://maven.impactdev.net/repository/development/")
+    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
 }
 
 fabricApi {
@@ -28,27 +29,28 @@ fabricApi {
 
 dependencies {
     // To change the versions see the gradle.properties file
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
-    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    minecraft("com.mojang:minecraft:${properties["minecraft_version"]}")
+    mappings("net.fabricmc:yarn:${properties["yarn_mappings"]}:v2")
+    modImplementation("net.fabricmc:fabric-loader:${properties["loader_version"]}")
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${properties["fabric_version"]}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${properties["fabric_kotlin_version"]}")
 
     // Helpers
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+    modImplementation("dev.architectury:architectury-fabric:${properties["architectury_api_version"]}")
 
     // Cobblemon
-    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}")
+    modImplementation("com.cobblemon:fabric:${properties["cobblemon_version"]}")
 
     // OWO
-    modImplementation("io.wispforest:owo-lib:${property("owo_version")}")
-    include("io.wispforest:owo-sentinel:${property("owo_version")}")
+    modImplementation("io.wispforest:owo-lib:${properties["owo_version"]}")
+    include("io.wispforest:owo-sentinel:${properties["owo_version"]}")
 
     // Radical Cobblemon Trainers API
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_fabric_version")}")
+    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${properties["rctapi_common_version"]}")
+    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${properties["rctapi_fabric_version"]}")
 }
 
 tasks {

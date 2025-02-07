@@ -14,13 +14,10 @@ import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.pokemon.SpeciesManager
-import lol.gito.radgyms.resource.Gym
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 import kotlin.random.Random
-import kotlin.streams.toList
 
 data class GymNPC(
     val name: Text,
@@ -38,8 +35,8 @@ data class GymTrainer(
 
 object GymTemplate {
     var structure: String? = null
-    var relativeExitBLockSpawn: Vec3d? = null
-    var relativePlayerSpawn = Vec3d.ZERO
+    var relativeExitBlockSpawn: Vec3d? = null
+    var relativePlayerSpawn: Vec3d = Vec3d.ZERO
     var playerYaw: Float? = null
     var trainers: List<GymTrainer> = mutableListOf()
     var type: String? = null
@@ -50,9 +47,9 @@ object GymTemplate {
         return this
     }
 
-    fun fromGymDto(dto: Gym, level: Int, type: String?): GymTemplate {
+    fun fromGymDto(dto: GymDTO, level: Int, type: String?): GymTemplate {
         structure = dto.template
-        relativeExitBLockSpawn = Vec3d(
+        relativeExitBlockSpawn = Vec3d(
             dto.exitBlockPos[0],
             dto.exitBlockPos[1],
             dto.exitBlockPos[2],
@@ -68,11 +65,11 @@ object GymTemplate {
         trainers = dto.trainers.map trainerMap@{ trainer ->
             val battleConfig = if (trainer.ai.data != null) {
                 RCTBattleAIConfig(
-                    /* moveBias = 1.0 */ trainer.ai.data.moveBias ?: 1.0,
-                    /* statusMoveBias =0.1 */ trainer.ai.data.statusMoveBias ?: 0.1,
-                    /* switchBias = 0.65 */ trainer.ai.data.switchBias ?: 0.65,
-                    /* itemBias = 1.0 */   trainer.ai.data.itemBias ?: 1.0,
-                    /* maxSelectMargin =  0.15 */ trainer.ai.data.maxSelectMargin ?: 0.15
+                    trainer.ai.data.moveBias ?: 1.0,
+                    trainer.ai.data.statusMoveBias ?: 0.1,
+                    trainer.ai.data.switchBias ?: 0.65,
+                    trainer.ai.data.itemBias ?: 1.0,
+                    trainer.ai.data.maxSelectMargin ?: 0.15
                 )
             } else {
                 RCTBattleAIConfig()
@@ -140,7 +137,7 @@ object GymTemplate {
             val species = PokemonSpecies.implemented.asSequence()
                 .associateWith { species -> species.forms }
                 .flatMap { (species, forms) ->
-                        forms.map { form -> species to form }
+                    forms.map { form -> species to form }
                 }.random()
 
             RadGyms.LOGGER.info("Picked ${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} from random pool")

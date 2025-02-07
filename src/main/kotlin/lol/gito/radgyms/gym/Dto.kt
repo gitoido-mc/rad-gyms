@@ -1,4 +1,6 @@
-package lol.gito.radgyms.resource
+@file:Suppress("unused")
+
+package lol.gito.radgyms.gym
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
@@ -11,13 +13,13 @@ enum class GymTeamType {
 }
 
 @Serializable
-data class GymCoordsAndYaw(
+data class GymCoordsAndYawDTO(
     val pos: List<Double>,
     val yaw: Double,
 )
 
 @Serializable
-data class GymTrainerTeamMember(
+data class GymTrainerTeamMemberDTO(
     val species: String,
     val gender: String? = null,
     val nature: String? = null,
@@ -29,7 +31,7 @@ data class GymTrainerTeamMember(
 )
 
 @Serializable
-data class GymTrainerAIData(
+data class GymTrainerAIDataDTO(
     val moveBias: Double? = null,
     val statusMoveBias: Double? = null,
     val switchBias: Double? = null,
@@ -38,36 +40,36 @@ data class GymTrainerAIData(
 )
 
 @Serializable
-data class GymTrainerBattleRules(
+data class GymTrainerBattleRulesDTO(
     val maxItemUses: Int
 )
 
 @Serializable
-data class GymTrainerAI(
+data class GymTrainerAIDTO(
     val type: String,
-    val data: GymTrainerAIData? = null,
+    val data: GymTrainerAIDataDTO? = null,
 )
 
 @Serializable
-data class GymTrainerBagItem(
+data class GymTrainerBagItemDTO(
     val item: String,
     val quantity: Int
 )
 
 @Serializable
-data class GymTrainer(
+data class GymTrainerDTO(
     val id: String,
     val name: String,
     @SerialName("spawn_relative")
-    val spawnRelative: GymCoordsAndYaw,
+    val spawnRelative: GymCoordsAndYawDTO,
     @SerialName("team_type")
     val teamType: GymTeamType,
-    val ai: GymTrainerAI,
-    val bag: List<GymTrainerBagItem>,
+    val ai: GymTrainerAIDTO,
+    val bag: List<GymTrainerBagItemDTO>,
     @SerialName("count_per_level_threshold")
     val levelToCount: List<List<Int>>,
-    val battleRules: GymTrainerBattleRules? = null,
-    val team: List<GymTrainerTeamMember>? = null,
+    val battleRules: GymTrainerBattleRulesDTO? = null,
+    val team: List<GymTrainerTeamMemberDTO>? = null,
     val requires: String? = null,
 ) {
     init {
@@ -80,12 +82,12 @@ data class GymTrainer(
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 @JsonIgnoreUnknownKeys
-data class Gym(
+data class GymDTO(
     @SerialName("interior_template")
     val template: String,
     @SerialName("exit_block_pos")
     val exitBlockPos: List<Double>,
     @SerialName("player_spawn_relative")
-    val playerSpawnRelative: GymCoordsAndYaw,
-    val trainers: List<GymTrainer>
+    val playerSpawnRelative: GymCoordsAndYawDTO,
+    val trainers: List<GymTrainerDTO>
 )

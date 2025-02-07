@@ -1,6 +1,8 @@
 package lol.gito.radgyms.command
 
 import com.mojang.brigadier.context.CommandContext
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.modIdentifier
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.command.CommandManager
@@ -14,15 +16,17 @@ object CommandManager {
         val world = serverPlayer.world
 
         return if (world is ServerWorld) {
-            1;
+            1
         } else {
-            serverPlayer.sendMessage(Text.translatable("cobgyms.lang.message.no_response"))
-            -1;
+            serverPlayer.sendMessage(Text.translatable(modIdentifier("message.error.common.no-response").toTranslationKey()))
+            -1
         }
     }
 
     fun register() {
-        CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback { dispatcher, access, environment ->
+        RadGyms.LOGGER.info("Registering chat commands")
+        RCTCommandManager.register()
+        CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback { dispatcher, _, _ ->
             dispatcher.register(
                 CommandManager.literal("radgyms")
                 .then(CommandManager.literal("forceLeave").requires { s -> s.hasPermissionLevel(2) }.then(

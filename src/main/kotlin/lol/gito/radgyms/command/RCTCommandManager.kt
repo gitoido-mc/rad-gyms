@@ -1,4 +1,4 @@
-package lol.gito.radgyms.rct
+package lol.gito.radgyms.command
 
 import com.gitlab.srcmc.rctapi.commands.CommandsContext
 import com.gitlab.srcmc.rctapi.commands.RCTApiCommands

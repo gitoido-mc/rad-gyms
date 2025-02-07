@@ -1,4 +1,4 @@
-package lol.gito.radgyms.world.dimension
+package lol.gito.radgyms.world
 
 import lol.gito.radgyms.RadGyms
 import net.minecraft.registry.RegistryKey
@@ -10,6 +10,6 @@ object DimensionManager {
         RegistryKey.of(RegistryKeys.WORLD, RadGyms.modIdentifier("${RadGyms.MOD_ID}_dim"))
 
     fun register() {
-        RadGyms.LOGGER.info("Registering RadGyms dimension")
+        RadGyms.LOGGER.info("Registering gym dimension")
     }
 }

@@ -1,10 +1,12 @@
 package lol.gito.radgyms.mixin;
 
+import kotlin.Suppress;
 import lol.gito.radgyms.RadGyms;
 import lol.gito.radgyms.nbt.EntityDataSaver;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,10 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
+@Suppress(names = "unused")
 public abstract class RadGymsPlayerDataSaverMixin implements EntityDataSaver {
     @Unique
     private NbtCompound persistentData;
 
+    @SuppressWarnings("NullableProblems")
     public NbtCompound getPersistentData() {
         if (this.persistentData == null) {
             this.persistentData = new NbtCompound();
