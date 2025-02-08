@@ -71,12 +71,12 @@ class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : Villag
             }
 
             if (defeated) {
-                player.sendMessage(
-                    Text.translatable(
-                        "rad-gyms.message.info.trainer_defeated"
-                    ),
-                    true
-                )
+                val messageKey = when (leader) {
+                    true -> "rad-gyms.message.info.leader_defeated"
+                    false -> "rad-gyms.message.info.trainer_defeated"
+                }
+
+                player.sendMessage(Text.translatable(messageKey), true)
                 return ActionResult.FAIL
             }
 

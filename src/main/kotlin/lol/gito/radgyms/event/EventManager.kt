@@ -9,11 +9,13 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
+import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.RCT
 import lol.gito.radgyms.RadGyms.modIdentifier
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.entity.Trainer
+import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.world.DimensionManager
@@ -56,10 +58,11 @@ object EventManager {
         result: BlockHitResult,
     ): ActionResult {
         if (world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
-            if (world.getBlockState(result.blockPos).block != BlockRegistry.GYM_EXIT) {
-                return ActionResult.PASS
+            return if (world.getBlockState(result.blockPos).block != BlockRegistry.GYM_EXIT) {
+                ActionResult.FAIL
+            } else {
+                ActionResult.SUCCESS
             }
-            return ActionResult.FAIL
         }
         return ActionResult.PASS
     }
@@ -113,22 +116,25 @@ object EventManager {
             return
         }
 
-        val loser = event.losers.first()
-        RadGyms.LOGGER.info(event.losers.joinToString("\n"))
-        val rctRegistry = RCT.trainerRegistry
-        val rctTrainer = rctRegistry.getById(loser.uuid.toString())
+        for (loser in event.losers) {
+            val battleActor = loser as TrainerEntityBattleActor
+            if (battleActor.type == ActorType.NPC && battleActor.entity is Trainer) {
+                val trainer = (battleActor.entity as Trainer)
+                trainer.defeated = true
+                if (trainer.leader) {
+                    val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as TrainerEntityBattleActor)
+                    val player = winnerBattleActor.entity as PlayerEntity
 
-
-
-        if (loser.type == ActorType.NPC && rctTrainer.entity is Trainer) {
-            (rctTrainer.entity as Trainer).defeated = true
+                    GymManager.handleLeaderBattleWon(player, player.world)
+                }
+             }
         }
     }
 
     private fun onSpeciesUpdate() {
         for (type in ElementalTypes.all()) {
             SPECIES_BY_TYPE[type.name] = speciesOfType(type)
-            RadGyms.LOGGER.info("Added  ${SPECIES_BY_TYPE[type.name]?.size} ${type.name} entries to species map")
+            RadGyms.LOGGER.info("Added ${SPECIES_BY_TYPE[type.name]?.size} ${type.name} entries to species map")
         }
     }
 }

@@ -87,6 +87,8 @@ data class GymDTO(
     val template: String,
     @SerialName("exit_block_pos")
     val exitBlockPos: List<Double>,
+    @SerialName("reward_loot_table")
+    val lootTableId: String,
     @SerialName("player_spawn_relative")
     val playerSpawnRelative: GymCoordsAndYawDTO,
     val trainers: List<GymTrainerDTO>

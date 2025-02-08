@@ -16,4 +16,8 @@ object GuiHandler {
     fun openGymEntranceScreen(player: PlayerEntity, type: String, blockPos: BlockPos) {
         MinecraftClient.getInstance().execute { MinecraftClient.getInstance().setScreen(GymEnterScreen(player, type, blockPos)) }
     }
+    @Environment(EnvType.CLIENT)
+    fun openGymLeaveScreen(player: PlayerEntity) {
+        MinecraftClient.getInstance().execute { MinecraftClient.getInstance().setScreen(GymLeaveScreen(player)) }
+    }
 }

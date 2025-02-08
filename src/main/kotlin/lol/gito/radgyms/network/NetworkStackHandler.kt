@@ -43,9 +43,14 @@ object NetworkStackHandler {
         }
     }
 
-
-
     private fun handleGymLeavePacket(packet: GymLeave, context: ServerAccess) {
+        val player = context.player()
+        val world = player.world
 
+        if (player is ServerPlayerEntity && world is ServerWorld) {
+            world.server.execute { GymLeavePacketHandler(player) }
+        } else {
+            player.sendMessage(translatable(modIdentifier("message.error.common.no-response").toTranslationKey()))
+        }
     }
 }

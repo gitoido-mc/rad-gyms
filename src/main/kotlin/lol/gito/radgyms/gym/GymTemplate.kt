@@ -35,7 +35,7 @@ data class GymTrainer(
 
 object GymTemplate {
     var structure: String? = null
-    var relativeExitBlockSpawn: Vec3d? = null
+    var relativeExitBlockSpawn: Vec3d = Vec3d.ZERO
     var relativePlayerSpawn: Vec3d = Vec3d.ZERO
     var playerYaw: Float? = null
     var trainers: List<GymTrainer> = mutableListOf()
@@ -111,7 +111,7 @@ object GymTemplate {
                 trainer.id,
                 npc,
                 TrainerModel(
-                    trainer.name,
+                    Text.of(trainer.name).literalString ?: "Trainer",
                     JTO.of { ai },
                     bag,
                     team

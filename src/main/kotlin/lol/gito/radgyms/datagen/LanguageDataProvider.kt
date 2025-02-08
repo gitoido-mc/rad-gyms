@@ -61,5 +61,9 @@ class LanguageDataProvider(
             RadGyms.modIdentifier("message.info.trainer_defeated"),
             "You won! Go challenge next trainer."
         )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.leader_defeated"),
+            "You won! You can leave now."
+        )
     }
 }

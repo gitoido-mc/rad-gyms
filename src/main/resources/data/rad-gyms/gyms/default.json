@@ -10,7 +10,7 @@
       "id": "rad_gym_default_trainer_junior",
       "name": "rad-gyms.npc.trainer_junior",
       "spawn_relative": {
-        "pos": [24.5, 2, 15.5],
+        "pos": [26.5, 2, 15.5],
         "yaw": 42.5
       },
       "ai": {

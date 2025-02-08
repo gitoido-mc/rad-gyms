@@ -9,7 +9,7 @@ class GymExitEntity(
     pos: BlockPos,
     state: BlockState
 ) : BlockEntity(
-    BlockEntityRegistry.GYM_ENTRANCE_ENTITY,
+    BlockEntityRegistry.GYM_EXIT_ENTITY,
     pos,
     state
 ) {
