@@ -6,6 +6,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
@@ -24,6 +25,8 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.registry.RegistryKey
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -58,11 +61,16 @@ object EventManager {
         result: BlockHitResult,
     ): ActionResult {
         if (world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
-            return if (world.getBlockState(result.blockPos).block != BlockRegistry.GYM_EXIT) {
-                ActionResult.FAIL
+            return if (playerEntity.mainHandStack.item == BlockRegistry.GYM_EXIT.asItem()) {
+                ActionResult.CONSUME
             } else {
-                ActionResult.SUCCESS
+                when (world.getBlockState(result.blockPos).block != BlockRegistry.GYM_EXIT) {
+                    true -> ActionResult.FAIL
+                    false -> ActionResult.PASS
+                }
             }
+
+
         }
         return ActionResult.PASS
     }
@@ -116,19 +124,22 @@ object EventManager {
             return
         }
 
+        val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
+        val player = winnerBattleActor.entity as ServerPlayerEntity
         for (loser in event.losers) {
             val battleActor = loser as TrainerEntityBattleActor
             if (battleActor.type == ActorType.NPC && battleActor.entity is Trainer) {
                 val trainer = (battleActor.entity as Trainer)
                 trainer.defeated = true
                 if (trainer.leader) {
-                    val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as TrainerEntityBattleActor)
-                    val player = winnerBattleActor.entity as PlayerEntity
-
+                    trainer.defeated = false
+                    RadGyms.LOGGER.info("leader kill")
                     GymManager.handleLeaderBattleWon(player, player.world)
                 }
              }
         }
+
+        GymManager.handleLootDistribution(player)
     }
 
     private fun onSpeciesUpdate() {

@@ -15,6 +15,6 @@ object GymLeavePacketHandler {
         player: ServerPlayerEntity,
     ) {
         player.sendMessage(Text.literal("packet received, player: ${player.name.literalString}"))
-
+        GymManager.handleGymLeave(player, player.world)
     }
 }

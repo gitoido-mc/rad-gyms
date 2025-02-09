@@ -1,10 +1,17 @@
 {
   "interior_template": "rad-gyms:gym_interior_default",
-  "exit_block_pos": [16, 3, 16],
+  "exit_block_pos": [16, 2, 16],
   "player_spawn_relative": {
     "pos": [16.5, 2, 27],
     "yaw": -180.0
   },
+  "reward_loot_tables":  [
+    {
+      "minLevel": 1,
+      "maxLevel": 100,
+      "id": "rad-gyms/shared"
+    }
+  ],
   "trainers": [
     {
       "id": "rad_gym_default_trainer_junior",
@@ -69,6 +76,7 @@
       "id": "rad_gym_default_trainer_leader",
       "name": "rad-gyms.npc.leader",
       "requires": "rad_gym_default_trainer_senior",
+      "leader": true,
       "spawn_relative": {
         "pos": [16, 2, 6],
         "yaw": 0.01

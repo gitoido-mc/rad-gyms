@@ -30,6 +30,7 @@ object NetworkStackHandler {
     fun register() {
         RadGyms.LOGGER.info("Registering network stack handler")
         RadGyms.CHANNEL.registerServerbound(GymEnter::class.java, ::handleGymEnterPacket)
+        RadGyms.CHANNEL.registerServerbound(GymLeave::class.java, ::handleGymLeavePacket)
     }
 
     private fun handleGymEnterPacket(packet: GymEnter, context: ServerAccess) {
@@ -51,6 +52,7 @@ object NetworkStackHandler {
             world.server.execute { GymLeavePacketHandler(player) }
         } else {
             player.sendMessage(translatable(modIdentifier("message.error.common.no-response").toTranslationKey()))
+
         }
     }
 }

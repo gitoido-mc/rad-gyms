@@ -14,6 +14,7 @@ import lol.gito.radgyms.item.ItemManager
 import lol.gito.radgyms.network.NetworkStackHandler
 import lol.gito.radgyms.gym.SpeciesManager
 import lol.gito.radgyms.world.DimensionManager
+import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.api.ModInitializer
@@ -23,41 +24,11 @@ import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-object RadGyms : ModInitializer {
-    const val MOD_ID: String = "rad-gyms"
-    val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
-    val CHANNEL: OwoNetChannel = OwoNetChannel.create(modIdentifier("main"))
-    val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
-    val GYM_LOADER: GymLoader = GymLoader()
-
-
-    override fun onInitialize() {
-        LOGGER.info("Initializing the mod")
-
-        // Data
-        EntityManager.register()
-        GymManager.register()
-        GYM_LOADER.register()
-
-        // Worldgen
-        DimensionManager.register()
-
-        // Blocks, items and creative tab
-        ItemManager.register()
-        BlockManager.register()
-        ItemGroupManager.register()
-
-        // Commands
-        CommandManager.register()
-
-        // Events
-        EventManager.register()
-
-        // Network
-        NetworkStackHandler.register()
+object RadGymsClient : ClientModInitializer {
+    @Environment(EnvType.CLIENT)
+    override fun onInitializeClient() {
+        RadGyms.LOGGER.info("Initializing client")
+        EntityRendererRegistry.register(EntityManager.GYM_TRAINER) {context -> VillagerEntityRenderer(context) }
     }
 
-    fun modIdentifier(name: String): Identifier {
-        return Identifier.of(MOD_ID, name)
-    }
 }

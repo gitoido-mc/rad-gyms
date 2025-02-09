@@ -15,8 +15,7 @@
                                         <horizontal method="fill">100</horizontal>
                                     </sizing>
                                     <margins>
-                                        <top>5</top>
-                                        <bottom>10</bottom>
+                                        <bottom>5</bottom>
                                     </margins>
                                 </label>
                                 <flow-layout direction="horizontal">
@@ -37,9 +36,6 @@
                                         </button>
                                     </children>
                                     <gap>20</gap>
-                                    <margins>
-                                        <top>10</top>
-                                    </margins>
                                     <sizing>
                                         <horizontal method="fill">100</horizontal>
                                         <vertical method="fixed">20</vertical>
@@ -47,7 +43,7 @@
                                 </flow-layout>
                             </children>
                             <sizing>
-                                <vertical method="fixed">80</vertical>
+                                <vertical method="fixed">45</vertical>
                                 <horizontal method="fixed">250</horizontal>
                             </sizing>
                         </flow-layout>

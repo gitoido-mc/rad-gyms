@@ -30,6 +30,7 @@ data class GymTrainer(
     val npc: GymNPC,
     val trainer: TrainerModel,
     val battleRules: BattleRules,
+    val leader: Boolean = false,
     val requires: String? = null
 )
 
@@ -117,6 +118,7 @@ object GymTemplate {
                     team
                 ),
                 rules,
+                trainer.leader,
                 trainer.requires
             )
         }

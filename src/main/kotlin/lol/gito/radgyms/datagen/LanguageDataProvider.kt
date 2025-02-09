@@ -28,10 +28,15 @@ class LanguageDataProvider(
             RadGyms.modIdentifier("gui.common.set-gym-level"),
             "Select desirable gym level"
         )
+        translationBuilder.add(
+            RadGyms.modIdentifier("gui.common.leave-gym"),
+            "You want to leave? Rewards will be lost if leader is not beaten."
+        )
         translationBuilder.add(RadGyms.modIdentifier("gui.common.increase"), "+1")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.increase-ten"), "+10")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease"), "-1")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease-ten"), "-10")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.ok"), "Leave gym")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.start"), "Start gym")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.cancel"), "Cancel")
         translationBuilder.add(RadGyms.modIdentifier("npc.trainer_junior"), "Junior gym trainer")

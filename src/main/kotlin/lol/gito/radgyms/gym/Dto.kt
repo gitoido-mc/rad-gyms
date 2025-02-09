@@ -2,10 +2,8 @@
 
 package lol.gito.radgyms.gym
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonIgnoreUnknownKeys
 
 @Serializable
 enum class GymTeamType {
@@ -70,6 +68,7 @@ data class GymTrainerDTO(
     val levelToCount: List<List<Int>>,
     val battleRules: GymTrainerBattleRulesDTO? = null,
     val team: List<GymTrainerTeamMemberDTO>? = null,
+    val leader: Boolean = false,
     val requires: String? = null,
 ) {
     init {
@@ -79,16 +78,22 @@ data class GymTrainerDTO(
     }
 }
 
-@OptIn(ExperimentalSerializationApi::class)
 @Serializable
-@JsonIgnoreUnknownKeys
+data class GymLootTableDTO(
+    val id: String,
+    val rolls: Int? = 1,
+    val minLevel: Int? = null,
+    val maxLevel: Int? = null,
+)
+
+@Serializable
 data class GymDTO(
     @SerialName("interior_template")
     val template: String,
     @SerialName("exit_block_pos")
     val exitBlockPos: List<Double>,
-    @SerialName("reward_loot_table")
-    val lootTableId: String,
+    @SerialName("reward_loot_tables")
+    val rewardLootTables: List<GymLootTableDTO>,
     @SerialName("player_spawn_relative")
     val playerSpawnRelative: GymCoordsAndYawDTO,
     val trainers: List<GymTrainerDTO>

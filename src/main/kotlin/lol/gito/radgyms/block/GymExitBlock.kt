@@ -35,6 +35,7 @@ class GymExitBlock(settings: Settings) : BlockWithEntity(settings) {
         player: PlayerEntity,
         hit: BlockHitResult
     ): ActionResult {
+        RadGyms.LOGGER.info("exit block used")
         if (world.isClient) {
             GuiHandler.openGymLeaveScreen(player)
             return ActionResult.SUCCESS

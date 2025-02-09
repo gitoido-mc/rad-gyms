@@ -39,8 +39,8 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
         }
 
         if (world.isClient) {
-            val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
-            GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos)
+             val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
+             GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos)
         }
 
         return ActionResult.SUCCESS
