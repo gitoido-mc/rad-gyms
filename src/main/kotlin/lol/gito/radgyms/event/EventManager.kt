@@ -124,6 +124,14 @@ object EventManager {
             return
         }
 
+        if (event.losers.none { it.type == ActorType.NPC }) {
+            return
+        }
+
+        if (event.winners.none { it.type == ActorType.PLAYER }) {
+            return
+        }
+
         val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
         val player = winnerBattleActor.entity as ServerPlayerEntity
         for (loser in event.losers) {
@@ -132,8 +140,6 @@ object EventManager {
                 val trainer = (battleActor.entity as Trainer)
                 trainer.defeated = true
                 if (trainer.leader) {
-                    trainer.defeated = false
-                    RadGyms.LOGGER.info("leader kill")
                     GymManager.handleLeaderBattleWon(player, player.world)
                 }
              }
