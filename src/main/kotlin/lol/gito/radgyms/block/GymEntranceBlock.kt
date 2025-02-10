@@ -7,7 +7,12 @@ import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.NbtString
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
@@ -27,6 +32,20 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
         return GymEntranceEntity(pos, state)
     }
 
+    override fun onPlaced(
+        world: World,
+        pos: BlockPos,
+        state: BlockState,
+        placer: LivingEntity?,
+        itemStack: ItemStack?
+    ) {
+        super.onPlaced(world, pos, state, placer, itemStack)
+
+        if (!world.isClient) {
+            (world as ServerWorld).chunkManager.markForUpdate(pos)
+        }
+    }
+
     override fun onUse(
         state: BlockState,
         world: World,
@@ -39,8 +58,8 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
         }
 
         if (world.isClient) {
-             val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
-             GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos)
+            val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
+            GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos)
         }
 
         return ActionResult.SUCCESS

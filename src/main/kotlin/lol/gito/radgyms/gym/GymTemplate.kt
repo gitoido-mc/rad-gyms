@@ -1,11 +1,14 @@
 package lol.gito.radgyms.gym
 
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.FormData
-import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.util.toPokemon
+import com.cobblemon.mod.common.util.toProperties
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
@@ -14,7 +17,6 @@ import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.RadGyms
-import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 import kotlin.random.Random
@@ -83,17 +85,30 @@ object GymTemplate {
                 return@bagMap BagItemModel(bagItem.item, bagItem.quantity)
             }
 
-            var pokemonCount = 1
-            for (mapperLevel in trainer.countPerLevelThreshold.sortedByDescending { it[0] }) {
-                if (level <= mapperLevel[0]) {
-                    pokemonCount = mapperLevel[1]
+            val team = mutableListOf<PokemonModel>()
+            if (trainer.teamType == GymTeamType.GENERATED) {
+                var pokemonCount = 1
+                for (mapperLevel in trainer.countPerLevelThreshold.sortedByDescending { it[0] }) {
+                    if (level <= mapperLevel[0]) {
+                        pokemonCount = mapperLevel[1]
+                    }
+                }
+
+                RadGyms.LOGGER.info("Derived pokemon count for level $level is $pokemonCount")
+
+                for (i in 1..pokemonCount) {
+                    team.add(generatePokemon(level, type))
+                }
+            } else {
+                for (pokeParams in trainer.team!!) {
+                    val props = PokemonProperties.parse(pokeParams)
+                    props.level = level
+                    val poke = props.create()
+
+                    team.add(fillPokemonModelFromPokemon(poke))
                 }
             }
 
-            val team = mutableListOf<PokemonModel>()
-            for (i in 1..pokemonCount) {
-                team.add(generatePokemon(level, type))
-            }
 
             val npc = GymNPC(
                 name = Text.translatable(trainer.name),
@@ -131,7 +146,7 @@ object GymTemplate {
             RadGyms.LOGGER.info("count in bucket ${SpeciesManager.SPECIES_BY_TYPE[type]?.size}")
             val species = SpeciesManager.SPECIES_BY_TYPE[type]?.toList()?.random()!!
 
-            RadGyms.LOGGER.info("Picked ${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} from $type")
+            RadGyms.LOGGER.info("Picked ${species.first.showdownId()} form=${species.second.formOnlyShowdownId()} level=${level}")
 
             return fillPokemonModel(species, level)
         } else {
@@ -148,44 +163,42 @@ object GymTemplate {
     }
 
     private fun fillPokemonModel(species: Pair<Species, FormData>, level: Int): PokemonModel {
-        val poke = Pokemon()
-        poke.species = species.first
-        poke.form = species.second
-        poke.gender = if (Random.nextBoolean()) Gender.MALE else Gender.FEMALE
-        poke.level = level
-        poke.shiny = Random.nextInt(1, 10) == 1
+        val pokeString = "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} "
 
-        RadGyms.LOGGER.info("${poke.ivs.toList()}")
-        val moveset = poke.moveSet.getMoves().stream().map { it.name }.toList()
+        if (Random.nextInt(1, 10) == 1) {
+            pokeString.plus("shiny=true")
+        }
 
-        RadGyms.LOGGER.info("Moveset $moveset")
+        val poke = pokeString.toPokemon().initialize()
 
-        return PokemonModel(
-            poke.species.resourceIdentifier.path,
-            poke.gender.asString(),
-            poke.level,
-            poke.nature.name.toString(),
-            poke.ability.name,
-            mutableSetOf(*moveset.toTypedArray()),
-            PokemonModel.StatsModel(
-                poke.ivs.getOrDefault(Stats.HP),
-                poke.ivs.getOrDefault(Stats.ATTACK),
-                poke.ivs.getOrDefault(Stats.DEFENCE),
-                poke.ivs.getOrDefault(Stats.SPECIAL_ATTACK),
-                poke.ivs.getOrDefault(Stats.SPECIAL_DEFENCE),
-                poke.ivs.getOrDefault(Stats.SPEED),
-            ),
-            PokemonModel.StatsModel(
-                poke.evs.getOrDefault(Stats.HP),
-                poke.evs.getOrDefault(Stats.ATTACK),
-                poke.evs.getOrDefault(Stats.DEFENCE),
-                poke.evs.getOrDefault(Stats.SPECIAL_ATTACK),
-                poke.evs.getOrDefault(Stats.SPECIAL_DEFENCE),
-                poke.evs.getOrDefault(Stats.SPEED),
-            ),
-            poke.shiny,
-            Registries.ITEM.getId(poke.heldItem().item).toString(),
-            poke.aspects
-        )
+        return fillPokemonModelFromPokemon(poke)
     }
+
+    private fun fillPokemonModelFromPokemon(poke: Pokemon): PokemonModel = PokemonModel(
+        poke.species.resourceIdentifier.path,
+        poke.gender.toString(),
+        poke.level,
+        poke.nature.name.path,
+        poke.ability.name,
+        poke.moveSet.map { it.name }.toSet(),
+        PokemonModel.StatsModel(
+            poke.ivs.getOrDefault(Stats.HP),
+            poke.ivs.getOrDefault(Stats.ATTACK),
+            poke.ivs.getOrDefault(Stats.DEFENCE),
+            poke.ivs.getOrDefault(Stats.SPECIAL_ATTACK),
+            poke.ivs.getOrDefault(Stats.SPECIAL_DEFENCE),
+            poke.ivs.getOrDefault(Stats.SPEED),
+        ),
+        PokemonModel.StatsModel(
+            poke.evs.getOrDefault(Stats.HP),
+            poke.evs.getOrDefault(Stats.ATTACK),
+            poke.evs.getOrDefault(Stats.DEFENCE),
+            poke.evs.getOrDefault(Stats.SPECIAL_ATTACK),
+            poke.evs.getOrDefault(Stats.SPECIAL_DEFENCE),
+            poke.evs.getOrDefault(Stats.SPEED),
+        ),
+        poke.shiny,
+        poke.heldItem().registryEntry.idAsString,
+        poke.aspects
+    )
 }

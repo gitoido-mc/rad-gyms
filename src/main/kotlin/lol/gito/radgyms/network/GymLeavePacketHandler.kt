@@ -14,7 +14,7 @@ object GymLeavePacketHandler {
     operator fun invoke(
         player: ServerPlayerEntity,
     ) {
-        player.sendMessage(Text.literal("packet received, player: ${player.name.literalString}"))
+        player.sendMessage(Text.of("Leaving the gym..."))
         GymManager.handleGymLeave(player, player.world)
     }
 }
