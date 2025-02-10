@@ -1,4 +1,4 @@
-package lol.gito.radgyms.datagen
+package lol.gito.radgyms.datagen.i18n
 
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.block.BlockRegistry
@@ -9,67 +9,67 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
 import java.util.concurrent.CompletableFuture
 
-class EnUSLocaleProvider(
+class PtBRLocaleProvider(
     dataOutput: FabricDataOutput,
     registryLookup: CompletableFuture<RegistryWrapper.WrapperLookup>
 ) : FabricLanguageProvider(
     dataOutput,
-    "en_us",
+    "pt_br",
     registryLookup
 ) {
     override fun generateTranslations(
         wrapperLookup: RegistryWrapper.WrapperLookup,
         translationBuilder: TranslationBuilder
     ) {
-        translationBuilder.add(ItemGroupManager.GYMS_GROUP.displayName.string, "Radical Gyms")
-        translationBuilder.add(ItemRegistry.GYM_KEY, "Gym key")
-        translationBuilder.add(BlockRegistry.GYM_ENTRANCE, "Gym entrance")
-        translationBuilder.add(BlockRegistry.GYM_EXIT, "Gym exit")
+        translationBuilder.add(ItemGroupManager.GYMS_GROUP.displayName.string, "Ginásios Radicais")
+        translationBuilder.add(ItemRegistry.GYM_KEY, "Chave do Ginásio")
+        translationBuilder.add(BlockRegistry.GYM_ENTRANCE, "Entrada do Ginásio")
+        translationBuilder.add(BlockRegistry.GYM_EXIT, "Saída do Ginásio")
         translationBuilder.add(
             RadGyms.modIdentifier("gui.common.set-gym-level"),
-            "Select desirable gym level"
+            "Selecione o nível desejado do ginásio"
         )
         translationBuilder.add(
             RadGyms.modIdentifier("gui.common.leave-gym"),
-            "You want to leave? Rewards will be lost if leader is not beaten."
+            "Quer sair? As recompensas serão perdidas se o líder não for derrotado."
         )
         translationBuilder.add(RadGyms.modIdentifier("gui.common.increase"), "+1")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.increase-ten"), "+10")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease"), "-1")
         translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease-ten"), "-10")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.ok"), "Leave gym")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.start"), "Start gym")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.cancel"), "Cancel")
-        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_junior"), "Junior gym trainer")
-        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_senior"), "Senior gym trainer")
-        translationBuilder.add(RadGyms.modIdentifier("npc.leader"), "Gym leader")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.ok"), "Sair do Ginásio")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.start"), "Iniciar Ginásio")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.cancel"), "Cancelar")
+        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_junior"), "Treinador Júnior do Ginásio")
+        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_senior"), "Treinador Sênior do Ginásio")
+        translationBuilder.add(RadGyms.modIdentifier("npc.leader"), "Líder de Ginásio")
         translationBuilder.add(
             RadGyms.modIdentifier("message.error.key.not-in-main-hand"),
-            "Gym key must be in your main hand!"
+            "A chave do ginásio deve estar na sua mão principal!"
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.error.common.no-response"),
-            "Cannot acquire server response, try again"
+            "Não foi possível obter resposta do servidor, tente novamente"
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.error.gym_entrance.not-sneaking"),
-            "You need to sneak to break gym entrance"
+            "Você precisa se agachar para quebrar a entrada do ginásio"
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.gym_entrance_breaking"),
-            "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance"
+            "Entradas de ginásio não dropam ao serem quebradas. Se você quebrá-la, todos os jogadores perderão o acesso a essa entrada"
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.trainer_required"),
-            "Go fight %s before challenging me."
+            "Derrote %s antes de me desafiar."
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.trainer_defeated"),
-            "You won! Go challenge next trainer."
+            "Você venceu! Vá desafiar o próximo treinador."
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.leader_defeated"),
-            "You won! You can leave now."
+            "Você venceu! Agora pode sair."
         )
     }
 }

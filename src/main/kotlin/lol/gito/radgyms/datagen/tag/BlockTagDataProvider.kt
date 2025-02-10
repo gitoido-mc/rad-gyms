@@ -1,4 +1,4 @@
-package lol.gito.radgyms.datagen
+package lol.gito.radgyms.datagen.tag
 
 import lol.gito.radgyms.block.BlockRegistry
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput

@@ -1,8 +1,9 @@
 package lol.gito.radgyms
 
-import lol.gito.radgyms.datagen.BlockTagDataProvider
-import lol.gito.radgyms.datagen.EnUSLocaleProvider
-import lol.gito.radgyms.datagen.PtBRLocaleProvider
+import lol.gito.radgyms.datagen.recipe.RecipeProvider
+import lol.gito.radgyms.datagen.tag.BlockTagDataProvider
+import lol.gito.radgyms.datagen.i18n.EnUSLocaleProvider
+import lol.gito.radgyms.datagen.i18n.PtBRLocaleProvider
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator.Pack
@@ -14,5 +15,6 @@ object RadGymsDataGenerator : DataGeneratorEntrypoint {
         pack.addProvider(::EnUSLocaleProvider)
         pack.addProvider(::PtBRLocaleProvider)
         pack.addProvider(::BlockTagDataProvider)
+        pack.addProvider(::RecipeProvider)
     }
 }
