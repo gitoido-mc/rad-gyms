@@ -1,16 +1,8 @@
-# Automatically build the project and run any configured tests for every push
-# and submitted pull request. This can help catch issues that only occur on
-# certain platforms or Java versions, and provides a first line of defence
-# against bad commits.
-
-name: build
+name: Build and publish project artifacts on platforms
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - published
 
 jobs:
   build:
