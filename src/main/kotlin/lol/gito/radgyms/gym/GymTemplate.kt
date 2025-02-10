@@ -84,10 +84,9 @@ object GymTemplate {
             }
 
             var pokemonCount = 1
-            for (mapperLevel in trainer.levelToCount) {
+            for (mapperLevel in trainer.countPerLevelThreshold.sortedByDescending { it[0] }) {
                 if (level <= mapperLevel[0]) {
                     pokemonCount = mapperLevel[1]
-                    break
                 }
             }
 
