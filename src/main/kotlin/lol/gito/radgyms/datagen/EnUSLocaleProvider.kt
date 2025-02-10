@@ -1,0 +1,75 @@
+package lol.gito.radgyms.datagen
+
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.block.BlockRegistry
+import lol.gito.radgyms.item.ItemGroupManager
+import lol.gito.radgyms.item.ItemRegistry
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
+import net.minecraft.registry.RegistryWrapper
+import java.util.concurrent.CompletableFuture
+
+class EnUSLocaleProvider(
+    dataOutput: FabricDataOutput,
+    registryLookup: CompletableFuture<RegistryWrapper.WrapperLookup>
+) : FabricLanguageProvider(
+    dataOutput,
+    "en_us",
+    registryLookup
+) {
+    override fun generateTranslations(
+        wrapperLookup: RegistryWrapper.WrapperLookup,
+        translationBuilder: TranslationBuilder
+    ) {
+        translationBuilder.add(ItemGroupManager.GYMS_GROUP.displayName.string, "Radical Gyms")
+        translationBuilder.add(ItemRegistry.GYM_KEY, "Gym key")
+        translationBuilder.add(BlockRegistry.GYM_ENTRANCE, "Gym entrance")
+        translationBuilder.add(BlockRegistry.GYM_EXIT, "Gym exit")
+        translationBuilder.add(
+            RadGyms.modIdentifier("gui.common.set-gym-level"),
+            "Select desirable gym level"
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("gui.common.leave-gym"),
+            "You want to leave? Rewards will be lost if leader is not beaten."
+        )
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.increase"), "+1")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.increase-ten"), "+10")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease"), "-1")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease-ten"), "-10")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.ok"), "Leave gym")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.start"), "Start gym")
+        translationBuilder.add(RadGyms.modIdentifier("gui.common.cancel"), "Cancel")
+        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_junior"), "Junior gym trainer")
+        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_senior"), "Senior gym trainer")
+        translationBuilder.add(RadGyms.modIdentifier("npc.leader"), "Gym leader")
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.error.key.not-in-main-hand"),
+            "Gym key must be in your main hand!"
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.error.common.no-response"),
+            "Cannot acquire server response, try again"
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.error.gym_entrance.not-sneaking"),
+            "You need to sneak to break gym entrance"
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.gym_entrance_breaking"),
+            "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance"
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.trainer_required"),
+            "Go fight %s before challenging me."
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.trainer_defeated"),
+            "You won! Go challenge next trainer."
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.leader_defeated"),
+            "You won! You can leave now."
+        )
+    }
+}
