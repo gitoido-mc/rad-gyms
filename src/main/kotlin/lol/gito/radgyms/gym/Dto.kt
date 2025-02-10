@@ -65,7 +65,7 @@ data class GymTrainerDTO(
     val ai: GymTrainerAIDTO,
     val bag: List<GymTrainerBagItemDTO>,
     @SerialName("count_per_level_threshold")
-    val levelToCount: List<List<Int>>,
+    val countPerLevelThreshold: List<List<Int>>,
     val battleRules: GymTrainerBattleRulesDTO? = null,
     val team: List<GymTrainerTeamMemberDTO>? = null,
     val leader: Boolean = false,
