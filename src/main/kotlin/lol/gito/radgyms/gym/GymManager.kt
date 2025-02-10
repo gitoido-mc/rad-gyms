@@ -179,8 +179,8 @@ object GymManager {
                 returnCoords.x.toDouble(),
                 returnCoords.y.toDouble(),
                 returnCoords.z.toDouble(),
-                yaw = 90F,
-                pitch = 90F,
+                yaw = player.yaw,
+                pitch = player.pitch,
             )
         }
 
