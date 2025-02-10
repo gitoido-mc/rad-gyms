@@ -15,7 +15,7 @@ import org.lwjgl.glfw.GLFW
 class GymEnterScreen(
     val player: PlayerEntity,
     val type: String? = null,
-    val blockPos: BlockPos? = null
+    private val blockPos: BlockPos? = null
 ) : BaseUIModelScreen<FlowLayout>(
     FlowLayout::class.java,
     DataSource.asset(RadGyms.modIdentifier("gym_enter_ui"))
@@ -29,6 +29,9 @@ class GymEnterScreen(
     override fun build(root: FlowLayout) {
         this.root = root
         root.childById(DiscreteSliderComponent::class.java, "gym_slider").setFromDiscreteValue(gymLevel)
+        root.childById(DiscreteSliderComponent::class.java, "gym_slider").onChanged().subscribe {
+            gymLevel = it
+        }
         root.childById(ButtonComponent::class.java, "inc").onPress {
             this.incPress(1.0)
         }
