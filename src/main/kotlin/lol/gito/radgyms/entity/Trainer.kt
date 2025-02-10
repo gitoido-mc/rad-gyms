@@ -114,9 +114,17 @@ class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : Villag
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
-        trainerId = nbt.getUuid(trainerIdKey)
-        requires = nbt.getUuid(requiresKey)
-        defeated = nbt.getBoolean(defeatedKey)
-        leader = nbt.getBoolean(leaderKey)
+        if (nbt.contains(trainerIdKey)) {
+            trainerId = nbt.getUuid(trainerIdKey)
+        }
+        if (nbt.contains(requiresKey)) {
+            requires = nbt.getUuid(requiresKey)
+        }
+        if (nbt.contains(defeatedKey)) {
+            defeated = nbt.getBoolean(defeatedKey)
+        }
+        if (nbt.contains(leaderKey)) {
+            leader = nbt.getBoolean(leaderKey)
+        }
     }
 }

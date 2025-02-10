@@ -18,7 +18,7 @@ object GymEnterPacketHandler {
         key: Boolean = false,
         type: String = ElementalTypes.all().random().name
     ) {
-        player.sendMessage(Text.literal("packet received, level is ${level}. player: ${player.name.literalString}"))
+        player.sendMessage(Text.literal("Initializing level $level $type gym"))
         if (key) {
             val stack = player.mainHandStack
 

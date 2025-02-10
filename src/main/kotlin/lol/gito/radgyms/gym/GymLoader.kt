@@ -26,8 +26,9 @@ class GymLoader {
             manager.findResources("gyms") { path -> path.endsWith(".json") }
                 .forEach { (id: Identifier, res: Resource) ->
                     try {
-                        GymManager.GYM_TEMPLATES[res.packId] = Json.decodeFromStream<GymDTO>(res.inputStream)
-                        RadGyms.LOGGER.info("Loaded ${File(id.path).name} gym config")
+                        val templateName = File(id.path).nameWithoutExtension
+                        GymManager.GYM_TEMPLATES[templateName] = Json.decodeFromStream<GymDTO>(res.inputStream)
+                        RadGyms.LOGGER.info("Loaded $templateName template from ${File(id.path).name} gym config")
                     } catch (e: Exception) {
                         RadGyms.LOGGER.warn("Could not parse ${File(id.path).name} gym data", e)
                     }

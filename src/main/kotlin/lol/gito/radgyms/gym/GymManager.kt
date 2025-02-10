@@ -51,7 +51,9 @@ object GymManager {
         if (world.registryKey != DimensionManager.RADGYMS_LEVEL_KEY) {
             val pos = player.pos
             val gymType = if (type in GYM_TEMPLATES.keys) type else GYM_TEMPLATES.keys.random()
-            RadGyms.LOGGER.info("Initializing $gymType template")
+            RadGyms.LOGGER.info("Initializing $gymType template for $type gym")
+            RadGyms.LOGGER.info("Available templates ${GYM_TEMPLATES.keys}")
+
 
             val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(it, gymLevel, type) }
 

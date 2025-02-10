@@ -1,13 +1,16 @@
 package lol.gito.radgyms.block.entity
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import lol.gito.radgyms.RadGyms
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.Packet
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.math.BlockPos
+import java.util.*
 
 class GymEntranceEntity(
     pos: BlockPos,
@@ -30,16 +33,20 @@ class GymEntranceEntity(
         markDirty()
     }
 
-    override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
-        val data = NbtCompound()
+    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? {
+        return BlockEntityUpdateS2CPacket.create(this)
+    }
 
+    override fun toInitialChunkDataNbt(registryLookup: RegistryWrapper.WrapperLookup): NbtCompound {
+        return createNbt(registryLookup)
+    }
+
+    override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
         for ((key, value) in playerUseCounter) {
-            data.putInt(key, value)
+            nbt.putInt(key, value)
         }
 
         nbt.putString(gymTypeKey, gymType)
-        nbt.put(playerUsageDataKey, data)
-        RadGyms.LOGGER.info(data.toString())
 
         super.writeNbt(nbt, registryLookup)
     }
@@ -50,8 +57,11 @@ class GymEntranceEntity(
         val data = nbt.getCompound(playerUsageDataKey)
         gymType = nbt.getString(gymTypeKey)
 
-        for (key: String in data.keys) {
-            playerUseCounter[key] = data.getInt(key)
+        for (key: String in nbt.keys) {
+            try {
+                UUID.fromString(key)
+                playerUseCounter[key] = data.getInt(key)
+            } catch (_: IllegalArgumentException) {}
         }
     }
 }

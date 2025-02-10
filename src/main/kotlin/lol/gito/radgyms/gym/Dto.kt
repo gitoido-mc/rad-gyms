@@ -17,18 +17,6 @@ data class GymCoordsAndYawDTO(
 )
 
 @Serializable
-data class GymTrainerTeamMemberDTO(
-    val species: String,
-    val gender: String? = null,
-    val nature: String? = null,
-    val ability: String? = null,
-    val moveset: Set<String>? = null,
-    val ivs: Map<String, Int>? = null,
-    val evs: Map<String, Int>? = null,
-    val heldItem: String? = null
-)
-
-@Serializable
 data class GymTrainerAIDataDTO(
     val moveBias: Double? = null,
     val statusMoveBias: Double? = null,
@@ -67,7 +55,7 @@ data class GymTrainerDTO(
     @SerialName("count_per_level_threshold")
     val countPerLevelThreshold: List<List<Int>>,
     val battleRules: GymTrainerBattleRulesDTO? = null,
-    val team: List<GymTrainerTeamMemberDTO>? = null,
+    val team: List<String>? = null,
     val leader: Boolean = false,
     val requires: String? = null,
 ) {
