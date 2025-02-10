@@ -22,9 +22,8 @@ class GymEntranceEntity(
 ) {
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
-
-    private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
     var gymType: String = ElementalTypes.all().random().name
+    var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
 
     fun incrementPlayerUseCount(player: PlayerEntity) {
         val useCounter = playerUseCounter.getOrDefault(player.uuid.toString(), 0)
@@ -42,26 +41,23 @@ class GymEntranceEntity(
     }
 
     override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+        val playerEntries = nbt.getCompound(playerUsageDataKey)
         for ((key, value) in playerUseCounter) {
-            nbt.putInt(key, value)
+            playerEntries.putInt(key, value)
         }
-
+        nbt.put(playerUsageDataKey, playerEntries)
         nbt.putString(gymTypeKey, gymType)
-
         super.writeNbt(nbt, registryLookup)
     }
 
     override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
         super.readNbt(nbt, registryLookup)
 
-        val data = nbt.getCompound(playerUsageDataKey)
         gymType = nbt.getString(gymTypeKey)
 
-        for (key: String in nbt.keys) {
-            try {
-                UUID.fromString(key)
-                playerUseCounter[key] = data.getInt(key)
-            } catch (_: IllegalArgumentException) {}
+        val playerEntriesNBT = nbt.getCompound(playerUsageDataKey)
+        for (key in playerEntriesNBT.keys) {
+            playerUseCounter[key] = playerEntriesNBT.getInt(key)
         }
     }
 }

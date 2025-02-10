@@ -86,14 +86,15 @@ class GymEnterScreen(
                 else -> type
             }
 
-            if (blockPos != null && player.world.getBlockEntity(blockPos) is GymEntranceEntity) {
-                val gymEntrance: GymEntranceEntity = player.world.getBlockEntity(blockPos) as GymEntranceEntity
-                RadGyms.LOGGER.info("Gym Entrance: $gymEntrance")
-                gymEntrance.incrementPlayerUseCount(player)
-            }
-
             RadGyms.LOGGER.info("Sending GymKey(level:$level, type:$type, key: ${blockPos == null}) C2S packet from ${player.name}")
-            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymEnter(level = level, type = chosenType, key = blockPos == null))
+
+            RadGyms.CHANNEL.clientHandle().send(
+                NetworkStackHandler.GymEnter(
+                    level = level,
+                    type = chosenType,
+                    blockPos = blockPos?.asLong()
+                )
+            )
         } catch (e: Exception) {
             RadGyms.LOGGER.info(e.toString())
         }

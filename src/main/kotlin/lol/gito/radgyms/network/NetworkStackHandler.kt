@@ -3,10 +3,12 @@ package lol.gito.radgyms.network
 import io.wispforest.owo.network.ServerAccess
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.modIdentifier
+import lol.gito.radgyms.block.entity.GymEntranceEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
 
 
 @Suppress("EmptyMethod")
@@ -19,7 +21,7 @@ object NetworkStackHandler {
         val id: Identifier = GYM_KEY_PACKET_ID,
         val level: Int,
         val type: String,
-        val key: Boolean = false
+        val blockPos: Long? = null
     )
 
     @JvmRecord
@@ -38,7 +40,16 @@ object NetworkStackHandler {
         val world = player.world
 
         if (player is ServerPlayerEntity && world is ServerWorld) {
-            world.server.execute { GymEnterPacketHandler(player, world, packet.level, packet.key, packet.type) }
+            if (packet.blockPos != null) {
+                val blockPos = BlockPos.fromLong(packet.blockPos)
+                if (world.getBlockEntity(blockPos) is GymEntranceEntity) {
+                    val gymEntrance = player.world.getBlockEntity(blockPos) as GymEntranceEntity
+                    gymEntrance.incrementPlayerUseCount(player)
+                    RadGyms.LOGGER.info("Gym Entrance at ${blockPos.asLong()} - increased usage for player ${player.name.literalString}")
+                }
+                world.chunkManager.markForUpdate(blockPos)
+            }
+            world.server.execute { GymEnterPacketHandler(player, world, packet.level, packet.blockPos == null, packet.type) }
         } else {
             player.sendMessage(translatable(modIdentifier("message.error.common.no-response").toTranslationKey()))
         }

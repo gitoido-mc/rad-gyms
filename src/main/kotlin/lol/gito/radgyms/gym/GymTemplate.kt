@@ -163,10 +163,10 @@ object GymTemplate {
     }
 
     private fun fillPokemonModel(species: Pair<Species, FormData>, level: Int): PokemonModel {
-        val pokeString = "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} "
+        val pokeString = "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level}"
 
         if (Random.nextInt(1, 10) == 1) {
-            pokeString.plus("shiny=true")
+            pokeString.plus(" shiny=yes")
         }
 
         val poke = pokeString.toPokemon().initialize()
