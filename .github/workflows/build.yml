@@ -37,7 +37,7 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 1196570
-          curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
           modrinth-id: eF8kqlHd
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}

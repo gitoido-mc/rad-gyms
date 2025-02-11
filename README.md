@@ -1,3 +1,6 @@
+![Rad Gyms on CurseForge](https://cf.way2muchnoise.eu/1196570.svg?badge_style=flat)
+![Rad Gyms on Modrinth](https://img.shields.io/modrinth/dt/eF8kqlHd?style=flat-square&logo=modrinth&label=%20&labelColor=%23000&color=rgb(27%2C%20217%2C%20106))
+
 ### Lore bit
 
 Legends of Arceus speak of mysterious Evergaols scattered across the wild, said to hold ancient trials meant to test the courage and skill of daring Pokémon trainers. Are you brave enough to face these challenges and claim the bountiful rewards that await?
