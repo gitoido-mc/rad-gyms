@@ -4,7 +4,6 @@ on:
     types:
       - published
 
-
 jobs:
   build:
     strategy:
@@ -39,6 +38,9 @@ jobs:
         with:
           curseforge-id: 1196570
           curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
+
+          modrinth-id: eF8kqlHd
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           loaders: fabric
           game-versions: "1.21.1"
