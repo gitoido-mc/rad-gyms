@@ -223,7 +223,7 @@ object GymManager {
 
         for (table in lootTables) {
 
-            RadGyms.LOGGER.info("Settling level ${gym.level} rewards for player ${player.name.literalString}")
+            RadGyms.LOGGER.info("Settling level ${gym.level} rewards for player ${player.name.literalString} after beating leader")
             val registryLootTable =
                 player.server.reloadableRegistries.registryManager.get(RegistryKeys.LOOT_TABLE).get(table.id)
 

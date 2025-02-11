@@ -141,11 +141,10 @@ object EventManager {
                 trainer.defeated = true
                 if (trainer.leader) {
                     GymManager.handleLeaderBattleWon(player, player.world)
+                    GymManager.handleLootDistribution(player)
                 }
              }
         }
-
-        GymManager.handleLootDistribution(player)
     }
 
     private fun onSpeciesUpdate() {
