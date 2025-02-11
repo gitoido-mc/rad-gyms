@@ -2,13 +2,11 @@ package lol.gito.radgyms.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.toPokemon
-import com.cobblemon.mod.common.util.toProperties
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
@@ -18,6 +16,7 @@ import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.RadGyms
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import kotlin.random.Random
 
@@ -36,6 +35,12 @@ data class GymTrainer(
     val requires: String? = null
 )
 
+data class GymLootTable(
+    val id: Identifier,
+    val rolls: Pair<Int, Int>,
+    val levels: Pair<Int, Int>
+)
+
 object GymTemplate {
     var structure: String? = null
     var relativeExitBlockSpawn: Vec3d = Vec3d.ZERO
@@ -43,15 +48,17 @@ object GymTemplate {
     var playerYaw: Float? = null
     var trainers: List<GymTrainer> = mutableListOf()
     var type: String? = null
-
-    fun setType(type: String): GymTemplate {
-        this.type = type
-
-        return this
-    }
+    var lootTables: List<GymLootTable> = mutableListOf()
 
     fun fromGymDto(dto: GymDTO, level: Int, type: String?): GymTemplate {
         structure = dto.template
+        lootTables = dto.rewardLootTables.map {
+            GymLootTable(
+                Identifier.of(it.id),
+                Pair(it.minRolls, it.maxRolls),
+                Pair(it.minLevel, it.maxLevel),
+            )
+        }
         relativeExitBlockSpawn = Vec3d(
             dto.exitBlockPos[0],
             dto.exitBlockPos[1],

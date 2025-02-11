@@ -1,0 +1,32 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:tier_3_poke_balls"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:tier_3_poke_ball_materials"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon:hyper_potion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon:elixir"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon:revive"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

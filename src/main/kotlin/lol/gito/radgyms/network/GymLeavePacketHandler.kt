@@ -15,6 +15,7 @@ object GymLeavePacketHandler {
         player: ServerPlayerEntity,
     ) {
         player.sendMessage(Text.of("Leaving the gym..."))
+        GymManager.handleLootDistribution(player)
         GymManager.handleGymLeave(player, player.world)
     }
 }

@@ -1,0 +1,35 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:tumblestones"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:held/is_held_item"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:evolution_items"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:restores"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:vitamins"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}
