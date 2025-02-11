@@ -69,9 +69,10 @@ data class GymTrainerDTO(
 @Serializable
 data class GymLootTableDTO(
     val id: String,
-    val rolls: Int? = 1,
-    val minLevel: Int? = null,
-    val maxLevel: Int? = null,
+    val minRolls: Int = 1,
+    val maxRolls: Int = 1,
+    val minLevel: Int = 1,
+    val maxLevel: Int = 100,
 )
 
 @Serializable

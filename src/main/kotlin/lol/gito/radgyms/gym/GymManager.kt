@@ -9,11 +9,14 @@ import lol.gito.radgyms.entity.EntityManager
 import lol.gito.radgyms.entity.Trainer
 import lol.gito.radgyms.nbt.EntityDataSaver
 import lol.gito.radgyms.nbt.GymsNbtData
+import lol.gito.radgyms.world.DimensionManager
 import lol.gito.radgyms.world.PlayerSpawnHelper
 import lol.gito.radgyms.world.StructureManager
-import lol.gito.radgyms.world.DimensionManager
-import net.minecraft.client.render.DimensionEffects.Overworld
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.Entity
+import net.minecraft.entity.ItemEntity
+import net.minecraft.loot.context.LootContextParameterSet
+import net.minecraft.loot.context.LootContextParameters
+import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.network.ServerPlayerEntity
@@ -212,9 +215,35 @@ object GymManager {
     }
 
     fun handleLootDistribution(player: ServerPlayerEntity) {
-//        val gym = PLAYER_GYMS[player.uuid] ?: return
-//        val lootTable =
-        //lootTable.value().generateLoot();
+        val gym = PLAYER_GYMS[player.uuid] ?: return
+
+        val lootTables = gym.template.lootTables.filter {
+            gym.level in it.levels.first..it.levels.second
+        }
+
+        for (table in lootTables) {
+
+            RadGyms.LOGGER.info("Settling level ${gym.level} rewards for player ${player.name.literalString}")
+            val registryLootTable =
+                player.server.reloadableRegistries.registryManager.get(RegistryKeys.LOOT_TABLE).get(table.id)
+
+            val lootContextParameterSet = LootContextParameterSet.Builder(player.world as ServerWorld)
+                .add(LootContextParameters.THIS_ENTITY, player)
+                .add(LootContextParameters.ORIGIN, player.pos)
+                .build(LootContextTypes.GIFT)
+
+            val loot = registryLootTable?.generateLoot(lootContextParameterSet) ?: continue
+
+
+            for (itemStack in loot) {
+                if (!player.giveItemStack(itemStack)) {
+                    val pos = player.blockPos
+                    val itemEntity =
+                        ItemEntity(player.world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
+                    player.world.spawnEntity(itemEntity)
+                }
+            }
+        }
     }
 
     fun register() {
