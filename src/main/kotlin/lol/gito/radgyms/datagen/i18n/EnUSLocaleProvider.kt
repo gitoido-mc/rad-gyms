@@ -68,8 +68,8 @@ class EnUSLocaleProvider(
             "You won! Go challenge next trainer."
         )
         translationBuilder.add(
-            RadGyms.modIdentifier("message.info.leader_defeated"),
-            "You won! You can leave now."
+            RadGyms.modIdentifier("message.info.battle_fled"),
+            "Mysterious forces are teleporting you away from the trial."
         )
     }
 }

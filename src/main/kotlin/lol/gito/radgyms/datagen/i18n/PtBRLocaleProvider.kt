@@ -71,5 +71,9 @@ class PtBRLocaleProvider(
             RadGyms.modIdentifier("message.info.leader_defeated"),
             "Você venceu! Agora pode sair."
         )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.battle_fled"),
+            "Poderes misteriosos estão te teleportando para longe do julgamento."
+        )
     }
 }

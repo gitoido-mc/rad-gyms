@@ -3,6 +3,8 @@ package lol.gito.radgyms.event
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
+import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -19,6 +21,7 @@ import lol.gito.radgyms.entity.Trainer
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.gym.SpeciesManager.speciesOfType
+import lol.gito.radgyms.network.NetworkStackHandler
 import lol.gito.radgyms.world.DimensionManager
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
@@ -43,6 +46,9 @@ object EventManager {
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.LOW, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.LOW, ::onPlayerDisconnect)
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onGymBattleWon)
+        CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onGymBattleFled)
+        CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
+
         CobblemonEvents.DATA_SYNCHRONIZED.subscribe(Priority.NORMAL) { _ ->
             RadGyms.LOGGER.info("Cobblemon DATA_SYNCHRONIZED triggered, updating elemental gyms species map")
             onSpeciesUpdate()
@@ -143,7 +149,7 @@ object EventManager {
                     GymManager.handleLeaderBattleWon(player, player.world)
                     GymManager.handleLootDistribution(player)
                 }
-             }
+            }
         }
     }
 
@@ -151,6 +157,32 @@ object EventManager {
         for (type in ElementalTypes.all()) {
             SPECIES_BY_TYPE[type.name] = speciesOfType(type)
             RadGyms.LOGGER.info("Added ${SPECIES_BY_TYPE[type.name]?.size} ${type.name} entries to species map")
+        }
+    }
+
+    private fun onGymBattleFled(event: BattleFledEvent) {
+        val loser = event.player
+        val entity = loser.entity ?: return
+        if (loser.type != ActorType.PLAYER) return
+
+        if (entity.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
+            entity.sendMessage(Text.of(modIdentifier("message.info.battle_fled")))
+            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymLeave())
+        }
+    }
+
+    private fun onGymBattleFainted(event: BattleFaintedEvent) {
+        val killed = event.killed
+        val entity = killed.entity ?: return
+        val owner = entity.owner ?: return
+        if (killed.actor.type != ActorType.PLAYER) return
+        if (owner.isDead) return
+
+        if (owner.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
+            if (killed.actor.pokemonList.all { it.health == 0 }) {
+                entity.sendMessage(Text.of(modIdentifier("message.info.battle_fled")))
+                RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymLeave())
+            }
         }
     }
 }
