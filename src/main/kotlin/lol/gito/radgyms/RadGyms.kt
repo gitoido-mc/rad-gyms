@@ -13,6 +13,7 @@ import lol.gito.radgyms.item.ItemGroupManager
 import lol.gito.radgyms.item.ItemManager
 import lol.gito.radgyms.network.NetworkStackHandler
 import lol.gito.radgyms.gym.SpeciesManager
+import lol.gito.radgyms.item.DataComponentManager
 import lol.gito.radgyms.world.DimensionManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -43,6 +44,7 @@ object RadGyms : ModInitializer {
         DimensionManager.register()
 
         // Blocks, items and creative tab
+        DataComponentManager.register()
         ItemManager.register()
         BlockManager.register()
         ItemGroupManager.register()

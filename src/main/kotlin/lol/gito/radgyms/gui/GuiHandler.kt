@@ -9,8 +9,8 @@ import net.minecraft.util.math.BlockPos
 @Environment(EnvType.CLIENT)
 object GuiHandler {
     @Environment(EnvType.CLIENT)
-    fun openGymKeyScreen(player: PlayerEntity) {
-        MinecraftClient.getInstance().execute { MinecraftClient.getInstance().setScreen(GymEnterScreen(player)) }
+    fun openGymKeyScreen(player: PlayerEntity, type: String? = null) {
+        MinecraftClient.getInstance().execute { MinecraftClient.getInstance().setScreen(GymEnterScreen(player, type)) }
     }
     @Environment(EnvType.CLIENT)
     fun openGymEntranceScreen(player: PlayerEntity, type: String, blockPos: BlockPos) {

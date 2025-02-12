@@ -16,13 +16,22 @@ object NetworkStackHandler {
     val GYM_KEY_PACKET_ID = modIdentifier("net.gym_enter")
     val GYM_LEAVE_PACKET_ID = modIdentifier("net.gym_leave")
 
+    sealed interface GymEnter
+
     @JvmRecord
-    data class GymEnter(
+    data class GymEnterWithCoords(
         val id: Identifier = GYM_KEY_PACKET_ID,
         val level: Int,
         val type: String,
-        val blockPos: Long? = null
-    )
+        val blockPos: Long
+    ) : GymEnter
+
+    @JvmRecord
+    data class GymEnterWithoutCoords(
+        val id: Identifier = GYM_KEY_PACKET_ID,
+        val level: Int,
+        val type: String
+    ) : GymEnter
 
     @JvmRecord
     data class GymLeave(
@@ -31,7 +40,8 @@ object NetworkStackHandler {
 
     fun register() {
         RadGyms.LOGGER.info("Registering network stack handler")
-        RadGyms.CHANNEL.registerServerbound(GymEnter::class.java, ::handleGymEnterPacket)
+        RadGyms.CHANNEL.registerServerbound(GymEnterWithCoords::class.java, ::handleGymEnterPacket)
+        RadGyms.CHANNEL.registerServerbound(GymEnterWithoutCoords::class.java, ::handleGymEnterPacket)
         RadGyms.CHANNEL.registerServerbound(GymLeave::class.java, ::handleGymLeavePacket)
     }
 
@@ -40,18 +50,42 @@ object NetworkStackHandler {
         val world = player.world
 
         if (player is ServerPlayerEntity && world is ServerWorld) {
-            if (packet.blockPos != null) {
-                val blockPos = BlockPos.fromLong(packet.blockPos)
-                if (world.getBlockEntity(blockPos) is GymEntranceEntity) {
-                    val gymEntrance = player.world.getBlockEntity(blockPos) as GymEntranceEntity
-                    gymEntrance.incrementPlayerUseCount(player)
-                    RadGyms.LOGGER.info("Gym Entrance at ${blockPos.asLong()} - increased usage for player ${player.name.literalString}")
+            when (packet) {
+                is GymEnterWithCoords -> {
+                    val blockPos = BlockPos.fromLong(packet.blockPos)
+                    if (world.getBlockEntity(blockPos) is GymEntranceEntity) {
+                        val gymEntrance = player.world.getBlockEntity(blockPos) as GymEntranceEntity
+                        gymEntrance.incrementPlayerUseCount(player)
+                        RadGyms.LOGGER.info("Gym Entrance at $blockPos - increased usage for player ${player.name.string}")
+                    }
+                    world.chunkManager.markForUpdate(blockPos)
+                    executeEnter(world, player, packet.level, packet.type, false)
                 }
-                world.chunkManager.markForUpdate(blockPos)
+
+                is GymEnterWithoutCoords -> {
+                    executeEnter(world, player, packet.level, packet.type, true)
+                }
             }
-            world.server.execute { GymEnterPacketHandler(player, world, packet.level, packet.blockPos == null, packet.type) }
         } else {
             player.sendMessage(translatable(modIdentifier("message.error.common.no-response").toTranslationKey()))
+        }
+    }
+
+    private fun executeEnter(
+        world: ServerWorld,
+        player: ServerPlayerEntity,
+        level: Int,
+        type: String,
+        key: Boolean
+    ) {
+        world.server.execute {
+            GymEnterPacketHandler(
+                player,
+                world,
+                level,
+                key,
+                type
+            )
         }
     }
 
