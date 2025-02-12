@@ -23,6 +23,9 @@ class EnUSLocaleProvider(
     ) {
         translationBuilder.add(ItemGroupManager.GYMS_GROUP.displayName.string, "Radical Gyms")
         translationBuilder.add(ItemRegistry.GYM_KEY, "Gym key")
+        translationBuilder.add(ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
+            "Attuned to %s"
+        )
         translationBuilder.add(BlockRegistry.GYM_ENTRANCE, "Gym entrance")
         translationBuilder.add(BlockRegistry.GYM_EXIT, "Gym exit")
         translationBuilder.add(
@@ -66,6 +69,10 @@ class EnUSLocaleProvider(
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.trainer_defeated"),
             "You won! Go challenge next trainer."
+        )
+        translationBuilder.add(
+            RadGyms.modIdentifier("message.info.leader_defeated"),
+            "Congratulations on beating the gym!"
         )
         translationBuilder.add(
             RadGyms.modIdentifier("message.info.battle_fled"),

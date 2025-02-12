@@ -23,6 +23,9 @@ class PtBRLocaleProvider(
     ) {
         translationBuilder.add(ItemGroupManager.GYMS_GROUP.displayName.string, "Ginásios Radicais")
         translationBuilder.add(ItemRegistry.GYM_KEY, "Chave do Ginásio")
+        translationBuilder.add(ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
+            "Sintonizado com o %s"
+        )
         translationBuilder.add(BlockRegistry.GYM_ENTRANCE, "Entrada do Ginásio")
         translationBuilder.add(BlockRegistry.GYM_EXIT, "Saída do Ginásio")
         translationBuilder.add(

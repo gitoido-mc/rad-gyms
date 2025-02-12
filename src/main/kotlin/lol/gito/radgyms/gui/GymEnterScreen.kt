@@ -6,7 +6,6 @@ import io.wispforest.owo.ui.component.ButtonComponent
 import io.wispforest.owo.ui.component.DiscreteSliderComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.block.entity.GymEntranceEntity
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.BlockPos
@@ -89,11 +88,17 @@ class GymEnterScreen(
             RadGyms.LOGGER.info("Sending GymKey(level:$level, type:$type, key: ${blockPos == null}) C2S packet from ${player.name}")
 
             RadGyms.CHANNEL.clientHandle().send(
-                NetworkStackHandler.GymEnter(
-                    level = level,
-                    type = chosenType,
-                    blockPos = blockPos?.asLong()
-                )
+                when (blockPos) {
+                    null -> NetworkStackHandler.GymEnterWithoutCoords(
+                            level = level,
+                            type = chosenType
+                        )
+                    else -> NetworkStackHandler.GymEnterWithCoords(
+                        level = level,
+                        type = chosenType,
+                        blockPos = blockPos.asLong()
+                    )
+                }
             )
         } catch (e: Exception) {
             RadGyms.LOGGER.info(e.toString())
