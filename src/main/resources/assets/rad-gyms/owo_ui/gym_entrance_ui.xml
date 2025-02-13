@@ -16,6 +16,17 @@
                                     </sizing>
                                     <margins>
                                         <top>5</top>
+                                    </margins>
+                                </label>
+                                <label id="usage">
+                                    <text>rad-gyms.gui.common.set-gym-level</text>
+                                    <max-width>250</max-width>
+                                    <horizontal-text-alignment>center</horizontal-text-alignment>
+                                    <sizing>
+                                        <horizontal method="fill">100</horizontal>
+                                    </sizing>
+                                    <margins>
+                                        <top>5</top>
                                         <bottom>10</bottom>
                                     </margins>
                                 </label>
@@ -30,12 +41,12 @@
                                         <button id="dec">
                                             <text translate="true">rad-gyms.gui.common.decrease</text>
                                             <sizing>
-                                                <horizontal method="fixed">24</horizontal>
+                                                <horizontal method="fixed">16</horizontal>
                                             </sizing>
                                         </button>
                                         <discrete-slider min="1" max="100" id="gym_slider">
                                             <sizing>
-                                                <horizontal method="fill">54</horizontal>
+                                                <horizontal method="fill">65</horizontal>
                                                 <vertical method="fixed">20</vertical>
                                             </sizing>
                                             <margins>
@@ -45,7 +56,7 @@
                                         <button id="inc">
                                             <text translate="true">rad-gyms.gui.common.increase</text>
                                             <sizing>
-                                                <horizontal method="fixed">24</horizontal>
+                                                <horizontal method="fixed">16</horizontal>
                                             </sizing>
                                         </button>
                                         <button id="inc-ten">
@@ -88,7 +99,7 @@
                                 </flow-layout>
                             </children>
                             <sizing>
-                                <vertical method="fixed">80</vertical>
+                                <vertical method="fixed">90</vertical>
                                 <horizontal method="fixed">260</horizontal>
                             </sizing>
                         </flow-layout>

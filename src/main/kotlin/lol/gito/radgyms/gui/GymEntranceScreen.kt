@@ -4,19 +4,25 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.ButtonComponent
 import io.wispforest.owo.ui.component.DiscreteSliderComponent
+import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.FlowLayout
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.CHANNEL
+import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.Text.translatable
 import net.minecraft.util.math.BlockPos
 import org.lwjgl.glfw.GLFW
 
-class GymEnterScreen(
+class GymEntranceScreen(
     val player: PlayerEntity,
-    val type: String? = null
+    val type: String? = null,
+    private val blockPos: BlockPos,
+    private val usesLeft: Int
 ) : BaseUIModelScreen<FlowLayout>(
     FlowLayout::class.java,
-    DataSource.asset(RadGyms.modId("gym_enter_ui"))
+    DataSource.asset(modId("gym_entrance_ui"))
 ) {
     private var gymLevel: Double = 1.0
         set(value) {
@@ -30,6 +36,9 @@ class GymEnterScreen(
         root.childById(DiscreteSliderComponent::class.java, "gym_slider").onChanged().subscribe {
             gymLevel = it
         }
+        root.childById(LabelComponent::class.java, "usage").text(
+            translatable(modId("gui.common.uses_left").toTranslationKey(), usesLeft)
+        )
         root.childById(ButtonComponent::class.java, "inc").onPress {
             this.incPress(1.0)
         }
@@ -74,24 +83,24 @@ class GymEnterScreen(
 
     private fun sendStartGymPacket() {
         try {
-            var level: Int = this.gymLevel.toInt()
-            if (level < 5) {
-                level = 5
-            }
+            val level: Int = this.gymLevel.toInt().coerceIn(5, 100)
 
             val chosenType = when (type) {
                 null -> ElementalTypes.all().random().name
                 else -> type
             }
 
-            RadGyms.LOGGER.info("Sending GymEnterWithoutCoords(level:$level, type:$type) C2S packet from ${player.name}")
+            LOGGER.info("Sending GymEnterWithCoords(level:$level, type:$type, blockPos:$blockPos) C2S packet from ${player.name}")
 
-            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymEnterWithoutCoords(
-                level = level,
-                type = chosenType
-            ))
+            CHANNEL.clientHandle().send(
+                NetworkStackHandler.GymEnterWithCoords(
+                    level = level,
+                    type = chosenType,
+                    blockPos = blockPos.asLong()
+                )
+            )
         } catch (e: Exception) {
-            RadGyms.LOGGER.info(e.toString())
+            LOGGER.info(e.toString())
         }
     }
 }

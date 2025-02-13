@@ -37,7 +37,6 @@ data class GymTrainer(
 
 data class GymLootTable(
     val id: Identifier,
-    val rolls: Pair<Int, Int>,
     val levels: Pair<Int, Int>
 )
 
@@ -55,7 +54,6 @@ object GymTemplate {
         lootTables = dto.rewardLootTables.map {
             GymLootTable(
                 Identifier.of(it.id),
-                Pair(it.minRolls, it.maxRolls),
                 Pair(it.minLevel, it.maxLevel),
             )
         }
@@ -85,6 +83,7 @@ object GymTemplate {
                 RCTBattleAIConfig()
             }
 
+
             val ai = RCTBattleAI(
                 battleConfig
             )
@@ -95,8 +94,8 @@ object GymTemplate {
             val team = mutableListOf<PokemonModel>()
             if (trainer.teamType == GymTeamType.GENERATED) {
                 var pokemonCount = 1
-                for (mapperLevel in trainer.countPerLevelThreshold.sortedByDescending { it[0] }) {
-                    if (level <= mapperLevel[0]) {
+                for (mapperLevel in trainer.countPerLevelThreshold.sortedBy { it[0] }) {
+                    if (level >= mapperLevel[0]) {
                         pokemonCount = mapperLevel[1]
                     }
                 }
@@ -170,10 +169,10 @@ object GymTemplate {
     }
 
     private fun fillPokemonModel(species: Pair<Species, FormData>, level: Int): PokemonModel {
-        val pokeString = "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level}"
+        var pokeString = "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level}"
 
         if (Random.nextInt(1, 10) == 1) {
-            pokeString.plus(" shiny=yes")
+            pokeString = pokeString.plus(" shiny=yes")
         }
 
         val poke = pokeString.toPokemon().initialize()

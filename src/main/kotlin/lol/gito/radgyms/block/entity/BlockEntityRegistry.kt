@@ -1,15 +1,14 @@
 package lol.gito.radgyms.block.entity
 
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.block.BlockRegistry
 import net.minecraft.block.Block
-import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.entity.BlockEntityType.BlockEntityFactory
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
-import net.minecraft.util.math.BlockPos
 
 
 object BlockEntityRegistry {
@@ -29,15 +28,13 @@ object BlockEntityRegistry {
         name: String,
         entityFactory: BlockEntityFactory<out F>,
         vararg blocks: Block
-    ): BlockEntityType<F> {
-        return Registry.register(
-            Registries.BLOCK_ENTITY_TYPE,
-            RadGyms.modIdentifier(name),
-            BlockEntityType.Builder.create(entityFactory, *blocks).build()
-        )
-    }
+    ): BlockEntityType<F> = Registry.register(
+        Registries.BLOCK_ENTITY_TYPE,
+        modId(name),
+        BlockEntityType.Builder.create(entityFactory, *blocks).build()
+    )
 
     fun register() {
-        RadGyms.LOGGER.info("Registering block entities")
+        LOGGER.info("Registering block entities")
     }
 }

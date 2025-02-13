@@ -7,7 +7,7 @@ import net.minecraft.world.World
 
 object DimensionManager {
     val RADGYMS_LEVEL_KEY: RegistryKey<World> =
-        RegistryKey.of(RegistryKeys.WORLD, RadGyms.modIdentifier("${RadGyms.MOD_ID}_dim"))
+        RegistryKey.of(RegistryKeys.WORLD, RadGyms.modId("${RadGyms.MOD_ID}_dim"))
 
     fun register() {
         RadGyms.LOGGER.info("Registering gym dimension")

@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.5,
       "entries": [
         {
           "type": "minecraft:tag",
@@ -29,7 +29,11 @@
           "name": "cobblemon:vitamins"
         }
       ],
-      "rolls": 1.0
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 5.0,
+        "min": 1.0
+      }
     }
   ]
 }

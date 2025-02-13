@@ -11,9 +11,8 @@
     }
   },
   "pattern": [
-    "  g",
-    " b ",
-    "   "
+    " g",
+    "b "
   ],
   "result": {
     "count": 1,

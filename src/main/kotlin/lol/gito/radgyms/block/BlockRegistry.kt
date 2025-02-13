@@ -8,7 +8,7 @@ import net.minecraft.block.Blocks
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 
-class BlockRegistry: BlockRegistryContainer {
+class BlockRegistry : BlockRegistryContainer {
     companion object {
         @JvmField
         val GYM_ENTRANCE = GymEntranceBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK))
@@ -18,7 +18,6 @@ class BlockRegistry: BlockRegistryContainer {
         val GYM_EXIT = GymExitBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK))
     }
 
-    override fun createBlockItem(block: Block, identifier: String): BlockItem {
-        return BlockItem(block, Item.Settings().group(ItemGroupManager.GYMS_GROUP))
-    }
+    override fun createBlockItem(block: Block, identifier: String): BlockItem =
+        BlockItem(block, Item.Settings().group(ItemGroupManager.GYMS_GROUP))
 }

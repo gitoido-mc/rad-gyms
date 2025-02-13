@@ -13,9 +13,10 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.CHANNEL
+import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.RCT
-import lol.gito.radgyms.RadGyms.modIdentifier
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.entity.Trainer
 import lol.gito.radgyms.gym.GymManager
@@ -28,7 +29,6 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.registry.RegistryKey
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
@@ -39,22 +39,22 @@ import net.minecraft.world.World
 
 object EventManager {
     fun register() {
-        RadGyms.LOGGER.info("Registering event handlers")
+        LOGGER.info("Registering event handlers")
         UseBlockCallback.EVENT.register(::onBlockInteract)
         PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
         PlatformEvents.SERVER_STARTING.subscribe(Priority.LOW, ::onServerStart)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.LOW, ::onPlayerJoin)
-        PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.LOW, ::onPlayerDisconnect)
+        PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onGymBattleWon)
         CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onGymBattleFled)
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
 
-        CobblemonEvents.DATA_SYNCHRONIZED.subscribe(Priority.NORMAL) { _ ->
-            RadGyms.LOGGER.info("Cobblemon DATA_SYNCHRONIZED triggered, updating elemental gyms species map")
+        CobblemonEvents.DATA_SYNCHRONIZED.subscribe(Priority.LOWEST) { _ ->
+            LOGGER.info("Cobblemon DATA_SYNCHRONIZED triggered, updating elemental gyms species map")
             onSpeciesUpdate()
         }
-        PokemonSpecies.observable.subscribe(Priority.NORMAL) { _ ->
-            RadGyms.LOGGER.info("Cobblemon species observable triggered, updating elemental gyms species map")
+        PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
+            LOGGER.info("Cobblemon species observable triggered, updating elemental gyms species map")
             onSpeciesUpdate()
         }
     }
@@ -96,11 +96,11 @@ object EventManager {
         if (state.block == BlockRegistry.GYM_ENTRANCE) {
             var allowBreak = false
             if (player.isSneaking) {
-                player.sendMessage(Text.translatable(modIdentifier("message.error.gym_entrance.not-sneaking").toTranslationKey()))
+                player.sendMessage(Text.translatable(modId("message.error.gym_entrance.not-sneaking").toTranslationKey()))
                 allowBreak = true
             }
             if (!allowBreak) {
-                player.sendMessage(Text.translatable(modIdentifier("message.info.gym_entrance_breaking").toTranslationKey()))
+                player.sendMessage(Text.translatable(modId("message.info.gym_entrance_breaking").toTranslationKey()))
             }
             return allowBreak
 
@@ -111,18 +111,22 @@ object EventManager {
 
     private fun onServerStart(event: ServerEvent.Starting) {
         val trainerRegistry = RCT.trainerRegistry
-        RadGyms.LOGGER.info("initializing RCT trainer mod registry")
+        LOGGER.info("initializing RCT trainer mod registry")
         trainerRegistry.init(event.server)
     }
 
     private fun onPlayerJoin(event: ServerPlayerEvent) {
-        RadGyms.LOGGER.info("Adding player ${event.player.name} in RadGyms trainer registry")
+        LOGGER.info("Adding player ${event.player.name} in RadGyms trainer registry")
         RCT.trainerRegistry.registerPlayer(event.player.uuid.toString(), event.player)
     }
 
     private fun onPlayerDisconnect(event: ServerPlayerEvent) {
-        RadGyms.LOGGER.info("Removing player ${event.player.name} from RCT trainer mod registry")
+        LOGGER.info("Removing player ${event.player.name} from RCT trainer mod registry")
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
+
+        if (event.player.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
+            CHANNEL.serverHandle(event.player).send(NetworkStackHandler.GymLeave())
+        }
     }
 
     private fun onGymBattleWon(event: BattleVictoryEvent) {
@@ -140,49 +144,47 @@ object EventManager {
 
         val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
         val player = winnerBattleActor.entity as ServerPlayerEntity
-        for (loser in event.losers) {
+        event.losers.forEach { loser ->
             val battleActor = loser as TrainerEntityBattleActor
             if (battleActor.type == ActorType.NPC && battleActor.entity is Trainer) {
-                val trainer = (battleActor.entity as Trainer)
-                trainer.defeated = true
-                if (trainer.leader) {
-                    GymManager.handleLeaderBattleWon(player, player.world)
-                    GymManager.handleLootDistribution(player)
+                (battleActor.entity as Trainer).let { trainer ->
+                    trainer.defeated = true
+                    if (trainer.leader) {
+                        GymManager.handleLeaderBattleWon(player)
+                        GymManager.handleLootDistribution(player)
+                    }
                 }
             }
         }
     }
 
     private fun onSpeciesUpdate() {
-        for (type in ElementalTypes.all()) {
-            SPECIES_BY_TYPE[type.name] = speciesOfType(type)
-            RadGyms.LOGGER.info("Added ${SPECIES_BY_TYPE[type.name]?.size} ${type.name} entries to species map")
+        ElementalTypes.all().forEach {
+            SPECIES_BY_TYPE[it.name] = speciesOfType(it)
+            LOGGER.info("Added ${SPECIES_BY_TYPE[it.name]?.size} ${it.name} entries to species map")
         }
     }
 
     private fun onGymBattleFled(event: BattleFledEvent) {
         val loser = event.player
-        val entity = loser.entity ?: return
         if (loser.type != ActorType.PLAYER) return
 
-        if (entity.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
-            entity.sendMessage(Text.of(modIdentifier("message.info.battle_fled")))
-            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymLeave())
-        }
+        event.battle.players
+            .filter { it.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY }
+            .forEach { player ->
+                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave())
+            }
     }
 
     private fun onGymBattleFainted(event: BattleFaintedEvent) {
         val killed = event.killed
-        val entity = killed.entity ?: return
-        val owner = entity.owner ?: return
         if (killed.actor.type != ActorType.PLAYER) return
-        if (owner.isDead) return
+        if (killed.entity?.owner?.isDead == true) return
 
-        if (owner.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
-            if (killed.actor.pokemonList.all { it.health == 0 }) {
-                entity.sendMessage(Text.of(modIdentifier("message.info.battle_fled")))
-                RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymLeave())
+        event.battle.players
+            .filter { it.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY }
+            .forEach { player ->
+                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave())
             }
-        }
     }
 }

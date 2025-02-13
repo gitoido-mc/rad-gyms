@@ -7,12 +7,11 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.loot.LootPool
 import net.minecraft.loot.LootTable
-import net.minecraft.loot.context.LootContextType
 import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.loot.entry.ItemEntry
 import net.minecraft.loot.entry.TagEntry
-import net.minecraft.loot.function.SetCountLootFunction
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider
+import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryWrapper
 import java.util.concurrent.CompletableFuture
@@ -45,68 +44,63 @@ class GymLootDataProvider(
         )
     }
 
-    private fun generateSharedDefaultLootTable(): LootTable.Builder {
-        return LootTable.Builder()
-            .pool(
-                LootPool.builder()
-                    .rolls(ConstantLootNumberProvider.create(1.0f))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TUMBLESTONES))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.ANY_HELD_ITEM))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.EVOLUTION_ITEMS))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.RESTORES))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.VITAMINS))
-            )
-    }
+    private fun generateSharedDefaultLootTable() = LootTable.Builder()
+        .pool(
+            LootPool.builder()
+                .rolls(UniformLootNumberProvider.create(1.0f, 2.0f))
+                .bonusRolls(ConstantLootNumberProvider.create(0.25f))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TUMBLESTONES))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.ANY_HELD_ITEM))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.EVOLUTION_ITEMS))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.RESTORES))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.VITAMINS))
+        )
 
-    private fun generateCommonLootTable(): LootTable.Builder {
-        return LootTable.Builder()
-            .pool(
-                LootPool.builder()
-                    .rolls(ConstantLootNumberProvider.create(1.0f))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_1_POKE_BALLS))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_1_POKE_BALL_MATERIALS))
-                    .with(ItemEntry.builder(CobblemonItems.POTION))
-                    .with(ItemEntry.builder(CobblemonItems.ETHER))
-                    .with(ItemEntry.builder(CobblemonItems.REVIVE))
-            )
-    }
+    private fun generateCommonLootTable() = LootTable.Builder()
+        .pool(
+            LootPool.builder()
+                .rolls(UniformLootNumberProvider.create(1.0f, 5.0f))
+                .bonusRolls(ConstantLootNumberProvider.create(0.5f))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_1_POKE_BALLS))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_1_POKE_BALL_MATERIALS))
+                .with(ItemEntry.builder(CobblemonItems.POTION))
+                .with(ItemEntry.builder(CobblemonItems.ETHER))
+                .with(ItemEntry.builder(CobblemonItems.REVIVE))
+        )
 
-    private fun generateUncommonLootTable(): LootTable.Builder {
-        return LootTable.Builder()
-            .pool(
-                LootPool.builder()
-                    .rolls(ConstantLootNumberProvider.create(1.0f))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_2_POKE_BALLS))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_2_POKE_BALL_MATERIALS))
-                    .with(ItemEntry.builder(CobblemonItems.SUPER_POTION))
-                    .with(ItemEntry.builder(CobblemonItems.MAX_ETHER))
-                    .with(ItemEntry.builder(CobblemonItems.REVIVE))
-            )
-    }
+    private fun generateUncommonLootTable() = LootTable.Builder()
+        .pool(
+            LootPool.builder()
+                .rolls(UniformLootNumberProvider.create(1.0f, 5.0f))
+                .bonusRolls(ConstantLootNumberProvider.create(0.5f))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_2_POKE_BALLS))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_2_POKE_BALL_MATERIALS))
+                .with(ItemEntry.builder(CobblemonItems.SUPER_POTION))
+                .with(ItemEntry.builder(CobblemonItems.MAX_ETHER))
+                .with(ItemEntry.builder(CobblemonItems.REVIVE))
+        )
 
-    private fun generateRareLootTable(): LootTable.Builder {
-        return LootTable.Builder()
-            .pool(
-                LootPool.builder()
-                    .rolls(ConstantLootNumberProvider.create(1.0f))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_3_POKE_BALLS))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_3_POKE_BALL_MATERIALS))
-                    .with(ItemEntry.builder(CobblemonItems.HYPER_POTION))
-                    .with(ItemEntry.builder(CobblemonItems.ELIXIR))
-                    .with(ItemEntry.builder(CobblemonItems.REVIVE))
-            )
-    }
+    private fun generateRareLootTable() = LootTable.Builder()
+        .pool(
+            LootPool.builder()
+                .rolls(UniformLootNumberProvider.create(1.0f, 5.0f))
+                .bonusRolls(ConstantLootNumberProvider.create(0.5f))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_3_POKE_BALLS))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_3_POKE_BALL_MATERIALS))
+                .with(ItemEntry.builder(CobblemonItems.HYPER_POTION))
+                .with(ItemEntry.builder(CobblemonItems.ELIXIR))
+                .with(ItemEntry.builder(CobblemonItems.REVIVE))
+        )
 
-    private fun generateEpicLootTable(): LootTable.Builder {
-        return LootTable.Builder()
-            .pool(
-                LootPool.builder()
-                    .rolls(ConstantLootNumberProvider.create(1.0f))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_4_POKE_BALLS))
-                    .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_4_POKE_BALL_MATERIALS))
-                    .with(ItemEntry.builder(CobblemonItems.MAX_POTION))
-                    .with(ItemEntry.builder(CobblemonItems.MAX_ELIXIR))
-                    .with(ItemEntry.builder(CobblemonItems.MAX_REVIVE))
-            )
-    }
+    private fun generateEpicLootTable() = LootTable.Builder()
+        .pool(
+            LootPool.builder()
+                .rolls(UniformLootNumberProvider.create(1.0f, 5.0f))
+                .bonusRolls(ConstantLootNumberProvider.create(0.5f))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_4_POKE_BALLS))
+                .with(TagEntry.expandBuilder(CobblemonItemTags.TIER_4_POKE_BALL_MATERIALS))
+                .with(ItemEntry.builder(CobblemonItems.MAX_POTION))
+                .with(ItemEntry.builder(CobblemonItems.MAX_ELIXIR))
+                .with(ItemEntry.builder(CobblemonItems.MAX_REVIVE))
+        )
 }

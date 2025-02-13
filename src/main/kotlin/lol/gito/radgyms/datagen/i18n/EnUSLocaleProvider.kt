@@ -1,6 +1,7 @@
 package lol.gito.radgyms.datagen.i18n
 
 import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.item.ItemGroupManager
 import lol.gito.radgyms.item.ItemRegistry
@@ -17,66 +18,77 @@ class EnUSLocaleProvider(
     "en_us",
     registryLookup
 ) {
+
+    private fun provideTranslations(): MutableMap<String, String> {
+        return mutableMapOf(
+            ItemGroupManager.GYMS_GROUP.displayName.string to
+                    "Rad Gyms",
+            ItemRegistry.GYM_KEY.translationKey to
+                    "Gym key",
+            ItemRegistry.GYM_KEY.translationKey.plus(".attuned") to
+                    "Attuned to %s",
+            BlockRegistry.GYM_ENTRANCE.translationKey to
+                    "Gym Entrance",
+            BlockRegistry.GYM_EXIT.translationKey to
+                    "Gym Exit",
+            modId("gui.common.set-gym-level").toTranslationKey() to
+                    "Select desirable gym level",
+            modId("gui.common.leave-gym").toTranslationKey() to
+                    "You want to leave? Rewards will be lost if leader is not beaten.",
+            modId("gui.common.increase").toTranslationKey() to
+                    "+1",
+            modId("gui.common.increase-ten").toTranslationKey() to
+                    "+10",
+            modId("gui.common.decrease").toTranslationKey() to
+                    "-1",
+            modId("gui.common.decrease-ten").toTranslationKey() to
+                    "-10",
+            modId("gui.common.leave").toTranslationKey() to
+                    "Leave Gym",
+            modId("gui.common.start").toTranslationKey() to
+                    "Start Gym",
+            modId("gui.common.cancel").toTranslationKey() to
+                    "Cancel",
+            modId("gui.common.uses_left").toTranslationKey() to
+                    "Entrance uses left: %s",
+            modId("npc.trainer_junior").toTranslationKey() to
+                    "Junior gym trainer",
+            modId("npc.trainer_senior").toTranslationKey() to
+                    "Senior gym trainer",
+            modId("npc.leader").toTranslationKey() to
+                    "Gym Leader",
+            modId("message.info.gym_entrance_breaking").toTranslationKey() to
+                    "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance",
+            modId("message.info.gym_entrance_exhausted").toTranslationKey() to
+                    "This gym entrance lost all his energies, look for another one",
+            modId("message.info.trainer_required").toTranslationKey() to
+                    "Go fight %s before challenging me.",
+            modId("message.info.trainer_defeated").toTranslationKey() to
+                    "You won! Go challenge next trainer.",
+            modId("message.info.leader_defeated").toTranslationKey() to
+                    "Congratulations on beating the gym!",
+            modId("message.info.gym_failed").toTranslationKey() to
+                    "Mysterious forces are teleporting you away from the trial",
+            modId("message.info.gym_init").toTranslationKey() to
+                    "Mysterious forces are teleporting you to %s trial",
+            modId("message.info.gym_complete").toTranslationKey() to
+                    "An exit appeared somewhere in gym",
+            modId("message.error.common.no-response").toTranslationKey() to
+                    "Cannot acquire server response, try again",
+            modId("message.error.key.not-in-main-hand").toTranslationKey() to
+                    "Gym key must be in your main hand",
+            modId("message.error.gym_entrance.not-sneaking").toTranslationKey() to
+                    "You need to sneak to break gym entrance",
+        )
+    }
+
+
     override fun generateTranslations(
         wrapperLookup: RegistryWrapper.WrapperLookup,
         translationBuilder: TranslationBuilder
     ) {
-        translationBuilder.add(ItemGroupManager.GYMS_GROUP.displayName.string, "Radical Gyms")
-        translationBuilder.add(ItemRegistry.GYM_KEY, "Gym key")
-        translationBuilder.add(ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
-            "Attuned to %s"
-        )
-        translationBuilder.add(BlockRegistry.GYM_ENTRANCE, "Gym entrance")
-        translationBuilder.add(BlockRegistry.GYM_EXIT, "Gym exit")
-        translationBuilder.add(
-            RadGyms.modIdentifier("gui.common.set-gym-level"),
-            "Select desirable gym level"
-        )
-        translationBuilder.add(
-            RadGyms.modIdentifier("gui.common.leave-gym"),
-            "You want to leave? Rewards will be lost if leader is not beaten."
-        )
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.increase"), "+1")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.increase-ten"), "+10")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease"), "-1")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.decrease-ten"), "-10")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.ok"), "Leave gym")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.start"), "Start gym")
-        translationBuilder.add(RadGyms.modIdentifier("gui.common.cancel"), "Cancel")
-        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_junior"), "Junior gym trainer")
-        translationBuilder.add(RadGyms.modIdentifier("npc.trainer_senior"), "Senior gym trainer")
-        translationBuilder.add(RadGyms.modIdentifier("npc.leader"), "Gym leader")
-        translationBuilder.add(
-            RadGyms.modIdentifier("message.error.key.not-in-main-hand"),
-            "Gym key must be in your main hand!"
-        )
-        translationBuilder.add(
-            RadGyms.modIdentifier("message.error.common.no-response"),
-            "Cannot acquire server response, try again"
-        )
-        translationBuilder.add(
-            RadGyms.modIdentifier("message.error.gym_entrance.not-sneaking"),
-            "You need to sneak to break gym entrance"
-        )
-        translationBuilder.add(
-            RadGyms.modIdentifier("message.info.gym_entrance_breaking"),
-            "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance"
-        )
-        translationBuilder.add(
-            RadGyms.modIdentifier("message.info.trainer_required"),
-            "Go fight %s before challenging me."
-        )
-        translationBuilder.add(
-            RadGyms.modIdentifier("message.info.trainer_defeated"),
-            "You won! Go challenge next trainer."
-        )
-        translationBuilder.add(
-            RadGyms.modIdentifier("message.info.leader_defeated"),
-            "Congratulations on beating the gym!"
-        )
-        translationBuilder.add(
-            RadGyms.modIdentifier("message.info.battle_fled"),
-            "Mysterious forces are teleporting you away from the trial."
-        )
+        for (item in provideTranslations()) {
+            translationBuilder.add(item.key, item.value)
+        }
     }
 }

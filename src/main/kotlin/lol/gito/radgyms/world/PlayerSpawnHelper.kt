@@ -1,6 +1,6 @@
 package lol.gito.radgyms.world
 
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.nbt.EntityDataSaver
 import lol.gito.radgyms.nbt.GymsNbtData
 import net.minecraft.network.packet.s2c.play.PositionFlag
@@ -10,16 +10,16 @@ import net.minecraft.util.math.BlockPos
 import kotlin.random.Random
 
 object PlayerSpawnHelper {
-    fun getUniquePlayerCoords(player: ServerPlayerEntity, world: ServerWorld): BlockPos {
-        val border = world.worldBorder
-        val seed = Random(player.uuid.mostSignificantBits and border.maxRadius.toLong())
+    fun getUniquePlayerCoords(serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld): BlockPos {
+        val border = serverWorld.worldBorder
+        val seed = Random(serverPlayer.uuid.mostSignificantBits and border.maxRadius.toLong())
         val playerX: Int = seed.nextInt(
             border.boundNorth.toInt(),
             border.boundSouth.toInt(),
         ) // get uniq x coord based on player uuid
-        val playerZ: Int = GymsNbtData.incrementVisitCount(player as EntityDataSaver) * 128
+        val playerZ: Int = GymsNbtData.incrementVisitCount(serverPlayer as EntityDataSaver) * 128
 
-        RadGyms.LOGGER.info("Derived player ${player.name} unique X coordinate from UUID: $playerX")
+        LOGGER.info("Derived player ${serverPlayer.name} unique X coordinate from UUID: $playerX")
 
         return BlockPos(
             playerX,
@@ -30,7 +30,7 @@ object PlayerSpawnHelper {
 
     fun teleportPlayer(
         serverPlayer: ServerPlayerEntity,
-        targetDimension: ServerWorld,
+        serverWorld: ServerWorld,
         destX: Double,
         destY: Double,
         destZ: Double,
@@ -42,7 +42,7 @@ object PlayerSpawnHelper {
         val totalExperience: Int = serverPlayer.totalExperience
 
         serverPlayer.teleport(
-            targetDimension,
+            serverWorld,
             destX,
             destY,
             destZ,
@@ -50,6 +50,7 @@ object PlayerSpawnHelper {
             yaw,
             pitch
         )
+        LOGGER.info("Teleported player ${serverPlayer.name}")
 
         serverPlayer.setExperienceLevel(xpLevels)
         serverPlayer.experienceProgress = xpProgress
