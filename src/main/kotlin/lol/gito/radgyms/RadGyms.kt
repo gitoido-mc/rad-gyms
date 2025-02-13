@@ -12,22 +12,21 @@ import lol.gito.radgyms.entity.EntityManager
 import lol.gito.radgyms.event.EventManager
 import lol.gito.radgyms.gym.GymLoader
 import lol.gito.radgyms.gym.GymManager
+import lol.gito.radgyms.item.DataComponentManager
 import lol.gito.radgyms.item.ItemGroupManager
 import lol.gito.radgyms.item.ItemManager
 import lol.gito.radgyms.network.NetworkStackHandler
-import lol.gito.radgyms.item.DataComponentManager
 import lol.gito.radgyms.world.DimensionManager
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.util.stream.Stream
 
 object RadGyms : ModInitializer {
     const val MOD_ID: String = "rad-gyms"
     const val CONFIG_PATH: String = "config/${MOD_ID}_server.json"
-    lateinit var CONFIG: RadGymsConfig.ConfigContainer
+    lateinit var CONFIG: RadGymsConfig
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
     val CHANNEL: OwoNetChannel = OwoNetChannel.create(modId("main"))
     val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
@@ -71,17 +70,28 @@ object RadGyms : ModInitializer {
         configFile.parentFile.mkdirs()
 
         CONFIG = if (configFile.exists()) {
-            Json.decodeFromStream<RadGymsConfig.ConfigContainer>(configFile.inputStream())
+            configFile.inputStream().let {
+                Json.decodeFromStream<RadGymsConfig>(it)
+            }
         } else {
-            RadGymsConfig.ConfigContainer
+            RadGymsConfig(
+                debug = false,
+                maxEntranceUses = 3,
+                ignoredSpecies = emptyList(),
+                ignoredForms = emptyList(),
+            )
         }
-
         saveConfig()
     }
 
     @OptIn(ExperimentalSerializationApi::class)
     fun saveConfig() {
         val configFile = File(CONFIG_PATH)
-        Json.encodeToStream(CONFIG, configFile.outputStream())
+        val prettify = Json {
+            prettyPrint = true
+        }
+        configFile.outputStream().let {
+            prettify.encodeToStream(CONFIG, it)
+        }
     }
 }

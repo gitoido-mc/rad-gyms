@@ -15,6 +15,7 @@ import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.CONFIG
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
@@ -157,7 +158,8 @@ object GymTemplate {
             return fillPokemonModel(species, level)
         } else {
             val species = PokemonSpecies.implemented.asSequence()
-                .associateWith { species -> species.forms }
+                .filter { species -> species.name !in CONFIG.ignoredSpecies }
+                .associateWith { species -> species.forms.filter { form -> form.name !in CONFIG.ignoredForms } }
                 .flatMap { (species, forms) ->
                     forms.map { form -> species to form }
                 }.random()
@@ -169,7 +171,8 @@ object GymTemplate {
     }
 
     private fun fillPokemonModel(species: Pair<Species, FormData>, level: Int): PokemonModel {
-        var pokeString = "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level}"
+        var pokeString =
+            "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level}"
 
         if (Random.nextInt(1, 10) == 1) {
             pokeString = pokeString.plus(" shiny=yes")

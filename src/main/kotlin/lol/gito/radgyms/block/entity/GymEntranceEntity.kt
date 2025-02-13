@@ -1,6 +1,7 @@
 package lol.gito.radgyms.block.entity
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import lol.gito.radgyms.RadGyms.CONFIG
 import lol.gito.radgyms.RadGymsConfig
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -60,7 +61,7 @@ class GymEntranceEntity(
     fun usesLeftForPlayer(player: PlayerEntity): Int {
         val playerCounter = playerUseCounter
             .getOrDefault(player.uuid.toString(), 0)
-            .coerceIn(0, RadGymsConfig.maxEntranceUses)
-        return RadGymsConfig.maxEntranceUses - playerCounter
+            .coerceIn(0, CONFIG.maxEntranceUses)
+        return CONFIG.maxEntranceUses - playerCounter
     }
 }
