@@ -1,103 +1,97 @@
 package lol.gito.radgyms.network
 
+import io.wispforest.owo.network.ClientAccess
 import io.wispforest.owo.network.ServerAccess
 import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.RadGyms.modIdentifier
+import lol.gito.radgyms.RadGyms.CHANNEL
+import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.entity.GymEntranceEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.Text.translatable
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
-
 @Suppress("EmptyMethod")
 object NetworkStackHandler {
-    val GYM_KEY_PACKET_ID = modIdentifier("net.gym_enter")
-    val GYM_LEAVE_PACKET_ID = modIdentifier("net.gym_leave")
-
-    sealed interface GymEnter
+    val PACKET_ENTER_BLOCK = modId("net.gym_enter_block")
+    val PACKET_ENTER_KEY = modId("net.gym_enter_key")
+    val PACKET_LEAVE = modId("net.gym_leave")
+    val PACKET_LEAVE_SERVER = modId("net.gym_leave_server")
 
     @JvmRecord
     data class GymEnterWithCoords(
-        val id: Identifier = GYM_KEY_PACKET_ID,
+        val id: Identifier = PACKET_ENTER_BLOCK,
         val level: Int,
         val type: String,
         val blockPos: Long
-    ) : GymEnter
+    )
 
     @JvmRecord
     data class GymEnterWithoutCoords(
-        val id: Identifier = GYM_KEY_PACKET_ID,
+        val id: Identifier = PACKET_ENTER_KEY,
         val level: Int,
         val type: String
-    ) : GymEnter
+    )
 
     @JvmRecord
     data class GymLeave(
-        val id: Identifier = GYM_LEAVE_PACKET_ID
+        val id: Identifier = PACKET_LEAVE
+    )
+
+    @JvmRecord
+    data class GymLeaveServer(
+        val id: Identifier = PACKET_LEAVE_SERVER
     )
 
     fun register() {
-        RadGyms.LOGGER.info("Registering network stack handler")
-        RadGyms.CHANNEL.registerServerbound(GymEnterWithCoords::class.java, ::handleGymEnterPacket)
-        RadGyms.CHANNEL.registerServerbound(GymEnterWithoutCoords::class.java, ::handleGymEnterPacket)
-        RadGyms.CHANNEL.registerServerbound(GymLeave::class.java, ::handleGymLeavePacket)
+        LOGGER.info("Registering network stack handler")
+        CHANNEL.registerServerbound(GymEnterWithCoords::class.java, ::handleGymEnterBlockPacket)
+        CHANNEL.registerServerbound(GymEnterWithoutCoords::class.java, ::handleGymEnterKeyPacket)
+        CHANNEL.registerServerbound(GymLeave::class.java, ::handleGymLeavePacket)
+        CHANNEL.registerClientboundDeferred(GymLeave::class.java)
     }
 
-    private fun handleGymEnterPacket(packet: GymEnter, context: ServerAccess) {
-        val player = context.player()
-        val world = player.world
+    private fun handleGymEnterBlockPacket(packet: GymEnterWithCoords, context: ServerAccess) {
+        val serverPlayer = context.player() as ServerPlayerEntity
+        val serverWorld = serverPlayer.world as ServerWorld
 
-        if (player is ServerPlayerEntity && world is ServerWorld) {
-            when (packet) {
-                is GymEnterWithCoords -> {
-                    val blockPos = BlockPos.fromLong(packet.blockPos)
-                    if (world.getBlockEntity(blockPos) is GymEntranceEntity) {
-                        val gymEntrance = player.world.getBlockEntity(blockPos) as GymEntranceEntity
-                        gymEntrance.incrementPlayerUseCount(player)
-                        RadGyms.LOGGER.info("Gym Entrance at $blockPos - increased usage for player ${player.name.string}")
-                    }
-                    world.chunkManager.markForUpdate(blockPos)
-                    executeEnter(world, player, packet.level, packet.type, false)
-                }
-
-                is GymEnterWithoutCoords -> {
-                    executeEnter(world, player, packet.level, packet.type, true)
-                }
-            }
-        } else {
-            player.sendMessage(translatable(modIdentifier("message.error.common.no-response").toTranslationKey()))
+        val blockPos = BlockPos.fromLong(packet.blockPos)
+        if (serverWorld.getBlockEntity(blockPos) is GymEntranceEntity) {
+            val gymEntrance = serverPlayer.world.getBlockEntity(blockPos) as GymEntranceEntity
+            gymEntrance.incrementPlayerUseCount(serverPlayer)
+            LOGGER.info("Gym Entrance at $blockPos - increased usage for player ${serverPlayer.name.string}")
         }
+        serverWorld.chunkManager.markForUpdate(blockPos)
+        executeEnter(serverPlayer, serverWorld, packet.level, packet.type, false)
+    }
+
+    private fun handleGymEnterKeyPacket(packet: GymEnterWithoutCoords, context: ServerAccess) {
+        val serverPlayer = context.player() as ServerPlayerEntity
+        val serverWorld = serverPlayer.world as ServerWorld
+
+        executeEnter(serverPlayer, serverWorld, packet.level, packet.type, true)
     }
 
     private fun executeEnter(
-        world: ServerWorld,
-        player: ServerPlayerEntity,
-        level: Int,
-        type: String,
-        key: Boolean
+        serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld, level: Int, type: String, key: Boolean
     ) {
-        world.server.execute {
+        LOGGER.info("Handling GymEnter packet for player ${serverPlayer.name}")
+        serverWorld.server.execute {
             GymEnterPacketHandler(
-                player,
-                world,
-                level,
-                key,
-                type
+                serverPlayer, serverWorld, level, key, type
             )
         }
     }
 
     private fun handleGymLeavePacket(packet: GymLeave, context: ServerAccess) {
-        val player = context.player()
-        val world = player.world
+        val serverPlayer = context.player()
+        LOGGER.info("Received GymLeave ${packet.id} packet for player ${serverPlayer.name}")
 
-        if (player is ServerPlayerEntity && world is ServerWorld) {
-            world.server.execute { GymLeavePacketHandler(player) }
-        } else {
-            player.sendMessage(translatable(modIdentifier("message.error.common.no-response").toTranslationKey()))
+        context.player.server.execute { GymLeavePacketHandler(context.player) }
+    }
 
-        }
+    fun handleGymServerLeavePacket(packet: GymLeave, context: ClientAccess) {
+        CHANNEL.clientHandle().send(GymLeave())
     }
 }

@@ -1,6 +1,6 @@
 package lol.gito.radgyms.world
 
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.LOGGER
 import net.minecraft.structure.StructurePlacementData
 import net.minecraft.util.BlockMirror
 import net.minecraft.util.BlockRotation
@@ -21,13 +21,13 @@ object StructureManager {
                 .setUpdateNeighbors(true)
 
             if (!structureTemplate.get().place(world, pos, pos, structPlacementData, null, 18)) {
-                RadGyms.LOGGER.info("Error placing structure: $structureId")
+                LOGGER.info("Error placing structure: $structureId")
             } else {
                 structTemplateManager.unloadTemplate(Identifier.of(structureId))
-                RadGyms.LOGGER.info("Successfully placed structure: $structureId at ${pos.x},${pos.y},${pos.z}")
+                LOGGER.info("Successfully placed structure: $structureId at ${pos.x},${pos.y},${pos.z}")
             }
         } else {
-            RadGyms.LOGGER.info("Failed to load structure: $structureId")
+            LOGGER.info("Failed to load structure: $structureId")
         }
     }
 }

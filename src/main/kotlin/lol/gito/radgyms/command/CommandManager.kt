@@ -2,7 +2,7 @@ package lol.gito.radgyms.command
 
 import com.mojang.brigadier.context.CommandContext
 import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.RadGyms.modIdentifier
+import lol.gito.radgyms.RadGyms.modId
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.command.CommandManager
@@ -18,7 +18,7 @@ object CommandManager {
         return if (world is ServerWorld) {
             1
         } else {
-            serverPlayer.sendMessage(Text.translatable(modIdentifier("message.error.common.no-response").toTranslationKey()))
+            serverPlayer.sendMessage(Text.translatable(modId("message.error.common.no-response").toTranslationKey()))
             -1
         }
     }

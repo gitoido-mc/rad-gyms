@@ -2,7 +2,6 @@ package lol.gito.radgyms.gui
 
 import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.ButtonComponent
-import io.wispforest.owo.ui.component.DiscreteSliderComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.network.NetworkStackHandler
@@ -13,7 +12,7 @@ class GymLeaveScreen(
     val player: PlayerEntity
 ) : BaseUIModelScreen<FlowLayout>(
     FlowLayout::class.java,
-    DataSource.asset(RadGyms.modIdentifier("gym_leave_ui"))
+    DataSource.asset(RadGyms.modId("gym_leave_ui"))
 ) {
     private lateinit var root: FlowLayout
 

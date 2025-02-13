@@ -18,7 +18,6 @@ repositories {
     maven("https://maven.architectury.dev/")
     maven("https://maven.wispforest.io/releases/")
     maven("https://maven.impactdev.net/repository/development/")
-    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
 }
 
 fabricApi {
@@ -58,9 +57,11 @@ tasks {
         inputs.property("version", project.version)
 
         filesMatching("fabric.mod.json") {
-            expand(mutableMapOf(
-                "version" to project.version
-            ))
+            expand(
+                mutableMapOf(
+                    "version" to project.version
+                )
+            )
         }
     }
 

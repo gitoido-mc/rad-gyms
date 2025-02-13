@@ -8,34 +8,25 @@
   "reward_loot_tables":  [
     {
       "id": "rad-gyms:gyms/default/shared_loot_table",
-      "maxRolls": 3,
       "minLevel": 1,
       "maxLevel": 100
     },
     {
       "id": "rad-gyms:gyms/default/common_loot_table",
-      "minRolls": 1,
-      "maxRolls": 5,
-      "maxLevel": 26
+      "maxLevel": 25
     },
     {
       "id": "rad-gyms:gyms/default/uncommon_loot_table",
-      "minRolls": 1,
-      "maxRolls": 5,
       "minLevel": 26,
       "maxLevel": 50
     },
     {
       "id": "rad-gyms:gyms/default/rare_loot_table",
-      "minRolls": 1,
-      "maxRolls": 5,
       "minLevel": 51,
       "maxLevel": 75
     },
     {
       "id": "rad-gyms:gyms/default/epic_loot_table",
-      "minRolls": 1,
-      "maxRolls": 5,
       "minLevel": 76
     }
   ],

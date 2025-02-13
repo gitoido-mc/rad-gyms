@@ -4,7 +4,8 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import io.wispforest.owo.itemgroup.Icon
 import io.wispforest.owo.itemgroup.OwoItemGroup
 import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.RadGyms.modIdentifier
+import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.GymManager
 import net.minecraft.component.ComponentMap
 import net.minecraft.component.DataComponentTypes
@@ -16,7 +17,7 @@ import net.minecraft.util.Rarity
 
 object ItemGroupManager {
     val GYMS_GROUP: OwoItemGroup = OwoItemGroup
-        .builder(modIdentifier("items")) { Icon.of(ItemRegistry.GYM_KEY) }
+        .builder(modId("items")) { Icon.of(ItemRegistry.GYM_KEY) }
         .disableDynamicTitle()
         .build()
 
@@ -24,20 +25,20 @@ object ItemGroupManager {
         if (item is GymKey) {
             entries.add(item.defaultStack)
 
-            for (type in ElementalTypes.all()) {
+            ElementalTypes.all().forEach {
                 val components = ComponentMap.builder();
                 components.add(DataComponentTypes.RARITY, Rarity.EPIC)
-                components.add(DataComponentManager.GYM_TYPE_COMPONENT, type.name)
+                components.add(DataComponentManager.GYM_TYPE_COMPONENT, it.name)
 
                 val stack = ItemStack(item)
                 stack.applyComponentsFrom(components.build())
                 entries.add(stack)
             }
 
-            for (type in GymManager.GYM_TEMPLATES.filterNot { it.key == "default" }.map { it.key }) {
+            GymManager.GYM_TEMPLATES.filterNot { it.key == "default" }.map { it.key }.forEach {
                 val components = ComponentMap.builder();
                 components.add(DataComponentTypes.RARITY, Rarity.EPIC)
-                components.add(DataComponentManager.GYM_TYPE_COMPONENT, type)
+                components.add(DataComponentManager.GYM_TYPE_COMPONENT, it)
 
                 val stack = ItemStack(item)
                 stack.applyComponentsFrom(components.build())
@@ -47,7 +48,7 @@ object ItemGroupManager {
     }
 
     fun register() {
-        RadGyms.LOGGER.info("Registering item groups")
+        LOGGER.info("Registering item groups")
         GYMS_GROUP.initialize()
     }
 }

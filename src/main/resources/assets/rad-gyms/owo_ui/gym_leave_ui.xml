@@ -21,7 +21,7 @@
                                 <flow-layout direction="horizontal">
                                     <children>
                                         <button id="ok">
-                                            <text translate="true">rad-gyms.gui.common.ok</text>
+                                            <text translate="true">rad-gyms.gui.common.leave</text>
                                             <sizing>
                                                 <horizontal method="fill">45</horizontal>
                                                 <vertical method="fixed">20</vertical>

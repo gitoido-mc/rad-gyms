@@ -35,9 +35,7 @@ class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : Villag
     }
 
     companion object {
-        fun createAttributes(): DefaultAttributeContainer.Builder {
-            return createVillagerAttributes()
-        }
+        fun createAttributes(): DefaultAttributeContainer.Builder = createVillagerAttributes()
     }
 
     override fun getMaxLookYawChange(): Int = 360
@@ -106,7 +104,7 @@ class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : Villag
             nbt.putUuid(trainerIdKey, trainerId)
         }
         if (requires != null) {
-            nbt.putUuid(requiresKey, trainerId)
+            nbt.putUuid(requiresKey, requires)
         }
 
         return nbt

@@ -16,17 +16,12 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 class GymExitBlock(settings: Settings) : BlockWithEntity(settings) {
-    override fun getCodec(): MapCodec<out BlockWithEntity> {
-        return createCodec { settings: Settings -> GymExitBlock(settings) }
-    }
+    override fun getCodec(): MapCodec<out BlockWithEntity> =
+        createCodec { settings: Settings -> GymExitBlock(settings) }
 
-    override fun getRenderType(state: BlockState): BlockRenderType {
-        return BlockRenderType.MODEL
-    }
+    override fun getRenderType(state: BlockState): BlockRenderType = BlockRenderType.MODEL
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
-        return GymExitEntity(pos, state)
-    }
+    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymExitEntity(pos, state)
 
     override fun onUse(
         state: BlockState,

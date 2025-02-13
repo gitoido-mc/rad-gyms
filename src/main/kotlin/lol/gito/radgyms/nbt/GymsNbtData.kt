@@ -1,13 +1,13 @@
 package lol.gito.radgyms.nbt
 
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.modId
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.BlockPos
 
 object GymsNbtData {
-    private val visitedCountKey: String = RadGyms.modIdentifier("visited_count").toTranslationKey()
-    private val returnDimensionKey: String = RadGyms.modIdentifier("return_dim").toTranslationKey()
-    private val returnCoordsKey: String = RadGyms.modIdentifier("return_coords").toTranslationKey()
+    private val visitedCountKey: String = modId("visited_count").toTranslationKey()
+    private val returnDimensionKey: String = modId("return_dim").toTranslationKey()
+    private val returnCoordsKey: String = modId("return_coords").toTranslationKey()
 
     fun incrementVisitCount(player: EntityDataSaver): Int {
         val nbt: NbtCompound = player.getPersistentData()
