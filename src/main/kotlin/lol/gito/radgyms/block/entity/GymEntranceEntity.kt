@@ -1,6 +1,8 @@
 package lol.gito.radgyms.block.entity
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import lol.gito.radgyms.RadGyms.CONFIG
+import lol.gito.radgyms.RadGymsConfig
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -10,7 +12,6 @@ import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.math.BlockPos
-import java.util.*
 
 class GymEntranceEntity(
     pos: BlockPos,
@@ -23,7 +24,7 @@ class GymEntranceEntity(
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
     var gymType: String = ElementalTypes.all().random().name
-    var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
+    private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
 
     fun incrementPlayerUseCount(player: PlayerEntity) {
         val useCounter = playerUseCounter.getOrDefault(player.uuid.toString(), 0)
@@ -32,13 +33,9 @@ class GymEntranceEntity(
         markDirty()
     }
 
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? {
-        return BlockEntityUpdateS2CPacket.create(this)
-    }
+    override fun toUpdatePacket(): Packet<ClientPlayPacketListener> = BlockEntityUpdateS2CPacket.create(this)
 
-    override fun toInitialChunkDataNbt(registryLookup: RegistryWrapper.WrapperLookup): NbtCompound {
-        return createNbt(registryLookup)
-    }
+    override fun toInitialChunkDataNbt(registryLookup: RegistryWrapper.WrapperLookup): NbtCompound = createNbt(registryLookup)
 
     override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
         val playerEntries = nbt.getCompound(playerUsageDataKey)
@@ -59,5 +56,12 @@ class GymEntranceEntity(
         for (key in playerEntriesNBT.keys) {
             playerUseCounter[key] = playerEntriesNBT.getInt(key)
         }
+    }
+
+    fun usesLeftForPlayer(player: PlayerEntity): Int {
+        val playerCounter = playerUseCounter
+            .getOrDefault(player.uuid.toString(), 0)
+            .coerceIn(0, CONFIG.maxEntranceUses)
+        return CONFIG.maxEntranceUses - playerCounter
     }
 }

@@ -29,7 +29,7 @@
 		],
 		"fabric-datagen": [
 			{
-				"value": "lol.gito.radgyms.RadGymsDataGenerator",
+				"value": "lol.gito.radgyms.datagen.RadGymsDataGenerator",
 				"adapter": "kotlin"
 			}
 		]
@@ -44,7 +44,7 @@
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
 		"architectury": ">=13.0.8",
-		"rctapi": ">=0.10.11-beta",
+		"rctapi": ">=0.10.12-beta",
 		"cobblemon": ">=1.6.1+1.21.1",
 		"java": ">=21"
 	},

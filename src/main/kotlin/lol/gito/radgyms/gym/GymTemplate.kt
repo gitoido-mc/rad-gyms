@@ -15,6 +15,7 @@ import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.CONFIG
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
@@ -37,7 +38,6 @@ data class GymTrainer(
 
 data class GymLootTable(
     val id: Identifier,
-    val rolls: Pair<Int, Int>,
     val levels: Pair<Int, Int>
 )
 
@@ -55,7 +55,6 @@ object GymTemplate {
         lootTables = dto.rewardLootTables.map {
             GymLootTable(
                 Identifier.of(it.id),
-                Pair(it.minRolls, it.maxRolls),
                 Pair(it.minLevel, it.maxLevel),
             )
         }
@@ -85,6 +84,7 @@ object GymTemplate {
                 RCTBattleAIConfig()
             }
 
+
             val ai = RCTBattleAI(
                 battleConfig
             )
@@ -95,8 +95,8 @@ object GymTemplate {
             val team = mutableListOf<PokemonModel>()
             if (trainer.teamType == GymTeamType.GENERATED) {
                 var pokemonCount = 1
-                for (mapperLevel in trainer.countPerLevelThreshold.sortedByDescending { it[0] }) {
-                    if (level <= mapperLevel[0]) {
+                for (mapperLevel in trainer.countPerLevelThreshold.sortedBy { it[0] }) {
+                    if (level >= mapperLevel[0]) {
                         pokemonCount = mapperLevel[1]
                     }
                 }
@@ -158,7 +158,8 @@ object GymTemplate {
             return fillPokemonModel(species, level)
         } else {
             val species = PokemonSpecies.implemented.asSequence()
-                .associateWith { species -> species.forms }
+                .filter { species -> species.name !in CONFIG.ignoredSpecies }
+                .associateWith { species -> species.forms.filter { form -> form.name !in CONFIG.ignoredForms } }
                 .flatMap { (species, forms) ->
                     forms.map { form -> species to form }
                 }.random()
@@ -170,10 +171,11 @@ object GymTemplate {
     }
 
     private fun fillPokemonModel(species: Pair<Species, FormData>, level: Int): PokemonModel {
-        val pokeString = "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level}"
+        var pokeString =
+            "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level}"
 
         if (Random.nextInt(1, 10) == 1) {
-            pokeString.plus(" shiny=yes")
+            pokeString = pokeString.plus(" shiny=yes")
         }
 
         val poke = pokeString.toPokemon().initialize()

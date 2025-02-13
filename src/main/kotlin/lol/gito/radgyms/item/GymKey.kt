@@ -2,7 +2,7 @@ package lol.gito.radgyms.item
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.cobblemonResource
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gui.GuiHandler
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.Rarity
@@ -41,17 +42,17 @@ class GymKey : Item(Settings().also { settings ->
         val attuned = itemStack.get(DataComponentManager.GYM_TYPE_COMPONENT)
         if (attuned != null) {
             val tooltipText: MutableText = if (ElementalTypes.get(attuned) != null) {
-                Text.translatable(
+                translatable(
                     ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
-                    Text.translatable(
+                    translatable(
                         cobblemonResource("type.suffix").toTranslationKey(),
-                        Text.translatable(cobblemonResource("type.$attuned").toTranslationKey())
+                        translatable(cobblemonResource("type.$attuned").toTranslationKey())
                     )
                 )
             } else {
-                Text.translatable(
+                translatable(
                     ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
-                    Text.translatable(RadGyms.modIdentifier("custom_type.$attuned").toTranslationKey())
+                    translatable(modId("custom_type.$attuned").toTranslationKey())
                 )
             }
             tooltip.add(tooltipText.formatted(Formatting.GOLD))

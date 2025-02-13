@@ -10,7 +10,7 @@ import net.minecraft.registry.Registry
 object EntityManager {
     val GYM_TRAINER: EntityType<Trainer> = Registry.register(
         Registries.ENTITY_TYPE,
-        RadGyms.modIdentifier("gym_trainer"),
+        RadGyms.modId("gym_trainer"),
         EntityType.Builder.create(::Trainer, SpawnGroup.CREATURE).build("gym_trainer")
     )
 
