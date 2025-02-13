@@ -176,6 +176,7 @@ object EventManager {
         val entity = killed.entity ?: return
         val owner = entity.owner ?: return
         if (killed.actor.type != ActorType.PLAYER) return
+        if (!killed.actor.pokemonList.all { it.health == 0 }) return
         if (owner.isDead) return
 
         if (owner.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
