@@ -20,6 +20,7 @@ import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.entity.Trainer
 import lol.gito.radgyms.gym.GymManager
+import lol.gito.radgyms.gym.GymManager.PLAYER_GYMS
 import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.network.NetworkStackHandler
@@ -123,6 +124,12 @@ object EventManager {
 
         if (event.player.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
             CHANNEL.serverHandle(event.player).send(NetworkStackHandler.GymLeave())
+        }
+
+        PLAYER_GYMS[event.player.uuid]?.npcList?.forEach {
+            LOGGER.info("Removing trainer ${it.second} from registry and discarding associated entity")
+            RCT.trainerRegistry.unregisterById(it.second.toString())
+            event.player.world.getEntityById(it.first)?.discard()
         }
     }
 
