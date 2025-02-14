@@ -42,7 +42,7 @@ class RecipeProvider(
             val pair = elementalTypeKeys(type)
 
             val components = ComponentMap.builder()
-                .add(DataComponentTypes.RARITY, Rarity.EPIC)
+                .add(DataComponentTypes.RARITY, Rarity.RARE)
                 .add(DataComponentManager.GYM_TYPE_COMPONENT, type.name)
 
             ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, pair.first)
