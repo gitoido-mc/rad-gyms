@@ -46,7 +46,7 @@ object GymManager {
 
         if (serverWorld.registryKey != DimensionManager.RADGYMS_LEVEL_KEY) {
             val pos = serverPlayer.pos
-            val gymType = if (type in GYM_TEMPLATES.keys) type else GYM_TEMPLATES.keys.random()
+            val gymType = if (type in GYM_TEMPLATES.keys) type else "default"
             LOGGER.info("Initializing $gymType template for $type gym")
             LOGGER.info("Available templates ${GYM_TEMPLATES.keys}")
 
@@ -130,7 +130,7 @@ object GymManager {
                 uuid = trainerUUID
                 headYaw = trainer.npc.yaw
                 bodyYaw = trainer.npc.yaw
-                customName = trainer.npc.name
+                customName = Text.of(trainer.npc.name)
                 isCustomNameVisible = true
                 setPosition(
                     Vec3d(
@@ -149,9 +149,7 @@ object GymManager {
 
         RCT.trainerRegistry.let { registry ->
             LOGGER.info("Registering trainer ${trainerEntity.id} in RCT registry with id $trainerUUID")
-            registry.registerNPC(trainerUUID.toString(), trainer.trainer).let { record ->
-                record.entity = trainerEntity
-            }
+            registry.registerNPC(trainerUUID.toString(), trainer.trainer).entity = trainerEntity
         }
 
         return trainerEntity
