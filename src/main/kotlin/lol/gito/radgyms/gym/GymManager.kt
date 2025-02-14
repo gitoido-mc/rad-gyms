@@ -173,7 +173,7 @@ object GymManager {
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayerEntity) {
-        val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
+        val gym = PLAYER_GYMS[serverPlayer.uuid]
         val returnDim = when (GymsNbtData.getReturnDimension(serverPlayer as EntityDataSaver)) {
             null -> DimensionTypes.OVERWORLD_ID
             else -> Identifier.of(GymsNbtData.getReturnDimension(serverPlayer as EntityDataSaver))
@@ -181,10 +181,10 @@ object GymManager {
         val dim = serverPlayer.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, returnDim))!!
         val returnCoords = GymsNbtData.getReturnCoordinates(serverPlayer as EntityDataSaver) ?: dim.spawnPos
 
-        gym.npcList.forEach {
+        gym?.npcList?.forEach {
             LOGGER.info("Removing trainer ${it.second} from registry and detaching associated entity")
             RCT.trainerRegistry.unregisterById(it.second.toString())
-            serverPlayer.world.getEntityById(it.first)?.detach()
+            serverPlayer.world.getEntityById(it.first)?.discard()
         }
 
         returnCoords.let {
