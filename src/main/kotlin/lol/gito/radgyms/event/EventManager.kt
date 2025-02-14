@@ -49,15 +49,12 @@ object EventManager {
         CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onGymBattleFled)
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
 
-        CobblemonEvents.DATA_SYNCHRONIZED.subscribe(Priority.LOWEST) { _ ->
-            LOGGER.info("Cobblemon DATA_SYNCHRONIZED triggered, updating elemental gyms species map")
-            onSpeciesUpdate()
-        }
         PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
             LOGGER.info("Cobblemon species observable triggered, updating elemental gyms species map")
             onSpeciesUpdate()
         }
     }
+
 
     @Suppress("UNUSED_PARAMETER")
     private fun onBlockInteract(
@@ -159,6 +156,7 @@ object EventManager {
     }
 
     private fun onSpeciesUpdate() {
+        SPECIES_BY_TYPE.clear()
         ElementalTypes.all().forEach {
             SPECIES_BY_TYPE[it.name] = speciesOfType(it)
             LOGGER.info("Added ${SPECIES_BY_TYPE[it.name]?.size} ${it.name} entries to species map")

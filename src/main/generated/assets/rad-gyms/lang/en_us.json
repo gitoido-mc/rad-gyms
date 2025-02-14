@@ -1,6 +1,9 @@
 {
   "block.rad-gyms.gym_entrance": "Gym Entrance",
   "block.rad-gyms.gym_exit": "Gym Exit",
+  "item.rad-gyms.exit_rope": "Exit rope",
+  "item.rad-gyms.exit_rope.failed": "It cannot be used here",
+  "item.rad-gyms.exit_rope.tooltip": "Single-use rope to escape the gym trial",
   "item.rad-gyms.gym_key": "Gym key",
   "item.rad-gyms.gym_key.attuned": "Attuned to %s",
   "itemGroup.rad-gyms.items": "Rad Gyms",

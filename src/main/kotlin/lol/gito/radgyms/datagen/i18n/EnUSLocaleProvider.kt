@@ -1,6 +1,5 @@
 package lol.gito.radgyms.datagen.i18n
 
-import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.item.ItemGroupManager
@@ -23,6 +22,12 @@ class EnUSLocaleProvider(
         return mutableMapOf(
             ItemGroupManager.GYMS_GROUP.displayName.string to
                     "Rad Gyms",
+            ItemRegistry.EXIT_ROPE.translationKey to
+                    "Exit rope",
+            ItemRegistry.EXIT_ROPE.translationKey.plus(".tooltip") to
+                    "Single-use rope to escape the gym trial",
+            ItemRegistry.EXIT_ROPE.translationKey.plus(".failed") to
+                    "It cannot be used here",
             ItemRegistry.GYM_KEY.translationKey to
                     "Gym key",
             ItemRegistry.GYM_KEY.translationKey.plus(".attuned") to
