@@ -17,7 +17,7 @@ import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.CONFIG
-import net.minecraft.text.Text
+import net.minecraft.text.Text.translatable
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import kotlin.random.Random
@@ -124,7 +124,7 @@ object GymTemplate {
 
 
             val npc = GymNPC(
-                name = Text.translatable(trainer.name).string,
+                name = translatable(trainer.name).string,
                 relativePosition = Vec3d(
                     trainer.spawnRelative.pos[0],
                     trainer.spawnRelative.pos[1],
@@ -139,7 +139,7 @@ object GymTemplate {
                 trainer.id,
                 npc,
                 TrainerModel(
-                    Text.translatable(trainer.name).literalString ?: "Trainer",
+                    translatable(trainer.name).string,
                     JTO.of { ai },
                     bag,
                     team
