@@ -119,7 +119,7 @@ object GymManager {
     }
 
     private fun buildTrainerEntity(
-        trainer: GymTrainer,
+        trainerTemplate: GymTrainer,
         gymDimension: ServerWorld,
         coords: BlockPos,
         trainerUUID: UUID,
@@ -128,20 +128,20 @@ object GymManager {
         val trainerEntity = Trainer(EntityManager.GYM_TRAINER, gymDimension)
             .apply {
                 uuid = trainerUUID
-                headYaw = trainer.npc.yaw
-                bodyYaw = trainer.npc.yaw
-                customName = Text.of(trainer.npc.name)
+                headYaw = trainerTemplate.npc.yaw
+                bodyYaw = trainerTemplate.npc.yaw
+                customName = Text.of(trainerTemplate.npc.name)
                 isCustomNameVisible = true
                 setPosition(
                     Vec3d(
-                        coords.x + trainer.npc.relativePosition.x,
-                        coords.y + trainer.npc.relativePosition.y,
-                        coords.z + trainer.npc.relativePosition.z
+                        coords.x + trainerTemplate.npc.relativePosition.x,
+                        coords.y + trainerTemplate.npc.relativePosition.y,
+                        coords.z + trainerTemplate.npc.relativePosition.z
                     )
                 )
                 trainerId = trainerUUID
                 requires = requiredUUID
-                leader = trainer.leader
+                leader = trainerTemplate.leader
             }.also {
                 LOGGER.info("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
                 gymDimension.spawnEntityAndPassengers(it)
@@ -149,7 +149,7 @@ object GymManager {
 
         RCT.trainerRegistry.let { registry ->
             LOGGER.info("Registering trainer ${trainerEntity.id} in RCT registry with id $trainerUUID")
-            registry.registerNPC(trainerUUID.toString(), trainer.trainer).entity = trainerEntity
+            registry.registerNPC(trainerUUID.toString(), trainerTemplate.trainer).entity = trainerEntity
         }
 
         return trainerEntity

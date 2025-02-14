@@ -12,6 +12,7 @@ import lol.gito.radgyms.entity.EntityManager
 import lol.gito.radgyms.event.EventManager
 import lol.gito.radgyms.gym.GymLoader
 import lol.gito.radgyms.gym.GymManager
+import lol.gito.radgyms.gym.SpeciesManager
 import lol.gito.radgyms.item.DataComponentManager
 import lol.gito.radgyms.item.ItemGroupManager
 import lol.gito.radgyms.item.ItemManager
@@ -41,6 +42,12 @@ object RadGyms : ModInitializer {
         GymManager.register()
         GYM_LOADER.register()
 
+        // Events
+        EventManager.register()
+
+        // Species
+        SpeciesManager.register()
+
         // Worldgen
         DimensionManager.register()
 
@@ -52,9 +59,6 @@ object RadGyms : ModInitializer {
 
         // Commands
         CommandManager.register()
-
-        // Events
-        EventManager.register()
 
         // Network
         NetworkStackHandler.register()

@@ -25,7 +25,6 @@ class GymLoader {
         @OptIn(ExperimentalSerializationApi::class)
         override fun reload(manager: ResourceManager) {
             GYM_TEMPLATES.clear()
-            SPECIES_BY_TYPE.clear()
             manager.findResources("gyms") { path -> path.endsWith(".json") }
                 .forEach { (id: Identifier, res: Resource) ->
                     try {
