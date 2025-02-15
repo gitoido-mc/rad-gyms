@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "multi_bench",
+  "key": {
+    "b": {
+      "item": "cobblemon:binding_band"
+    },
+    "l": {
+      "item": "minecraft:lead"
+    }
+  },
+  "pattern": [
+    "l",
+    "b"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rad-gyms:exit_rope"
+  }
+}

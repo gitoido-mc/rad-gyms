@@ -20,6 +20,7 @@ import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.entity.Trainer
 import lol.gito.radgyms.gym.GymManager
+import lol.gito.radgyms.gym.GymManager.PLAYER_GYMS
 import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.network.NetworkStackHandler
@@ -49,15 +50,12 @@ object EventManager {
         CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onGymBattleFled)
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
 
-        CobblemonEvents.DATA_SYNCHRONIZED.subscribe(Priority.LOWEST) { _ ->
-            LOGGER.info("Cobblemon DATA_SYNCHRONIZED triggered, updating elemental gyms species map")
-            onSpeciesUpdate()
-        }
         PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
             LOGGER.info("Cobblemon species observable triggered, updating elemental gyms species map")
             onSpeciesUpdate()
         }
     }
+
 
     @Suppress("UNUSED_PARAMETER")
     private fun onBlockInteract(
@@ -127,6 +125,12 @@ object EventManager {
         if (event.player.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
             CHANNEL.serverHandle(event.player).send(NetworkStackHandler.GymLeave())
         }
+
+        PLAYER_GYMS[event.player.uuid]?.npcList?.forEach {
+            LOGGER.info("Removing trainer ${it.second} from registry and discarding associated entity")
+            RCT.trainerRegistry.unregisterById(it.second.toString())
+            event.player.world.getEntityById(it.first)?.discard()
+        }
     }
 
     private fun onGymBattleWon(event: BattleVictoryEvent) {
@@ -159,6 +163,7 @@ object EventManager {
     }
 
     private fun onSpeciesUpdate() {
+        SPECIES_BY_TYPE.clear()
         ElementalTypes.all().forEach {
             SPECIES_BY_TYPE[it.name] = speciesOfType(it)
             LOGGER.info("Added ${SPECIES_BY_TYPE[it.name]?.size} ${it.name} entries to species map")

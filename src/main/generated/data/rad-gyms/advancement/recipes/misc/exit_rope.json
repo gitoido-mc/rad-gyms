@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_poke_ball": {
+    "has_binding_band": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:crafting_table"
+            "items": "cobblemon:binding_band"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rad-gyms:gym_key"
+        "recipe": "rad-gyms:exit_rope"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_poke_ball"
+      "has_binding_band"
     ]
   ],
   "rewards": {
     "recipes": [
-      "rad-gyms:gym_key"
+      "rad-gyms:exit_rope"
     ]
   }
 }

@@ -6,6 +6,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import lol.gito.radgyms.RadGyms.CONFIG
+import lol.gito.radgyms.RadGyms.LOGGER
 
 object SpeciesManager {
     var SPECIES_BY_TYPE: HashMap<String, List<Pair<Species, FormData>>> = HashMap(ElementalTypes.count())
@@ -19,5 +20,9 @@ object SpeciesManager {
                     .map { form -> species to form }
             }
             .toList()
+    }
+
+    fun register() {
+        LOGGER.info("Initializing SpeciesManager instance")
     }
 }

@@ -35,14 +35,23 @@ class RecipeProvider(
             .input('g', Items.GOLD_INGOT)
             .input('b', PokeBalls.POKE_BALL.item())
             .group("multi_bench")
-            .criterion(hasItem(Items.CRAFTING_TABLE), RecipeProvider.conditionsFromItem(Items.CRAFTING_TABLE))
+            .criterion(hasItem(PokeBalls.POKE_BALL.item()), RecipeProvider.conditionsFromItem(Items.CRAFTING_TABLE))
+            .offerTo(recipeExporter)
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ItemRegistry.EXIT_ROPE, 1)
+            .pattern("l")
+            .pattern("b")
+            .input('l', Items.LEAD)
+            .input('b', CobblemonItems.BINDING_BAND)
+            .group("multi_bench")
+            .criterion(hasItem(CobblemonItems.BINDING_BAND), RecipeProvider.conditionsFromItem(CobblemonItems.BINDING_BAND))
             .offerTo(recipeExporter)
 
         ElementalTypes.all().forEach { type ->
             val pair = elementalTypeKeys(type)
 
             val components = ComponentMap.builder()
-                .add(DataComponentTypes.RARITY, Rarity.EPIC)
+                .add(DataComponentTypes.RARITY, Rarity.RARE)
                 .add(DataComponentManager.GYM_TYPE_COMPONENT, type.name)
 
             ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, pair.first)

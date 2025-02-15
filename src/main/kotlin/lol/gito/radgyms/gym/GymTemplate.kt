@@ -3,6 +3,7 @@ package lol.gito.radgyms.gym
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
@@ -16,13 +17,13 @@ import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.CONFIG
-import net.minecraft.text.Text
+import net.minecraft.text.Text.translatable
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import kotlin.random.Random
 
 data class GymNPC(
-    val name: Text,
+    val name: String,
     val relativePosition: Vec3d,
     val yaw: Float,
 )
@@ -95,6 +96,7 @@ object GymTemplate {
             val team = mutableListOf<PokemonModel>()
             if (trainer.teamType == GymTeamType.GENERATED) {
                 var pokemonCount = 1
+
                 for (mapperLevel in trainer.countPerLevelThreshold.sortedBy { it[0] }) {
                     if (level >= mapperLevel[0]) {
                         pokemonCount = mapperLevel[1]
@@ -103,13 +105,17 @@ object GymTemplate {
 
                 RadGyms.LOGGER.info("Derived pokemon count for level $level is $pokemonCount")
 
+                val elementType: String? = if (type == "default") {
+                    ElementalTypes.all().random().name
+                } else null
+
+
                 for (i in 1..pokemonCount) {
-                    team.add(generatePokemon(level, type))
+                    team.add(generatePokemon(level, elementType ?: type))
                 }
             } else {
                 for (pokeParams in trainer.team!!) {
                     val props = PokemonProperties.parse(pokeParams)
-                    props.level = level
                     val poke = props.create()
 
                     team.add(fillPokemonModelFromPokemon(poke))
@@ -118,7 +124,7 @@ object GymTemplate {
 
 
             val npc = GymNPC(
-                name = Text.translatable(trainer.name),
+                name = translatable(trainer.name).string,
                 relativePosition = Vec3d(
                     trainer.spawnRelative.pos[0],
                     trainer.spawnRelative.pos[1],
@@ -133,7 +139,7 @@ object GymTemplate {
                 trainer.id,
                 npc,
                 TrainerModel(
-                    Text.of(trainer.name).literalString ?: "Trainer",
+                    translatable(trainer.name).string,
                     JTO.of { ai },
                     bag,
                     team
@@ -150,9 +156,7 @@ object GymTemplate {
     private fun generatePokemon(level: Int, type: String?): PokemonModel {
         RadGyms.LOGGER.info("Generating pokemon with level $level and type $type")
         if (type != null && type != "default") {
-            RadGyms.LOGGER.info("count in bucket ${SpeciesManager.SPECIES_BY_TYPE[type]?.size}")
             val species = SpeciesManager.SPECIES_BY_TYPE[type]?.toList()?.random()!!
-
             RadGyms.LOGGER.info("Picked ${species.first.showdownId()} form=${species.second.formOnlyShowdownId()} level=${level}")
 
             return fillPokemonModel(species, level)

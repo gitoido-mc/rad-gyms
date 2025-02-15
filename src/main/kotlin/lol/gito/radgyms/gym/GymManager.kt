@@ -46,7 +46,7 @@ object GymManager {
 
         if (serverWorld.registryKey != DimensionManager.RADGYMS_LEVEL_KEY) {
             val pos = serverPlayer.pos
-            val gymType = if (type in GYM_TEMPLATES.keys) type else GYM_TEMPLATES.keys.random()
+            val gymType = if (type in GYM_TEMPLATES.keys) type else "default"
             LOGGER.info("Initializing $gymType template for $type gym")
             LOGGER.info("Available templates ${GYM_TEMPLATES.keys}")
 
@@ -119,7 +119,7 @@ object GymManager {
     }
 
     private fun buildTrainerEntity(
-        trainer: GymTrainer,
+        trainerTemplate: GymTrainer,
         gymDimension: ServerWorld,
         coords: BlockPos,
         trainerUUID: UUID,
@@ -128,20 +128,20 @@ object GymManager {
         val trainerEntity = Trainer(EntityManager.GYM_TRAINER, gymDimension)
             .apply {
                 uuid = trainerUUID
-                headYaw = trainer.npc.yaw
-                bodyYaw = trainer.npc.yaw
-                customName = trainer.npc.name
+                headYaw = trainerTemplate.npc.yaw
+                bodyYaw = trainerTemplate.npc.yaw
+                customName = Text.of(trainerTemplate.npc.name)
                 isCustomNameVisible = true
                 setPosition(
                     Vec3d(
-                        coords.x + trainer.npc.relativePosition.x,
-                        coords.y + trainer.npc.relativePosition.y,
-                        coords.z + trainer.npc.relativePosition.z
+                        coords.x + trainerTemplate.npc.relativePosition.x,
+                        coords.y + trainerTemplate.npc.relativePosition.y,
+                        coords.z + trainerTemplate.npc.relativePosition.z
                     )
                 )
                 trainerId = trainerUUID
                 requires = requiredUUID
-                leader = trainer.leader
+                leader = trainerTemplate.leader
             }.also {
                 LOGGER.info("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
                 gymDimension.spawnEntityAndPassengers(it)
@@ -149,9 +149,7 @@ object GymManager {
 
         RCT.trainerRegistry.let { registry ->
             LOGGER.info("Registering trainer ${trainerEntity.id} in RCT registry with id $trainerUUID")
-            registry.registerNPC(trainerUUID.toString(), trainer.trainer).let { record ->
-                record.entity = trainerEntity
-            }
+            registry.registerNPC(trainerUUID.toString(), trainerTemplate.trainer).entity = trainerEntity
         }
 
         return trainerEntity
@@ -175,7 +173,7 @@ object GymManager {
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayerEntity) {
-        val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
+        val gym = PLAYER_GYMS[serverPlayer.uuid]
         val returnDim = when (GymsNbtData.getReturnDimension(serverPlayer as EntityDataSaver)) {
             null -> DimensionTypes.OVERWORLD_ID
             else -> Identifier.of(GymsNbtData.getReturnDimension(serverPlayer as EntityDataSaver))
@@ -183,10 +181,10 @@ object GymManager {
         val dim = serverPlayer.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, returnDim))!!
         val returnCoords = GymsNbtData.getReturnCoordinates(serverPlayer as EntityDataSaver) ?: dim.spawnPos
 
-        gym.npcList.forEach {
+        gym?.npcList?.forEach {
             LOGGER.info("Removing trainer ${it.second} from registry and detaching associated entity")
             RCT.trainerRegistry.unregisterById(it.second.toString())
-            serverPlayer.world.getEntityById(it.first)?.detach()
+            serverPlayer.world.getEntityById(it.first)?.discard()
         }
 
         returnCoords.let {

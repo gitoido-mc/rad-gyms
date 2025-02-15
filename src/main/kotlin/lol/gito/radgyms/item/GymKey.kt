@@ -21,7 +21,7 @@ import net.minecraft.world.World
 class GymKey : Item(Settings().also { settings ->
     settings
         .group(ItemGroupManager.GYMS_GROUP)
-        .rarity(Rarity.RARE)
+        .rarity(Rarity.UNCOMMON)
         .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)
         .stackGenerator(ItemGroupManager::gymTypeItemStacks)
 }) {
@@ -61,7 +61,7 @@ class GymKey : Item(Settings().also { settings ->
 
     override fun getDefaultStack(): ItemStack {
         val itemStack = ItemStack(this)
-        itemStack.set(DataComponentTypes.RARITY, Rarity.RARE)
+        itemStack.set(DataComponentTypes.RARITY, Rarity.UNCOMMON)
 
         return itemStack
     }

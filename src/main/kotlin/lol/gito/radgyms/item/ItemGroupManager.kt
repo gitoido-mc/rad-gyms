@@ -27,7 +27,7 @@ object ItemGroupManager {
 
             ElementalTypes.all().forEach {
                 val components = ComponentMap.builder();
-                components.add(DataComponentTypes.RARITY, Rarity.EPIC)
+                components.add(DataComponentTypes.RARITY, Rarity.RARE)
                 components.add(DataComponentManager.GYM_TYPE_COMPONENT, it.name)
 
                 val stack = ItemStack(item)

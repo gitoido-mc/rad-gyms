@@ -6,5 +6,8 @@ class ItemRegistry : ItemRegistryContainer {
     companion object {
         @JvmField
         val GYM_KEY = GymKey()
+
+        @JvmField
+        val EXIT_ROPE = ExitRope()
     }
 }
