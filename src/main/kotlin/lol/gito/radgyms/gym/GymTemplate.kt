@@ -2,12 +2,15 @@ package lol.gito.radgyms.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
+import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.toPokemon
+import com.cobblemon.mod.common.util.toProperties
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
@@ -182,7 +185,38 @@ object GymTemplate {
             pokeString = pokeString.plus(" shiny=yes")
         }
 
-        val poke = pokeString.toPokemon().initialize()
+        val pokemonProperties: PokemonProperties = pokeString.toProperties()
+
+        // Thanks Ludichat [Cobbreeding project code]
+        if (pokemonProperties.form != null && PokemonSpecies.getByName(species.first.name) != null)
+        {
+            PokemonSpecies.getByName(species.first.name)!!.forms.find { it.formOnlyShowdownId() == pokemonProperties.form }?.run {
+                aspects.forEach {
+                    // alternative form
+                    pokemonProperties.customProperties.add(FlagSpeciesFeature(it, true))
+                    // regional bias
+                    pokemonProperties.customProperties.add(
+                        StringSpeciesFeature(
+                            "region_bias",
+                            it.split("-").last()
+                        )
+                    )
+                    // Basculin wants to be special
+                    // We're handling aspects now but some form handling should be kept to prevent
+                    // legitimate abilities to be flagged as forced
+                    pokemonProperties.customProperties.add(
+                        StringSpeciesFeature(
+                            "fish_stripes",
+                            it.removeSuffix("striped")
+                        )
+                    )
+                }
+            }
+        }
+
+        val poke = pokemonProperties.create()
+        poke.setFriendship(120)
+        poke.forcedAspects = pokemonProperties.aspects
 
         return fillPokemonModelFromPokemon(poke)
     }
