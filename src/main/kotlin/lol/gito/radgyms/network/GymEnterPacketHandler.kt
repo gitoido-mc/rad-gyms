@@ -1,12 +1,16 @@
 package lol.gito.radgyms.network
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.util.cobblemonResource
+import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.item.ItemRegistry
 import lol.gito.radgyms.item.dataComponent.DataComponentManager.GYM_TYPE_COMPONENT
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.text.MutableText
+import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 
 object GymEnterPacketHandler {
@@ -17,6 +21,7 @@ object GymEnterPacketHandler {
         key: Boolean = false,
         type: String
     ) {
+        LOGGER.info("Using key? : $key")
         var message = translatable(
             modId("message.info.gym_init").toTranslationKey(),
             type
@@ -27,11 +32,17 @@ object GymEnterPacketHandler {
 
             if (stack.item == ItemRegistry.GYM_KEY) {
                 val stackType = stack.components.get(GYM_TYPE_COMPONENT).let { it ?: type }
+                LOGGER.info("Gym key type : $stackType")
 
-                if (stackType !in ElementalTypes.all().map { it.name }) {
-                    message = translatable(
+                message = if (stackType !in ElementalTypes.all().map { it.name }) {
+                    translatable(
                         modId("message.info.gym_init").toTranslationKey(),
                         translatable(modId("custom_type.$stackType").toTranslationKey())
+                    )
+                } else {
+                    translatable(
+                        modId("message.info.gym_init").toTranslationKey(),
+                        translatable(cobblemonResource("type.$stackType").toTranslationKey())
                     )
                 }
 
