@@ -2,7 +2,7 @@ package lol.gito.radgyms.datagen.i18n
 
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
-import lol.gito.radgyms.item.ItemGroupManager
+import lol.gito.radgyms.item.group.ItemGroupManager
 import lol.gito.radgyms.item.ItemRegistry
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider

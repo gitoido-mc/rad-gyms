@@ -1,4 +1,4 @@
-package lol.gito.radgyms.item
+package lol.gito.radgyms.item.dataComponent
 
 import com.mojang.serialization.Codec
 import lol.gito.radgyms.RadGyms.LOGGER

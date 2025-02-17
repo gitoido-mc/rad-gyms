@@ -1,12 +1,14 @@
-package lol.gito.radgyms.item
+package lol.gito.radgyms.item.group
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import io.wispforest.owo.itemgroup.Icon
 import io.wispforest.owo.itemgroup.OwoItemGroup
-import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.GymManager
+import lol.gito.radgyms.item.GymKey
+import lol.gito.radgyms.item.ItemRegistry
+import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import net.minecraft.component.ComponentMap
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.item.Item
