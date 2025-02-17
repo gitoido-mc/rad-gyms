@@ -66,6 +66,8 @@ class EnUSLocaleProvider(
                     "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance",
             modId("message.info.gym_entrance_exhausted").toTranslationKey() to
                     "This gym entrance lost all his energies, look for another one",
+            modId("message.info.gym_entrance_party_fainted").toTranslationKey() to
+                    "Your party requires healing",
             modId("message.info.trainer_required").toTranslationKey() to
                     "Go fight %s before challenging me.",
             modId("message.info.trainer_defeated").toTranslationKey() to

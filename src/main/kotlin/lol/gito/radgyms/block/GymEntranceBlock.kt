@@ -1,5 +1,6 @@
 package lol.gito.radgyms.block
 
+import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.entity.GymEntranceEntity
@@ -11,6 +12,7 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
@@ -42,6 +44,15 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
     ): ActionResult {
         if (world.getBlockEntity(pos) !is GymEntranceEntity) {
             return super.onUse(state, world, pos, player, hit)
+        }
+
+        if (!world.isClient) {
+            val party = (player as ServerPlayerEntity).party()
+            if (party.all { it.isFainted() }) {
+                player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
+
+                return ActionResult.PASS
+            }
         }
 
         val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity

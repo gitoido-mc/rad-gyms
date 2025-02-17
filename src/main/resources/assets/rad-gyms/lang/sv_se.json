@@ -23,6 +23,7 @@
   "rad-gyms.message.info.gym_complete": "En utgång dök upp någonstans i gymmet...",
   "rad-gyms.message.info.gym_entrance_breaking": "Gymingångar droppas inte när de bryts. Om du bryter den förlorar alla spelare tillgång till denna ingång.",
   "rad-gyms.message.info.gym_entrance_exhausted": "Denna gymingång har förlorat all sin energi, leta efter en annan",
+  "rad-gyms.message.info.gym_entrance_party_fainted": "Ditt lag behöver läkning",
   "rad-gyms.message.info.gym_failed": "Mystiska krafter teleporterar dig bort från trialen",
   "rad-gyms.message.info.gym_init": "Mystiska krafter teleporterar dig till {0} trial",
   "rad-gyms.message.info.leader_defeated": "Grattis till att du besegrat gymmet!",
