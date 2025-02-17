@@ -1,7 +1,7 @@
 package lol.gito.radgyms.block
 
 import io.wispforest.owo.registration.reflect.BlockRegistryContainer
-import lol.gito.radgyms.item.ItemGroupManager
+import lol.gito.radgyms.item.group.ItemGroupManager
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks

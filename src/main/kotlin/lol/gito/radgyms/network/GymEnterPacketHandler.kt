@@ -1,15 +1,12 @@
 package lol.gito.radgyms.network
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.GymManager
-import lol.gito.radgyms.item.DataComponentManager
 import lol.gito.radgyms.item.ItemRegistry
+import lol.gito.radgyms.item.dataComponent.DataComponentManager.GYM_TYPE_COMPONENT
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.Text
-import net.minecraft.text.Text.literal
 import net.minecraft.text.Text.translatable
 
 object GymEnterPacketHandler {
@@ -29,7 +26,7 @@ object GymEnterPacketHandler {
             val stack = player.mainHandStack
 
             if (stack.item == ItemRegistry.GYM_KEY) {
-                val stackType = stack.components.get(DataComponentManager.GYM_TYPE_COMPONENT).let { it ?: type }
+                val stackType = stack.components.get(GYM_TYPE_COMPONENT).let { it ?: type }
 
                 if (stackType !in ElementalTypes.all().map { it.name }) {
                     message = translatable(

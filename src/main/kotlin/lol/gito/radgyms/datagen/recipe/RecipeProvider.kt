@@ -7,7 +7,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.CobblemonItem
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.datagen.json.builder.ShapelessWithComponentRecipeJsonBuilder
-import lol.gito.radgyms.item.DataComponentManager
+import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import lol.gito.radgyms.item.GymKey
 import lol.gito.radgyms.item.ItemRegistry
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
@@ -17,7 +17,6 @@ import net.minecraft.component.DataComponentTypes
 import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.item.Items
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.RegistryWrapper

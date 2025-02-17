@@ -1,0 +1,168 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:mushroom_fields",
+    "minecraft:stony_shore",
+    "minecraft:swamp",
+    "minecraft:mangrove_swamp",
+    "minecraft:snowy_slopes",
+    "minecraft:snowy_plains",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:grove",
+    "minecraft:windswept_hills",
+    "minecraft:snowy_taiga",
+    "minecraft:windswept_forest",
+    "minecraft:taiga",
+    "minecraft:plains",
+    "minecraft:meadow",
+    "minecraft:forest",
+    "minecraft:old_growth_spruce_taiga",
+    "minecraft:flower_forest",
+    "minecraft:birch_forest",
+    "minecraft:dark_forest",
+    "minecraft:savanna_plateau",
+    "minecraft:savanna",
+    "minecraft:jungle",
+    "minecraft:badlands",
+    "minecraft:desert",
+    "minecraft:wooded_badlands",
+    "minecraft:jagged_peaks",
+    "minecraft:stony_peaks",
+    "minecraft:ice_spikes",
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:sunflower_plains",
+    "minecraft:old_growth_birch_forest",
+    "minecraft:sparse_jungle",
+    "minecraft:bamboo_jungle",
+    "minecraft:eroded_badlands",
+    "minecraft:windswept_savanna",
+    "minecraft:cherry_grove",
+    "minecraft:frozen_peaks",
+    "#cobblemon:is_arid",
+    "#cobblemon:is_coast",
+    "#cobblemon:is_floral",
+    "#cobblemon:is_forest",
+    "#cobblemon:is_swamp",
+    "#cobblemon:is_grassland",
+    "#cobblemon:is_highlands",
+    "#cobblemon:is_island",
+    "#cobblemon:is_jungle",
+    "#cobblemon:is_magical",
+    "#cobblemon:is_mountain",
+    "#cobblemon:is_mushroom",
+    "#cobblemon:is_sky",
+    "#cobblemon:is_spooky",
+    "#cobblemon:is_temperate",
+    "#cobblemon:is_thermal",
+    "#cobblemon:is_volcanic",
+    "#cobblemon:is_glacial",
+    "#cobblemon:is_snowy",
+    "#cobblemon:is_peak",
+    "#cobblemon:is_taiga",
+    "#cobblemon:is_tundra",
+    {
+      "id": "#byg:is_cold",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:aspen_forest",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:bog",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:cold_desert",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:dead_forest",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:hot_springs",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:maple_woods",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:old_growth_dead_forest",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:pumpkin_patch",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:seasonal_forest",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:seasonal_orchard",
+      "required": false
+    },
+    {
+      "id": "clifftree:cold_caves",
+      "required": false
+    },
+    {
+      "id": "wythers:berry_bog",
+      "required": false
+    },
+    {
+      "id": "#byg:is_snowy",
+      "required": false
+    },
+    {
+      "id": "byg:cardinal_tundra",
+      "required": false
+    },
+    {
+      "id": "clifftree:frozen_caves",
+      "required": false
+    },
+    {
+      "id": "terralith:emerald_peaks",
+      "required": false
+    },
+    {
+      "id": "terralith:scarlet_mountains",
+      "required": false
+    },
+    {
+      "id": "terralith:skylands_winter",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_badlands",
+      "required": false
+    },
+    {
+      "id": "wythers:crimson_tundra",
+      "required": false
+    },
+    {
+      "id": "wythers:frozen_island",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_bog",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_canyon",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_peaks",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_tundra",
+      "required": false
+    }
+  ]
+}

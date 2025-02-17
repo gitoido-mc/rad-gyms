@@ -4,6 +4,8 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.cobblemonResource
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gui.GuiHandler
+import lol.gito.radgyms.item.dataComponent.DataComponentManager
+import lol.gito.radgyms.item.group.ItemGroupManager
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
