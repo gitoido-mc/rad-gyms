@@ -23,6 +23,7 @@
   "rad-gyms.message.info.gym_complete": "В гиме появился выход",
   "rad-gyms.message.info.gym_entrance_breaking": "Входы в гимы не дропаются. Если вход сломать, все потеряют возможность его использования",
   "rad-gyms.message.info.gym_entrance_exhausted": "Невозможно воспользоваться входом, попытки исчерпаны.",
+  "rad-gyms.message.info.gym_entrance_party_fainted": "Надо вылечить команду",
   "rad-gyms.message.info.gym_failed": "Сторонние силы выталкивают тебя из испытания",
   "rad-gyms.message.info.gym_init": "Сторонниесилы переносят тебя в испытание: {0}",
   "rad-gyms.message.info.leader_defeated": "Поздравляю с победой в гиме!",

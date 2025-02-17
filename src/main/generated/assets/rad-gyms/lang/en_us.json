@@ -23,6 +23,7 @@
   "rad-gyms.message.info.gym_complete": "An exit appeared somewhere in gym",
   "rad-gyms.message.info.gym_entrance_breaking": "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance",
   "rad-gyms.message.info.gym_entrance_exhausted": "This gym entrance lost all his energies, look for another one",
+  "rad-gyms.message.info.gym_entrance_party_fainted": "Your party requires healing",
   "rad-gyms.message.info.gym_failed": "Mysterious forces are teleporting you away from the trial",
   "rad-gyms.message.info.gym_init": "Mysterious forces are teleporting you to %s trial",
   "rad-gyms.message.info.leader_defeated": "Congratulations on beating the gym!",

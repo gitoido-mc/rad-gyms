@@ -2,7 +2,6 @@ package lol.gito.radgyms.network
 
 import io.wispforest.owo.network.ClientAccess
 import io.wispforest.owo.network.ServerAccess
-import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.modId
