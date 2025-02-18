@@ -49,7 +49,7 @@ object GymTemplate {
     var structure: String? = null
     var relativeExitBlockSpawn: Vec3d = Vec3d.ZERO
     var relativePlayerSpawn: Vec3d = Vec3d.ZERO
-    var playerYaw: Float? = null
+    var playerYaw: Float = 0F
     var trainers: List<GymTrainer> = mutableListOf()
     var type: String? = null
     var lootTables: List<GymLootTable> = mutableListOf()
@@ -188,9 +188,9 @@ object GymTemplate {
         val pokemonProperties: PokemonProperties = pokeString.toProperties()
 
         // Thanks Ludichat [Cobbreeding project code]
-        if (pokemonProperties.form != null && PokemonSpecies.getByName(species.first.name) != null)
+        if (pokemonProperties.form != null)
         {
-            PokemonSpecies.getByName(species.first.name)!!.forms.find { it.formOnlyShowdownId() == pokemonProperties.form }?.run {
+            species.first.forms.find { it.formOnlyShowdownId() == pokemonProperties.form }?.run {
                 aspects.forEach {
                     // alternative form
                     pokemonProperties.customProperties.add(FlagSpeciesFeature(it, true))
