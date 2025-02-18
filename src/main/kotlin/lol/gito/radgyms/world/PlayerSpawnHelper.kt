@@ -1,5 +1,7 @@
 package lol.gito.radgyms.world
 
+import com.cobblemon.mod.common.api.scheduling.ScheduledTask
+import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.nbt.EntityDataSaver
 import lol.gito.radgyms.nbt.GymsNbtData
@@ -51,12 +53,22 @@ PlayerSpawnHelper {
             pitch,
             TeleportTarget.NO_OP
         )
-        val teleportedPlayer = serverPlayer.teleportTo(teleportTarget) as ServerPlayerEntity
 
-        // Fix experience just in case
-        teleportedPlayer.setExperienceLevel(xpLevels)
-        teleportedPlayer.experienceProgress = xpProgress
-        teleportedPlayer.totalExperience = totalExperience
-        LOGGER.info("Teleported player ${serverPlayer.name}")
+        val preloadPos = serverWorld.getChunk(BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
+        serverWorld.setChunkForced(preloadPos.pos.x, preloadPos.pos.z, true).also {
+            ScheduledTask.Builder()
+                .execute {
+                    val teleportedPlayer = serverPlayer.teleportTo(teleportTarget) as ServerPlayerEntity
+                    // Fix experience just in case
+                    teleportedPlayer.setExperienceLevel(xpLevels)
+                    teleportedPlayer.experienceProgress = xpProgress
+                    teleportedPlayer.totalExperience = totalExperience
+                    LOGGER.info("Teleported player ${serverPlayer.name}")
+                    serverWorld.setChunkForced(preloadPos.pos.x, preloadPos.pos.z, false)
+                }
+                .delay(1f)
+                .tracker(ServerTaskTracker)
+                .build()
+        }
     }
 }
