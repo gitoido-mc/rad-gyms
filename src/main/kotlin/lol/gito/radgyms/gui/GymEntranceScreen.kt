@@ -90,6 +90,8 @@ class GymEntranceScreen(
                 else -> type
             }
 
+            this.close()
+
             LOGGER.info("Sending GymEnterWithCoords(level:$level, type:$type, blockPos:$blockPos) C2S packet from ${player.name}")
 
             CHANNEL.clientHandle().send(

@@ -71,11 +71,12 @@ object GymManager {
                     coords.x + gym.relativePlayerSpawn.x,
                     coords.y + gym.relativePlayerSpawn.y,
                     coords.z + gym.relativePlayerSpawn.z,
-                    gym.playerYaw!!,
+                    gym.playerYaw,
                     0.0F
-                )
-                LOGGER.info("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
-                return true
+                ).also {
+                    LOGGER.info("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
+                    return true
+                }
             } else {
                 LOGGER.warn("Gym $gymType could not be initialized, no such type in template registry")
                 return false
@@ -196,11 +197,12 @@ object GymManager {
                 it.z.toDouble(),
                 yaw = serverPlayer.yaw,
                 pitch = serverPlayer.pitch,
-            )
+            ).also {
+                PLAYER_GYMS.remove(serverPlayer.uuid)
+                LOGGER.info("Gym instance removed from memory")
+                return
+            }
         }
-
-        PLAYER_GYMS.remove(serverPlayer.uuid)
-        LOGGER.info("Gym instance removed from memory")
     }
 
     fun handleLootDistribution(serverPlayer: ServerPlayerEntity) {

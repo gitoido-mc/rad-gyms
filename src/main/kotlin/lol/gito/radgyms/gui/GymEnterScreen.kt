@@ -84,6 +84,8 @@ class GymEnterScreen(
                 else -> type
             }
 
+            this.close()
+
             RadGyms.LOGGER.info("Sending GymEnterWithoutCoords(level:$level, type:$type) C2S packet from ${player.name}")
 
             RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymEnterWithoutCoords(
