@@ -6,6 +6,7 @@ import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.nbt.EntityDataSaver
 import lol.gito.radgyms.nbt.GymsNbtData
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
@@ -55,20 +56,21 @@ PlayerSpawnHelper {
         )
 
         val preloadPos = serverWorld.getChunk(BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
-        serverWorld.setChunkForced(preloadPos.pos.x, preloadPos.pos.z, true).also {
-            ScheduledTask.Builder()
-                .execute {
-                    val teleportedPlayer = serverPlayer.teleportTo(teleportTarget) as ServerPlayerEntity
-                    // Fix experience just in case
-                    teleportedPlayer.setExperienceLevel(xpLevels)
-                    teleportedPlayer.experienceProgress = xpProgress
-                    teleportedPlayer.totalExperience = totalExperience
-                    LOGGER.info("Teleported player ${serverPlayer.name}")
-                    serverWorld.setChunkForced(preloadPos.pos.x, preloadPos.pos.z, false)
-                }
-                .delay(1f)
-                .tracker(ServerTaskTracker)
-                .build()
-        }
+
+        serverWorld.chunkManager.addTicket(ChunkTicketType.PORTAL, preloadPos.pos, 8, BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
+
+        ScheduledTask.Builder()
+            .execute {
+                val teleportedPlayer = serverPlayer.teleportTo(teleportTarget) as ServerPlayerEntity
+                // Fix experience just in case
+                teleportedPlayer.setExperienceLevel(xpLevels)
+                teleportedPlayer.experienceProgress = xpProgress
+                teleportedPlayer.totalExperience = totalExperience
+                LOGGER.info("Teleported player ${serverPlayer.name}")
+                serverWorld.setChunkForced(preloadPos.pos.x, preloadPos.pos.z, false)
+            }
+            .delay(1f)
+            .tracker(ServerTaskTracker)
+            .build()
     }
 }
