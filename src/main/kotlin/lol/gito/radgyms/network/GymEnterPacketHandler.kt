@@ -8,10 +8,12 @@ import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.item.ItemRegistry
 import lol.gito.radgyms.item.dataComponent.DataComponentManager.GYM_TYPE_COMPONENT
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
+import net.minecraft.util.math.BlockPos
 
 object GymEnterPacketHandler {
     operator fun invoke(

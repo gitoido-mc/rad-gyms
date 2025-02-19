@@ -55,20 +55,11 @@ PlayerSpawnHelper {
             TeleportTarget.NO_OP
         )
 
-        val preloadPos = serverWorld.getChunk(BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
-        serverWorld.chunkManager.addTicket(ChunkTicketType.PORTAL, preloadPos.pos, 3, BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
-
-        ScheduledTask.Builder()
-            .execute {
-                val teleportedPlayer = serverPlayer.teleportTo(teleportTarget) as ServerPlayerEntity
-                // Fix experience just in case
-                teleportedPlayer.setExperienceLevel(xpLevels)
-                teleportedPlayer.experienceProgress = xpProgress
-                teleportedPlayer.totalExperience = totalExperience
-                LOGGER.info("Teleported player ${serverPlayer.name}")
-            }
-            .delay(1f)
-            .tracker(ServerTaskTracker)
-            .build()
+        val teleportedPlayer = serverPlayer.teleportTo(teleportTarget) as ServerPlayerEntity
+        // Fix experience just in case
+        teleportedPlayer.setExperienceLevel(xpLevels)
+        teleportedPlayer.experienceProgress = xpProgress
+        teleportedPlayer.totalExperience = totalExperience
+        LOGGER.info("Teleported player ${serverPlayer.name}")
     }
 }

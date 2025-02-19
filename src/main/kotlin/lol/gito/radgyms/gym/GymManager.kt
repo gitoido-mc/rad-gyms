@@ -19,6 +19,7 @@ import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -53,6 +54,19 @@ object GymManager {
             val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(it, gymLevel, type) }
             if (gym != null) {
                 val coords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
+
+                val destX = coords.x + gym.relativePlayerSpawn.x
+                val destY = coords.y + gym.relativePlayerSpawn.y
+                val destZ = coords.z + gym.relativePlayerSpawn.z
+
+                val preloadPos = serverWorld.getChunk(BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
+                serverWorld.chunkManager.addTicket(
+                    ChunkTicketType.PORTAL,
+                    preloadPos.pos,
+                    8,
+                    BlockPos(destX.toInt(), destY.toInt(), destZ.toInt())
+                )
+
                 val trainerUUIDs = buildFromTemplate(gym, gymDimension, coords)
 
                 if (trainerUUIDs != null) {
@@ -68,9 +82,9 @@ object GymManager {
                 PlayerSpawnHelper.teleportPlayer(
                     serverPlayer,
                     gymDimension,
-                    coords.x + gym.relativePlayerSpawn.x,
-                    coords.y + gym.relativePlayerSpawn.y,
-                    coords.z + gym.relativePlayerSpawn.z,
+                    destX,
+                    destY,
+                    destZ,
                     gym.playerYaw,
                     0.0F
                 ).also {
@@ -146,13 +160,13 @@ object GymManager {
                 leader = trainerTemplate.leader
             }.also {
                 LOGGER.info("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
-                gymDimension.spawnEntityAndPassengers(it)
+                if (gymDimension.spawnNewEntityAndPassengers(it)) {
+                    RCT.trainerRegistry.let { registry ->
+                        LOGGER.info("Registering trainer ${it.id} in RCT registry with id $trainerUUID")
+                        registry.registerNPC(trainerUUID.toString(), trainerTemplate.trainer).entity = it
+                    }
+                }
             }
-
-        RCT.trainerRegistry.let { registry ->
-            LOGGER.info("Registering trainer ${trainerEntity.id} in RCT registry with id $trainerUUID")
-            registry.registerNPC(trainerUUID.toString(), trainerTemplate.trainer).entity = trainerEntity
-        }
 
         return trainerEntity
     }
