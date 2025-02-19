@@ -1,12 +1,9 @@
 package lol.gito.radgyms.world
 
-import com.cobblemon.mod.common.api.scheduling.ScheduledTask
-import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.nbt.EntityDataSaver
 import lol.gito.radgyms.nbt.GymsNbtData
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
