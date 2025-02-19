@@ -128,6 +128,7 @@ object GymManager {
     ): Trainer {
         val trainerEntity = Trainer(EntityManager.GYM_TRAINER, gymDimension)
             .apply {
+                setPersistent()
                 uuid = trainerUUID
                 headYaw = trainerTemplate.npc.yaw
                 bodyYaw = trainerTemplate.npc.yaw
