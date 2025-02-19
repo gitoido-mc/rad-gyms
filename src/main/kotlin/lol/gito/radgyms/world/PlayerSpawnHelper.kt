@@ -56,8 +56,7 @@ PlayerSpawnHelper {
         )
 
         val preloadPos = serverWorld.getChunk(BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
-
-        serverWorld.chunkManager.addTicket(ChunkTicketType.PORTAL, preloadPos.pos, 8, BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
+        serverWorld.chunkManager.addTicket(ChunkTicketType.PORTAL, preloadPos.pos, 3, BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
 
         ScheduledTask.Builder()
             .execute {
@@ -67,7 +66,6 @@ PlayerSpawnHelper {
                 teleportedPlayer.experienceProgress = xpProgress
                 teleportedPlayer.totalExperience = totalExperience
                 LOGGER.info("Teleported player ${serverPlayer.name}")
-                serverWorld.setChunkForced(preloadPos.pos.x, preloadPos.pos.z, false)
             }
             .delay(1f)
             .tracker(ServerTaskTracker)
