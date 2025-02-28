@@ -129,7 +129,7 @@ object EventManager {
         PLAYER_GYMS[event.player.uuid]?.npcList?.forEach {
             LOGGER.info("Removing trainer ${it.second} from registry and discarding associated entity")
             RCT.trainerRegistry.unregisterById(it.second.toString())
-            event.player.world.getEntityById(it.first)?.discard()
+            event.player.world.getEntityById(it.first.id)?.discard()
         }
     }
 

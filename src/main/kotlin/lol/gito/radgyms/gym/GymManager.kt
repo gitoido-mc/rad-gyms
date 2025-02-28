@@ -1,5 +1,7 @@
 package lol.gito.radgyms.gym
 
+import com.cobblemon.mod.common.api.scheduling.ScheduledTask
+import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.util.toBlockPos
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.RCT
@@ -31,7 +33,7 @@ import kotlin.time.TimeSource.Monotonic.markNow
 
 data class GymInstance(
     val template: GymTemplate,
-    val npcList: List<Pair<Int, UUID>>,
+    val npcList: List<Pair<Trainer, UUID>>,
     val coords: BlockPos,
     val level: Int,
 )
@@ -44,6 +46,7 @@ object GymManager {
         val startTime = markNow()
         val gymLevel = level.coerceIn(5..100)
         val gymDimension = serverPlayer.getServer()?.getWorld(DimensionManager.RADGYMS_LEVEL_KEY) ?: return false
+
 
         if (serverWorld.registryKey != DimensionManager.RADGYMS_LEVEL_KEY) {
             val pos = serverPlayer.pos
@@ -59,38 +62,53 @@ object GymManager {
                 val destY = coords.y + gym.relativePlayerSpawn.y
                 val destZ = coords.z + gym.relativePlayerSpawn.z
 
-                val preloadPos = serverWorld.getChunk(BlockPos(destX.toInt(), destY.toInt(), destZ.toInt()))
-                serverWorld.chunkManager.addTicket(
-                    ChunkTicketType.PORTAL,
-                    preloadPos.pos,
-                    8,
-                    BlockPos(destX.toInt(), destY.toInt(), destZ.toInt())
-                )
+                ScheduledTask.Builder()
+                    .tracker(ServerTaskTracker)
+                    .delay(0.1f)
+                    .execute {
+                        LOGGER.info("Trying to place gym structure with ${gym.structure} at ${coords.x} ${coords.y} ${coords.z} ")
+                        StructureManager.placeStructure(
+                            gymDimension,
+                            coords,
+                            gym.structure
+                        )
+                    }
+                    .build()
 
-                val trainerUUIDs = buildFromTemplate(gym, gymDimension, coords)
+                ScheduledTask.Builder()
+                    .tracker(ServerTaskTracker)
+                    .execute {
+                        LOGGER.info("return dim ${serverWorld.registryKey.value}")
+                        GymsNbtData.setReturnDimension(
+                            serverPlayer as EntityDataSaver,
+                            serverWorld.registryKey.value.toString()
+                        )
+                        GymsNbtData.setReturnCoordinates(serverPlayer as EntityDataSaver, pos.toBlockPos())
 
-                if (trainerUUIDs != null) {
-                    PLAYER_GYMS[serverPlayer.uuid] = GymInstance(gym, trainerUUIDs, coords, gymLevel)
-                }
-                LOGGER.info("return dim ${serverWorld.registryKey.value}")
-                GymsNbtData.setReturnDimension(
-                    serverPlayer as EntityDataSaver,
-                    serverWorld.registryKey.value.toString()
-                )
-                GymsNbtData.setReturnCoordinates(serverPlayer as EntityDataSaver, pos.toBlockPos())
+                        PlayerSpawnHelper.teleportPlayer(
+                            serverPlayer,
+                            gymDimension,
+                            destX,
+                            destY,
+                            destZ,
+                            gym.playerYaw,
+                            0.0F
+                        )
+                    }
+                    .build()
 
-                PlayerSpawnHelper.teleportPlayer(
-                    serverPlayer,
-                    gymDimension,
-                    destX,
-                    destY,
-                    destZ,
-                    gym.playerYaw,
-                    0.0F
-                ).also {
-                    LOGGER.info("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
-                    return true
-                }
+                ScheduledTask.Builder()
+                    .tracker(ServerTaskTracker)
+                    .delay(1f)
+                    .execute {
+                        val trainerUUIDs = buildTrainers(gym, gymDimension, coords)
+
+                        PLAYER_GYMS[serverPlayer.uuid] = GymInstance(gym, trainerUUIDs, coords, gymLevel)
+                    }
+                    .build()
+
+                LOGGER.info("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
+                return true
             } else {
                 LOGGER.warn("Gym $gymType could not be initialized, no such type in template registry")
                 return false
@@ -100,37 +118,26 @@ object GymManager {
         return false
     }
 
-    private fun buildFromTemplate(
+    private fun buildTrainers(
         template: GymTemplate,
         gymDimension: ServerWorld,
         coords: BlockPos
-    ): List<Pair<Int, UUID>>? {
-        if (template.structure != null) {
-            val trainerIds = mutableMapOf<String, Pair<Int, UUID>>()
+    ): List<Pair<Trainer, UUID>> {
+        val trainerIds = mutableMapOf<String, Pair<Trainer, UUID>>()
 
-            LOGGER.info("Trying to place gym structure with ${template.structure} at ${coords.x} ${coords.y} ${coords.z} ")
-            StructureManager.placeStructure(
-                gymDimension,
-                coords,
-                template.structure!!
-            )
-
-            template.trainers.forEach {
-                val uuid = UUID.randomUUID()
-                val requiredUUID = when (it.requires) {
-                    null -> null
-                    else -> trainerIds[it.requires]?.second
-                }
-
-                buildTrainerEntity(it, gymDimension, coords, uuid, requiredUUID).let { entity ->
-                    trainerIds[it.id] = Pair(entity.id, uuid)
-                }
+        template.trainers.forEach {
+            val uuid = UUID.randomUUID()
+            val requiredUUID = when (it.requires) {
+                null -> null
+                else -> trainerIds[it.requires]?.second
             }
 
-            return trainerIds.map { it.value }.toList()
+            buildTrainerEntity(it, gymDimension, coords, uuid, requiredUUID).let { entity ->
+                trainerIds[it.id] = Pair(entity, uuid)
+            }
         }
 
-        return null
+        return trainerIds.map { it.value }
     }
 
     private fun buildTrainerEntity(
@@ -160,7 +167,7 @@ object GymManager {
                 leader = trainerTemplate.leader
             }.also {
                 LOGGER.info("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
-                if (gymDimension.spawnNewEntityAndPassengers(it)) {
+                if (gymDimension.spawnEntity(it)) {
                     RCT.trainerRegistry.let { registry ->
                         LOGGER.info("Registering trainer ${it.id} in RCT registry with id $trainerUUID")
                         registry.registerNPC(trainerUUID.toString(), trainerTemplate.trainer).entity = it
@@ -197,27 +204,51 @@ object GymManager {
         val dim = serverPlayer.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, returnDim))!!
         val returnCoords = GymsNbtData.getReturnCoordinates(serverPlayer as EntityDataSaver) ?: dim.spawnPos
 
+        val world = serverPlayer.world
+
         gym?.npcList?.forEach {
             LOGGER.info("Removing trainer ${it.second} from registry and detaching associated entity")
             RCT.trainerRegistry.unregisterById(it.second.toString())
-            serverPlayer.world.getEntityById(it.first)?.discard()
+            serverPlayer.world.getEntityById(it.first.id)?.discard()
         }
 
-        returnCoords.let {
-            PlayerSpawnHelper.teleportPlayer(
-                serverPlayer,
-                dim,
-                it.x.toDouble(),
-                it.y.toDouble(),
-                it.z.toDouble(),
-                yaw = serverPlayer.yaw,
-                pitch = serverPlayer.pitch,
-            ).also {
-                PLAYER_GYMS.remove(serverPlayer.uuid)
-                LOGGER.info("Gym instance removed from memory")
-                return
+        ScheduledTask.Builder()
+            .tracker(ServerTaskTracker)
+            .delay(0.1f)
+            .execute {
+                val returnBlockPos = BlockPos(returnCoords.x, returnCoords.y, returnCoords.z)
+                val preloadPos = world.getChunk(returnBlockPos)
+                dim.chunkManager.addTicket(
+                    ChunkTicketType.PORTAL,
+                    preloadPos.pos,
+                    1,
+                    returnBlockPos
+                )
             }
-        }
+            .build()
+
+        ScheduledTask.Builder()
+            .tracker(ServerTaskTracker)
+            .delay(0.1f)
+            .execute {
+                returnCoords.let {
+                    PlayerSpawnHelper.teleportPlayer(
+                        serverPlayer,
+                        dim,
+                        it.x.toDouble(),
+                        it.y.toDouble(),
+                        it.z.toDouble(),
+                        yaw = serverPlayer.yaw,
+                        pitch = serverPlayer.pitch,
+                    ).also {
+                        PLAYER_GYMS.remove(serverPlayer.uuid)
+                        LOGGER.info("Gym instance removed from memory")
+                    }
+                }
+            }
+            .build()
+
+        return
     }
 
     fun handleLootDistribution(serverPlayer: ServerPlayerEntity) {
@@ -245,19 +276,19 @@ object GymManager {
                 registryLootTable
                     .generateLoot(lootContextParameterSet)
                     .forEach { itemStack ->
-                    if (!serverPlayer.giveItemStack(itemStack)) {
-                        ItemEntity(
-                            serverPlayer.world,
-                            serverPlayer.pos.x,
-                            serverPlayer.pos.y,
-                            serverPlayer.pos.z,
-                            itemStack
-                        ).let {
-                            serverPlayer.world.spawnEntity(it)
-                        }
+                        if (!serverPlayer.giveItemStack(itemStack)) {
+                            ItemEntity(
+                                serverPlayer.world,
+                                serverPlayer.pos.x,
+                                serverPlayer.pos.y,
+                                serverPlayer.pos.z,
+                                itemStack
+                            ).let {
+                                serverPlayer.world.spawnEntity(it)
+                            }
 
+                        }
                     }
-                }
             }
     }
 
