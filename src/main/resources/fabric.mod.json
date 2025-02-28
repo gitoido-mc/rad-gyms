@@ -47,8 +47,5 @@
 		"rctapi": ">=0.10.12-beta",
 		"cobblemon": ">=1.6.1+1.21.1",
 		"java": ">=21"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }

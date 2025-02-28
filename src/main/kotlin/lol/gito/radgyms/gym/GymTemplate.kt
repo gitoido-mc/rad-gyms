@@ -46,7 +46,7 @@ data class GymLootTable(
 )
 
 object GymTemplate {
-    var structure: String? = null
+    lateinit var structure: String
     var relativeExitBlockSpawn: Vec3d = Vec3d.ZERO
     var relativePlayerSpawn: Vec3d = Vec3d.ZERO
     var playerYaw: Float = 0F
