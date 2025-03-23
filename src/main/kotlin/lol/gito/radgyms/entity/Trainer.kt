@@ -2,7 +2,9 @@ package lol.gito.radgyms.entity
 
 import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
+import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.gym.GymManager.PLAYER_GYMS
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.damage.DamageSource
@@ -16,9 +18,10 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
+import net.minecraft.world.entity.EntityLookup
 import java.util.*
 
-class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : VillagerEntity(entityType, world) {
+class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntity(entityType, world) {
     private val trainerIdKey = "trainerId"
     private val requiresKey = "requires"
     private val defeatedKey = "isDefeated"
@@ -49,12 +52,29 @@ class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : Villag
     }
 
     override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
+        RadGyms.LOGGER.info("Vec3d: ${this.pos}")
         if (player is ServerPlayerEntity && world is ServerWorld) {
             val trainerRegistry = RadGyms.RCT.trainerRegistry
+            val rctBattleManager = RadGyms.RCT.battleManager
+            val playerTrainer = trainerRegistry.getById(player.uuid.toString())
+
+            // Hope it fixes "Entity not attached"
+            val gymNpcPair = PLAYER_GYMS[player.uuid]!!.npcList.first { it.first == this.uuid }
+
+            var npcTrainer : TrainerNPC?
+            RadGyms.RCT.trainerRegistry.let { registry ->
+                val entity = this
+                npcTrainer = when (RadGyms.RCT.trainerRegistry.getById(this.uuid.toString())) {
+                    null -> registry.registerNPC(this.uuid.toString(), gymNpcPair.second.trainer).apply {
+                        this.entity = entity
+                    }
+                    else -> registry.getById(this.uuid.toString()) as TrainerNPC
+                }
+            }
+
+
             if (requires != null) {
-                val trainerToFight: Trainer = trainerRegistry
-                    .getById(requires.toString())
-                    .entity as Trainer
+                val trainerToFight = (world as ServerWorld).getEntity(requires) as Trainer
 
                 if (!trainerToFight.defeated) {
                     player.sendMessage(
@@ -77,10 +97,6 @@ class Trainer(entityType: EntityType<out VillagerEntity>, world: World) : Villag
                 player.sendMessage(Text.translatable(messageKey), true)
                 return ActionResult.FAIL
             }
-
-            val rctBattleManager = RadGyms.RCT.battleManager
-            val playerTrainer = trainerRegistry.getById(player.uuid.toString())
-            val npcTrainer = trainerRegistry.getById(trainerId.toString())
 
             rctBattleManager.start(
                 listOf(playerTrainer),

@@ -22,6 +22,7 @@ PlayerSpawnHelper {
         val playerZ: Int = GymsNbtData.incrementVisitCount(serverPlayer as EntityDataSaver) * 128
 
         LOGGER.info("Derived player ${serverPlayer.name} unique X coordinate from UUID: $playerX")
+        LOGGER.info("Derived player ${serverPlayer.name} unique Z coordinate from UUID: ${border.boundWest.toLong() + playerZ}")
 
         return BlockPos(
             playerX,
