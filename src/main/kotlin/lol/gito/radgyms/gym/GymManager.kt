@@ -3,6 +3,7 @@ package lol.gito.radgyms.gym
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.util.toBlockPos
+import com.cobblemon.mod.common.util.toVec3d
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.RCT
 import lol.gito.radgyms.RadGyms.modId
@@ -25,6 +26,7 @@ import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.dimension.DimensionTypes
@@ -33,7 +35,7 @@ import kotlin.time.TimeSource.Monotonic.markNow
 
 data class GymInstance(
     val template: GymTemplate,
-    val npcList: List<Pair<Trainer, UUID>>,
+    val npcList: List<Pair<UUID, GymTrainer>>,
     val coords: BlockPos,
     val level: Int,
 )
@@ -122,18 +124,18 @@ object GymManager {
         template: GymTemplate,
         gymDimension: ServerWorld,
         coords: BlockPos
-    ): List<Pair<Trainer, UUID>> {
-        val trainerIds = mutableMapOf<String, Pair<Trainer, UUID>>()
+    ): List<Pair<UUID, GymTrainer>> {
+        val trainerIds = mutableMapOf<String, Pair<UUID, GymTrainer>>()
 
         template.trainers.forEach {
             val uuid = UUID.randomUUID()
             val requiredUUID = when (it.requires) {
                 null -> null
-                else -> trainerIds[it.requires]?.second
+                else -> trainerIds[it.requires]?.first
             }
 
             buildTrainerEntity(it, gymDimension, coords, uuid, requiredUUID).let { entity ->
-                trainerIds[it.id] = Pair(entity, uuid)
+                trainerIds[it.id] = entity
             }
         }
 
@@ -146,7 +148,7 @@ object GymManager {
         coords: BlockPos,
         trainerUUID: UUID,
         requiredUUID: UUID?
-    ): Trainer {
+    ): Pair<UUID, GymTrainer> {
         val trainerEntity = Trainer(EntityManager.GYM_TRAINER, gymDimension)
             .apply {
                 setPersistent()
@@ -167,15 +169,10 @@ object GymManager {
                 leader = trainerTemplate.leader
             }.also {
                 LOGGER.info("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
-                if (gymDimension.spawnEntity(it)) {
-                    RCT.trainerRegistry.let { registry ->
-                        LOGGER.info("Registering trainer ${it.id} in RCT registry with id $trainerUUID")
-                        registry.registerNPC(trainerUUID.toString(), trainerTemplate.trainer).entity = it
-                    }
-                }
+                gymDimension.spawnEntity(it)
             }
 
-        return trainerEntity
+        return Pair(trainerEntity.uuid, trainerTemplate)
     }
 
     fun handleLeaderBattleWon(serverPlayer: ServerPlayerEntity) {
@@ -208,13 +205,12 @@ object GymManager {
 
         gym?.npcList?.forEach {
             LOGGER.info("Removing trainer ${it.second} from registry and detaching associated entity")
-            RCT.trainerRegistry.unregisterById(it.second.toString())
-            serverPlayer.world.getEntityById(it.first.id)?.discard()
+            RCT.trainerRegistry.unregisterById(it.first.toString())
+            (world as ServerWorld).getEntity(it.first)?.discard()
         }
 
         ScheduledTask.Builder()
             .tracker(ServerTaskTracker)
-            .delay(0.1f)
             .execute {
                 val returnBlockPos = BlockPos(returnCoords.x, returnCoords.y, returnCoords.z)
                 val preloadPos = world.getChunk(returnBlockPos)
@@ -229,7 +225,7 @@ object GymManager {
 
         ScheduledTask.Builder()
             .tracker(ServerTaskTracker)
-            .delay(0.1f)
+            .delay(1f)
             .execute {
                 returnCoords.let {
                     PlayerSpawnHelper.teleportPlayer(
