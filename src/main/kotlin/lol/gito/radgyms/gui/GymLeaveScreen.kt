@@ -38,7 +38,7 @@ class GymLeaveScreen(
         try {
             this.close()
             RadGyms.LOGGER.info("Sending GymLeave C2S packet from ${player.name}")
-            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymLeave())
+            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymLeave(teleport = true))
         } catch (e: Exception) {
             RadGyms.LOGGER.info(e.toString())
         }

@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 @Suppress(names = "unused")
-public abstract class RadGymsPlayerDataSaverMixin implements EntityDataSaver {
+public abstract class DataSaver implements EntityDataSaver {
     @Unique
     private NbtCompound persistentData;
 
