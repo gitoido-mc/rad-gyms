@@ -46,6 +46,7 @@ object GymManager {
     val PLAYER_GYMS: MutableMap<UUID, GymInstance> = mutableMapOf()
 
     fun initInstance(serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld, level: Int, type: String?): Boolean {
+        PLAYER_GYMS.remove(serverPlayer.uuid)
         val startTime = markNow()
         val gymLevel = level.coerceIn(5..100)
         val gymDimension = serverPlayer.getServer()?.getWorld(DimensionManager.RADGYMS_LEVEL_KEY) ?: return false
