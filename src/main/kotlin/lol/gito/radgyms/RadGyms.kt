@@ -26,12 +26,12 @@ import java.io.File
 
 object RadGyms : ModInitializer {
     const val MOD_ID: String = "rad-gyms"
-    const val CONFIG_PATH: String = "config/${MOD_ID}_server.json"
+    private const val CONFIG_PATH: String = "config/${MOD_ID}_server.json"
     lateinit var CONFIG: RadGymsConfig
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
     val CHANNEL: OwoNetChannel = OwoNetChannel.create(modId("main"))
     val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
-    val GYM_LOADER: GymLoader = GymLoader()
+    private val GYM_LOADER: GymLoader = GymLoader()
 
 
     override fun onInitialize() {
@@ -68,16 +68,22 @@ object RadGyms : ModInitializer {
         return Identifier.of(MOD_ID, name)
     }
 
+    fun debug(message: String) {
+        if (CONFIG.debug) LOGGER.info(message)
+    }
+
     @OptIn(ExperimentalSerializationApi::class)
     fun loadConfig() {
         val configFile = File(CONFIG_PATH)
         configFile.parentFile.mkdirs()
 
         CONFIG = if (configFile.exists()) {
+            debug("Loading config")
             configFile.inputStream().let {
                 Json.decodeFromStream<RadGymsConfig>(it)
             }
         } else {
+            debug("Creating config")
             RadGymsConfig(
                 debug = false,
                 maxEntranceUses = 3,
@@ -96,6 +102,7 @@ object RadGyms : ModInitializer {
         }
         configFile.outputStream().let {
             prettify.encodeToStream(CONFIG, it)
+            debug("Saving config")
         }
     }
 }
