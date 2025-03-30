@@ -35,12 +35,8 @@ object NetworkStackHandler {
 
     @JvmRecord
     data class GymLeave(
-        val id: Identifier = PACKET_LEAVE
-    )
-
-    @JvmRecord
-    data class GymLeaveServer(
-        val id: Identifier = PACKET_LEAVE_SERVER
+        val id: Identifier = PACKET_LEAVE,
+        val teleport: Boolean
     )
 
     fun register() {
@@ -90,7 +86,8 @@ object NetworkStackHandler {
         context.player.server.execute { GymLeavePacketHandler(context.player) }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun handleGymServerLeavePacket(packet: GymLeave, context: ClientAccess) {
-        CHANNEL.clientHandle().send(GymLeave())
+        CHANNEL.clientHandle().send(packet)
     }
 }

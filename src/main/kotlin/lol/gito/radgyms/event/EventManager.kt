@@ -123,7 +123,7 @@ object EventManager {
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
         if (event.player.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
-            CHANNEL.serverHandle(event.player).send(NetworkStackHandler.GymLeave())
+            CHANNEL.serverHandle(event.player).send(NetworkStackHandler.GymLeave(teleport = true))
         }
 
         PLAYER_GYMS[event.player.uuid]?.npcList?.forEach {
@@ -150,9 +150,8 @@ object EventManager {
         val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
         val player = winnerBattleActor.entity as ServerPlayerEntity
         event.losers.forEach { loser ->
-            val battleActor = loser as TrainerEntityBattleActor
-            if (battleActor.type == ActorType.NPC && battleActor.entity is Trainer) {
-                (battleActor.entity as Trainer).let { trainer ->
+            if (loser.type == ActorType.NPC  && loser is TrainerEntityBattleActor && loser.entity is Trainer) {
+                (loser.entity as Trainer).let { trainer ->
                     trainer.defeated = true
                     if (trainer.leader) {
                         GymManager.handleLeaderBattleWon(player)
@@ -178,7 +177,7 @@ object EventManager {
         event.battle.players
             .filter { it.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY }
             .forEach { player ->
-                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave())
+                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave(teleport = true))
             }
     }
 
@@ -193,7 +192,7 @@ object EventManager {
         event.battle.players
             .filter { it.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY }
             .forEach { player ->
-                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave())
+                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave(teleport = true))
             }
     }
 }

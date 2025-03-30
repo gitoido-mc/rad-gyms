@@ -29,6 +29,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.world.World
 import net.minecraft.world.dimension.DimensionTypes
 import java.util.*
 import kotlin.time.TimeSource.Monotonic.markNow
@@ -193,7 +194,6 @@ object GymManager {
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayerEntity) {
-        val gym = PLAYER_GYMS[serverPlayer.uuid]
         val returnDim = when (GymsNbtData.getReturnDimension(serverPlayer as EntityDataSaver)) {
             null -> DimensionTypes.OVERWORLD_ID
             else -> Identifier.of(GymsNbtData.getReturnDimension(serverPlayer as EntityDataSaver))
@@ -201,19 +201,13 @@ object GymManager {
         val dim = serverPlayer.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, returnDim))!!
         val returnCoords = GymsNbtData.getReturnCoordinates(serverPlayer as EntityDataSaver) ?: dim.spawnPos
 
-        val world = serverPlayer.world
-
-        gym?.npcList?.forEach {
-            LOGGER.info("Removing trainer ${it.second} from registry and detaching associated entity")
-            RCT.trainerRegistry.unregisterById(it.first.toString())
-            (world as ServerWorld).getEntity(it.first)?.discard()
-        }
+        destructGym(serverPlayer)
 
         ScheduledTask.Builder()
             .tracker(ServerTaskTracker)
             .execute {
                 val returnBlockPos = BlockPos(returnCoords.x, returnCoords.y, returnCoords.z)
-                val preloadPos = world.getChunk(returnBlockPos)
+                val preloadPos = serverPlayer.world.getChunk(returnBlockPos)
                 dim.chunkManager.addTicket(
                     ChunkTicketType.PORTAL,
                     preloadPos.pos,
@@ -237,7 +231,6 @@ object GymManager {
                         yaw = serverPlayer.yaw,
                         pitch = serverPlayer.pitch,
                     ).also {
-                        PLAYER_GYMS.remove(serverPlayer.uuid)
                         LOGGER.info("Gym instance removed from memory")
                     }
                 }
@@ -245,6 +238,20 @@ object GymManager {
             .build()
 
         return
+    }
+
+    fun destructGym(serverPlayer: ServerPlayerEntity) {
+        val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
+
+        val world = serverPlayer.world
+
+        gym.npcList.forEach {
+            LOGGER.info("Removing trainer ${it.second} from registry and detaching associated entity")
+            RCT.trainerRegistry.unregisterById(it.first.toString())
+            (world as ServerWorld).getEntity(it.first)?.discard()
+        }
+
+        PLAYER_GYMS.remove(serverPlayer.uuid)
     }
 
     fun handleLootDistribution(serverPlayer: ServerPlayerEntity) {
