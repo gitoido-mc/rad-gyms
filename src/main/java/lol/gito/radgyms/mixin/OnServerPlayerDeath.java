@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class OnServerPlayerDeath {
-    @Inject(method = "onDeath", at = @At("RETURN"), remap = false)
+    @Inject(method = "onDeath", at = @At("TAIL"))
     public void RadGyms$onDeath(DamageSource damageSource, CallbackInfo ci) {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
 

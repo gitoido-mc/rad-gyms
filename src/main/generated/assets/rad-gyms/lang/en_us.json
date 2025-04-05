@@ -32,5 +32,6 @@
   "rad-gyms.message.info.trainer_required": "Go fight %s before challenging me.",
   "rad-gyms.npc.leader": "Gym Leader",
   "rad-gyms.npc.trainer_junior": "Junior gym trainer",
-  "rad-gyms.npc.trainer_senior": "Senior gym trainer"
+  "rad-gyms.npc.trainer_senior": "Senior gym trainer",
+  "rad-gyms.type.chaos": "Chaos"
 }

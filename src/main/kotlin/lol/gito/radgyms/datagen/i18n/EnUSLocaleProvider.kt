@@ -36,6 +36,10 @@ class EnUSLocaleProvider(
                     "Gym Entrance",
             BlockRegistry.GYM_EXIT.translationKey to
                     "Gym Exit",
+            modId("type").withSuffixedPath(".chaos").toTranslationKey() to
+                    "Chaos",
+            modId("gym_reward").toTranslationKey("item") to
+                    "Level %s %s gym reward cache",
             modId("gui.common.set-gym-level").toTranslationKey() to
                     "Select desirable gym level",
             modId("gui.common.leave-gym").toTranslationKey() to

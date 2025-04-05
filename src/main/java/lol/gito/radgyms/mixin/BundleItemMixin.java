@@ -2,8 +2,10 @@ package lol.gito.radgyms.mixin;
 
 import lol.gito.radgyms.item.dataComponent.DataComponentManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ClickType;
@@ -29,20 +31,34 @@ public abstract class BundleItemMixin {
     }
 
     @Inject(method = "onStackClicked", at = @At("HEAD"), cancellable = true)
-    private void RadGyms$preventPuttingItems(
-        ItemStack stack,
-        Slot slot,
-        ClickType clickType,
-        PlayerEntity player,
-        CallbackInfoReturnable<Boolean> cir
+    private void RadGyms$preventOnStackClicked(
+            ItemStack stack,
+            Slot slot,
+            ClickType clickType,
+            PlayerEntity player,
+            CallbackInfoReturnable<Boolean> cir
     ) {
-        if (clickType != ClickType.RIGHT) {
-            cir.setReturnValue(false);
-        }
-
         Boolean bundleComponent = stack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
 
-        if (bundleComponent == null) {
+        if (bundleComponent != null) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "onClicked", at = @At("HEAD"), cancellable = true)
+    private void RadGyms$preventOnClicked(
+            ItemStack stack,
+            ItemStack otherStack,
+            Slot slot,
+            ClickType clickType,
+            PlayerEntity player,
+            StackReference cursorStackReference,
+            CallbackInfoReturnable<Boolean> cir
+    ) {
+        Boolean bundleComponent = stack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
+        Boolean bundleOtherComponent = otherStack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
+
+        if (bundleComponent != null || bundleOtherComponent != null) {
             cir.setReturnValue(false);
         }
     }

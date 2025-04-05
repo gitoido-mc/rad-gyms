@@ -25,6 +25,7 @@ import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.network.NetworkStackHandler
 import lol.gito.radgyms.world.DimensionManager
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.BlockState

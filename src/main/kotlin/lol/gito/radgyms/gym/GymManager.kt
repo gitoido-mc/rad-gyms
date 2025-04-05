@@ -30,8 +30,12 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
+import net.minecraft.text.TextColor
+import net.minecraft.util.Colors
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
@@ -44,6 +48,7 @@ data class GymInstance(
     val npcList: List<Pair<UUID, GymTrainer>>,
     val coords: BlockPos,
     val level: Int,
+    val type: String
 )
 
 object GymManager {
@@ -111,8 +116,23 @@ object GymManager {
                     .delay(1f)
                     .execute {
                         val trainerUUIDs = buildTrainers(gym, gymDimension, coords)
+                        val chaosTranslatable = translatable(
+                            modId("type").withSuffixedPath(".chaos").toTranslationKey()
+                        )
 
-                        PLAYER_GYMS[serverPlayer.uuid] = GymInstance(gym, trainerUUIDs, coords, gymLevel)
+                        val label = when (gymType) {
+                            "default" -> when (type) {
+                                "default" -> chaosTranslatable.string
+                                null -> chaosTranslatable.string
+                                else -> translatable(
+                                    cobblemonResource("type.${type}").toTranslationKey()
+                                ).string
+                            }
+
+                            null -> chaosTranslatable.string
+                            else -> translatable(cobblemonResource("type.${type}").toTranslationKey()).string
+                        }
+                        PLAYER_GYMS[serverPlayer.uuid] = GymInstance(gym, trainerUUIDs, coords, gymLevel, label)
                     }
                     .build()
 
@@ -291,11 +311,16 @@ object GymManager {
                     }
             }
 
+        val styledLevel = MutableText.of(Text.of(gym.level.toString()).content).formatted(Formatting.GOLD)
+        val styledType = MutableText.of(Text.of(gym.type).content)
+            .formatted(Formatting.ITALIC)
+            .formatted(Formatting.GREEN)
 
         bundle.set(
             DataComponentTypes.CUSTOM_NAME,
-            translatable(modId("item.rad-gyms.gym_reward").toTranslationKey(),
-                gym.level, translatable(cobblemonResource("type.${gym.template.type}").toTranslationKey())
+            translatable(
+                modId("gym_reward").toTranslationKey("item"),
+                styledLevel, styledType
             )
         )
         bundle.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContents.build())

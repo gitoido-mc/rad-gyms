@@ -4,9 +4,12 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "BundleItemMixin",
-    "DataSaver",
+    "DataSaver"
+  ],
+  "server": [
     "OnServerPlayerDeath"
   ],
+  "client": [],
   "injectors": {
     "defaultRequire": 1
   }
