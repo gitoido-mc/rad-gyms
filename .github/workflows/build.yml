@@ -6,6 +6,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
     strategy:
       matrix:
         # Use these Java versions
@@ -33,19 +35,23 @@ jobs:
         with:
           name: Artifacts
           path: build/libs/
-      - name: Publish (CurseForge/GitHub)
-        uses: Kir-Antipov/mc-publish@v3.3
+      - name: Publish
+        uses: Kira-NT/mc-publish@v3.3.0
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
           curseforge-id: 1196570
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
           modrinth-id: eF8kqlHd
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-          loaders: fabric
-          game-versions: "1.21.1"
-          java: 21
-
+          loaders: |
+            fabric
+          game-versions: |
+            1.21.1
+          java: |
+            21
           dependencies: |
             fabric-api(required){curseforge:306612}{modrinth:P7dR8mSH}
             cobblemon(required){curseforge:687131}{modrinth:MdwFAVRL}

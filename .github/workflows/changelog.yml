@@ -1,12 +1,14 @@
 name: Generate changelog
 on:
   push:
-    tags:
+    branches:
       - "*"
 
 jobs:
   changelog:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     steps:
       - name: "Generate changelog"
         uses: rhysd/changelog-from-release/action@v3
