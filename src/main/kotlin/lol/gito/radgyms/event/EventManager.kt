@@ -14,8 +14,8 @@ import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
 import lol.gito.radgyms.RadGyms.CHANNEL
-import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.RCT
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.entity.Trainer
@@ -40,7 +40,7 @@ import net.minecraft.world.World
 
 object EventManager {
     fun register() {
-        LOGGER.info("Registering event handlers")
+        debug("Registering event handlers")
         UseBlockCallback.EVENT.register(::onBlockInteract)
         PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
         PlatformEvents.SERVER_STARTING.subscribe(Priority.LOW, ::onServerStart)
@@ -51,11 +51,10 @@ object EventManager {
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
 
         PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
-            LOGGER.info("Cobblemon species observable triggered, updating elemental gyms species map")
+            debug("Cobblemon species observable triggered, updating elemental gyms species map")
             onSpeciesUpdate()
         }
     }
-
 
     @Suppress("UNUSED_PARAMETER")
     private fun onBlockInteract(
@@ -109,25 +108,25 @@ object EventManager {
 
     private fun onServerStart(event: ServerEvent.Starting) {
         val trainerRegistry = RCT.trainerRegistry
-        LOGGER.info("initializing RCT trainer mod registry")
+        debug("initializing RCT trainer mod registry")
         trainerRegistry.init(event.server)
     }
 
     private fun onPlayerJoin(event: ServerPlayerEvent) {
-        LOGGER.info("Adding player ${event.player.name} in RadGyms trainer registry")
+        debug("Adding player ${event.player.name} in RadGyms trainer registry")
         RCT.trainerRegistry.registerPlayer(event.player.uuid.toString(), event.player)
     }
 
     private fun onPlayerDisconnect(event: ServerPlayerEvent) {
-        LOGGER.info("Removing player ${event.player.name} from RCT trainer mod registry")
+        debug("Removing player ${event.player.name} from RCT trainer mod registry")
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
         if (event.player.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
-            CHANNEL.serverHandle(event.player).send(NetworkStackHandler.GymLeave())
+            CHANNEL.serverHandle(event.player).send(NetworkStackHandler.GymLeave(teleport = true))
         }
 
         PLAYER_GYMS[event.player.uuid]?.npcList?.forEach {
-            LOGGER.info("Removing trainer ${it.second} from registry and discarding associated entity")
+            debug("Removing trainer ${it.second} from registry and discarding associated entity")
             val trainer = RCT.trainerRegistry.getById(it.first.toString())
             trainer.entity.discard()
             RCT.trainerRegistry.unregisterById(it.first.toString())
@@ -150,9 +149,8 @@ object EventManager {
         val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
         val player = winnerBattleActor.entity as ServerPlayerEntity
         event.losers.forEach { loser ->
-            val battleActor = loser as TrainerEntityBattleActor
-            if (battleActor.type == ActorType.NPC && battleActor.entity is Trainer) {
-                (battleActor.entity as Trainer).let { trainer ->
+            if (loser.type == ActorType.NPC && loser is TrainerEntityBattleActor && loser.entity is Trainer) {
+                (loser.entity as Trainer).let { trainer ->
                     trainer.defeated = true
                     if (trainer.leader) {
                         GymManager.handleLeaderBattleWon(player)
@@ -167,7 +165,7 @@ object EventManager {
         SPECIES_BY_TYPE.clear()
         ElementalTypes.all().forEach {
             SPECIES_BY_TYPE[it.name] = speciesOfType(it)
-            LOGGER.info("Added ${SPECIES_BY_TYPE[it.name]?.size} ${it.name} entries to species map")
+            debug("Added ${SPECIES_BY_TYPE[it.name]?.size} ${it.name} entries to species map")
         }
     }
 
@@ -178,7 +176,7 @@ object EventManager {
         event.battle.players
             .filter { it.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY }
             .forEach { player ->
-                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave())
+                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave(teleport = true))
             }
     }
 
@@ -193,7 +191,7 @@ object EventManager {
         event.battle.players
             .filter { it.world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY }
             .forEach { player ->
-                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave())
+                CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave(teleport = true))
             }
     }
 }

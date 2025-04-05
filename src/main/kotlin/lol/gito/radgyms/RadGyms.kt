@@ -13,28 +13,27 @@ import lol.gito.radgyms.event.EventManager
 import lol.gito.radgyms.gym.GymLoader
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.gym.SpeciesManager
+import lol.gito.radgyms.item.ItemManager
 import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import lol.gito.radgyms.item.group.ItemGroupManager
-import lol.gito.radgyms.item.ItemManager
 import lol.gito.radgyms.network.NetworkStackHandler
 import lol.gito.radgyms.world.DimensionManager
-import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 
-object RadGyms : ModInitializer {
+object RadGyms {
     const val MOD_ID: String = "rad-gyms"
-    const val CONFIG_PATH: String = "config/${MOD_ID}_server.json"
+    private const val CONFIG_PATH: String = "config/${MOD_ID}_server.json"
     lateinit var CONFIG: RadGymsConfig
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
     val CHANNEL: OwoNetChannel = OwoNetChannel.create(modId("main"))
     val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
-    val GYM_LOADER: GymLoader = GymLoader()
+    private val GYM_LOADER: GymLoader = GymLoader()
 
 
-    override fun onInitialize() {
+    fun init() {
         LOGGER.info("Initializing the mod")
         loadConfig()
         // Data
@@ -58,7 +57,7 @@ object RadGyms : ModInitializer {
         ItemGroupManager.register()
 
         // Commands
-        CommandManager.register()
+         CommandManager.register()
 
         // Network
         NetworkStackHandler.register()
@@ -68,21 +67,27 @@ object RadGyms : ModInitializer {
         return Identifier.of(MOD_ID, name)
     }
 
+    fun debug(message: String) {
+        if (CONFIG.debug) LOGGER.info(message)
+    }
+
     @OptIn(ExperimentalSerializationApi::class)
     fun loadConfig() {
         val configFile = File(CONFIG_PATH)
         configFile.parentFile.mkdirs()
 
         CONFIG = if (configFile.exists()) {
+            LOGGER.info("Loading config")
             configFile.inputStream().let {
                 Json.decodeFromStream<RadGymsConfig>(it)
             }
         } else {
+            LOGGER.info("Creating config")
             RadGymsConfig(
                 debug = false,
                 maxEntranceUses = 3,
                 ignoredSpecies = emptyList(),
-                ignoredForms = emptyList(),
+                ignoredForms = mutableListOf("gmax"),
             )
         }
         saveConfig()
@@ -96,6 +101,7 @@ object RadGyms : ModInitializer {
         }
         configFile.outputStream().let {
             prettify.encodeToStream(CONFIG, it)
+            debug("Saving config")
         }
     }
 }

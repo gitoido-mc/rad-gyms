@@ -17,13 +17,13 @@
 	"entrypoints": {
 		"main": [
 			{
-				"value": "lol.gito.radgyms.RadGyms",
+				"value": "lol.gito.radgyms.RadGyms::init",
 				"adapter": "kotlin"
 			}
 		],
 		"client": [
 			{
-				"value": "lol.gito.radgyms.RadGymsClient",
+				"value": "lol.gito.radgyms.RadGymsClient::init",
 				"adapter": "kotlin"
 			}
 		],
@@ -44,7 +44,7 @@
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
 		"architectury": ">=13.0.8",
-		"rctapi": ">=0.10.12-beta",
+		"rctapi": ">=0.10.14-beta",
 		"cobblemon": ">=1.6.1+1.21.1",
 		"java": ">=21"
 	}

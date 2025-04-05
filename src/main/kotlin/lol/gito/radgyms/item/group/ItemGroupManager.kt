@@ -3,7 +3,7 @@ package lol.gito.radgyms.item.group
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import io.wispforest.owo.itemgroup.Icon
 import io.wispforest.owo.itemgroup.OwoItemGroup
-import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.item.GymKey
@@ -50,7 +50,7 @@ object ItemGroupManager {
     }
 
     fun register() {
-        LOGGER.info("Registering item groups")
+        debug("Registering item groups")
         GYMS_GROUP.initialize()
     }
 }

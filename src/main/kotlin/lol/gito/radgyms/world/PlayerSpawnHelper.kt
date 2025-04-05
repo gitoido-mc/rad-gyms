@@ -1,6 +1,7 @@
 package lol.gito.radgyms.world
 
 import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.nbt.EntityDataSaver
 import lol.gito.radgyms.nbt.GymsNbtData
 import net.minecraft.server.network.ServerPlayerEntity
@@ -21,8 +22,8 @@ PlayerSpawnHelper {
         ) // get uniq x coord based on player uuid
         val playerZ: Int = GymsNbtData.incrementVisitCount(serverPlayer as EntityDataSaver) * 128
 
-        LOGGER.info("Derived player ${serverPlayer.name} unique X coordinate from UUID: $playerX")
-        LOGGER.info("Derived player ${serverPlayer.name} unique Z coordinate from UUID: ${border.boundWest.toLong() + playerZ}")
+        debug("Derived player ${serverPlayer.name} unique X coordinate from UUID: $playerX")
+        debug("Derived player ${serverPlayer.name} unique Z coordinate from UUID: ${border.boundWest.toLong() + playerZ}")
 
         return BlockPos(
             playerX,
@@ -58,6 +59,6 @@ PlayerSpawnHelper {
         teleportedPlayer.setExperienceLevel(xpLevels)
         teleportedPlayer.experienceProgress = xpProgress
         teleportedPlayer.totalExperience = totalExperience
-        LOGGER.info("Teleported player ${serverPlayer.name}")
+        debug("Teleported player ${serverPlayer.name}")
     }
 }

@@ -6,23 +6,34 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import lol.gito.radgyms.RadGyms.CONFIG
-import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
 
 object SpeciesManager {
     var SPECIES_BY_TYPE: HashMap<String, List<Pair<Species, FormData>>> = HashMap(ElementalTypes.count())
 
     fun speciesOfType(elementalType: ElementalType): List<Pair<Species, FormData>> {
-        return PokemonSpecies.implemented.asSequence()
-            .filter { species -> species.name !in CONFIG.ignoredSpecies }
-            .associateWith { species -> species.forms.filter { form -> form.name !in CONFIG.ignoredForms } }
-            .flatMap { (species, forms) ->
+        val allSpecies = PokemonSpecies.implemented.asSequence()
+        val species = allSpecies
+            .filter { filterSpecies -> filterSpecies.name !in CONFIG.ignoredSpecies }
+            .associateWith { associateSpecies -> associateSpecies.forms.filter { form -> form.name !in CONFIG.ignoredForms } }
+            .flatMap { (flatMapSpecies, forms) ->
                 forms.filter { form -> form.types.contains(elementalType) }
-                    .map { form -> species to form }
+                    .map { form -> flatMapSpecies to form }
+            }
+            .toList()
+
+        if (species.isNotEmpty()) return species
+
+        return allSpecies
+            .filter { filterSpecies -> filterSpecies.name !in CONFIG.ignoredSpecies }
+            .associateWith { associateSpecies -> associateSpecies.forms.filter { form -> form.name !in CONFIG.ignoredForms } }
+            .flatMap { (flatMapSpecies, forms) ->
+                forms.map { form -> flatMapSpecies to form }
             }
             .toList()
     }
 
     fun register() {
-        LOGGER.info("Initializing SpeciesManager instance")
+        debug("Initializing SpeciesManager instance")
     }
 }

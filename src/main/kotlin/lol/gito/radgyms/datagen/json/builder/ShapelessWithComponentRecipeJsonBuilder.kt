@@ -17,6 +17,7 @@ import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class ShapelessWithComponentRecipeJsonBuilder(
     private val category: RecipeCategory,
     private val output: Item,
@@ -32,22 +33,24 @@ class ShapelessWithComponentRecipeJsonBuilder(
     fun input(ingredient: Ingredient): ShapelessWithComponentRecipeJsonBuilder = this.input(ingredient, 1)
 
     fun input(itemProvider: ItemConvertible?, size: Int): ShapelessWithComponentRecipeJsonBuilder {
-        for (i in 0..<size) {
-            this.input(Ingredient.ofItems(itemProvider))
+        return this.apply {
+            for (i in 0..<size) {
+                input(Ingredient.ofItems(itemProvider))
+            }
         }
-        return this
     }
 
     fun input(ingredient: Ingredient, size: Int): ShapelessWithComponentRecipeJsonBuilder {
-        for (i in 0..<size) {
-            inputs.add(ingredient)
+        return this.apply {
+            for (i in 0..<size) {
+                inputs.add(ingredient)
+            }
         }
-        return this
     }
 
     fun withComponentMap(map: ComponentMap): ShapelessWithComponentRecipeJsonBuilder {
         return this.apply {
-            this.itemStack.applyComponentsFrom(map)
+            itemStack.applyComponentsFrom(map)
         }
     }
 
@@ -55,13 +58,15 @@ class ShapelessWithComponentRecipeJsonBuilder(
         string: String?,
         advancementCriterion: AdvancementCriterion<*>?
     ): ShapelessWithComponentRecipeJsonBuilder {
-        advancementBuilder[string] = advancementCriterion
-        return this
+        return this.apply {
+            advancementBuilder[string] = advancementCriterion
+        }
     }
 
     override fun group(string: String?): ShapelessWithComponentRecipeJsonBuilder {
-        this.group = string
-        return this
+        return this.apply {
+            group = string
+        }
     }
 
     override fun getOutputItem(): Item {

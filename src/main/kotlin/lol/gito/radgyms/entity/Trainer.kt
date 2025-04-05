@@ -18,7 +18,6 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import net.minecraft.world.entity.EntityLookup
 import java.util.*
 
 class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntity(entityType, world) {
@@ -52,13 +51,11 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
     }
 
     override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
-        RadGyms.LOGGER.info("Vec3d: ${this.pos}")
         if (player is ServerPlayerEntity && world is ServerWorld) {
             val trainerRegistry = RadGyms.RCT.trainerRegistry
             val rctBattleManager = RadGyms.RCT.battleManager
             val playerTrainer = trainerRegistry.getById(player.uuid.toString())
 
-            // Hope it fixes "Entity not attached"
             val gymNpcPair = PLAYER_GYMS[player.uuid]!!.npcList.first { it.first == this.uuid }
 
             var npcTrainer : TrainerNPC?

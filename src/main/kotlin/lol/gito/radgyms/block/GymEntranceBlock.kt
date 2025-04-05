@@ -1,7 +1,9 @@
 package lol.gito.radgyms.block
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.entity.GymEntranceEntity
 import lol.gito.radgyms.gui.GuiHandler
@@ -12,6 +14,7 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text.translatable
@@ -42,15 +45,13 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
     override fun onUse(
         state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hit: BlockHitResult
     ): ActionResult {
-        if (world.getBlockEntity(pos) !is GymEntranceEntity) {
-            return super.onUse(state, world, pos, player, hit)
-        }
+        if (world.getBlockEntity(pos) !is GymEntranceEntity) return super.onUse(state, world, pos, player, hit)
 
         if (!world.isClient) {
-            val party = (player as ServerPlayerEntity).party()
+            val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
             if (party.all { it.isFainted() }) {
                 player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
-
+                debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
                 return ActionResult.PASS
             }
         }
@@ -59,11 +60,12 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
 
         if (gymEntrance.usesLeftForPlayer(player) == 0) {
             if (!world.isClient) player.sendMessage(translatable(modId("message.info.gym_entrance_exhausted").toTranslationKey()))
-
+            debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
             return ActionResult.PASS
         }
 
         if (world.isClient) {
+            debug("Client: Opening gym entry screen for player ${player.uuid} (tries left: ${gymEntrance.usesLeftForPlayer(player)})")
             GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos, gymEntrance.usesLeftForPlayer(player))
         }
 

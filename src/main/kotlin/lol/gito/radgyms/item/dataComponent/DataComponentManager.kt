@@ -1,7 +1,7 @@
 package lol.gito.radgyms.item.dataComponent
 
 import com.mojang.serialization.Codec
-import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import net.minecraft.component.ComponentType
 import net.minecraft.registry.Registries.DATA_COMPONENT_TYPE
@@ -14,7 +14,13 @@ object DataComponentManager {
         ComponentType.builder<String>().codec(Codec.STRING).build()
     )
 
+    val RAD_GYM_BUNDLE_COMPONENT: ComponentType<Boolean> = Registry.register(
+        DATA_COMPONENT_TYPE,
+        modId("bundle"),
+        ComponentType.builder<Boolean>().codec(Codec.BOOL).build()
+    )
+
     fun register() {
-        LOGGER.info("Registering data components")
+        debug("Registering data components")
     }
 }

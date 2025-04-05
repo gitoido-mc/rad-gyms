@@ -4,6 +4,7 @@ import io.wispforest.owo.network.ClientAccess
 import io.wispforest.owo.network.ServerAccess
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.entity.GymEntranceEntity
 import net.minecraft.server.network.ServerPlayerEntity
@@ -16,7 +17,6 @@ object NetworkStackHandler {
     val PACKET_ENTER_BLOCK = modId("net.gym_enter_block")
     val PACKET_ENTER_KEY = modId("net.gym_enter_key")
     val PACKET_LEAVE = modId("net.gym_leave")
-    val PACKET_LEAVE_SERVER = modId("net.gym_leave_server")
 
     @JvmRecord
     data class GymEnterWithCoords(
@@ -35,16 +35,12 @@ object NetworkStackHandler {
 
     @JvmRecord
     data class GymLeave(
-        val id: Identifier = PACKET_LEAVE
-    )
-
-    @JvmRecord
-    data class GymLeaveServer(
-        val id: Identifier = PACKET_LEAVE_SERVER
+        val id: Identifier = PACKET_LEAVE,
+        val teleport: Boolean
     )
 
     fun register() {
-        LOGGER.info("Registering network stack handler")
+        debug("Registering network stack handler")
         CHANNEL.registerServerbound(GymEnterWithCoords::class.java, ::handleGymEnterBlockPacket)
         CHANNEL.registerServerbound(GymEnterWithoutCoords::class.java, ::handleGymEnterKeyPacket)
         CHANNEL.registerServerbound(GymLeave::class.java, ::handleGymLeavePacket)
@@ -59,7 +55,7 @@ object NetworkStackHandler {
         if (serverWorld.getBlockEntity(blockPos) is GymEntranceEntity) {
             val gymEntrance = serverPlayer.world.getBlockEntity(blockPos) as GymEntranceEntity
             gymEntrance.incrementPlayerUseCount(serverPlayer)
-            LOGGER.info("Gym Entrance at $blockPos - increased usage for player ${serverPlayer.name.string}")
+            debug("Gym Entrance at $blockPos - increased usage for player ${serverPlayer.name.string}")
         }
         serverWorld.chunkManager.markForUpdate(blockPos)
         executeEnter(serverPlayer, serverWorld, packet.level, packet.type, false)
@@ -75,7 +71,7 @@ object NetworkStackHandler {
     private fun executeEnter(
         serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld, level: Int, type: String, key: Boolean
     ) {
-        LOGGER.info("Handling GymEnter packet for player ${serverPlayer.name}")
+        debug("Handling GymEnter packet for player ${serverPlayer.name}")
         serverWorld.server.execute {
             GymEnterPacketHandler(
                 serverPlayer, serverWorld, level, key, type
@@ -85,12 +81,13 @@ object NetworkStackHandler {
 
     private fun handleGymLeavePacket(packet: GymLeave, context: ServerAccess) {
         val serverPlayer = context.player()
-        LOGGER.info("Received GymLeave ${packet.id} packet for player ${serverPlayer.name}")
+        debug("Received GymLeave ${packet.id} packet for player ${serverPlayer.name}")
 
         context.player.server.execute { GymLeavePacketHandler(context.player) }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun handleGymServerLeavePacket(packet: GymLeave, context: ClientAccess) {
-        CHANNEL.clientHandle().send(GymLeave())
+        CHANNEL.clientHandle().send(packet)
     }
 }

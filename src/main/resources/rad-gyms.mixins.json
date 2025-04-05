@@ -3,7 +3,9 @@
   "package": "lol.gito.radgyms.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "RadGymsPlayerDataSaverMixin"
+    "BundleItemMixin",
+    "DataSaver",
+    "OnServerPlayerDeath"
   ],
   "injectors": {
     "defaultRequire": 1

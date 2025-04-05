@@ -3,6 +3,7 @@ package lol.gito.radgyms.network
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.cobblemonResource
 import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.item.ItemRegistry
@@ -19,7 +20,7 @@ object GymEnterPacketHandler {
         key: Boolean = false,
         type: String
     ) {
-        LOGGER.info("Using key? : $key")
+        debug("Using key? : $key")
         var message = translatable(
             modId("message.info.gym_init").toTranslationKey(),
             type
@@ -30,7 +31,7 @@ object GymEnterPacketHandler {
 
             if (stack.item == ItemRegistry.GYM_KEY) {
                 val stackType = stack.components.get(GYM_TYPE_COMPONENT).let { it ?: type }
-                LOGGER.info("Gym key type : $stackType")
+                debug("Gym key type : $stackType")
 
                 message = if (stackType !in ElementalTypes.all().map { it.name }) {
                     translatable(

@@ -1,10 +1,9 @@
 package lol.gito.radgyms.block
 
 import com.mojang.serialization.MapCodec
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.block.entity.GymExitEntity
 import lol.gito.radgyms.gui.GuiHandler
-import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
@@ -30,8 +29,9 @@ class GymExitBlock(settings: Settings) : BlockWithEntity(settings) {
         player: PlayerEntity,
         hit: BlockHitResult
     ): ActionResult {
-        RadGyms.LOGGER.info("exit block used")
+        debug("Gym exit block user by player ${player.uuid} at $pos in ${world.registryKey}")
         if (world.isClient) {
+            debug("Client: Opening gym exit screen for ${player.uuid} at $pos in ${world.registryKey}")
             GuiHandler.openGymLeaveScreen(player)
             return ActionResult.SUCCESS
         }
