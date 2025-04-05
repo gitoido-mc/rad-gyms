@@ -23,7 +23,7 @@ class ExitRope : Item(Settings().group(ItemGroupManager.GYMS_GROUP)) {
             if (world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
                 GuiHandler.openGymLeaveScreen(user)
             } else {
-                user.sendMessage(translatable( EXIT_ROPE.translationKey.plus(".failed")))
+                user.sendMessage(translatable(EXIT_ROPE.translationKey.plus(".failed")))
             }
         }
 
@@ -40,6 +40,6 @@ class ExitRope : Item(Settings().group(ItemGroupManager.GYMS_GROUP)) {
     override fun appendTooltip(
         stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType
     ) {
-        tooltip.add(translatable( EXIT_ROPE.translationKey.plus(".tooltip")).formatted(Formatting.GRAY))
+        tooltip.add(translatable(EXIT_ROPE.translationKey.plus(".tooltip")).formatted(Formatting.GRAY))
     }
 }

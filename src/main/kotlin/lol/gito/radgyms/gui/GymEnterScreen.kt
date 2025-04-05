@@ -2,66 +2,34 @@ package lol.gito.radgyms.gui
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import io.wispforest.owo.ui.base.BaseUIModelScreen
-import io.wispforest.owo.ui.component.ButtonComponent
 import io.wispforest.owo.ui.component.DiscreteSliderComponent
 import io.wispforest.owo.ui.container.FlowLayout
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.CHANNEL
+import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_GYM_SLIDER
+import lol.gito.radgyms.gui.GymGUIIdentifiers.UI_GYM_ENTER
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.Identifier
 import org.lwjgl.glfw.GLFW
 
-class GymEnterScreen(
-    val player: PlayerEntity,
-    val type: String? = null
-) : BaseUIModelScreen<FlowLayout>(
-    FlowLayout::class.java,
-    DataSource.asset(RadGyms.modId("gym_enter_ui"))
-) {
-    private var gymLevel: Double = 1.0
+open class GymEnterScreen(
+    open val type: String? = null, open val id: Identifier = UI_GYM_ENTER, open val player: PlayerEntity
+) :
+    BaseUIModelScreen<FlowLayout>(FlowLayout::class.java,DataSource.asset(id)),
+    IGymEnterScreen
+{
+    override lateinit var root: FlowLayout
+
+    override var gymLevel: Double = 1.0
         set(value) {
             field = value.coerceIn(1.0, 100.0) // min and max limit
         }
-    private lateinit var root: FlowLayout
 
     override fun build(root: FlowLayout) {
         this.root = root
-        root.childById(DiscreteSliderComponent::class.java, "gym_slider").setFromDiscreteValue(gymLevel)
-        root.childById(DiscreteSliderComponent::class.java, "gym_slider").onChanged().subscribe {
-            gymLevel = it
-        }
-        root.childById(ButtonComponent::class.java, "inc").onPress {
-            this.incPress(1.0)
-        }
-        root.childById(ButtonComponent::class.java, "inc-ten").onPress {
-            this.incPress(10.0)
-        }
-        root.childById(ButtonComponent::class.java, "dec").onPress {
-            this.decPress(1.0)
-        }
-        root.childById(ButtonComponent::class.java, "dec-ten").onPress {
-            this.decPress(10.0)
-        }
-        root.childById(ButtonComponent::class.java, "cancel").onPress {
-            this.close()
-        }
-        root.childById(ButtonComponent::class.java, "start").onPress {
-            this.sendStartGymPacket()
-        }
-    }
-
-    private fun incPress(value: Double) {
-        gymLevel += value
-        updateSlider()
-    }
-
-    private fun decPress(value: Double) {
-        gymLevel -= value
-        updateSlider()
-    }
-
-    private fun updateSlider() {
-        root.childById(DiscreteSliderComponent::class.java, "gym_slider").setFromDiscreteValue(gymLevel)
+        GymScreenCommons.enterScreenControls(root, this)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
@@ -72,7 +40,21 @@ class GymEnterScreen(
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    private fun sendStartGymPacket() {
+    override fun incPress(value: Double) {
+        gymLevel += value
+        updateSlider()
+    }
+
+    override fun decPress(value: Double) {
+        gymLevel -= value
+        updateSlider()
+    }
+
+    override fun updateSlider() {
+        root.childById(DiscreteSliderComponent::class.java, ID_GYM_SLIDER).setFromDiscreteValue(gymLevel)
+    }
+
+    override fun sendStartGymPacket() {
         try {
             var level: Int = this.gymLevel.toInt()
             if (level < 5) {
@@ -86,14 +68,17 @@ class GymEnterScreen(
 
             this.close()
 
-            RadGyms.LOGGER.info("Sending GymEnterWithoutCoords(level:$level, type:$type) C2S packet from ${player.name}")
+            debug("Sending GymEnterWithoutCoords(level:$level, type:$type) C2S packet from ${player.name}")
 
-            RadGyms.CHANNEL.clientHandle().send(NetworkStackHandler.GymEnterWithoutCoords(
-                level = level,
-                type = chosenType
-            ))
+            CHANNEL.clientHandle().send(
+                chosenType?.let {
+                    NetworkStackHandler.GymEnterWithoutCoords(
+                        level = level, type = it
+                    )
+                }
+            )
         } catch (e: Exception) {
-            RadGyms.LOGGER.info(e.toString())
+            LOGGER.warn(e.toString())
         }
     }
 }

@@ -2,20 +2,26 @@ package lol.gito.radgyms.gym
 
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.toBlockPos
-import com.cobblemon.mod.common.util.toVec3d
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.RCT
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.entity.EntityManager
 import lol.gito.radgyms.entity.Trainer
+import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import lol.gito.radgyms.nbt.EntityDataSaver
 import lol.gito.radgyms.nbt.GymsNbtData
 import lol.gito.radgyms.world.DimensionManager
 import lol.gito.radgyms.world.PlayerSpawnHelper
 import lol.gito.radgyms.world.StructureManager
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.component.type.BundleContentsComponent
 import net.minecraft.entity.ItemEntity
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.loot.context.LootContextTypes
@@ -25,11 +31,10 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
+import net.minecraft.text.Text.translatable
 import net.minecraft.util.Identifier
-import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.minecraft.world.World
 import net.minecraft.world.dimension.DimensionTypes
 import java.util.*
 import kotlin.time.TimeSource.Monotonic.markNow
@@ -55,8 +60,8 @@ object GymManager {
         if (serverWorld.registryKey != DimensionManager.RADGYMS_LEVEL_KEY) {
             val pos = serverPlayer.pos
             val gymType = if (type in GYM_TEMPLATES.keys) type else "default"
-            LOGGER.info("Initializing $gymType template for $type gym")
-            LOGGER.info("Available templates ${GYM_TEMPLATES.keys}")
+            debug("Initializing $gymType template for $type gym")
+            debug("Available templates ${GYM_TEMPLATES.keys}")
 
             val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(it, gymLevel, type) }
             if (gym != null) {
@@ -70,7 +75,7 @@ object GymManager {
                     .tracker(ServerTaskTracker)
                     .delay(0.1f)
                     .execute {
-                        LOGGER.info("Trying to place gym structure with ${gym.structure} at ${coords.x} ${coords.y} ${coords.z} ")
+                        debug("Trying to place gym structure with ${gym.structure} at ${coords.x} ${coords.y} ${coords.z} ")
                         StructureManager.placeStructure(
                             gymDimension,
                             coords,
@@ -82,7 +87,7 @@ object GymManager {
                 ScheduledTask.Builder()
                     .tracker(ServerTaskTracker)
                     .execute {
-                        LOGGER.info("return dim ${serverWorld.registryKey.value}")
+                        debug("return dim ${serverWorld.registryKey.value}")
                         GymsNbtData.setReturnDimension(
                             serverPlayer as EntityDataSaver,
                             serverWorld.registryKey.value.toString()
@@ -111,7 +116,7 @@ object GymManager {
                     }
                     .build()
 
-                LOGGER.info("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
+                debug("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
                 return true
             } else {
                 LOGGER.warn("Gym $gymType could not be initialized, no such type in template registry")
@@ -170,7 +175,7 @@ object GymManager {
                 requires = requiredUUID
                 leader = trainerTemplate.leader
             }.also {
-                LOGGER.info("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
+                debug("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
                 gymDimension.spawnEntity(it)
             }
 
@@ -232,7 +237,7 @@ object GymManager {
                         yaw = serverPlayer.yaw,
                         pitch = serverPlayer.pitch,
                     ).also {
-                        LOGGER.info("Gym instance removed from memory")
+                        debug("Gym instance removed from memory")
                     }
                 }
             }
@@ -247,7 +252,7 @@ object GymManager {
         val world = serverPlayer.world
 
         gym.npcList.forEach {
-            LOGGER.info("Removing trainer ${it.second} from registry and detaching associated entity")
+            debug("Removing trainer ${it.second} from registry and detaching associated entity")
             RCT.trainerRegistry.unregisterById(it.first.toString())
             (world as ServerWorld).getEntity(it.first)?.discard()
         }
@@ -258,13 +263,15 @@ object GymManager {
     fun handleLootDistribution(serverPlayer: ServerPlayerEntity) {
         val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
 
+        val bundle = ItemStack(Items.BUNDLE)
+        val bundleContents = BundleContentsComponent.Builder(BundleContentsComponent.DEFAULT)
         gym.template
             .lootTables
             .filter {
                 gym.level in it.levels.first..it.levels.second
             }
             .forEach { table ->
-                LOGGER.info("Settling level ${gym.level} rewards for player ${serverPlayer.name.literalString} after beating leader")
+                debug("Settling level ${gym.level} rewards for player ${serverPlayer.name.literalString} after beating leader")
                 val registryLootTable = serverPlayer
                     .server
                     .reloadableRegistries
@@ -280,23 +287,34 @@ object GymManager {
                 registryLootTable
                     .generateLoot(lootContextParameterSet)
                     .forEach { itemStack ->
-                        if (!serverPlayer.giveItemStack(itemStack)) {
-                            ItemEntity(
-                                serverPlayer.world,
-                                serverPlayer.pos.x,
-                                serverPlayer.pos.y,
-                                serverPlayer.pos.z,
-                                itemStack
-                            ).let {
-                                serverPlayer.world.spawnEntity(it)
-                            }
-
-                        }
+                        bundleContents.add(itemStack)
                     }
             }
+
+
+        bundle.set(
+            DataComponentTypes.CUSTOM_NAME,
+            translatable(modId("item.rad-gyms.gym_reward").toTranslationKey(),
+                gym.level, translatable(cobblemonResource("type.${gym.template.type}").toTranslationKey())
+            )
+        )
+        bundle.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContents.build())
+        bundle.set(DataComponentManager.RAD_GYM_BUNDLE_COMPONENT, true)
+        if (!serverPlayer.giveItemStack(bundle)) {
+            ItemEntity(
+                serverPlayer.world,
+                serverPlayer.pos.x,
+                serverPlayer.pos.y,
+                serverPlayer.pos.z,
+                bundle,
+            ).let {
+                serverPlayer.world.spawnEntity(it)
+            }
+
+        }
     }
 
     fun register() {
-        LOGGER.info("GymManager init")
+        debug("GymManager init")
     }
 }

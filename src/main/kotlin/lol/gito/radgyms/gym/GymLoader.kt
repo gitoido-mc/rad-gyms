@@ -5,9 +5,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.GymManager.GYM_TEMPLATES
-import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_TYPE
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.resource.Resource
@@ -30,7 +30,7 @@ class GymLoader {
                     try {
                         val templateName = File(id.path).nameWithoutExtension
                         GYM_TEMPLATES[templateName] = Json.decodeFromStream<GymDTO>(res.inputStream)
-                        LOGGER.info("Loaded $templateName template from ${File(id.path).name} gym config")
+                        debug("Loaded $templateName template from ${File(id.path).name} gym config")
                     } catch (e: Exception) {
                         LOGGER.warn("Could not parse ${File(id.path).name} gym data", e)
                     }

@@ -26,6 +26,10 @@ fabricApi {
     }
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/rad-gyms.accesswidener")
+}
+
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft("com.mojang:minecraft:${properties["minecraft_version"]}")

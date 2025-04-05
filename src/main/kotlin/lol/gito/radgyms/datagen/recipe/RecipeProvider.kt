@@ -5,11 +5,11 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.CobblemonItem
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.datagen.json.builder.ShapelessWithComponentRecipeJsonBuilder
-import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import lol.gito.radgyms.item.GymKey
 import lol.gito.radgyms.item.ItemRegistry
+import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.minecraft.component.ComponentMap
@@ -84,7 +84,7 @@ class RecipeProvider(
         ElementalTypes.WATER -> Pair(ItemRegistry.GYM_KEY, CobblemonItems.WATER_GEM)
 
         else -> {
-            RadGyms.LOGGER.info("No keys found for $type")
+            debug("No keys found for $type")
             Pair(ItemRegistry.GYM_KEY, CobblemonItems.NORMAL_GEM)
         }
     }

@@ -1,7 +1,7 @@
 package lol.gito.radgyms.block.entity
 
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.block.BlockRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntity
@@ -35,6 +35,6 @@ object BlockEntityRegistry {
     )
 
     fun register() {
-        LOGGER.info("Registering block entities")
+        debug("Registering block entities")
     }
 }

@@ -1,7 +1,7 @@
 package lol.gito.radgyms.command
 
 import com.mojang.brigadier.context.CommandContext
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.argument.EntityArgumentType
@@ -24,14 +24,18 @@ object CommandManager {
     }
 
     fun register() {
-        RadGyms.LOGGER.info("Registering chat commands")
-        RCTCommandManager.register()
+        debug("Registering chat commands")
         CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback { dispatcher, _, _ ->
             dispatcher.register(
                 CommandManager.literal("radgyms")
-                .then(CommandManager.literal("forceLeave").requires { s -> s.hasPermissionLevel(2) }.then(
-                        CommandManager.argument("player", EntityArgumentType.player()).executes(::forceLeave)
-                    )))
+                    .then(
+                        CommandManager.literal("forceLeave")
+                        .requires { s -> s.hasPermissionLevel(2) }
+                        .then(
+                            CommandManager.argument("player", EntityArgumentType.player()).executes(::forceLeave)
+                        )
+                    )
+            )
         })
     }
 }

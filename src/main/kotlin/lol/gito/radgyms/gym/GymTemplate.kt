@@ -9,7 +9,6 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
-import com.cobblemon.mod.common.util.toPokemon
 import com.cobblemon.mod.common.util.toProperties
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
@@ -18,8 +17,8 @@ import com.gitlab.srcmc.rctapi.api.models.BagItemModel
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
-import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.CONFIG
+import lol.gito.radgyms.RadGyms.debug
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
@@ -106,7 +105,7 @@ object GymTemplate {
                     }
                 }
 
-                RadGyms.LOGGER.info("Derived pokemon count for level $level is $pokemonCount")
+                debug("Derived pokemon count for level $level is $pokemonCount")
 
                 val elementType: String? = if (type == "default") {
                     ElementalTypes.all().random().name
@@ -157,10 +156,10 @@ object GymTemplate {
     }
 
     private fun generatePokemon(level: Int, type: String?): PokemonModel {
-        RadGyms.LOGGER.info("Generating pokemon with level $level and type $type")
+        debug("Generating pokemon with level $level and type $type")
         if (type != null && type != "default") {
             val species = SpeciesManager.SPECIES_BY_TYPE[type]?.toList()?.random()!!
-            RadGyms.LOGGER.info("Picked ${species.first.showdownId()} form=${species.second.formOnlyShowdownId()} level=${level}")
+            debug("Picked ${species.first.showdownId()} form=${species.second.formOnlyShowdownId()} level=${level}")
 
             return fillPokemonModel(species, level)
         } else {
@@ -171,7 +170,7 @@ object GymTemplate {
                     forms.map { form -> species to form }
                 }.random()
 
-            RadGyms.LOGGER.info("Picked ${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} from random pool")
+            debug("Picked ${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} from random pool")
 
             return fillPokemonModel(species, level)
         }
@@ -188,8 +187,7 @@ object GymTemplate {
         val pokemonProperties: PokemonProperties = pokeString.toProperties()
 
         // Thanks Ludichat [Cobbreeding project code]
-        if (pokemonProperties.form != null)
-        {
+        if (pokemonProperties.form != null) {
             species.first.forms.find { it.formOnlyShowdownId() == pokemonProperties.form }?.run {
                 aspects.forEach {
                     // alternative form

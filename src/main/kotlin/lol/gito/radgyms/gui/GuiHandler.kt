@@ -13,16 +13,27 @@ object GuiHandler {
         MinecraftClient
             .getInstance()
             .execute {
-                MinecraftClient.getInstance().setScreen(GymEnterScreen(player, type))
+                MinecraftClient.getInstance().setScreen(
+                    GymEnterScreen(
+                        type = type,
+                        player = player
+                    )
+                )
             }
-
 
     @Environment(EnvType.CLIENT)
     fun openGymEntranceScreen(player: PlayerEntity, type: String, blockPos: BlockPos, usesLeft: Int) =
         MinecraftClient
             .getInstance()
             .execute {
-                MinecraftClient.getInstance().setScreen(GymEntranceScreen(player, type, blockPos, usesLeft))
+                MinecraftClient.getInstance().setScreen(
+                    GymEntranceScreen(
+                        type = type,
+                        player = player,
+                        blockPos = blockPos,
+                        usesLeft = usesLeft
+                    )
+                )
             }
 
 
