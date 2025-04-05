@@ -1,0 +1,15 @@
+name: Generate changelog
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  changelog:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: "Generate changelog"
+        uses: rhysd/changelog-from-release/action@v3
+        with:
+          file: CHANGELOG.md
+          github_token: ${{ secrets.GITHUB_TOKEN }}
