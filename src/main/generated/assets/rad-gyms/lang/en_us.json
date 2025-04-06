@@ -8,6 +8,7 @@
   "item.rad-gyms.gym_key.attuned": "Attuned to %s",
   "item.rad-gyms.gym_reward": "Level %s %s gym reward cache",
   "itemGroup.rad-gyms.items": "Rad Gyms",
+  "rad-gyms.cache.component.shiny_boost": "Shiny chance boosted: x%s time(s)",
   "rad-gyms.gui.common.cancel": "Cancel",
   "rad-gyms.gui.common.decrease": "-1",
   "rad-gyms.gui.common.decrease-ten": "-10",
