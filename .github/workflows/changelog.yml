@@ -1,17 +1,21 @@
-name: Generate changelog
+name: Update changelog
 on:
   push:
     branches:
       - "*"
+  workflow_dispatch:
 
 jobs:
   changelog:
+    name: Update changelog
     runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
-      - name: "Generate changelog"
-        uses: rhysd/changelog-from-release/action@v3
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: rhysd/changelog-from-release/action@v3
         with:
           file: CHANGELOG.md
           github_token: ${{ secrets.GITHUB_TOKEN }}
