@@ -57,7 +57,7 @@ class GymKey : Item(Settings().also { settings ->
                     translatable(modId("custom_type.$attuned").toTranslationKey())
                 )
             }
-            tooltip.add(tooltipText.formatted(Formatting.GOLD))
+            tooltip.addLast(tooltipText.formatted(Formatting.GOLD))
         }
     }
 
