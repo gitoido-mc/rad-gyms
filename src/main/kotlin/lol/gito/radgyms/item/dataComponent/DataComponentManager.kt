@@ -20,6 +20,12 @@ object DataComponentManager {
         ComponentType.builder<Boolean>().codec(Codec.BOOL).build()
     )
 
+    val CACHE_SHINY_BOOST_COMPONENT: ComponentType<Int> = Registry.register(
+        DATA_COMPONENT_TYPE,
+        modId("shiny_boost"),
+        ComponentType.builder<Int>().codec(Codec.INT).build()
+    )
+
     fun register() {
         debug("Registering data components")
     }

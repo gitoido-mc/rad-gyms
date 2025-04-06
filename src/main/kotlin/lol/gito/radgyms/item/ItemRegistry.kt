@@ -9,5 +9,29 @@ class ItemRegistry : ItemRegistryContainer {
 
         @JvmField
         val EXIT_ROPE = ExitRope()
+
+        @JvmField
+        val SHARD_COMMON = CommonPokeShard()
+
+        @JvmField
+        val SHARD_UNCOMMON = UncommonPokeShard()
+
+        @JvmField
+        val SHARD_RARE = RarePokeShard()
+
+        @JvmField
+        val SHARD_EPIC = EpicPokeShard()
+
+        @JvmField
+        val CACHE_COMMON = CommonPokeCache()
+
+        @JvmField
+        val CACHE_UNCOMMON = UncommonPokeCache()
+
+        @JvmField
+        val CACHE_RARE = RarePokeCache()
+
+        @JvmField
+        val CACHE_EPIC = EpicPokeCache()
     }
 }

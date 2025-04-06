@@ -38,6 +38,8 @@ class EnUSLocaleProvider(
                     "Gym Exit",
             modId("type").withSuffixedPath(".chaos").toTranslationKey() to
                     "Chaos",
+            modId("cache.component.shiny_boost").toTranslationKey() to
+                    "Shiny chance boosted: x%s time(s)",
             modId("gym_reward").toTranslationKey("item") to
                     "Level %s %s gym reward cache",
             modId("gui.common.set-gym-level").toTranslationKey() to

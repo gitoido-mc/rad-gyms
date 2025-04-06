@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "multi_bench",
+  "key": {
+    "c": {
+      "item": "cobblemon:luxury_ball"
+    },
+    "i": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "s": {
+      "item": "rad-gyms:shard_epic"
+    },
+    "x": {
+      "item": "minecraft:echo_shard"
+    }
+  },
+  "pattern": [
+    "sss",
+    "sxs",
+    "ici"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rad-gyms:cache_epic"
+  }
+}
