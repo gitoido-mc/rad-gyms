@@ -16,6 +16,7 @@ jobs:
         with:
           ref: main
       - uses: rhysd/changelog-from-release/action@v3
+        continue-on-error: true
         with:
           file: CHANGELOG.md
           github_token: ${{ secrets.GITHUB_TOKEN }}
