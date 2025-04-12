@@ -313,7 +313,6 @@ object GymManager {
 
         val styledLevel = MutableText.of(Text.of(gym.level.toString()).content).formatted(Formatting.GOLD)
         val styledType = MutableText.of(Text.of(gym.type).content)
-            .formatted(Formatting.ITALIC)
             .formatted(Formatting.GREEN)
 
         bundle.set(

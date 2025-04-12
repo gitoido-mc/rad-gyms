@@ -32,14 +32,40 @@ class EnUSLocaleProvider(
                     "Gym key",
             ItemRegistry.GYM_KEY.translationKey.plus(".attuned") to
                     "Attuned to %s",
+            ItemRegistry.CACHE_COMMON.translationKey to
+                    "Common Pokemon cache",
+            ItemRegistry.CACHE_UNCOMMON.translationKey to
+                    "Uncommon Pokemon cache",
+            ItemRegistry.CACHE_RARE.translationKey to
+                    "Rare Pokemon cache",
+            ItemRegistry.CACHE_EPIC.translationKey to
+                    "Epic Pokemon cache",
+            ItemRegistry.SHARD_COMMON.translationKey to
+                    "Common cache shard",
+            ItemRegistry.SHARD_UNCOMMON.translationKey to
+                    "Uncommon cache shard",
+            ItemRegistry.SHARD_RARE.translationKey to
+                    "Rare cache shard",
+            ItemRegistry.SHARD_EPIC.translationKey to
+                    "Epic cache shard",
             BlockRegistry.GYM_ENTRANCE.translationKey to
                     "Gym Entrance",
             BlockRegistry.GYM_EXIT.translationKey to
                     "Gym Exit",
+            BlockRegistry.SHARD_BLOCK_COMMON.translationKey to
+                    "Common shard block",
+            BlockRegistry.SHARD_BLOCK_UNCOMMON.translationKey to
+                    "Uncommon shard block",
+            BlockRegistry.SHARD_BLOCK_RARE.translationKey to
+                    "Rare shard block",
+            BlockRegistry.SHARD_BLOCK_EPIC.translationKey to
+                    "Epic shard block",
             modId("type").withSuffixedPath(".chaos").toTranslationKey() to
                     "Chaos",
-            modId("cache.component.shiny_boost").toTranslationKey() to
-                    "Shiny chance boosted: x%s time(s)",
+            modId("item.component.gym_type").toTranslationKey() to
+                    "Attuned to %s",
+            modId("item.component.shiny_boost").toTranslationKey() to
+                    "Shiny chance boosted x%s time(s)",
             modId("gym_reward").toTranslationKey("item") to
                     "Level %s %s gym reward cache",
             modId("gui.common.set-gym-level").toTranslationKey() to
