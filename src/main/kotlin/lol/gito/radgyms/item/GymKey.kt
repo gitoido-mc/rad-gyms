@@ -45,7 +45,7 @@ class GymKey : Item(Settings().also { settings ->
         if (attuned != null) {
             val tooltipText: MutableText = if (ElementalTypes.get(attuned) != null) {
                 translatable(
-                    ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
+                    modId("item.component.gym_type").toTranslationKey(),
                     translatable(
                         cobblemonResource("type.suffix").toTranslationKey(),
                         translatable(cobblemonResource("type.$attuned").toTranslationKey())
@@ -53,8 +53,11 @@ class GymKey : Item(Settings().also { settings ->
                 )
             } else {
                 translatable(
-                    ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
-                    translatable(modId("custom_type.$attuned").toTranslationKey())
+                    modId("item.component.gym_type").toTranslationKey(),
+                    translatable(
+                        cobblemonResource("type.suffix").toTranslationKey(),
+                        translatable(modId("custom_type.$attuned").toTranslationKey())
+                    )
                 )
             }
             tooltip.addLast(tooltipText.formatted(Formatting.GOLD))
