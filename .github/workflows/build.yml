@@ -60,3 +60,4 @@ jobs:
             radical-cobblemon-trainers-api(required){curseforge:1152792}{modrinth:CBfM2yw7}
             architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
             owo-lib(required){curseforge:532610}{modrinth:ccKDOlHs}
+            admiral@0.4.7+1.21.1+fabric(embedded)
