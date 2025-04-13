@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "multi_bench",
+  "key": {
+    "c": {
+      "item": "cobblemon:luxury_ball"
+    },
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "s": {
+      "item": "rad-gyms:shard_uncommon"
+    }
+  },
+  "pattern": [
+    "sss",
+    "s s",
+    "ici"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rad-gyms:cache_uncommon"
+  }
+}

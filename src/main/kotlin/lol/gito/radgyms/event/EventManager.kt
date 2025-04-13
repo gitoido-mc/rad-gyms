@@ -154,8 +154,9 @@ object EventManager {
                 (loser.entity as Trainer).let { trainer ->
                     trainer.defeated = true
                     if (trainer.leader) {
+                        val gym = PLAYER_GYMS[player.uuid]!!
                         GymManager.handleLeaderBattleWon(player)
-                        GymManager.handleLootDistribution(player)
+                        GymManager.handleLootDistribution(player, gym.template, gym.level, gym.type)
                     }
                 }
             }

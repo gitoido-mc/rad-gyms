@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "multi_bench",
+  "ingredients": [
+    {
+      "item": "rad-gyms:shard_block_rare"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "rad-gyms:shard_rare"
+  }
+}
