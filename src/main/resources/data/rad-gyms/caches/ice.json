@@ -1,0 +1,58 @@
+{
+  "common": {
+    "mrmime galarian": 400,
+    "ninetales alolan": 400,
+    "sandshrew alolan": 400,
+    "sandslash alolan": 400,
+    "vulpix alolan": 400,
+    "smoochum": 400,
+    "swinub": 400,
+    "spheal": 400,
+    "darmanitan standard-mode galarian": 400,
+    "darmanitan galarian zen-mode": 400,
+    "darumaka galarian": 400,
+    "bergmite region-bias-hisui": 400,
+    "snom": 400
+  },
+  "uncommon": {
+    "delibird": 300,
+    "castform snowy-form": 300,
+    "sealeo": 300,
+    "snorunt": 300,
+    "cubchoo": 300,
+    "vanillish": 300,
+    "vanillite": 300,
+    "bergmite": 300,
+    "cetoddle": 300
+  },
+  "rare": {
+    "jynx": 200,
+    "piloswine": 200,
+    "glalie": 200,
+    "walrein": 200,
+    "froslass": 200,
+    "glaceon": 200,
+    "mamoswine": 200,
+    "rotom frost-appliance": 200,
+    "beartic": 200,
+    "cryogonal": 200,
+    "vanilluxe": 200,
+    "avalugg": 200,
+    "eiscue": 200,
+    "eiscue noice_face": 200,
+    "frosmoth": 200,
+    "mrrime": 200,
+    "cetitan": 200
+  },
+  "epic": {
+    "articuno": 100,
+    "regice": 100,
+    "arceus ice-plate": 100,
+    "kyurem white-fusion": 100,
+    "kyurem black-fusion": 100,
+    "silvally ice-memory": 100,
+    "calyrex ice-rider": 100,
+    "glastrier": 100,
+    "ironbundle": 100
+  }
+}
