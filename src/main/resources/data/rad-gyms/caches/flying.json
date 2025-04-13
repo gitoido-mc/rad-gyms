@@ -1,0 +1,35 @@
+{
+  "common": {
+    "rufflet region-bias-hisui": 400,
+    "noibat": 400,
+    "dartrix region-bias-hisui": 400,
+    "rowlet region-bias-hisui": 400,
+    "rookidee": 400
+  },
+  "uncommon": {
+    "vivillon vivillon-wings-poke-ball": 300,
+    "minior meteor-form": 300,
+    "corvisquire": 300,
+    "squawkabilly squawkabilly-color-blue": 300,
+    "squawkabilly squawkabilly-color-yellow": 300,
+    "squawkabilly squawkabilly-color-gray": 300
+  },
+  "rare": {
+    "rotom fan-appliance": 200,
+    "noivern": 200,
+    "corviknight": 200,
+    "cramorant": 200,
+    "bombirdier": 200,
+    "flamigo": 200
+  },
+  "epic": {
+    "arceus flying-plate": 100,
+    "shaymin sky-forme": 100,
+    "landorus therian-forme": 100,
+    "thundurus therian-forme": 100,
+    "tornadus": 100,
+    "tornadus therian-forme": 100,
+    "silvally flying-memory": 100,
+    "enamorus therian-forme": 100
+  }
+}

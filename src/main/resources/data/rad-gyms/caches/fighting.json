@@ -1,0 +1,62 @@
+{
+  "common": {
+    "farfetchd galarian": 400,
+    "tauros paldean": 400,
+    "tauros blaze-breed paldean": 400,
+    "tauros paldean aqua-breed": 400,
+    "sneasel hisuian": 400,
+    "tyrogue": 400,
+    "makuhita": 400,
+    "meditite": 400,
+    "riolu": 400,
+    "lilligant hisuian": 400,
+    "decidueye hisuian": 400
+  },
+  "uncommon": {
+    "machoke": 300,
+    "machop": 300,
+    "mankey": 300,
+    "medicham": 300,
+    "gurdurr": 300,
+    "mienfoo": 300,
+    "timburr": 300,
+    "pancham": 300,
+    "crabrawler": 300,
+    "clobbopus": 300
+  },
+  "rare": {
+    "hitmonchan": 200,
+    "hitmonlee": 200,
+    "machamp": 200,
+    "primeape": 200,
+    "hitmontop": 200,
+    "hariyama": 200,
+    "lucario": 200,
+    "conkeldurr": 200,
+    "mienshao": 200,
+    "sawk": 200,
+    "throh": 200,
+    "hawlucha": 200,
+    "pangoro": 200,
+    "crabominable": 200,
+    "passimian": 200,
+    "falinks": 200,
+    "grapploct": 200,
+    "sirfetchd": 200,
+    "sneasler": 200,
+    "annihilape": 200
+  },
+  "epic": {
+    "zapdos galarian": 100,
+    "arceus fighting-plate": 100,
+    "keldeo resolute-form": 100,
+    "meloetta pirouette-forme": 100,
+    "marshadow": 100,
+    "silvally fighting-memory": 100,
+    "kubfu": 100,
+    "urshifu": 100,
+    "zamazenta": 100,
+    "ironhands": 100,
+    "koraidon": 100
+  }
+}
