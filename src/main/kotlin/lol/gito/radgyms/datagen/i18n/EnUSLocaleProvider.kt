@@ -112,12 +112,22 @@ class EnUSLocaleProvider(
                     "Mysterious forces are teleporting you to %s trial",
             modId("message.info.gym_complete").toTranslationKey() to
                     "An exit appeared somewhere in gym",
+            modId("message.info.command.op_kick").toTranslationKey() to
+                    "Mysterious forces are forcibly extracting you out from trial",
+            modId("message.info.command.debug_reward").toTranslationKey() to
+                    "Generated rewards for gym template %s, level %s",
             modId("message.error.common.no-response").toTranslationKey() to
                     "Cannot acquire server response, try again",
             modId("message.error.key.not-in-main-hand").toTranslationKey() to
                     "Gym key must be in your main hand",
             modId("message.error.gym_entrance.not-sneaking").toTranslationKey() to
                     "You need to sneak to break gym entrance",
+            modId("message.error.command.op_kick").toTranslationKey() to
+                    "Cannot kick player %s from gym, they are not in it",
+            modId("message.error.command.debug_reward.no_template").toTranslationKey() to
+                    "Cannot find template provided",
+            modId("message.error.command.debug_reward.no_player").toTranslationKey() to
+                    "Command was not executed by player",
         )
     }
 

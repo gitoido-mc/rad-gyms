@@ -7,10 +7,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 import lol.gito.radgyms.block.BlockManager
-import lol.gito.radgyms.command.CommandManager
+import lol.gito.radgyms.command.CommandRegistry
 import lol.gito.radgyms.entity.EntityManager
 import lol.gito.radgyms.event.EventManager
-import lol.gito.radgyms.gym.GymLoader
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.gym.SpeciesManager
 import lol.gito.radgyms.item.ItemManager
@@ -30,7 +29,7 @@ object RadGyms {
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
     val CHANNEL: OwoNetChannel = OwoNetChannel.create(modId("main"))
     val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
-    private val GYM_LOADER: GymLoader = GymLoader()
+    private val GYM_LOADER: RadGymsDataLoader = RadGymsDataLoader()
 
 
     fun init() {
@@ -57,7 +56,7 @@ object RadGyms {
         ItemGroupManager.register()
 
         // Commands
-         CommandManager.register()
+         CommandRegistry.register()
 
         // Network
         NetworkStackHandler.register()
@@ -68,7 +67,7 @@ object RadGyms {
     }
 
     fun debug(message: String) {
-        if (CONFIG.debug) LOGGER.info(message)
+        if (CONFIG.debug == true) LOGGER.info(message)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -86,6 +85,7 @@ object RadGyms {
             RadGymsConfig(
                 debug = false,
                 maxEntranceUses = 3,
+                shardRewards = true,
                 ignoredSpecies = emptyList(),
                 ignoredForms = mutableListOf("gmax"),
             )

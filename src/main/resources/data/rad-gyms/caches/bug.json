@@ -15,8 +15,8 @@
     "surskit": 400,
     "wurmple": 400,
     "burmy": 400,
-    "burmy sandy-cloak": 400,
-    "burmy trash-cloak": 400,
+    "burmy aspect=sandy-cloak": 400,
+    "burmy aspect=trash-cloak": 400,
     "combee": 400,
     "kricketot": 400,
     "venipede": 400,
@@ -89,9 +89,9 @@
     "rabsca": 200
   },
   "epic": {
-    "arceus bug-plate": 100,
+    "arceus aspect=bug-plate": 100,
     "genesect": 100,
-    "silvally bug-memory": 100,
+    "silvally aspect=bug-memory": 100,
     "slitherwing": 100
   }
 }
