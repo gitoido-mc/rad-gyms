@@ -57,6 +57,7 @@ dependencies {
     // Helpers
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     modImplementation("dev.architectury:architectury-fabric:${properties["architectury_api_version"]}")
+    include(modImplementation("maven.modrinth:admiral:${properties["admiral_version"]}+${properties["minecraft_version"]}+fabric")!!)
 
     // Compat
     modCompileOnly("com.aetherteam.aether:aether:${properties["aether_version"]}-fabric")
