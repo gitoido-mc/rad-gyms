@@ -1,16 +1,16 @@
 {
   "common": {
-    "farfetchd galarian": 400,
-    "tauros paldean": 400,
-    "tauros blaze-breed paldean": 400,
-    "tauros paldean aqua-breed": 400,
-    "sneasel hisuian": 400,
+    "farfetchd aspect=galarian": 400,
+    "tauros aspect=paldean": 400,
+    "tauros aspect=blaze-breed aspect=paldean": 400,
+    "tauros aspect=paldean aspect=aqua-breed": 400,
+    "sneasel aspect=hisuian": 400,
     "tyrogue": 400,
     "makuhita": 400,
     "meditite": 400,
     "riolu": 400,
-    "lilligant hisuian": 400,
-    "decidueye hisuian": 400
+    "lilligant aspect=hisuian": 400,
+    "decidueye aspect=hisuian": 400
   },
   "uncommon": {
     "machoke": 300,
@@ -47,12 +47,12 @@
     "annihilape": 200
   },
   "epic": {
-    "zapdos galarian": 100,
-    "arceus fighting-plate": 100,
-    "keldeo resolute-form": 100,
-    "meloetta pirouette-forme": 100,
+    "zapdos aspect=galarian": 100,
+    "arceus aspect=fighting-plate": 100,
+    "keldeo aspect=resolute-form": 100,
+    "meloetta aspect=pirouette-forme": 100,
     "marshadow": 100,
-    "silvally fighting-memory": 100,
+    "silvally aspect=fighting-memory": 100,
     "kubfu": 100,
     "urshifu": 100,
     "zamazenta": 100,

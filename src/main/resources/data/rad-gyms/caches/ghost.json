@@ -1,7 +1,7 @@
 {
   "common": {
-    "corsola galarian": 400,
-    "typhlosion hisuian": 400,
+    "corsola aspect=galarian": 400,
+    "typhlosion aspect=hisuian": 400,
     "duskull": 400,
     "shuppet": 400,
     "litwick": 400,
@@ -18,10 +18,10 @@
     "pumpkaboo": 300,
     "sandygast": 300,
     "sinistea": 300,
-    "sinistea antique": 300,
+    "sinistea aspect=antique": 300,
     "gimmighoul": 300,
-    "gimmighoul roaming": 300,
-    "poltchageist artisan": 300
+    "gimmighoul aspect=roaming": 300,
+    "poltchageist aspect=artisan": 300
   },
   "rare": {
     "gengar": 200,
@@ -33,26 +33,26 @@
     "spiritomb": 200,
     "chandelure": 200,
     "cofagrigus": 200,
-    "aegislash blade-forme": 200,
+    "aegislash aspect=blade-forme": 200,
     "gourgeist": 200,
     "trevenant": 200,
     "dhelmise": 200,
     "mimikyu": 200,
-    "oricorio sensu-style": 200,
+    "oricorio aspect=sensu-style": 200,
     "palossand": 200,
     "cursola": 200,
     "polteageist": 200,
-    "polteageist antique": 200,
-    "basculegion female": 200,
+    "polteageist aspect=antique": 200,
+    "basculegion aspect=female": 200,
     "houndstone": 200,
-    "sinistcha masterpiece": 200
+    "sinistcha aspect=masterpiece": 200
   },
   "epic": {
-    "arceus ghost-plate": 100,
+    "arceus aspect=ghost-plate": 100,
     "giratina": 100,
-    "necrozma dawn-fusion": 100,
-    "silvally ghost-memory": 100,
-    "calyrex shadow-rider": 100,
+    "necrozma aspect=dawn-fusion": 100,
+    "silvally aspect=ghost-memory": 100,
+    "calyrex aspect=shadow-rider": 100,
     "spectrier": 100,
     "fluttermane": 100
   }

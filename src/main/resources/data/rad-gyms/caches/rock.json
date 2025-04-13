@@ -1,12 +1,12 @@
 {
   "common": {
-    "arcanine hisuian": 400,
-    "growlithe hisuian": 400,
+    "arcanine aspect=hisuian": 400,
+    "growlithe aspect=hisuian": 400,
     "bonsly": 400,
     "roggenrola": 400,
-    "avalugg hisuian": 400,
+    "avalugg aspect=hisuian": 400,
     "rockruff": 400,
-    "rockruff dusk-form": 400,
+    "rockruff aspect=dusk-form": 400,
     "rolycoly": 400,
     "nacli": 400
   },
@@ -52,8 +52,8 @@
     "carbink": 200,
     "tyrantrum": 200,
     "lycanroc": 200,
-    "lycanroc midnight-form": 200,
-    "lycanroc dusk-form": 200,
+    "lycanroc aspect=midnight-form": 200,
+    "lycanroc aspect=dusk-form": 200,
     "minior": 200,
     "nihilego": 200,
     "stakataka": 200,
@@ -66,13 +66,13 @@
   "epic": {
     "tyranitar": 100,
     "regirock": 100,
-    "arceus rock-plate": 100,
+    "arceus aspect=rock-plate": 100,
     "terrakion": 100,
     "diancie": 100,
-    "silvally rock-memory": 100,
+    "silvally aspect=rock-memory": 100,
     "ironboulder": 100,
     "ironthorns": 100,
-    "ogerpon cornerstone-mask": 100,
-    "ogerpon embody-aspect cornerstone-mask": 100
+    "ogerpon aspect=cornerstone-mask": 100,
+    "ogerpon aspect=embody-aspect aspect=cornerstone-mask": 100
   }
 }

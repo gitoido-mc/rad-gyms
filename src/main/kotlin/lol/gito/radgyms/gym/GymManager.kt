@@ -31,10 +31,9 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.MutableText
+import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
-import net.minecraft.text.TextColor
-import net.minecraft.util.Colors
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
@@ -280,18 +279,16 @@ object GymManager {
         PLAYER_GYMS.remove(serverPlayer.uuid)
     }
 
-    fun handleLootDistribution(serverPlayer: ServerPlayerEntity) {
-        val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
-
+    fun handleLootDistribution(serverPlayer: ServerPlayerEntity, template: GymTemplate, level: Int, type: String) {
         val bundle = ItemStack(Items.BUNDLE)
         val bundleContents = BundleContentsComponent.Builder(BundleContentsComponent.DEFAULT)
-        gym.template
+        template
             .lootTables
             .filter {
-                gym.level in it.levels.first..it.levels.second
+               level in it.levels.first..it.levels.second
             }
             .forEach { table ->
-                debug("Settling level ${gym.level} rewards for player ${serverPlayer.name.literalString} after beating leader")
+                debug("Settling level $level rewards for player ${serverPlayer.name.literalString} after beating leader")
                 val registryLootTable = serverPlayer
                     .server
                     .reloadableRegistries
@@ -304,6 +301,8 @@ object GymManager {
                     .add(LootContextParameters.ORIGIN, serverPlayer.pos)
                     .build(LootContextTypes.GIFT)
 
+
+
                 registryLootTable
                     .generateLoot(lootContextParameterSet)
                     .forEach { itemStack ->
@@ -311,9 +310,11 @@ object GymManager {
                     }
             }
 
-        val styledLevel = MutableText.of(Text.of(gym.level.toString()).content).formatted(Formatting.GOLD)
-        val styledType = MutableText.of(Text.of(gym.type).content)
-            .formatted(Formatting.GREEN)
+        val styledLevel = MutableText.of(Text.literal(level.toString()).content).formatted(Formatting.GOLD)
+        val styledType = translatable(cobblemonResource("type.$type").toTranslationKey())
+            .setStyle(
+                Style.EMPTY.withColor(Formatting.GREEN).withItalic(true)
+            )
 
         bundle.set(
             DataComponentTypes.CUSTOM_NAME,

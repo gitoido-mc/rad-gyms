@@ -1,10 +1,10 @@
 {
   "common": {
-    "marowak alolan": 400,
+    "marowak aspect=alolan": 400,
     "vulpix": 400,
-    "cyndaquil region-bias-hisui": 400,
+    "cyndaquil aspect=region-bias-hisui": 400,
     "magby": 400,
-    "quilava region-bias-hisui": 400,
+    "quilava aspect=region-bias-hisui": 400,
     "slugma": 400,
     "charcadet": 400
   },
@@ -16,7 +16,7 @@
     "cyndaquil": 300,
     "magcargo": 300,
     "quilava": 300,
-    "castform sunny-form": 300,
+    "castform aspect=sunny-form": 300,
     "combusken": 300,
     "numel": 300,
     "torchic": 300,
@@ -51,7 +51,7 @@
     "torkoal": 200,
     "infernape": 200,
     "magmortar": 200,
-    "rotom heat-appliance": 200,
+    "rotom aspect=heat-appliance": 200,
     "darmanitan": 200,
     "emboar": 200,
     "heatmor": 200,
@@ -73,14 +73,14 @@
     "moltres": 100,
     "entei": 100,
     "hooh": 100,
-    "groudon primal": 100,
-    "arceus fire-plate": 100,
+    "groudon aspect=primal": 100,
+    "arceus aspect=fire-plate": 100,
     "heatran": 100,
     "volcanion": 100,
-    "silvally fire-memory": 100,
+    "silvally aspect=fire-memory": 100,
     "gougingfire": 100,
     "ironmoth": 100,
-    "ogerpon hearthflame-mask": 100,
-    "ogerpon embody-aspect hearthflame-mask": 100
+    "ogerpon aspect=hearthflame-mask": 100,
+    "ogerpon aspect=embody-aspect aspect=hearthflame-mask": 100
   }
 }

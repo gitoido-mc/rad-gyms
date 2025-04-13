@@ -1,10 +1,10 @@
 {
   "common": {
-    "cubone region-bias-alola": 400,
+    "cubone aspect=region-bias-alola": 400,
     "diglett": 400,
     "trapinch": 400,
     "sandile": 400,
-    "yamask galarian": 400
+    "yamask aspect=galarian": 400
   },
   "uncommon": {
     "cubone": 300,
@@ -17,7 +17,7 @@
     "baltoy": 300,
     "vibrava": 300,
     "hippopotas": 300,
-    "wormadam sandy-cloak": 300,
+    "wormadam aspect=sandy-cloak": 300,
     "drilbur": 300,
     "golett": 300,
     "krokorok": 300,
@@ -31,7 +31,7 @@
     "donphan": 200,
     "claydol": 200,
     "flygon": 200,
-    "gastrodon east-sea": 200,
+    "gastrodon aspect=east-sea": 200,
     "gliscor": 200,
     "hippowdon": 200,
     "rhyperior": 200,
@@ -47,13 +47,13 @@
   },
   "epic": {
     "groudon": 100,
-    "arceus ground-plate": 100,
+    "arceus aspect=ground-plate": 100,
     "landorus": 100,
-    "zygarde 10-percent": 100,
-    "zygarde power-construct 10-percent": 100,
-    "zygarde 50-percent power-construct": 100,
-    "zygarde complete-percent": 100,
-    "silvally ground-memory": 100,
+    "zygarde aspect=10-percent": 100,
+    "zygarde aspect=power-construct aspect=10-percent": 100,
+    "zygarde aspect=50-percent aspect=power-construct": 100,
+    "zygarde aspect=complete-percent": 100,
+    "silvally aspect=ground-memory": 100,
     "greattusk": 100,
     "irontreads": 100
   }
