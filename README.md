@@ -1,6 +1,8 @@
 <div align="center">
+
 [![Rad Gyms on CurseForge](https://cf.way2muchnoise.eu/1196570.svg?badge_style=flat)](https://www.curseforge.com/minecraft/mc-mods/rad-gyms-cobblemon)
 [![Rad Gyms on Modrinth](https://img.shields.io/modrinth/dt/eF8kqlHd?style=flat-square&logo=modrinth&label=%20&labelColor=%23000&color=rgb(27%2C%20217%2C%20106))](https://modrinth.com/mod/rad-gyms)
+
 </div>
 
 # Rad Gyms \[Cobblemon\]
