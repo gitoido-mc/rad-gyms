@@ -1,0 +1,80 @@
+<owo-ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/wisp-forest/owo-lib/1.20/owo-ui.xsd">
+    <components>
+        <flow-layout direction="vertical">
+            <children>
+                <flow-layout direction="vertical">
+                    <children>
+                        <label>
+                            <text translate="true">rad-gyms.gui.common.select_cache_type</text>
+                            <sizing>
+                                <horizontal method="fill">100</horizontal>
+                            </sizing>
+                            <horizontal-text-alignment>center</horizontal-text-alignment>
+                            <line-height>20</line-height>
+                            <max-width>20</max-width>
+                        </label>
+                        <scroll direction="vertical">
+                            <flow-layout direction="vertical" id="types">
+                                <children/>
+                                <sizing>
+                                    <horizontal method="fill">100</horizontal>
+                                </sizing>
+                                <margins>
+                                    <top>5</top>
+                                    <horizontal>5</horizontal>
+                                </margins>
+                            </flow-layout>
+                            <sizing>
+                                <horizontal method="fill">100</horizontal>
+                                <vertical method="fixed">340</vertical>
+                            </sizing>
+                            <padding>
+                                <all>5</all>
+                            </padding>
+                            <scrollbar-thiccness>5</scrollbar-thiccness>
+                            <scrollbar>
+                                <vanilla-flat/>
+                            </scrollbar>
+                        </scroll>
+                        <flow-layout direction="horizontal">
+                            <children>
+                                <flow-layout direction="horizontal">
+                                    <children>
+                                        <button id="ok">
+                                            <text translate="true">gui.ok</text>
+                                        </button>
+                                        <button id="cancel">
+                                            <text translate="true">gui.cancel</text>
+                                        </button>
+                                    </children>
+                                    <margins>
+                                        <all>5</all>
+                                    </margins>
+                                    <gap>5</gap>
+                                </flow-layout>
+                            </children>
+                            <sizing>
+                                <horizontal method="fill">100</horizontal>
+                            </sizing>
+                            <horizontal-alignment>center</horizontal-alignment>
+                        </flow-layout>
+                    </children>
+                    <sizing>
+                        <horizontal method="fixed">400</horizontal>
+                        <vertical method="fixed">400</vertical>
+                    </sizing>
+                    <surface>
+                        <panel dark="true"/>
+                    </surface>
+                </flow-layout>
+            </children>
+            <vertical-alignment>center</vertical-alignment>
+            <horizontal-alignment>center</horizontal-alignment>
+            <surface>
+                <blur quality="70" size="20"/>
+                <vanilla-translucent/>
+            </surface>
+        </flow-layout>
+    </components>
+</owo-ui>
