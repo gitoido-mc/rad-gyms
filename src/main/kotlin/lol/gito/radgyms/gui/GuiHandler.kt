@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.Rarity
 import net.minecraft.util.math.BlockPos
 
 @Environment(EnvType.CLIENT)
@@ -43,5 +44,13 @@ object GuiHandler {
             .getInstance()
             .execute {
                 MinecraftClient.getInstance().setScreen(GymLeaveScreen(player))
+            }
+
+    @Environment(EnvType.CLIENT)
+    fun openCacheAttuneScreen(player: PlayerEntity, rarity: Rarity) =
+        MinecraftClient
+            .getInstance()
+            .execute {
+                MinecraftClient.getInstance().setScreen(CacheAttuneScreen(player, rarity))
             }
 }

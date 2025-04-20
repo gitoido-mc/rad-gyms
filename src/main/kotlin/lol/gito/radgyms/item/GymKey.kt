@@ -61,6 +61,14 @@ class GymKey : Item(Settings().also { settings ->
                 )
             }
             tooltip.addLast(tooltipText.formatted(Formatting.GOLD))
+        } else {
+            val tooltipText: MutableText = translatable(
+                ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
+                translatable(modId("chaos_type").toTranslationKey()).styled { it.withFormatting(Formatting.OBFUSCATED) }
+            )
+            tooltip.addLast(tooltipText.styled {
+                it.withColor(Formatting.DARK_PURPLE)
+            })
         }
     }
 

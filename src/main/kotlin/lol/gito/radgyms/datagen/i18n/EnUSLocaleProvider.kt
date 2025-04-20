@@ -72,14 +72,6 @@ class EnUSLocaleProvider(
                     "Select desirable gym level",
             modId("gui.common.leave-gym").toTranslationKey() to
                     "You want to leave? Rewards will be lost if leader is not beaten.",
-            modId("gui.common.increase").toTranslationKey() to
-                    "+1",
-            modId("gui.common.increase-ten").toTranslationKey() to
-                    "+10",
-            modId("gui.common.decrease").toTranslationKey() to
-                    "-1",
-            modId("gui.common.decrease-ten").toTranslationKey() to
-                    "-10",
             modId("gui.common.leave").toTranslationKey() to
                     "Leave Gym",
             modId("gui.common.start").toTranslationKey() to

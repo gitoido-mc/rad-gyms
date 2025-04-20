@@ -1,7 +1,5 @@
 package lol.gito.radgyms.command
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.party
@@ -14,10 +12,9 @@ import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.cache.WeightedRandomSelector
+import lol.gito.radgyms.cache.CacheHandler
 import lol.gito.radgyms.gym.GymManager
 import lol.gito.radgyms.gym.GymTemplate
-import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_RARITY
 import lol.gito.radgyms.network.NetworkStackHandler
 import lol.gito.radgyms.world.DimensionManager.RADGYMS_LEVEL_KEY
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
@@ -57,9 +54,9 @@ object CommandRegistry {
     @RequiresPermissionLevel(4)
     fun debugReward(
         context: CommandContext<ServerCommandSource>,
-        template: String,
-        @MinMax(min = "1", max = "100") level: Int,
-        type: String?
+        @Name("template") template: String,
+        @Name("level") @MinMax(min = "1", max = "100") level: Int,
+        @Name("type") type: String?
     ): Int {
         if (context.source.player != null) {
             val gymDto = GymManager.GYM_TEMPLATES[template]
@@ -96,27 +93,34 @@ object CommandRegistry {
                     context.source.playerOrThrow.name
                 )
             )
-            return 1
+        } else {
+            context.source.sendError(translatable(modId("message.error.command.debug_reward.no_player").toTranslationKey()))
+            return -1
         }
-        context.source.sendError(translatable(modId("message.error.command.debug_reward.no_player").toTranslationKey()))
-        return -1
+        return 1
     }
 
     @Command("debug_cache")
     @RequiresPermissionLevel(4)
     fun debugCache(
         context: CommandContext<ServerCommandSource>,
-        type: String,
-        rarity: String
+        @Name("type") type: String,
+        @Name("rarity") rarity: String
     ): Int {
         if (context.source.player != null) {
-            val rarEnum = Rarity.valueOf(rarity.uppercase())
-            val cache = SPECIES_BY_RARITY[type]!!.forRarity(rarEnum)
-            val pokeProps = PokemonProperties.parse(WeightedRandomSelector(cache).next())
-            val poke = pokeProps.create()
-            poke.initialize()
-            context.source.player!!.party().add(poke)
-            context.source.player!!.sendMessage(literal("Rolled $rarity $type ${poke.species.name}"))
+            try {
+                val rarityEnum = Rarity.valueOf(rarity.uppercase())
+                val typeEnum = ElementalTypes.get(type) ?: throw RuntimeException("cannot get elemental type: $type")
+                val poke: Pokemon = CacheHandler.getPoke(typeEnum, rarityEnum, context.source.player!!)
+                context.source.player!!.party().add(poke)
+                context.source.player!!.sendMessage(literal("Rolled $rarity $type ${poke.species.name} shiny: ${poke.shiny}"))
+            } catch (e: Exception) {
+                context.source.player!!.sendMessage(literal("Cannot generate $rarity $type poke, caught error: ${e.message}"))
+                return -1
+            }
+        } else {
+            context.source.sendError(literal("Cannot generate reward for ${context.source.displayName}"))
+            return -1
         }
         return 1
     }
