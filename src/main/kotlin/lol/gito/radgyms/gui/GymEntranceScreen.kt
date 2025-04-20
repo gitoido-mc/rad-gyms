@@ -1,22 +1,18 @@
 package lol.gito.radgyms.gui
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import io.wispforest.owo.ui.base.BaseUIModelScreen
-import io.wispforest.owo.ui.component.DiscreteSliderComponent
 import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_GYM_SLIDER
 import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_USAGE
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import org.lwjgl.glfw.GLFW
 
 class GymEntranceScreen(
     override val type: String? = null,
@@ -26,8 +22,7 @@ class GymEntranceScreen(
     private val usesLeft: Int
 ) :
     GymEnterScreen(type, id, player),
-    IGymEnterScreen
-{
+    IGymEnterScreen {
     override fun build(root: FlowLayout) {
         this.root = root
         root.childById(LabelComponent::class.java, ID_USAGE).text(

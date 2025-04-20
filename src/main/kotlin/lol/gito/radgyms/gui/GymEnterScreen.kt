@@ -17,9 +17,8 @@ import org.lwjgl.glfw.GLFW
 open class GymEnterScreen(
     open val type: String? = null, open val id: Identifier = UI_GYM_ENTER, open val player: PlayerEntity
 ) :
-    BaseUIModelScreen<FlowLayout>(FlowLayout::class.java,DataSource.asset(id)),
-    IGymEnterScreen
-{
+    BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, DataSource.asset(id)),
+    IGymEnterScreen {
     override lateinit var root: FlowLayout
 
     override var gymLevel: Double = 1.0
@@ -30,6 +29,10 @@ open class GymEnterScreen(
     override fun build(root: FlowLayout) {
         this.root = root
         GymScreenCommons.enterScreenControls(root, this)
+    }
+
+    override fun close() {
+        super.close()
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
