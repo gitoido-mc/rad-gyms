@@ -1,3 +1,14 @@
+<a id="v0.1.12-stable"></a>
+# [Stable v0.1.12 (v0.1.12-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.12-stable) - 2025-04-20
+
+## What's Changed
+* hotfix: Closing screen crash fix
+
+**Full Changelog**: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.11...v0.1.12-stable
+
+[Changes][v0.1.12-stable]
+
+
 <a id="v0.1.11"></a>
 # [Stable v0.1.11](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.11) - 2025-04-05
 
@@ -152,6 +163,7 @@ fix: chunk loading and trainer entity persistence
 [Changes][v0.1.2-stable]
 
 
+[v0.1.12-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.11...v0.1.12-stable
 [v0.1.11]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.10...v0.1.11
 [v0.1.10]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.9...v0.1.10
 [v0.1.9]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.8b-stable...v0.1.9
