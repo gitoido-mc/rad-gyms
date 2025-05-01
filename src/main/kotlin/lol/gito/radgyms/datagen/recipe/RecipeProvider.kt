@@ -8,9 +8,7 @@ import com.cobblemon.mod.common.item.CobblemonItem
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.datagen.json.builder.ShapelessWithComponentRecipeJsonBuilder
-import lol.gito.radgyms.item.GymKey
-import lol.gito.radgyms.item.ItemRegistry
-import lol.gito.radgyms.item.PokeShardBase
+import lol.gito.radgyms.item.*
 import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
@@ -47,13 +45,16 @@ class RecipeProvider(
             .input('l', Items.LEAD)
             .input('b', CobblemonItems.BINDING_BAND)
             .group("multi_bench")
-            .criterion(hasItem(CobblemonItems.BINDING_BAND), RecipeProvider.conditionsFromItem(CobblemonItems.BINDING_BAND))
+            .criterion(
+                hasItem(CobblemonItems.BINDING_BAND),
+                RecipeProvider.conditionsFromItem(CobblemonItems.BINDING_BAND)
+            )
             .offerTo(recipeExporter)
 
         ElementalTypes.all().forEach { type ->
             val pair = elementalTypeKeyConfig(type)
 
-            val components = ComponentMap.builder()
+            val keyComponents = ComponentMap.builder()
                 .add(DataComponentTypes.RARITY, Rarity.RARE)
                 .add(DataComponentManager.GYM_TYPE_COMPONENT, type.name)
 
@@ -61,9 +62,32 @@ class RecipeProvider(
                 .input(ItemRegistry.GYM_KEY)
                 .input(pair.second)
                 .group("multi_bench")
-                .withComponentMap(components.build())
+                .withComponentMap(keyComponents.build())
                 .criterion(hasItem(pair.second), RecipeProvider.conditionsFromItem(pair.first))
                 .offerTo(recipeExporter, "gym_key_${type.name}")
+
+
+
+            Rarity.entries.forEach { rarity ->
+                val attunedCachePair = elementalTypeCacheConfig(cacheForRarity(rarity), type)
+
+                val cacheComponents = ComponentMap.builder()
+                    .add(DataComponentTypes.RARITY, rarity)
+                    .add(DataComponentManager.GYM_TYPE_COMPONENT, type.name)
+
+                ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, attunedCachePair.first, 9)
+                    .input(attunedCachePair.second.asItem())
+                    .group("multi_bench")
+                    .withComponentMap(cacheComponents.build())
+                    .criterion(
+                        hasItem(attunedCachePair.second),
+                        RecipeProvider.conditionsFromItem(attunedCachePair.first)
+                    )
+                    .offerTo(
+                        recipeExporter,
+                        "cache_${rarity.name.replace("minecraft:", "").lowercase()}_${type.name}"
+                    )
+            }
         }
 
         Rarity.entries.forEach { rarity ->
@@ -113,6 +137,13 @@ class RecipeProvider(
         }
     }
 
+    private fun cacheForRarity(rarity: Rarity): PokeCache = when (rarity) {
+        Rarity.COMMON -> ItemRegistry.CACHE_COMMON
+        Rarity.UNCOMMON -> ItemRegistry.CACHE_UNCOMMON
+        Rarity.RARE -> ItemRegistry.CACHE_RARE
+        Rarity.EPIC -> ItemRegistry.CACHE_EPIC
+    }
+
     private fun elementalTypeKeyConfig(type: ElementalType): Pair<GymKey, CobblemonItem> = when (type) {
         ElementalTypes.BUG -> Pair(ItemRegistry.GYM_KEY, CobblemonItems.BUG_GEM)
         ElementalTypes.DARK -> Pair(ItemRegistry.GYM_KEY, CobblemonItems.DARK_GEM)
@@ -135,9 +166,36 @@ class RecipeProvider(
 
         else -> {
             debug("No keys found for $type")
-            Pair(ItemRegistry.GYM_KEY, CobblemonItems.NORMAL_GEM)
+            throw NotImplementedError("No keys found for $type")
         }
     }
+
+    private fun elementalTypeCacheConfig(cache: PokeCache, type: ElementalType): Pair<PokeCache, CobblemonItem> =
+        when (type) {
+            ElementalTypes.BUG -> Pair(cache, CobblemonItems.BUG_GEM)
+            ElementalTypes.DARK -> Pair(cache, CobblemonItems.DARK_GEM)
+            ElementalTypes.DRAGON -> Pair(cache, CobblemonItems.DRAGON_GEM)
+            ElementalTypes.ELECTRIC -> Pair(cache, CobblemonItems.ELECTRIC_GEM)
+            ElementalTypes.FAIRY -> Pair(cache, CobblemonItems.FAIRY_GEM)
+            ElementalTypes.FIGHTING -> Pair(cache, CobblemonItems.FIGHTING_GEM)
+            ElementalTypes.FIRE -> Pair(cache, CobblemonItems.FIRE_GEM)
+            ElementalTypes.FLYING -> Pair(cache, CobblemonItems.FLYING_GEM)
+            ElementalTypes.GHOST -> Pair(cache, CobblemonItems.GHOST_GEM)
+            ElementalTypes.GRASS -> Pair(cache, CobblemonItems.GRASS_GEM)
+            ElementalTypes.GROUND -> Pair(cache, CobblemonItems.GROUND_GEM)
+            ElementalTypes.ICE -> Pair(cache, CobblemonItems.ICE_GEM)
+            ElementalTypes.NORMAL -> Pair(cache, CobblemonItems.NORMAL_GEM)
+            ElementalTypes.POISON -> Pair(cache, CobblemonItems.POISON_GEM)
+            ElementalTypes.PSYCHIC -> Pair(cache, CobblemonItems.PSYCHIC_GEM)
+            ElementalTypes.ROCK -> Pair(cache, CobblemonItems.ROCK_GEM)
+            ElementalTypes.STEEL -> Pair(cache, CobblemonItems.STEEL_GEM)
+            ElementalTypes.WATER -> Pair(cache, CobblemonItems.WATER_GEM)
+
+            else -> {
+                debug("No caches found for $type")
+                throw NotImplementedError("No caches found for $type")
+            }
+        }
 
     private fun shardConfig(rarity: Rarity): Pair<PokeShardBase, Item> = when (rarity) {
         Rarity.COMMON -> Pair(ItemRegistry.SHARD_COMMON, BlockRegistry.SHARD_BLOCK_COMMON.asItem())
@@ -146,7 +204,7 @@ class RecipeProvider(
         Rarity.EPIC -> Pair(ItemRegistry.SHARD_EPIC, BlockRegistry.SHARD_BLOCK_EPIC.asItem())
     }
 
-    private fun cacheConfig(rarity: Rarity): Pair<Quartet<PokeShardBase, Item, Item, Item?>, Item> = when(rarity) {
+    private fun cacheConfig(rarity: Rarity): Pair<Quartet<PokeShardBase, Item, Item, Item?>, Item> = when (rarity) {
         Rarity.COMMON -> {
             Pair(
                 Quartet(
@@ -158,6 +216,7 @@ class RecipeProvider(
                 ItemRegistry.CACHE_COMMON
             )
         }
+
         Rarity.UNCOMMON -> {
             Pair(
                 Quartet(
@@ -169,6 +228,7 @@ class RecipeProvider(
                 ItemRegistry.CACHE_UNCOMMON
             )
         }
+
         Rarity.RARE -> {
             Pair(
                 Quartet(
@@ -180,6 +240,7 @@ class RecipeProvider(
                 ItemRegistry.CACHE_RARE
             )
         }
+
         Rarity.EPIC -> {
             Pair(
                 Quartet(

@@ -14,8 +14,7 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.registry.DynamicRegistryManager
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.item.Items
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
@@ -47,6 +46,7 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
     ): ActionResult {
         if (world.getBlockEntity(pos) !is GymEntranceEntity) return super.onUse(state, world, pos, player, hit)
 
+        // fainted party check
         if (!world.isClient) {
             val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
             if (party.all { it.isFainted() }) {
@@ -58,14 +58,25 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
 
         val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
 
+        if (player.mainHandStack.isOf(Items.DEBUG_STICK)) {
+            gymEntrance.resetPlayerUseCounter()
+            return ActionResult.SUCCESS
+        }
+
         if (gymEntrance.usesLeftForPlayer(player) == 0) {
             if (!world.isClient) player.sendMessage(translatable(modId("message.info.gym_entrance_exhausted").toTranslationKey()))
             debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
             return ActionResult.PASS
         }
 
-        if (world.isClient) {
-            debug("Client: Opening gym entry screen for player ${player.uuid} (tries left: ${gymEntrance.usesLeftForPlayer(player)})")
+        if (world.isClient && !player.mainHandStack.isOf(Items.DEBUG_STICK)) {
+            debug(
+                "Client: Opening gym entry screen for player ${player.uuid} (tries left: ${
+                    gymEntrance.usesLeftForPlayer(
+                        player
+                    )
+                })"
+            )
             GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos, gymEntrance.usesLeftForPlayer(player))
         }
 

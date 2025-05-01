@@ -1,11 +1,11 @@
 package lol.gito.radgyms.item
 
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.cobblemonResource
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gui.GuiHandler
 import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import lol.gito.radgyms.item.group.ItemGroupManager
+import lol.gito.radgyms.util.TranslationUtil.attuneType
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -43,28 +43,17 @@ class GymKey : Item(Settings().also { settings ->
     ) {
         val attuned = itemStack.get(DataComponentManager.GYM_TYPE_COMPONENT)
         if (attuned != null) {
-            val tooltipText: MutableText = if (ElementalTypes.get(attuned) != null) {
-                translatable(
-                    modId("item.component.gym_type").toTranslationKey(),
-                    translatable(
-                        cobblemonResource("type.suffix").toTranslationKey(),
-                        translatable(cobblemonResource("type.$attuned").toTranslationKey())
-                    )
-                )
-            } else {
-                translatable(
-                    modId("item.component.gym_type").toTranslationKey(),
-                    translatable(
-                        cobblemonResource("type.suffix").toTranslationKey(),
-                        translatable(modId("custom_type.$attuned").toTranslationKey())
-                    )
-                )
-            }
+            val tooltipText: MutableText = attuneType(attuned)
             tooltip.addLast(tooltipText.formatted(Formatting.GOLD))
         } else {
             val tooltipText: MutableText = translatable(
-                ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
-                translatable(modId("chaos_type").toTranslationKey()).styled { it.withFormatting(Formatting.OBFUSCATED) }
+                modId("item.component.gym_type").toTranslationKey(),
+                translatable(
+                    cobblemonResource("type.suffix").toTranslationKey(),
+                    translatable(modId("item.component.type.chaos").toTranslationKey()).styled {
+                        it.withFormatting(Formatting.OBFUSCATED)
+                    }
+                )
             )
             tooltip.addLast(tooltipText.styled {
                 it.withColor(Formatting.DARK_PURPLE)

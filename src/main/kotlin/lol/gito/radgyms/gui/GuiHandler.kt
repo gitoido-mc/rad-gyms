@@ -47,10 +47,10 @@ object GuiHandler {
             }
 
     @Environment(EnvType.CLIENT)
-    fun openCacheAttuneScreen(player: PlayerEntity, rarity: Rarity) =
+    fun openCacheAttuneScreen(player: PlayerEntity, rarity: Rarity, shinyBoost: Int) =
         MinecraftClient
             .getInstance()
             .execute {
-                MinecraftClient.getInstance().setScreen(CacheAttuneScreen(player, rarity))
+                MinecraftClient.getInstance().setScreen(CacheAttuneScreen(player, rarity, shinyBoost))
             }
 }

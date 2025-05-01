@@ -27,6 +27,12 @@ class GymEntranceEntity(pos: BlockPos, state: BlockState) : BlockEntity(BlockEnt
         debug("Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance")
     }
 
+    fun resetPlayerUseCounter() {
+        playerUseCounter.clear()
+        markDirty()
+        debug("Reset usage count for $pos gym entrance")
+    }
+
     override fun toUpdatePacket(): Packet<ClientPlayPacketListener> = BlockEntityUpdateS2CPacket.create(this)
 
     override fun toInitialChunkDataNbt(registryLookup: RegistryWrapper.WrapperLookup): NbtCompound =

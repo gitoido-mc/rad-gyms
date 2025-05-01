@@ -215,7 +215,7 @@ object GymManager {
             BlockRegistry.GYM_EXIT.defaultState
         )
         serverPlayer.world.markDirty(exitPos)
-        serverPlayer.sendMessage(Text.translatable(modId("message.info.gym_complete").toTranslationKey()))
+        serverPlayer.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayerEntity) {
@@ -311,7 +311,7 @@ object GymManager {
             }
 
         val styledLevel = MutableText.of(Text.literal(level.toString()).content).formatted(Formatting.GOLD)
-        val styledType = translatable(cobblemonResource("type.$type").toTranslationKey())
+        val styledType = translatable(cobblemonResource("type.${type.lowercase()}").toTranslationKey())
             .setStyle(
                 Style.EMPTY.withColor(Formatting.GREEN).withItalic(true)
             )

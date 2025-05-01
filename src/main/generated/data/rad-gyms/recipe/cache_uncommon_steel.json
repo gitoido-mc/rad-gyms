@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "multi_bench",
+  "ingredients": [
+    {
+      "item": "cobblemon:steel_gem"
+    }
+  ],
+  "result": {
+    "components": {
+      "rad-gyms:gym_type_component": "steel"
+    },
+    "count": 9,
+    "id": "rad-gyms:cache_uncommon"
+  }
+}

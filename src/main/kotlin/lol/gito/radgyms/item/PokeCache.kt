@@ -1,15 +1,17 @@
 package lol.gito.radgyms.item
 
-import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.Cobblemon
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gui.GuiHandler
-import lol.gito.radgyms.item.dataComponent.DataComponentManager
+import lol.gito.radgyms.item.dataComponent.DataComponentManager.CACHE_SHINY_BOOST_COMPONENT
+import lol.gito.radgyms.item.dataComponent.DataComponentManager.GYM_TYPE_COMPONENT
 import lol.gito.radgyms.item.group.ItemGroupManager
-import net.minecraft.component.DataComponentTypes
+import lol.gito.radgyms.util.TranslationUtil.attuneType
+import net.minecraft.component.DataComponentTypes.RARITY
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
@@ -29,11 +31,41 @@ open class PokeCache(private val rarity: Rarity) : Item(
     Settings().group(ItemGroupManager.GYMS_GROUP).rarity(rarity)
 ) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        if (world.isClient) {
-            GuiHandler.openCacheAttuneScreen(user, this.rarity)
+        val stack = user.getStackInHand(hand)
+        val offhand = user.offHandStack
+        val boost = stack.getOrDefault(CACHE_SHINY_BOOST_COMPONENT, 0)
+        if (offhand.isOf(Items.LAPIS_LAZULI)) {
+            if (!world.isClient) {
+                if (boost < Cobblemon.config.shinyRate) {
+                    stack.set(CACHE_SHINY_BOOST_COMPONENT, boost.inc())
+                    offhand.decrementUnlessCreative(1, user)
+                }
+            }
+            return TypedActionResult.success(stack, true)
+        }
+        if (offhand.isOf(Items.LAPIS_BLOCK)) {
+            if (!world.isClient) {
+                if (boost < Cobblemon.config.shinyRate) {
+                    val newBoost =  when (boost.plus(9) > Cobblemon.config.shinyRate) {
+                        true -> Cobblemon.config.shinyRate.toInt()
+                        false -> boost.plus(9 * 100).coerceAtMost(Cobblemon.config.shinyRate.toInt() - 1)
+                    }
+                    stack.set(CACHE_SHINY_BOOST_COMPONENT, newBoost)
+                    offhand.decrementUnlessCreative(1, user)
+                }
+            }
+            return TypedActionResult.success(stack, true)
         }
 
-        return super.use(world, user, hand)
+        if (world.isClient) {
+            GuiHandler.openCacheAttuneScreen(
+                user,
+                this.rarity,
+                user.getStackInHand(hand).getOrDefault(CACHE_SHINY_BOOST_COMPONENT, 0)
+            )
+        }
+
+        return TypedActionResult.success(user.getStackInHand(hand), true)
     }
 
     override fun appendTooltip(
@@ -42,37 +74,26 @@ open class PokeCache(private val rarity: Rarity) : Item(
         tooltip: MutableList<Text>,
         type: TooltipType
     ) {
-        val shinyBoost = stack.get(DataComponentManager.CACHE_SHINY_BOOST_COMPONENT)
-        val cacheType = stack.get(DataComponentManager.GYM_TYPE_COMPONENT)
-        if (shinyBoost != null) {
+        val shinyBoost = stack.get(CACHE_SHINY_BOOST_COMPONENT)
+        val cacheType = stack.get(GYM_TYPE_COMPONENT)
+        if (shinyBoost != null && shinyBoost > 0) {
             val tooltipText = translatable(
-                modId("cache.component.shiny_boost").toTranslationKey(),
+                modId("item.component.shiny_boost").toTranslationKey(),
                 shinyBoost.toString()
             )
 
-            tooltip.addLast(tooltipText.formatted(Formatting.DARK_PURPLE).formatted(Formatting.BOLD))
+            tooltip.addLast(tooltipText.formatted(Formatting.GOLD).formatted(Formatting.BOLD))
         }
 
         if (cacheType != null) {
-            val tooltipText: MutableText = if (ElementalTypes.get(cacheType) != null) {
-                translatable(
-                    ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
-                    translatable(
-                        cobblemonResource("type.suffix").toTranslationKey(),
-                        translatable(cobblemonResource("type.$cacheType").toTranslationKey())
-                    )
-                )
-            } else {
-                translatable(
-                    ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
-                    translatable(modId("custom_type.$cacheType").toTranslationKey())
-                )
-            }
+            val tooltipText: MutableText = attuneType(cacheType)
             tooltip.addLast(tooltipText.styled { it.withColor(Formatting.GOLD) })
         } else {
             val tooltipText: MutableText = translatable(
-                ItemRegistry.GYM_KEY.translationKey.plus(".attuned"),
-                translatable(modId("chaos_type").toTranslationKey()).styled { it.withFormatting(Formatting.OBFUSCATED) }
+                modId("item.component.gym_type").toTranslationKey(),
+                translatable(modId("item.component.type.chaos").toTranslationKey()).styled {
+                    it.withFormatting(Formatting.OBFUSCATED)
+                }
             )
             tooltip.addLast(tooltipText.styled {
                 it.withColor(Formatting.DARK_PURPLE)
@@ -82,8 +103,13 @@ open class PokeCache(private val rarity: Rarity) : Item(
 
     override fun getDefaultStack(): ItemStack {
         val stack = super.getDefaultStack()
-        stack.set(DataComponentTypes.RARITY, this.rarity)
+        stack.set(RARITY, this.rarity)
+        stack.set(CACHE_SHINY_BOOST_COMPONENT, 0)
 
         return stack
+    }
+
+    override fun hasGlint(stack: ItemStack): Boolean {
+        return stack.getOrDefault(CACHE_SHINY_BOOST_COMPONENT, 0) > 0
     }
 }

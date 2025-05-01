@@ -21,17 +21,15 @@
   "item.rad-gyms.shard_uncommon": "Uncommon cache shard",
   "itemGroup.rad-gyms.items": "Rad Gyms",
   "rad-gyms.gui.common.cancel": "Cancel",
-  "rad-gyms.gui.common.decrease": "-1",
-  "rad-gyms.gui.common.decrease-ten": "-10",
-  "rad-gyms.gui.common.increase": "+1",
-  "rad-gyms.gui.common.increase-ten": "+10",
   "rad-gyms.gui.common.leave": "Leave Gym",
   "rad-gyms.gui.common.leave-gym": "You want to leave? Rewards will be lost if leader is not beaten.",
+  "rad-gyms.gui.common.select-cache-type": "Select desirable gym level",
   "rad-gyms.gui.common.set-gym-level": "Select desirable gym level",
   "rad-gyms.gui.common.start": "Start Gym",
   "rad-gyms.gui.common.uses_left": "Entrance uses left: %s",
   "rad-gyms.item.component.gym_type": "Attuned to %s",
   "rad-gyms.item.component.shiny_boost": "Shiny chance boosted x%s time(s)",
+  "rad-gyms.item.component.type.chaos": "Chaos",
   "rad-gyms.message.error.command.debug_reward.no_player": "Command was not executed by player",
   "rad-gyms.message.error.command.debug_reward.no_template": "Cannot find template provided",
   "rad-gyms.message.error.command.op_kick": "Cannot kick player %s from gym, they are not in it",
@@ -51,6 +49,5 @@
   "rad-gyms.message.info.trainer_required": "Go fight %s before challenging me.",
   "rad-gyms.npc.leader": "Gym Leader",
   "rad-gyms.npc.trainer_junior": "Junior gym trainer",
-  "rad-gyms.npc.trainer_senior": "Senior gym trainer",
-  "rad-gyms.type.chaos": "Chaos"
+  "rad-gyms.npc.trainer_senior": "Senior gym trainer"
 }

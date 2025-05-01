@@ -60,7 +60,7 @@ class EnUSLocaleProvider(
                     "Rare shard block",
             BlockRegistry.SHARD_BLOCK_EPIC.translationKey to
                     "Epic shard block",
-            modId("type").withSuffixedPath(".chaos").toTranslationKey() to
+            modId("item.component.type.chaos").toTranslationKey() to
                     "Chaos",
             modId("item.component.gym_type").toTranslationKey() to
                     "Attuned to %s",
@@ -69,6 +69,8 @@ class EnUSLocaleProvider(
             modId("gym_reward").toTranslationKey("item") to
                     "Level %s %s gym reward cache",
             modId("gui.common.set-gym-level").toTranslationKey() to
+                    "Select desirable gym level",
+            modId("gui.common.select-cache-type").toTranslationKey() to
                     "Select desirable gym level",
             modId("gui.common.leave-gym").toTranslationKey() to
                     "You want to leave? Rewards will be lost if leader is not beaten.",

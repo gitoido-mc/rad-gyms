@@ -2,7 +2,7 @@ package lol.gito.radgyms.command
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.runOnServer
 import com.mojang.brigadier.context.CommandContext
 import de.maxhenkel.admiral.MinecraftAdmiral
 import de.maxhenkel.admiral.annotations.Command
@@ -111,9 +111,10 @@ object CommandRegistry {
             try {
                 val rarityEnum = Rarity.valueOf(rarity.uppercase())
                 val typeEnum = ElementalTypes.get(type) ?: throw RuntimeException("cannot get elemental type: $type")
-                val poke: Pokemon = CacheHandler.getPoke(typeEnum, rarityEnum, context.source.player!!)
-                context.source.player!!.party().add(poke)
-                context.source.player!!.sendMessage(literal("Rolled $rarity $type ${poke.species.name} shiny: ${poke.shiny}"))
+                runOnServer {
+                    val poke: Pokemon = CacheHandler.getPoke(typeEnum, rarityEnum, context.source.player!!, addToParty = true)
+                    context.source.player!!.sendMessage(literal("Rolled $rarity $type ${poke.species.name} shiny: ${poke.shiny}"))
+                }
             } catch (e: Exception) {
                 context.source.player!!.sendMessage(literal("Cannot generate $rarity $type poke, caught error: ${e.message}"))
                 return -1

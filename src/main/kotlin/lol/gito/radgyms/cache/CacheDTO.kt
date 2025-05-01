@@ -15,8 +15,8 @@ class CacheDTO(
         val pokeList = when (rarity) {
             Rarity.COMMON -> this.common
             Rarity.UNCOMMON -> this.uncommon + this.common
-            Rarity.RARE -> this.rare + this.uncommon + this.common
-            Rarity.EPIC -> this.epic
+            Rarity.RARE -> this.rare + this.uncommon
+            Rarity.EPIC -> this.epic + this.rare
         }
         val list = WeightedList<String>()
         for (pokeItem in pokeList) {

@@ -6,7 +6,7 @@
                 <flow-layout direction="vertical">
                     <children>
                         <label>
-                            <text translate="true">rad-gyms.gui.common.select_cache_type</text>
+                            <text translate="true">rad-gyms.gui.common.select-cache-type</text>
                             <sizing>
                                 <horizontal method="fill">100</horizontal>
                             </sizing>
@@ -41,9 +41,6 @@
                             <children>
                                 <flow-layout direction="horizontal">
                                     <children>
-                                        <button id="ok">
-                                            <text translate="true">gui.ok</text>
-                                        </button>
                                         <button id="cancel">
                                             <text translate="true">gui.cancel</text>
                                         </button>
