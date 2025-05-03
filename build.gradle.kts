@@ -31,6 +31,8 @@ repositories {
     maven("https://maven.wispforest.io/releases/")
     maven("https://maven.impactdev.net/repository/development/")
     maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
+    maven("https://maven.blamejared.com/")
+    maven("https://modmaven.dev/")
     maven(githubPackage.invoke("The-Aether-Team/The-Aether"))
 }
 
@@ -61,6 +63,8 @@ dependencies {
 
     // Compat
     modCompileOnly("com.aetherteam.aether:aether:${properties["aether_version"]}-fabric")
+    modCompileOnlyApi("mezz.jei:jei-${properties["minecraft_version"]}-fabric-api:${properties["jei_version"]}")
+    modRuntimeOnly("mezz.jei:jei-${properties["minecraft_version"]}-fabric:${properties["jei_version"]}")
 
     // Cobblemon
     modImplementation("com.cobblemon:fabric:${properties["cobblemon_version"]}")
