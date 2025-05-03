@@ -44,7 +44,7 @@ class CacheAttuneScreen(
     }
 
     private fun buildElementalTypeComposable(type: ElementalType): Component {
-        val panel = CacheInfoHolder(player, type, rarity, shinyBoost, Sizing.expand(), Sizing.content())
+        val panel = CacheInfoHolder(player, type, rarity, shinyBoost)
         panel.padding(Insets.bottom(2))
         panel.id("cache")
         panel.build()

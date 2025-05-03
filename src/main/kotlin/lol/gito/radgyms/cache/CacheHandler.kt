@@ -12,32 +12,16 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_RARITY
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Rarity
-import java.util.*
 import kotlin.random.Random
 
 object CacheHandler {
     private fun Float.checkRate(): Boolean =
         if (this >= 1) (Random.Default.nextFloat() < 1 / this) else Random.Default.nextFloat() < this
 
-    @Environment(EnvType.SERVER)
-    fun getPoke(
-        type: ElementalType,
-        rarity: Rarity,
-        playerUUID: UUID,
-        shinyBoost: Int? = 0,
-        addToParty: Boolean? = false
-    ): Pokemon {
-        val player = Cobblemon.implementation.server()!!.playerManager.getPlayer(playerUUID)
-        return getPoke(type, rarity, player!!, shinyBoost, addToParty)
-    }
-
-    @Environment(EnvType.SERVER)
     fun getPoke(
         type: ElementalType,
         rarity: Rarity,
@@ -71,7 +55,6 @@ object CacheHandler {
         return instance
     }
 
-    @Environment(EnvType.SERVER)
     private fun shinyRoll(poke: Pokemon, player: ServerPlayerEntity, shinyBoost: Int? = 0): Float {
         var shinyRate = Cobblemon.config.shinyRate - (shinyBoost ?: 0).toFloat()
         val event = ShinyChanceCalculationEvent(shinyRate, poke)
@@ -83,7 +66,6 @@ object CacheHandler {
         return shinyRate
     }
 
-    @Environment(EnvType.CLIENT)
     fun getPokeNames(type: ElementalType, rarity: Rarity?): List<MutableText> {
         val pokes = mutableListOf<MutableText>()
 
@@ -102,7 +84,7 @@ object CacheHandler {
             if (poke.species.implemented) {
                 if (poke.form.name != poke.species.standardForm.name) {
                     val id = poke.form.name.lowercase()
-                    val form = lang("ui.pokedex.info.form.${id}")
+                    val form = lang("ui.pokedex.info.form.$id")
                     val pokeName = lang("species.${poke.species.showdownId().lowercase()}.name")
                         .add(" ")
                         .add("(")
@@ -115,11 +97,10 @@ object CacheHandler {
                 pokes.add(
                     translatable(
                         cobblemonResource("species.${poke.species.showdownId().lowercase()}.name").toTranslationKey()
-                    ).styled { it.withFormatting(pokeRarity.formatting) })
+                    ).styled { it.withFormatting(pokeRarity.formatting) }
+                )
             }
         }
-
-
 
         return pokes
     }

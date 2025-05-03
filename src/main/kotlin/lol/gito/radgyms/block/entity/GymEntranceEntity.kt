@@ -16,15 +16,17 @@ import net.minecraft.util.math.BlockPos
 class GymEntranceEntity(pos: BlockPos, state: BlockState) : BlockEntity(BlockEntityRegistry.GYM_ENTRANCE_ENTITY, pos, state) {
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
-    var gymType: String = ElementalTypes.all().random().name
     private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
+    var gymType: String = ElementalTypes.all().random().name
 
     fun incrementPlayerUseCount(player: PlayerEntity) {
         val useCounter = playerUseCounter.getOrDefault(player.uuid.toString(), 0)
 
         playerUseCounter[player.uuid.toString()] = useCounter + 1
         markDirty()
-        debug("Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance")
+        debug(
+            "Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance"
+        )
     }
 
     fun resetPlayerUseCounter() {

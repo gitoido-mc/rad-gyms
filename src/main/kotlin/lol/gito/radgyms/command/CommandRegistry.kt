@@ -94,7 +94,9 @@ object CommandRegistry {
                 )
             )
         } else {
-            context.source.sendError(translatable(modId("message.error.command.debug_reward.no_player").toTranslationKey()))
+            context.source.sendError(
+                translatable(modId("message.error.command.debug_reward.no_player").toTranslationKey())
+            )
             return -1
         }
         return 1
@@ -112,15 +114,26 @@ object CommandRegistry {
                 val rarityEnum = Rarity.valueOf(rarity.uppercase())
                 val typeEnum = ElementalTypes.get(type) ?: throw RuntimeException("cannot get elemental type: $type")
                 runOnServer {
-                    val poke: Pokemon = CacheHandler.getPoke(typeEnum, rarityEnum, context.source.player!!, addToParty = true)
-                    context.source.player!!.sendMessage(literal("Rolled $rarity $type ${poke.species.name} shiny: ${poke.shiny}"))
+                    val poke: Pokemon = CacheHandler.getPoke(
+                        typeEnum,
+                        rarityEnum,
+                        context.source.player!!,
+                        addToParty = true
+                    )
+                    context.source.player!!.sendMessage(
+                        literal("Rolled $rarity $type ${poke.species.name} shiny: ${poke.shiny}")
+                    )
                 }
             } catch (e: Exception) {
-                context.source.player!!.sendMessage(literal("Cannot generate $rarity $type poke, caught error: ${e.message}"))
+                context.source.player!!.sendMessage(
+                    literal("Cannot generate $rarity $type poke, caught error: ${e.message}")
+                )
                 return -1
             }
         } else {
-            context.source.sendError(literal("Cannot generate reward for ${context.source.displayName}"))
+            context.source.sendError(
+                literal("Cannot generate reward for ${context.source.displayName}")
+            )
             return -1
         }
         return 1
@@ -128,8 +141,13 @@ object CommandRegistry {
 
     fun register() {
         debug("Registering chat commands")
-        CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback { dispatcher, registryAccess, _ ->
-            MinecraftAdmiral.builder(dispatcher, registryAccess).addCommandClasses(this::class.java).build()
-        })
+        CommandRegistrationCallback.EVENT.register(
+            CommandRegistrationCallback { dispatcher, registryAccess, _ ->
+                MinecraftAdmiral
+                    .builder(dispatcher, registryAccess)
+                    .addCommandClasses(this::class.java)
+                    .build()
+            }
+        )
     }
 }

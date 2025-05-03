@@ -33,6 +33,7 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
+import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -87,24 +88,22 @@ object EventManager {
         state: BlockState,
         entity: BlockEntity?
     ): Boolean {
+        var allowBreak = true
         if (world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
-            return false
+            allowBreak = false
         }
 
         if (state.block == BlockRegistry.GYM_ENTRANCE) {
-            var allowBreak = false
-            if (player.isSneaking) {
-                player.sendMessage(Text.translatable(modId("message.error.gym_entrance.not-sneaking").toTranslationKey()))
+            if (!player.isSneaking) {
+                player.sendMessage(translatable(modId("message.info.gym_entrance_breaking").toTranslationKey()))
+                player.sendMessage(translatable(modId("message.error.gym_entrance.not-sneaking").toTranslationKey()))
+                allowBreak = false
+            } else {
                 allowBreak = true
             }
-            if (!allowBreak) {
-                player.sendMessage(Text.translatable(modId("message.info.gym_entrance_breaking").toTranslationKey()))
-            }
-            return allowBreak
-
         }
 
-        return true
+        return allowBreak
     }
 
     private fun onServerStart(event: ServerEvent.Starting) {
