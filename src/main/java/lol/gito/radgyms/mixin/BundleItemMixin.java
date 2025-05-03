@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ClickType;
@@ -17,7 +16,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BundleItem.class)
 public abstract class BundleItemMixin {
     @Inject(method = "dropAllBundledItems", at = @At("RETURN"), cancellable = true)
-    private static void RadGyms$dropAllBundledItems(ItemStack stack, PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
+    private static void RadGyms$dropAllBundledItems(
+        ItemStack stack,
+        PlayerEntity player,
+        CallbackInfoReturnable<Boolean> cir
+    ) {
         Boolean bundleComponent = stack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
 
         if (!cir.getReturnValue()) {
@@ -32,11 +35,11 @@ public abstract class BundleItemMixin {
 
     @Inject(method = "onStackClicked", at = @At("HEAD"), cancellable = true)
     private void RadGyms$preventOnStackClicked(
-            ItemStack stack,
-            Slot slot,
-            ClickType clickType,
-            PlayerEntity player,
-            CallbackInfoReturnable<Boolean> cir
+        ItemStack stack,
+        Slot slot,
+        ClickType clickType,
+        PlayerEntity player,
+        CallbackInfoReturnable<Boolean> cir
     ) {
         Boolean bundleComponent = stack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
 
@@ -47,13 +50,13 @@ public abstract class BundleItemMixin {
 
     @Inject(method = "onClicked", at = @At("HEAD"), cancellable = true)
     private void RadGyms$preventOnClicked(
-            ItemStack stack,
-            ItemStack otherStack,
-            Slot slot,
-            ClickType clickType,
-            PlayerEntity player,
-            StackReference cursorStackReference,
-            CallbackInfoReturnable<Boolean> cir
+        ItemStack stack,
+        ItemStack otherStack,
+        Slot slot,
+        ClickType clickType,
+        PlayerEntity player,
+        StackReference cursorStackReference,
+        CallbackInfoReturnable<Boolean> cir
     ) {
         Boolean bundleComponent = stack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
         Boolean bundleOtherComponent = otherStack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());

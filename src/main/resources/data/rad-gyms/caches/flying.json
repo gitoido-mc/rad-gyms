@@ -1,0 +1,35 @@
+{
+  "common": {
+    "rufflet aspect=region-bias-hisui": 400,
+    "noibat": 400,
+    "dartrix aspect=region-bias-hisui": 400,
+    "rowlet aspect=region-bias-hisui": 400,
+    "rookidee": 400
+  },
+  "uncommon": {
+    "vivillon aspect=vivillon-wings-poke-ball": 300,
+    "minior aspect=meteor-form": 300,
+    "corvisquire": 300,
+    "squawkabilly aspect=squawkabilly-color-blue": 300,
+    "squawkabilly aspect=squawkabilly-color-yellow": 300,
+    "squawkabilly aspect=squawkabilly-color-gray": 300
+  },
+  "rare": {
+    "rotom aspect=fan-appliance": 200,
+    "noivern": 200,
+    "corviknight": 200,
+    "cramorant": 200,
+    "bombirdier": 200,
+    "flamigo": 200
+  },
+  "epic": {
+    "arceus aspect=flying-plate": 100,
+    "shaymin aspect=sky-forme": 100,
+    "landorus aspect=therian-forme": 100,
+    "thundurus aspect=therian-forme": 100,
+    "tornadus": 100,
+    "tornadus aspect=therian-forme": 100,
+    "silvally aspect=flying-memory": 100,
+    "enamorus aspect=therian-forme": 100
+  }
+}

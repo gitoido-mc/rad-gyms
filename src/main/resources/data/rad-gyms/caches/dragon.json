@@ -1,0 +1,56 @@
+{
+  "common": {
+    "exeggutor aspect=alolan": 400,
+    "goomy aspect=region-bias-hisui": 400,
+    "dreepy": 400
+  },
+  "uncommon": {
+    "dragonair": 300,
+    "dratini": 300,
+    "bagon": 300,
+    "shelgon": 300,
+    "gabite": 300,
+    "gible": 300,
+    "axew": 300,
+    "fraxure": 300,
+    "goomy": 300,
+    "hakamoo": 300,
+    "jangmoo": 300,
+    "drakloak": 300,
+    "arctibax": 300,
+    "frigibax": 300
+  },
+  "rare": {
+    "altaria": 200,
+    "druddigon": 200,
+    "haxorus": 200,
+    "sliggoo": 200,
+    "cyclizar": 200,
+    "tatsugiri": 200
+  },
+  "epic": {
+    "dragonite": 100,
+    "latias": 100,
+    "latios": 100,
+    "rayquaza": 100,
+    "salamence": 100,
+    "arceus aspect=dragon-plate": 100,
+    "dialga aspect=origin-forme": 100,
+    "garchomp": 100,
+    "giratina aspect=origin-forme": 100,
+    "palkia aspect=origin-forme": 100,
+    "kyurem": 100,
+    "reshiram": 100,
+    "zekrom": 100,
+    "goodra": 100,
+    "zygarde": 100,
+    "kommoo": 100,
+    "necrozma aspect=ultra-fusion": 100,
+    "silvally aspect=dragon-memory": 100,
+    "dragapult": 100,
+    "eternatus aspect=eternamax": 100,
+    "regidrago": 100,
+    "baxcalibur": 100,
+    "roaringmoon": 100
+  }
+}

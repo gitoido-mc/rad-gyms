@@ -10,7 +10,6 @@ import net.minecraft.block.entity.BlockEntityType.BlockEntityFactory
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 
-
 object BlockEntityRegistry {
     val GYM_ENTRANCE_ENTITY = registerBlockEntity(
         "gym_entrance_entity",
