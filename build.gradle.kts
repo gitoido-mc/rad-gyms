@@ -27,6 +27,12 @@ repositories {
             includeGroup("maven.modrinth")
         }
     }
+    maven {
+        url = URI("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
+    }
     maven("https://maven.architectury.dev/")
     maven("https://maven.wispforest.io/releases/")
     maven("https://maven.impactdev.net/repository/development/")
