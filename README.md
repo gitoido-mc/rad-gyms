@@ -22,10 +22,19 @@ Legends of Arceus speak of mysterious Evergaols scattered across the wild, said 
 * [Radical Cobblemon Trainers API](https://modrinth.com/mod/rctapi) - Trainers functionality
 * [Architectury API](https://modrinth.com/mod/architectury-api) - RCT Api dependency
 * [oωo (owo-lib)](https://modrinth.com/mod/owo-lib) - Networking, GUI
+* [Admiral (embedded)](https://modrinth.com/mod/admiral) - Nice library for creating commands 
+* [Geckolib](https://modrinth.com/mod/geckolib) - Animated models
 
 ### Kudos
 * [Gensir017](https://github.com/Gensir017) (Original CobGyms mod)
 * [HDainester](https://gitlab.com/hdainester1) (Radical Cobblemon Trainers API library)
+
+### Licensing
+This project uses modified assets from Cobblemon mod<br>
+They have their own license which you can find in 3 places of mod
+* [Texture (gym_entrance.png and variations)](https://github.com/gitoido-mc/rad-gyms/tree/main/src/main/resources/assets/rad-gyms/textures/block/LICENSE)
+* [Block model (gym_entrance.geo.json)](https://github.com/gitoido-mc/rad-gyms/tree/main/src/main/resources/assets/rad-gyms/geo/block/LICENSE)
+* [Animations (gym_entrance.animations.json)](https://github.com/gitoido-mc/rad-gyms/tree/main/src/main/resources/assets/rad-gyms/animations/block/LICENSE)
 
 ### Modpack usage
 Feel free to use this mod in modpacks while crediting the author.
