@@ -4,6 +4,9 @@
   "group": "multi_bench",
   "ingredients": [
     {
+      "item": "rad-gyms:cache_common"
+    },
+    {
       "item": "cobblemon:fighting_gem"
     }
   ],
@@ -11,7 +14,7 @@
     "components": {
       "rad-gyms:gym_type_component": "fighting"
     },
-    "count": 9,
+    "count": 1,
     "id": "rad-gyms:cache_common"
   }
 }
