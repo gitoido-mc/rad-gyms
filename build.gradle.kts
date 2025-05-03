@@ -57,13 +57,17 @@ dependencies {
     minecraft("com.mojang:minecraft:${properties["minecraft_version"]}")
     mappings("net.fabricmc:yarn:${properties["yarn_mappings"]}:v2")
     modImplementation("net.fabricmc:fabric-loader:${properties["loader_version"]}")
-
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation("net.fabricmc.fabric-api:fabric-api:${properties["fabric_version"]}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${properties["fabric_kotlin_version"]}")
 
     // Helpers
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+    include(
+        modImplementation(
+            "maven.modrinth:admiral:${properties["admiral_version"]}+${properties["minecraft_version"]}+fabric"
+        )!!
+    )
     modImplementation("dev.architectury:architectury-fabric:${properties["architectury_api_version"]}")
     include(modImplementation("maven.modrinth:admiral:${properties["admiral_version"]}+${properties["minecraft_version"]}+fabric")!!)
 
