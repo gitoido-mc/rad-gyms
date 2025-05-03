@@ -32,6 +32,9 @@
 				"value": "lol.gito.radgyms.datagen.RadGymsDataGenerator",
 				"adapter": "kotlin"
 			}
+		],
+		"jei_mod_plugin": [
+			"lol.gito.radgyms.jei.IntegrationPlugin"
 		]
 	},
 	"mixins": [
