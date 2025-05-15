@@ -6,7 +6,7 @@
   "item.rad-gyms.exit_rope.failed": "No se puede usar aquí",
   "item.rad-gyms.exit_rope.tooltip": "Cuerda de un solo uso para escapar de la prueba del gimnasio",
   "item.rad-gyms.gym_key": "Llave de gimnasio",
-  "item.rad-gyms.gym_key.attuned": "Attuned to %s",
+  "rad-gyms.item.component.gym_type": "Attuned to %s",
   "rad-gyms.gui.common.cancel": "Cancelar",
   "rad-gyms.gui.common.decrease": "-1",
   "rad-gyms.gui.common.decrease-ten": "-10",

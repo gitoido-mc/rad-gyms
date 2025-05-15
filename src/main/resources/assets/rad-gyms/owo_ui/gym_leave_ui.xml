@@ -21,14 +21,14 @@
                                 <flow-layout direction="horizontal">
                                     <children>
                                         <button id="ok">
-                                            <text translate="true">rad-gyms.gui.common.leave</text>
+                                            <text translate="true">gui.proceed</text>
                                             <sizing>
                                                 <horizontal method="fill">45</horizontal>
                                                 <vertical method="fixed">20</vertical>
                                             </sizing>
                                         </button>
                                         <button id="cancel">
-                                            <text translate="true">rad-gyms.gui.common.cancel</text>
+                                            <text translate="true">gui.cancel</text>
                                             <sizing>
                                                 <horizontal method="fill">45</horizontal>
                                                 <vertical method="fixed">20</vertical>

@@ -34,17 +34,17 @@ jobs:
           name: Artifacts
           path: build/libs/
       - name: Publish (CurseForge/GitHub)
-        uses: Kir-Antipov/mc-publish@v3.3
+        uses: Kira-NT/mc-publish@v3.3
         with:
-          curseforge-id: 1196570
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-
-          modrinth-id: eF8kqlHd
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           loaders: fabric
           game-versions: "1.21.1"
           java: 21
+
+          files: |
+            !build/libs/*{all,sources}.jar
 
           dependencies: |
             fabric-api(required){curseforge:306612}{modrinth:P7dR8mSH}
@@ -52,3 +52,4 @@ jobs:
             radical-cobblemon-trainers-api(required){curseforge:1152792}{modrinth:CBfM2yw7}
             architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
             owo-lib(required){curseforge:532610}{modrinth:ccKDOlHs}
+            admiral@0.4.7+1.21.1+fabric(embedded)

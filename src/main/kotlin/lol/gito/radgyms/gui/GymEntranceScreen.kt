@@ -1,12 +1,14 @@
 package lol.gito.radgyms.gui
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.util.runOnServer
 import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.block.entity.GymEntranceEntity
 import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_USAGE
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
@@ -24,11 +26,27 @@ class GymEntranceScreen(
     GymEnterScreen(type, id, player),
     IGymEnterScreen {
     override fun build(root: FlowLayout) {
+        val entity = player.world.getBlockEntity(blockPos)
+        if (entity != null && entity is GymEntranceEntity) {
+            runOnServer {
+                entity.triggerAnim("gym_entrance", "open")
+            }
+        }
         this.root = root
         root.childById(LabelComponent::class.java, ID_USAGE).text(
             translatable(modId("gui.common.uses_left").toTranslationKey(), usesLeft)
         )
         super.build(root)
+    }
+
+    override fun close() {
+        super.close()
+        val entity = player.world.getBlockEntity(blockPos)
+        if (entity != null && entity is GymEntranceEntity) {
+            runOnServer {
+                entity.triggerAnim("gym_entrance", "close")
+            }
+        }
     }
 
     override fun sendStartGymPacket() {

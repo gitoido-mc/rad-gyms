@@ -5,7 +5,7 @@
   "item.rad-gyms.exit_rope.failed": "不能在这里使用",
   "item.rad-gyms.exit_rope.tooltip": "一次性使用的绳索，可以逃离道馆试炼",
   "item.rad-gyms.gym_key": "道馆钥匙",
-  "item.rad-gyms.gym_key.attuned": "调整至 %s",
+  "rad-gyms.item.component.gym_type": "调整至 %s",
   "itemGroup.rad-gyms.items": "rad-gyms",
   "rad-gyms.gui.common.cancel": "取消",
   "rad-gyms.gui.common.decrease": "-1",
