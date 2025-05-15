@@ -20,13 +20,15 @@ import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-class GymKey : Item(Settings().also { settings ->
-    settings
-        .group(ItemGroupManager.GYMS_GROUP)
-        .rarity(Rarity.UNCOMMON)
-        .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)
-        .stackGenerator(ItemGroupManager::gymTypeItemStacks)
-}) {
+class GymKey : Item(
+    Settings().also { settings ->
+        settings
+            .group(ItemGroupManager.GYMS_GROUP)
+            .rarity(Rarity.UNCOMMON)
+            .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)
+            .stackGenerator(ItemGroupManager::gymTypeItemStacks)
+    }
+) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         if (world.isClient) {
             GuiHandler.openGymKeyScreen(user)
@@ -55,9 +57,11 @@ class GymKey : Item(Settings().also { settings ->
                     }
                 )
             )
-            tooltip.addLast(tooltipText.styled {
-                it.withColor(Formatting.DARK_PURPLE)
-            })
+            tooltip.addLast(
+                tooltipText.styled {
+                    it.withColor(Formatting.DARK_PURPLE)
+                }
+            )
         }
     }
 

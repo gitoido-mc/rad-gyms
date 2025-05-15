@@ -11,6 +11,7 @@ import de.maxhenkel.admiral.annotations.Name
 import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.loadConfig
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.cache.CacheHandler
 import lol.gito.radgyms.gym.GymManager
@@ -47,6 +48,15 @@ object CommandRegistry {
             translatable(modId("message.info.command.op_kick").toTranslationKey())
         )
         CHANNEL.serverHandle(player).send(NetworkStackHandler.GymLeave(teleport = true))
+        return 1
+    }
+
+    @Command("config_reload")
+    @RequiresPermissionLevel(4)
+    fun reloadConfig(
+        context: CommandContext<ServerCommandSource>
+    ): Int {
+        loadConfig()
         return 1
     }
 

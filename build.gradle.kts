@@ -33,6 +33,10 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
+    maven {
+        url = URI("https://maven.terraformersmc.com/")
+        name = "TerraformersMC" // EMI
+    }
     maven("https://maven.architectury.dev/")
     maven("https://maven.wispforest.io/releases/")
     maven("https://maven.impactdev.net/repository/development/")
@@ -50,6 +54,9 @@ fabricApi {
 
 loom {
     accessWidenerPath = file("src/main/resources/rad-gyms.accesswidener")
+    val clientConfig = runConfigs.getByName("client")
+    clientConfig.programArg("--username=AshKetchum")
+    clientConfig.programArg("--uuid=93e4e551-589a-41cb-ab2d-435266c8e035")
 }
 
 dependencies {

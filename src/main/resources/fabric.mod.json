@@ -34,7 +34,13 @@
 			}
 		],
 		"jei_mod_plugin": [
-			"lol.gito.radgyms.jei.IntegrationPlugin"
+			"lol.gito.radgyms.compat.jei.IntegrationPlugin"
+		],
+		"rei_common": [
+			"lol.gito.radgyms.compat.rei.IntegrationPlugin"
+		],
+		"emi": [
+			"lol.gito.radgyms.compat.emi.IntegrationPlugin"
 		]
 	},
 	"mixins": [
@@ -52,6 +58,9 @@
 		"cobblemon": ">=1.6.1+1.21.1",
 		"admiral": "0.4.7+1.21.1+fabric",
 		"geckolib": ">=4.7.5"
+	},
+	"suggests": {
+		"jei": ">=19.21.0.247"
 	},
 	"custom": {
 		"mc-publish": {

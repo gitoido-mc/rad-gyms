@@ -1,15 +1,9 @@
 package lol.gito.radgyms.item
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.isServerSide
-import com.cobblemon.mod.common.util.runOnServer
-import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.CONFIG
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.cache.CacheHandler
 import lol.gito.radgyms.gui.GuiHandler
 import lol.gito.radgyms.item.dataComponent.DataComponentManager.CACHE_SHINY_BOOST_COMPONENT
 import lol.gito.radgyms.item.dataComponent.DataComponentManager.GYM_TYPE_COMPONENT
@@ -24,7 +18,6 @@ import net.minecraft.item.Items
 import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
-import net.minecraft.text.Text.literal
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
@@ -83,8 +76,6 @@ open class PokeCache(private val rarity: Rarity) : Item(
                     )
                 )
             }
-
-
         }
 
         return TypedActionResult.success(user.getStackInHand(hand), true)

@@ -1,6 +1,5 @@
 package lol.gito.radgyms.network
 
-import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import io.wispforest.owo.network.ClientAccess
 import io.wispforest.owo.network.ServerAccess
@@ -119,12 +118,12 @@ object NetworkStackHandler {
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
+    @Suppress("unused")
     fun handleGymServerLeavePacket(packet: GymLeave, context: ClientAccess) {
         CHANNEL.clientHandle().send(packet)
     }
 
-    @Suppress("UNUSED_PARAMETER")
+    @Suppress("unused")
     fun handleCacheServerOpenPacket(packet: CacheOpen, context: ClientAccess) {
         CHANNEL.clientHandle().send(packet)
     }

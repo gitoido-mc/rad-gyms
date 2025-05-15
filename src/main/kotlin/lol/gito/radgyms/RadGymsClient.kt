@@ -19,8 +19,12 @@ object RadGymsClient {
     @Environment(EnvType.CLIENT)
     fun init() {
         debug("Initializing client")
-        EntityRendererRegistry.register(EntityManager.GYM_TRAINER) { context -> VillagerEntityRenderer(context) }
-        BlockEntityRendererFactories.register(BlockEntityRegistry.GYM_ENTRANCE_ENTITY, ::GymEntranceEntityRenderer)
+        EntityRendererRegistry.register(EntityManager.GYM_TRAINER) { context ->
+            VillagerEntityRenderer(context)
+        }
+        BlockEntityRendererFactories.register(BlockEntityRegistry.GYM_ENTRANCE_ENTITY) { context ->
+            GymEntranceEntityRenderer(context)
+        }
 
         // Networking
         CHANNEL.registerClientbound(GymLeave::class.java, ::handleGymServerLeavePacket)
