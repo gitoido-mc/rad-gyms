@@ -2,7 +2,6 @@ package lol.gito.radgyms.block.entity
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.RadGyms.CONFIG
-import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity

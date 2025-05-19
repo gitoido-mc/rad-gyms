@@ -110,7 +110,7 @@ object GymTemplate {
                 } else null
 
 
-                for (i in 1..pokemonCount) {
+                (1..pokemonCount).forEach { i ->
                     team.add(generatePokemon(level, elementType ?: type))
                 }
             } else {
