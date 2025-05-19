@@ -1,3 +1,17 @@
+<a id="v0.1.13-stable"></a>
+# [Stable v0.1.13 (v0.1.13-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.13-stable) - 2025-05-19
+
+## What's Changed
+
+* feat: Implemented Aether mod compat
+* fix: Mod config file generation
+* chore: Dependencies update
+
+**Full Changelog**: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.12-stable...v0.1.13-stable
+
+[Changes][v0.1.13-stable]
+
+
 <a id="v0.1.12-stable"></a>
 # [Stable v0.1.12 (v0.1.12-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.12-stable) - 2025-04-20
 
@@ -163,6 +177,7 @@ fix: chunk loading and trainer entity persistence
 [Changes][v0.1.2-stable]
 
 
+[v0.1.13-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.12-stable...v0.1.13-stable
 [v0.1.12-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.11...v0.1.12-stable
 [v0.1.11]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.10...v0.1.11
 [v0.1.10]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.9...v0.1.10
