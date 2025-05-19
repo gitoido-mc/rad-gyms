@@ -3,6 +3,7 @@
   "package": "lol.gito.radgyms.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "AetherEntityInteract",
     "BundleItemMixin",
     "DataSaver"
   ],
