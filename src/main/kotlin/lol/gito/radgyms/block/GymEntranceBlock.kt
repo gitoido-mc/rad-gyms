@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.entity.GymEntranceEntity
-import lol.gito.radgyms.gui.GuiHandler
+import lol.gito.radgyms.client.gui.GuiHandler
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockRenderType
@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.state.StateManager
-import net.minecraft.state.property.Properties
 import net.minecraft.state.property.Properties.HORIZONTAL_FACING
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
@@ -72,7 +71,6 @@ class GymEntranceBlock : HorizontalFacingBlock, BlockEntityProvider {
         val blockEntity = world.getBlockEntity(pos)!! as GymEntranceEntity
         @Suppress("detekt:MagicNumber")
         if (world.isClient && random.nextBetween(0, 10) > 5) return
-        blockEntity.triggerAnim("gym_entrance", randomBobAnim.random())
     }
 
     override fun onPlaced(
@@ -111,7 +109,6 @@ class GymEntranceBlock : HorizontalFacingBlock, BlockEntityProvider {
                 )
             }
             debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
-            gymEntrance.triggerAnim("gym_entrance", randomBobAnim.random())
             return ActionResult.PASS
         }
 
@@ -135,7 +132,6 @@ class GymEntranceBlock : HorizontalFacingBlock, BlockEntityProvider {
     ): Boolean {
         if (player.mainHandStack.isOf(Items.DEBUG_STICK)) {
             gymEntrance.resetPlayerUseCounter()
-            gymEntrance.triggerAnim("gym_entrance", randomBobAnim.random())
             return true
         }
         return false
@@ -152,7 +148,6 @@ class GymEntranceBlock : HorizontalFacingBlock, BlockEntityProvider {
             if (party.all { it.isFainted() }) {
                 player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
                 debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
-                gymEntrance.triggerAnim("gym_entrance", randomBobAnim.random())
                 return true
             }
         }

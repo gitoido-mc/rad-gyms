@@ -1,4 +1,4 @@
-package lol.gito.radgyms.gui
+package lol.gito.radgyms.client.gui
 
 import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.ButtonComponent
@@ -6,9 +6,9 @@ import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_CANCEL
-import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_OK
-import lol.gito.radgyms.gui.GymGUIIdentifiers.UI_GYM_LEAVE
+import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_CANCEL
+import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_OK
+import lol.gito.radgyms.client.gui.GymGUIIdentifiers.UI_GYM_LEAVE
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
 import org.lwjgl.glfw.GLFW

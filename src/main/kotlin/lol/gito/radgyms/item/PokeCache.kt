@@ -4,7 +4,7 @@ import com.cobblemon.mod.common.Cobblemon
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.CONFIG
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.gui.GuiHandler
+import lol.gito.radgyms.client.gui.GuiHandler
 import lol.gito.radgyms.item.dataComponent.DataComponentManager.CACHE_SHINY_BOOST_COMPONENT
 import lol.gito.radgyms.item.dataComponent.DataComponentManager.GYM_TYPE_COMPONENT
 import lol.gito.radgyms.item.group.ItemGroupManager

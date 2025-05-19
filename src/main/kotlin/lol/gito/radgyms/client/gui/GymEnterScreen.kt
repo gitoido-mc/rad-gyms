@@ -1,4 +1,4 @@
-package lol.gito.radgyms.gui
+package lol.gito.radgyms.client.gui
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import io.wispforest.owo.ui.base.BaseUIModelScreen
@@ -7,8 +7,8 @@ import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_GYM_SLIDER
-import lol.gito.radgyms.gui.GymGUIIdentifiers.UI_GYM_ENTER
+import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_GYM_SLIDER
+import lol.gito.radgyms.client.gui.GymGUIIdentifiers.UI_GYM_ENTER
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier

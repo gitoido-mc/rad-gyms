@@ -1,4 +1,4 @@
-package lol.gito.radgyms.gui.widget
+package lol.gito.radgyms.client.gui.widget
 
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.util.cobblemonResource

@@ -11,7 +11,11 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_RARITY
+import net.minecraft.item.Item
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text.translatable
@@ -35,9 +39,12 @@ object CacheHandler {
         val poke = pokeProps.create()
 
         poke.shiny = shinyRoll(poke, player, shinyBoost).checkRate()
-        val hasShinyCharm = player.inventory.contains {
-            it.registryEntry.idAsString == "unimplemented_items:shiny_charm" // TODO: Make it taggable?
-        }
+        val hasShinyCharm = player.inventory.contains(
+            TagKey.of(
+                RegistryKeys.ITEM,
+                modId("items/shiny_chance_items")
+            )
+        )
 
         if (!poke.shiny && hasShinyCharm) {
             poke.shiny = shinyRoll(poke, player, shinyBoost).checkRate()
@@ -62,7 +69,6 @@ object CacheHandler {
             shinyRate = it.calculate(player)
         }
         if (shinyRate == 0f) return 1f
-        RadGyms.LOGGER.info("ShinyChance calculation event: $shinyRate")
         return shinyRate
     }
 
@@ -81,25 +87,23 @@ object CacheHandler {
             poke.updateAspects()
             poke.updateForm()
 
-            if (poke.species.implemented) {
-                if (poke.form.name != poke.species.standardForm.name) {
-                    val id = poke.form.name.lowercase()
-                    val form = lang("ui.pokedex.info.form.$id")
-                    val pokeName = lang("species.${poke.species.showdownId().lowercase()}.name")
-                        .add(" ")
-                        .add("(")
-                        .add(form.string)
-                        .add(")")
-                        .styled { it.withFormatting(pokeRarity.formatting) }
+            if (poke.form.name != poke.species.standardForm.name) {
+                val id = poke.form.name.lowercase()
+                val form = lang("ui.pokedex.info.form.$id")
+                val pokeName = lang("species.${poke.species.showdownId().lowercase()}.name")
+                    .add(" ")
+                    .add("(")
+                    .add(form.string)
+                    .add(")")
+                    .styled { it.withFormatting(pokeRarity.formatting) }
 
-                    pokes.add(pokeName)
-                }
-                pokes.add(
-                    translatable(
-                        cobblemonResource("species.${poke.species.showdownId().lowercase()}.name").toTranslationKey()
-                    ).styled { it.withFormatting(pokeRarity.formatting) }
-                )
+                pokes.add(pokeName)
             }
+            pokes.add(
+                translatable(
+                    cobblemonResource("species.${poke.species.showdownId().lowercase()}.name").toTranslationKey()
+                ).styled { it.withFormatting(pokeRarity.formatting) }
+            )
         }
 
         return pokes

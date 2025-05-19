@@ -1,4 +1,4 @@
-package lol.gito.radgyms.gui
+package lol.gito.radgyms.client.gui
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment

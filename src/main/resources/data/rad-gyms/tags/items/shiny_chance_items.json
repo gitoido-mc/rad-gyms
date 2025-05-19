@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "unimplemented_items:shiny_charm",
+      "required": false
+    }
+  ]
+}

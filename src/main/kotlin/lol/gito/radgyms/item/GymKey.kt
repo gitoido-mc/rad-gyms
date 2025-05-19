@@ -2,7 +2,7 @@ package lol.gito.radgyms.item
 
 import com.cobblemon.mod.common.util.cobblemonResource
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.gui.GuiHandler
+import lol.gito.radgyms.client.gui.GuiHandler
 import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import lol.gito.radgyms.item.group.ItemGroupManager
 import lol.gito.radgyms.util.TranslationUtil.attuneType

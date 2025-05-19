@@ -1,4 +1,4 @@
-package lol.gito.radgyms.gui
+package lol.gito.radgyms.client.gui
 
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -7,11 +7,10 @@ import io.wispforest.owo.ui.component.ButtonComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.Insets
-import io.wispforest.owo.ui.core.Sizing
-import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_CANCEL
-import lol.gito.radgyms.gui.GymGUIIdentifiers.ID_TYPES
-import lol.gito.radgyms.gui.GymGUIIdentifiers.UI_CACHE_ATTUNE
-import lol.gito.radgyms.gui.widget.CacheInfoHolder
+import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_CANCEL
+import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_TYPES
+import lol.gito.radgyms.client.gui.GymGUIIdentifiers.UI_CACHE_ATTUNE
+import lol.gito.radgyms.client.gui.widget.CacheInfoHolder
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Rarity
 

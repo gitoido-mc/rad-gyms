@@ -3,7 +3,7 @@ package lol.gito.radgyms.block
 import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.block.entity.GymExitEntity
-import lol.gito.radgyms.gui.GuiHandler
+import lol.gito.radgyms.client.gui.GuiHandler
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
