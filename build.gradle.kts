@@ -1,10 +1,12 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.net.URI
 
 plugins {
     id("java")
-    id("fabric-loom") version ("1.9-SNAPSHOT")
-    kotlin("jvm") version ("2.1.10")
+    id("fabric-loom") version "1.9-SNAPSHOT"
+    kotlin("jvm") version "2.1.10"
     kotlin("plugin.serialization") version "2.1.10"
+    id("io.github.0ffz.github-packages") version "1.2.1"
 }
 
 group = property("maven_group")!!
@@ -13,11 +15,23 @@ version = property("mod_version")!!
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://www.cursemaven.com")
-    maven("https://api.modrinth.com/maven")
+    maven {
+        url = URI("https://www.cursemaven.com")
+        content {
+            includeGroup("curse.maven")
+        }
+    }
+    maven {
+        url = URI("https://api.modrinth.com/maven")
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
     maven("https://maven.architectury.dev/")
     maven("https://maven.wispforest.io/releases/")
     maven("https://maven.impactdev.net/repository/development/")
+    maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
+    maven(githubPackage.invoke("The-Aether-Team/The-Aether"))
 }
 
 fabricApi {
@@ -44,6 +58,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     modImplementation("dev.architectury:architectury-fabric:${properties["architectury_api_version"]}")
 
+    // Compat
+    modCompileOnly("com.aetherteam.aether:aether:${properties["aether_version"]}-fabric")
+
     // Cobblemon
     modImplementation("com.cobblemon:fabric:${properties["cobblemon_version"]}")
 
@@ -52,8 +69,7 @@ dependencies {
     include("io.wispforest:owo-sentinel:${properties["owo_version"]}")
 
     // Radical Cobblemon Trainers API
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${properties["rctapi_common_version"]}")
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${properties["rctapi_fabric_version"]}")
+    modImplementation("maven.modrinth:rctapi:${properties["rctapi_fabric_version"]}")
 }
 
 tasks {

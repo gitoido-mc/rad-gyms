@@ -60,10 +60,10 @@ class GymEntranceEntity(pos: BlockPos, state: BlockState) : BlockEntity(BlockEnt
 
     fun usesLeftForPlayer(player: PlayerEntity): Int {
         val playerCounter = playerUseCounter
-            .getOrDefault(player.uuid.toString(), CONFIG.maxEntranceUses)
-            .coerceIn(0, CONFIG.maxEntranceUses)
+            .getOrDefault(player.uuid.toString(), CONFIG.maxEntranceUses!!)
+            .coerceIn(0, CONFIG.maxEntranceUses!!)
 
-        debug("Uses left for $player for $pos gym entrance: ${CONFIG.maxEntranceUses - playerCounter} (config max: ${CONFIG.maxEntranceUses})")
+        debug("Uses left for $player for $pos gym entrance: ${CONFIG.maxEntranceUses!! - playerCounter} (config max: ${CONFIG.maxEntranceUses!!})")
         return playerCounter
     }
 }

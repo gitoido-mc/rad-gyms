@@ -95,7 +95,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
                 return ActionResult.FAIL
             }
 
-            rctBattleManager.start(
+            rctBattleManager.startBattle(
                 listOf(playerTrainer),
                 listOf(npcTrainer),
                 BattleFormat.GEN_9_SINGLES,

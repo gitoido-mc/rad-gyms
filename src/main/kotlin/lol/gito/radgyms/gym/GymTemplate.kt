@@ -76,20 +76,18 @@ object GymTemplate {
 
         trainers = dto.trainers.map trainerMap@{ trainer ->
             val battleConfig = if (trainer.ai.data != null) {
-                RCTBattleAIConfig(
-                    trainer.ai.data.moveBias ?: 1.0,
-                    trainer.ai.data.statusMoveBias ?: 0.1,
-                    trainer.ai.data.switchBias ?: 0.65,
-                    trainer.ai.data.itemBias ?: 1.0,
-                    trainer.ai.data.maxSelectMargin ?: 0.15
-                )
+                RCTBattleAIConfig.Builder()
+                    .withMoveBias(trainer.ai.data.moveBias ?: 1.0)
+                    .withStatusMoveBias(trainer.ai.data.statusMoveBias ?: 0.85)
+                    .withSwitchBias(trainer.ai.data.switchBias ?: 0.85)
+                    .withItemBias(trainer.ai.data.itemBias ?: 0.85)
+                    .withMaxSelectMargin(trainer.ai.data.maxSelectMargin ?: 0.25)
             } else {
-                RCTBattleAIConfig()
+                RCTBattleAIConfig.Builder()
             }
 
-
             val ai = RCTBattleAI(
-                battleConfig
+                battleConfig.build()
             )
             val bag = trainer.bag.map bagMap@{ bagItem ->
                 return@bagMap BagItemModel(bagItem.item, bagItem.quantity)
@@ -164,8 +162,8 @@ object GymTemplate {
             return fillPokemonModel(species, level)
         } else {
             val species = PokemonSpecies.implemented.asSequence()
-                .filter { species -> species.name !in CONFIG.ignoredSpecies }
-                .associateWith { species -> species.forms.filter { form -> form.name !in CONFIG.ignoredForms } }
+                .filter { species -> species.name !in CONFIG.ignoredSpecies!! }
+                .associateWith { species -> species.forms.filter { form -> form.name !in CONFIG.ignoredForms!! } }
                 .flatMap { (species, forms) ->
                     forms.map { form -> species to form }
                 }.random()
