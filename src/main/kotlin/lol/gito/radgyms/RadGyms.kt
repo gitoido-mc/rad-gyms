@@ -68,7 +68,7 @@ object RadGyms {
     }
 
     fun debug(message: String) {
-        if (CONFIG.debug) LOGGER.info(message)
+        if (CONFIG.debug == true) LOGGER.info(message)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -76,19 +76,22 @@ object RadGyms {
         val configFile = File(CONFIG_PATH)
         configFile.parentFile.mkdirs()
 
-        CONFIG = if (configFile.exists()) {
+        CONFIG = RadGymsConfig(
+            debug = false,
+            maxEntranceUses = 3,
+            ignoredSpecies = emptyList(),
+            ignoredForms = mutableListOf("gmax"),
+        )
+
+        if (configFile.exists()) {
             LOGGER.info("Loading config")
-            configFile.inputStream().let {
+            val fileConfig = configFile.inputStream().let {
                 Json.decodeFromStream<RadGymsConfig>(it)
             }
+
+            CONFIG = CONFIG.combine(fileConfig)
         } else {
-            LOGGER.info("Creating config")
-            RadGymsConfig(
-                debug = false,
-                maxEntranceUses = 3,
-                ignoredSpecies = emptyList(),
-                ignoredForms = mutableListOf("gmax"),
-            )
+            LOGGER.info("No config found, creating new")
         }
         saveConfig()
     }
