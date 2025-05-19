@@ -1,6 +1,5 @@
 name: Build and publish project artifacts on platforms
 on:
-  workflow_run: ~
   release:
     types:
       - published
