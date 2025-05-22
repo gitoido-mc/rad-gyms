@@ -39,12 +39,12 @@
 	],
 	"depends": {
 		"minecraft": "~1.21.1",
-		"fabricloader": ">=0.16.10",
+		"fabricloader": ">=0.16.14",
 		"fabric": "*",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
 		"architectury": ">=13.0.8",
-		"rctapi": ">=0.10.14-beta",
+		"rctapi": ">=0.16.0-beta",
 		"cobblemon": ">=1.6.1+1.21.1",
 		"java": ">=21"
 	}
