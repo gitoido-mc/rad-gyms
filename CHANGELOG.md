@@ -24,7 +24,7 @@
 
 
 <a id="v0.1.11"></a>
-# [Stable v0.1.11](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.11) - 2025-04-05
+# [Stable v0.1.11 (v0.1.11-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.11) - 2025-04-05
 
 ## What's Changed
 * feat: Gym rewards are distributed in bundles now
@@ -39,7 +39,7 @@
 
 
 <a id="v0.1.10"></a>
-# [Stable v0.1.10](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.10) - 2025-03-23
+# [Stable v0.1.10 (v0.1.10-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.10) - 2025-03-23
 
 ## What's Changed
 * fix: Trainer registration in RCT, entity type fix
@@ -50,7 +50,7 @@
 
 
 <a id="v0.1.9"></a>
-# [Stable v0.1.9](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.9) - 2025-02-28
+# [Stable v0.1.9 (v0.1.9-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.9) - 2025-02-28
 
 ## What's Changed
 This release adds scheduling support, which (i hope) will prevent trainer registration and gym leave errors in some heavy modpack cases
