@@ -1,5 +1,5 @@
 <a id="v0.1.13-stable"></a>
-# [Stable v0.1.13 (v0.1.13-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.13-stable) - 2025-05-19
+# [Stable v0.1.13 (v0.1.13-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.13-stable) - 2025-05-20
 
 ## What's Changed
 
