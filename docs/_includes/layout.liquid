@@ -1,0 +1,39 @@
+---
+title: Rad Gyms by Gitoido
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.green.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css" type="text/css" >
+    <title>{{ title }}</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><strong>Rad Gyms</strong></li>
+        </ul>
+        {% assign navPages = collections.all | eleventyNavigation %}
+        <ul>
+        {%- for entry in navPages %}
+          <li{% if entry.url == page.url %} class="my-active-class"{% endif %}>
+            <a href="{{ entry.url }}">{{ entry.title }}</a>
+          </li>
+        {%- endfor %}
+        </ul>
+    </nav>
+</header>
+<main class="container-fluid">
+    <div class="row">
+
+    {{ content }}
+</main>
+<footer>
+</footer>
+</body>
+</html>

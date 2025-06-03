@@ -1,0 +1,220 @@
+{
+  "normal": [
+    {
+      "display_name": "Dunsparce",
+      "form": "normal",
+      "generation": 2,
+      "national_dex": 206
+    },
+    {
+      "display_name": "Azurill",
+      "form": "normal",
+      "generation": 3,
+      "national_dex": 298
+    },
+    {
+      "display_name": "Skitty",
+      "form": "normal",
+      "generation": 3,
+      "national_dex": 300
+    },
+    {
+      "display_name": "Delcatty",
+      "form": "normal",
+      "generation": 3,
+      "national_dex": 301
+    },
+    {
+      "display_name": "Swablu",
+      "form": "normal",
+      "generation": 3,
+      "national_dex": 333
+    },
+    {
+      "display_name": "Zangoose",
+      "form": "normal",
+      "generation": 3,
+      "national_dex": 335
+    },
+    {
+      "display_name": "Castform",
+      "form": "normal",
+      "generation": 3,
+      "national_dex": 351
+    },
+    {
+      "display_name": "Glameow",
+      "form": "normal",
+      "generation": 4,
+      "national_dex": 431
+    },
+    {
+      "display_name": "Purugly",
+      "form": "normal",
+      "generation": 4,
+      "national_dex": 432
+    },
+    {
+      "display_name": "Arceus",
+      "form": "normal",
+      "generation": 4,
+      "national_dex": 493
+    },
+    {
+      "display_name": "Audino",
+      "form": "normal",
+      "generation": 5,
+      "national_dex": 531
+    },
+    {
+      "display_name": "Minccino",
+      "form": "normal",
+      "generation": 5,
+      "national_dex": 572
+    },
+    {
+      "display_name": "Cinccino",
+      "form": "normal",
+      "generation": 5,
+      "national_dex": 573
+    },
+    {
+      "display_name": "Meloetta",
+      "form": "normal",
+      "generation": 5,
+      "national_dex": 648
+    },
+    {
+      "display_name": "Meloetta-Pirouette",
+      "form": "pirouette-forme",
+      "generation": 5,
+      "national_dex": 648
+    },
+    {
+      "display_name": "Litleo",
+      "form": "normal",
+      "generation": 6,
+      "national_dex": 667
+    },
+    {
+      "display_name": "Pyroar",
+      "form": "normal",
+      "generation": 6,
+      "national_dex": 668
+    },
+    {
+      "display_name": "Furfrou",
+      "form": "normal",
+      "generation": 6,
+      "national_dex": 676
+    },
+    {
+      "display_name": "Helioptile",
+      "form": "normal",
+      "generation": 6,
+      "national_dex": 694
+    },
+    {
+      "display_name": "Heliolisk",
+      "form": "normal",
+      "generation": 6,
+      "national_dex": 695
+    },
+    {
+      "display_name": "Yungoos",
+      "form": "normal",
+      "generation": 7,
+      "national_dex": 734
+    },
+    {
+      "display_name": "Gumshoos",
+      "form": "normal",
+      "generation": 7,
+      "national_dex": 735
+    },
+    {
+      "display_name": "Oranguru",
+      "form": "normal",
+      "generation": 7,
+      "national_dex": 765
+    },
+    {
+      "display_name": "Type: Null",
+      "form": "normal",
+      "generation": 7,
+      "national_dex": 772
+    },
+    {
+      "display_name": "Silvally",
+      "form": "normal",
+      "generation": 7,
+      "national_dex": 773
+    },
+    {
+      "display_name": "Drampa",
+      "form": "normal",
+      "generation": 7,
+      "national_dex": 780
+    },
+    {
+      "display_name": "Skwovet",
+      "form": "normal",
+      "generation": 8,
+      "national_dex": 819
+    },
+    {
+      "display_name": "Greedent",
+      "form": "normal",
+      "generation": 8,
+      "national_dex": 820
+    },
+    {
+      "display_name": "Indeedee",
+      "form": "normal",
+      "generation": 8,
+      "national_dex": 876
+    },
+    {
+      "display_name": "Indeedee-F",
+      "form": "female",
+      "generation": 8,
+      "national_dex": 876
+    },
+    {
+      "display_name": "Smoliv",
+      "form": "normal",
+      "generation": 9,
+      "national_dex": 928
+    },
+    {
+      "display_name": "Dolliv",
+      "form": "normal",
+      "generation": 9,
+      "national_dex": 929
+    },
+    {
+      "display_name": "Arboliva",
+      "form": "normal",
+      "generation": 9,
+      "national_dex": 930
+    },
+    {
+      "display_name": "Cyclizar",
+      "form": "normal",
+      "generation": 9,
+      "national_dex": 967
+    },
+    {
+      "display_name": "Dudunsparce",
+      "form": "normal",
+      "generation": 9,
+      "national_dex": 982
+    },
+    {
+      "display_name": "Terapagos",
+      "form": "normal",
+      "generation": 9,
+      "national_dex": 1024
+    }
+  ]
+}
