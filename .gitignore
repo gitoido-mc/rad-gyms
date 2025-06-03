@@ -40,3 +40,6 @@ replay_*.log
 *.hprof
 *.jfr
 
+docs/_site
+docs/.cache
+docs/node_modules
