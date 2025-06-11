@@ -7,6 +7,8 @@ import net.minecraft.util.BlockMirror
 import net.minecraft.util.BlockRotation
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.random.CheckedRandom
+import net.minecraft.util.math.random.ChunkRandom
 import net.minecraft.world.StructureWorldAccess
 
 object StructureManager {
@@ -21,7 +23,10 @@ object StructureManager {
                 .setRotation(BlockRotation.NONE)
                 .setUpdateNeighbors(true)
 
-            if (!structureTemplate.get().place(world, pos, pos, structPlacementData, null, 18)) {
+            val random = ChunkRandom(CheckedRandom(0L))
+            random.setCarverSeed(world.seed, pos.x shr 4, pos.z shr 4)
+
+            if (!structureTemplate.get().place(world, pos, pos, structPlacementData, random, 18)) {
                 LOGGER.warn("Error placing structure: ${Identifier.of(structureId)}")
             } else {
                 structTemplateManager.unloadTemplate(Identifier.of(structureId))
