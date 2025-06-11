@@ -115,7 +115,7 @@ object GymTemplate {
                 }
             } else {
                 for (pokeParams in trainer.team!!) {
-                    val props = PokemonProperties.parse(pokeParams)
+                    val props = PokemonProperties.parse("level=$level $pokeParams")
                     val poke = props.create()
 
                     team.add(fillPokemonModelFromPokemon(poke))
