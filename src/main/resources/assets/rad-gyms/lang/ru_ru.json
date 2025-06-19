@@ -6,7 +6,7 @@
   "item.rad-gyms.exit_rope.failed": "Здесь нельзя использовать веревку",
   "item.rad-gyms.exit_rope.tooltip": "Одноразовая веревка для побега из испытания гима",
   "item.rad-gyms.gym_key": "Ключ от гима",
-  "item.rad-gyms.gym_key.attuned": "Откалиброван на {0}",
+  "rad-gyms.item.component.gym_type": "Откалиброван на {0}",
   "rad-gyms.gui.common.cancel": "Отмена",
   "rad-gyms.gui.common.decrease": "-1",
   "rad-gyms.gui.common.decrease-ten": "-10",

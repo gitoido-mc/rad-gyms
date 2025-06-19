@@ -6,7 +6,7 @@
   "item.rad-gyms.exit_rope.failed": "Não pode ser usado aqui",
   "item.rad-gyms.exit_rope.tooltip": "Corda de uso único para escapar do teste do ginásio",
   "item.rad-gyms.gym_key": "Chave do ginásio",
-  "item.rad-gyms.gym_key.attuned": "Sintonizado com %s",
+  "rad-gyms.item.component.gym_type": "Sintonizado com %s",
   "rad-gyms.gui.common.cancel": "Cancelar",
   "rad-gyms.gui.common.decrease": "-1",
   "rad-gyms.gui.common.decrease-ten": "-10",

@@ -1,6 +1,6 @@
 package lol.gito.radgyms.item
 
-import lol.gito.radgyms.gui.GuiHandler
+import lol.gito.radgyms.client.gui.GuiHandler
 import lol.gito.radgyms.item.ItemRegistry.Companion.EXIT_ROPE
 import lol.gito.radgyms.item.group.ItemGroupManager
 import lol.gito.radgyms.world.DimensionManager

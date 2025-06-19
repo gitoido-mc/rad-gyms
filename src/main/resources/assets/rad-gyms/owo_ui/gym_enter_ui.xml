@@ -22,39 +22,40 @@
                                 <flow-layout direction="horizontal">
                                     <children>
                                         <button id="dec-ten">
-                                            <text translate="true">rad-gyms.gui.common.decrease-ten</text>
+                                            <text translate="true">-10</text>
                                             <sizing>
                                                 <horizontal method="fixed">24</horizontal>
                                             </sizing>
                                         </button>
                                         <button id="dec">
-                                            <text translate="true">rad-gyms.gui.common.decrease</text>
+                                            <text translate="true">-1</text>
                                             <sizing>
-                                                <horizontal method="fixed">24</horizontal>
+                                                <horizontal method="fixed">16</horizontal>
                                             </sizing>
                                         </button>
                                         <discrete-slider min="1" max="100" id="gym_slider">
                                             <sizing>
-                                                <horizontal method="fill">54</horizontal>
+                                                <horizontal method="fill">66</horizontal>
                                                 <vertical method="fixed">20</vertical>
                                             </sizing>
                                             <margins>
-                                                <horizontal>5</horizontal>
+                                                <horizontal>4</horizontal>
                                             </margins>
                                         </discrete-slider>
                                         <button id="inc">
-                                            <text translate="true">rad-gyms.gui.common.increase</text>
+                                            <text translate="true">+1</text>
                                             <sizing>
-                                                <horizontal method="fixed">24</horizontal>
+                                                <horizontal method="fixed">16</horizontal>
                                             </sizing>
                                         </button>
                                         <button id="inc-ten">
-                                            <text translate="true">rad-gyms.gui.common.increase-ten</text>
+                                            <text translate="true">+10</text>
                                             <sizing>
                                                 <horizontal method="fixed">24</horizontal>
                                             </sizing>
                                         </button>
                                     </children>
+                                    <horizontal-alignment>center</horizontal-alignment>
                                     <sizing>
                                         <vertical method="fixed">20</vertical>
                                         <horizontal method="fill">100</horizontal>
@@ -63,20 +64,21 @@
                                 <flow-layout direction="horizontal">
                                     <children>
                                         <button id="start">
-                                            <text translate="true">rad-gyms.gui.common.start</text>
+                                            <text translate="true">gui.proceed</text>
                                             <sizing>
                                                 <horizontal method="fill">45</horizontal>
                                                 <vertical method="fixed">20</vertical>
                                             </sizing>
                                         </button>
                                         <button id="cancel">
-                                            <text translate="true">rad-gyms.gui.common.cancel</text>
+                                            <text translate="true">gui.cancel</text>
                                             <sizing>
                                                 <horizontal method="fill">45</horizontal>
                                                 <vertical method="fixed">20</vertical>
                                             </sizing>
                                         </button>
                                     </children>
+                                    <horizontal-alignment>center</horizontal-alignment>
                                     <gap>20</gap>
                                     <margins>
                                         <top>10</top>
