@@ -44,12 +44,12 @@ open class PokeCache(private val rarity: Rarity) : Item(
         val boost = stack.getOrDefault(CACHE_SHINY_BOOST_COMPONENT, 0)
         val type = stack.getOrDefault(GYM_TYPE_COMPONENT, null)
         if (offhand.isOf(Items.LAPIS_LAZULI) && !world.isClient && boost < Cobblemon.config.shinyRate) {
-            stack.set(CACHE_SHINY_BOOST_COMPONENT, boost.plus(CONFIG.lapisBoostAmount))
+            stack.set(CACHE_SHINY_BOOST_COMPONENT, boost.plus(CONFIG.lapisBoostAmount!!))
         }
         if (offhand.isOf(Items.LAPIS_BLOCK) && !world.isClient && boost < Cobblemon.config.shinyRate) {
             val newBoost = when (boost.plus(RG_CACHE_BLOCK_BOOST) > Cobblemon.config.shinyRate) {
                 true -> Cobblemon.config.shinyRate.toInt()
-                false -> boost.plus(RG_CACHE_BLOCK_BOOST * CONFIG.lapisBoostAmount)
+                false -> boost.plus(RG_CACHE_BLOCK_BOOST * CONFIG.lapisBoostAmount!!)
                     .coerceAtMost(Cobblemon.config.shinyRate.toInt() - 1)
             }
             stack.set(CACHE_SHINY_BOOST_COMPONENT, newBoost)

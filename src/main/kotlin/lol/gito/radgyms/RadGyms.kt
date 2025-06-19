@@ -74,7 +74,7 @@ object RadGyms {
         val configFile = File(CONFIG_PATH)
         configFile.parentFile.mkdirs()
 
-        var CONFIG = RadGymsConfig(
+        CONFIG = RadGymsConfig(
             debug = false,
             maxEntranceUses = 3,
             lapisBoostAmount = 1,

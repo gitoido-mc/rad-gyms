@@ -2,6 +2,7 @@ package lol.gito.radgyms.client.renderer
 
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BlockEntityModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.entity.GymEntranceEntity
 import net.minecraft.client.render.OverlayTexture
 import net.minecraft.client.render.RenderLayer
@@ -18,6 +19,8 @@ class GymEntranceEntityRenderer(context: BlockEntityRendererFactory.Context) : B
         it.put(RenderContext.DO_QUIRKS, true)
     }
 
+    private fun getModel(variant: String) = modId("gym_entrance")
+
     override fun render(
         entity: GymEntranceEntity,
         tickDelta: Float,
@@ -32,11 +35,11 @@ class GymEntranceEntityRenderer(context: BlockEntityRendererFactory.Context) : B
         state.currentAspects = aspects
         state.updatePartialTicks(tickDelta)
 
-        val poserId = entity.type
+        val poserId = modId("gym_entrance_entity")
 
-        val model = BlockEntityModelRepository.getPoser(poserId, state)
+        val model = BlockEntityModelRepository.getPoser(getModel(entity.gymType), state)
         model.context = context
-        val texture = BlockEntityModelRepository.getTexture(poserId, state)
+        val texture = BlockEntityModelRepository.getTexture(getModel(entity.gymType), state)
         val vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(texture))
         model.bufferProvider = vertexConsumers
         state.currentModel = model

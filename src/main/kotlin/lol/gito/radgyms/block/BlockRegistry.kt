@@ -1,7 +1,6 @@
 package lol.gito.radgyms.block
 
 import io.wispforest.owo.registration.reflect.BlockRegistryContainer
-import lol.gito.radgyms.item.block.GymEntranceItem
 import lol.gito.radgyms.item.group.ItemGroupManager
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
@@ -35,14 +34,6 @@ class BlockRegistry : BlockRegistryContainer {
 
         val settings = if (block is PokeShardBlockBase) baseSettings.rarity(block.rarity) else baseSettings
 
-        if (block is GymEntranceBlock) {
-            return createGymEntranceItem(settings)
-        }
-
         return BlockItem(block, settings ?: baseSettings)
-    }
-
-    private fun createGymEntranceItem(settings: Item.Settings): BlockItem {
-        return GymEntranceItem(settings)
     }
 }
