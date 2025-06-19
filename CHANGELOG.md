@@ -1,7 +1,11 @@
 <a id="v0.1.13.1-stable"></a>
 # [Stable v0.1.13.1 (v0.1.13.1-stable)](https://github.com/gitoido-mc/rad-gyms/releases/tag/v0.1.13.1-stable) - 2025-05-22
 
+## What's Changed
 
+* chore: fabric.mod.json deps update
+
+**Full Changelog**: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.13-stable...v0.1.13.1-stable
 
 [Changes][v0.1.13.1-stable]
 
