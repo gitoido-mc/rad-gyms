@@ -18,6 +18,9 @@ import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import lol.gito.radgyms.item.group.ItemGroupManager
 import lol.gito.radgyms.network.NetworkStackHandler
 import lol.gito.radgyms.world.DimensionManager
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
+import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -65,6 +68,16 @@ object RadGyms {
 
     fun modId(name: String): Identifier {
         return Identifier.of(MOD_ID, name)
+    }
+
+    @Environment(EnvType.CLIENT)
+    fun modModelId(id: Identifier, variant: String): ModelIdentifier {
+        return ModelIdentifier(id, variant)
+    }
+
+    @Environment(EnvType.CLIENT)
+    fun modModelId(name: String, variant: String): ModelIdentifier {
+        return modModelId(modId(name), variant)
     }
 
     fun debug(message: String) {
