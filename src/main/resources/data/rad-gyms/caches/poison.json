@@ -1,0 +1,59 @@
+{
+  "common": {
+    "ekans": 400,
+    "koffing aspect=region-bias-galar": 400,
+    "nidoranf": 400,
+    "nidoranm": 400,
+    "slowbro aspect=galarian": 400,
+    "zubat": 400,
+    "slowking aspect=galarian": 400,
+    "wooper aspect=paldean": 400,
+    "shroodle": 400
+  },
+  "uncommon": {
+    "arbok": 300,
+    "grimer": 300,
+    "koffing": 300,
+    "nidorina": 300,
+    "nidorino": 300,
+    "gulpin": 300,
+    "croagunk": 300,
+    "skorupi": 300,
+    "stunky": 300,
+    "trubbish": 300,
+    "skrelp": 300,
+    "mareanie": 300,
+    "salandit": 300,
+    "clodsire": 300
+  },
+  "rare": {
+    "golbat": 200,
+    "muk": 200,
+    "nidoking": 200,
+    "nidoqueen": 200,
+    "weezing": 200,
+    "crobat": 200,
+    "seviper": 200,
+    "swalot": 200,
+    "drapion": 200,
+    "skuntank": 200,
+    "toxicroak": 200,
+    "garbodor": 200,
+    "dragalge": 200,
+    "naganadel": 200,
+    "poipole": 200,
+    "salazzle": 200,
+    "toxapex": 200,
+    "toxtricity aspect=low_key-form": 200,
+    "grafaiai": 200
+  },
+  "epic": {
+    "arceus aspect=poison-plate": 100,
+    "silvally aspect=poison-memory": 100,
+    "eternatus": 100,
+    "fezandipiti": 100,
+    "munkidori": 100,
+    "okidogi": 100,
+    "pecharunt": 100
+  }
+}

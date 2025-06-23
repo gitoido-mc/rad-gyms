@@ -1,0 +1,62 @@
+{
+  "common": {
+    "diglett aspect=alolan": 400,
+    "dugtrio aspect=alolan": 400,
+    "meowth aspect=galarian": 400,
+    "stunfisk aspect=galarian": 400,
+    "goodra aspect=hisuian": 400,
+    "sliggoo aspect=hisuian": 400
+  },
+  "uncommon": {
+    "aron": 300,
+    "beldum": 300,
+    "lairon": 300,
+    "mawile": 300,
+    "metang": 300,
+    "bronzor": 300,
+    "wormadam aspect=trash-cloak": 300,
+    "klang": 300,
+    "klink": 300,
+    "doublade": 300,
+    "honedge": 300,
+    "cufant": 300,
+    "perrserker": 300,
+    "varoom": 300
+  },
+  "rare": {
+    "skarmory": 200,
+    "steelix": 200,
+    "aggron": 200,
+    "bronzong": 200,
+    "klinklang": 200,
+    "aegislash": 200,
+    "klefki": 200,
+    "celesteela": 200,
+    "copperajah": 200,
+    "duraludon": 200,
+    "gholdengo": 200,
+    "orthworm": 200,
+    "revavroom": 200
+  },
+  "epic": {
+    "jirachi": 100,
+    "metagross": 100,
+    "registeel": 100,
+    "arceus aspect=steel-plate": 100,
+    "dialga": 100,
+    "cobalion": 100,
+    "genesect aspect=water-drive": 100,
+    "genesect aspect=electric-drive": 100,
+    "genesect aspect=fire-drive": 100,
+    "genesect aspect=ice-drive": 100,
+    "magearna": 100,
+    "necrozma aspect=dusk-fusion": 100,
+    "silvally aspect=steel-memory": 100,
+    "melmetal": 100,
+    "meltan": 100,
+    "zacian aspect=crowned": 100,
+    "zamazenta aspect=crowned": 100,
+    "archaludon": 100,
+    "ironcrown": 100
+  }
+}

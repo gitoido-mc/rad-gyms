@@ -55,20 +55,13 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
             val trainerRegistry = RadGyms.RCT.trainerRegistry
             val rctBattleManager = RadGyms.RCT.battleManager
             val playerTrainer = trainerRegistry.getById(player.uuid.toString())
+            val gymNpcPair = PLAYER_GYMS[player.uuid]!!.npcList.first { it.first == uuid }
 
-            val gymNpcPair = PLAYER_GYMS[player.uuid]!!.npcList.first { it.first == this.uuid }
-
-            var npcTrainer : TrainerNPC?
+            var npcTrainer: TrainerNPC?
             RadGyms.RCT.trainerRegistry.let { registry ->
                 val entity = this
-                npcTrainer = when (RadGyms.RCT.trainerRegistry.getById(this.uuid.toString())) {
-                    null -> registry.registerNPC(this.uuid.toString(), gymNpcPair.second.trainer).apply {
-                        this.entity = entity
-                    }
-                    else -> registry.getById(this.uuid.toString()) as TrainerNPC
-                }
+                npcTrainer = RadGyms.RCT.trainerRegistry.getById(uuid.toString()) as TrainerNPC
             }
-
 
             if (requires != null) {
                 val trainerToFight = (world as ServerWorld).getEntity(requires) as Trainer
@@ -105,7 +98,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
             return ActionResult.SUCCESS
         }
 
-        return super.interactMob(player, hand)
+        return ActionResult.PASS
     }
 
     override fun writeNbt(nbt: NbtCompound): NbtCompound {

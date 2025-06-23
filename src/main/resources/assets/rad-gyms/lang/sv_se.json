@@ -6,7 +6,7 @@
   "item.rad-gyms.exit_rope.failed": "Det kan inte användas här",
   "item.rad-gyms.exit_rope.tooltip": "Engångsrep för att slippa gymmet",
   "item.rad-gyms.gym_key": "Gymnyckel",
-  "item.rad-gyms.gym_key.attuned": "Anpassad till {0} gymtyp",
+  "rad-gyms.item.component.gym_type": "Anpassad till {0} gymtyp",
   "rad-gyms.gui.common.cancel": "Avbryt",
   "rad-gyms.gui.common.decrease": "-1",
   "rad-gyms.gui.common.decrease-ten": "-10",

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "multi_bench",
+  "ingredients": [
+    {
+      "item": "rad-gyms:cache_rare"
+    },
+    {
+      "item": "cobblemon:ground_gem"
+    }
+  ],
+  "result": {
+    "components": {
+      "rad-gyms:gym_type_component": "ground"
+    },
+    "count": 1,
+    "id": "rad-gyms:cache_rare"
+  }
+}
