@@ -1,7 +1,7 @@
 package lol.gito.radgyms.block
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.server
 import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
@@ -109,7 +109,7 @@ class GymEntranceBlock : HorizontalFacingBlock, BlockEntityProvider {
                 )
             }
             debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
-            return ActionResult.PASS
+            return ActionResult.FAIL
         }
 
         if (world.isClient && !player.mainHandStack.isOf(Items.DEBUG_STICK)) {

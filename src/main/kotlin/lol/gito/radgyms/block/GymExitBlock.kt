@@ -29,7 +29,7 @@ class GymExitBlock(settings: Settings) : BlockWithEntity(settings) {
         player: PlayerEntity,
         hit: BlockHitResult
     ): ActionResult {
-        debug("Gym exit block user by player ${player.uuid} at $pos in ${world.registryKey}")
+        debug("Gym exit block used by player ${player.uuid} at $pos in ${world.registryKey}")
         if (world.isClient) {
             debug("Client: Opening gym exit screen for ${player.uuid} at $pos in ${world.registryKey}")
             GuiHandler.openGymLeaveScreen(player)

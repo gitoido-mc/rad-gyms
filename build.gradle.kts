@@ -6,7 +6,6 @@ plugins {
     id("fabric-loom") version "1.9-SNAPSHOT"
     kotlin("jvm") version "2.1.10"
     kotlin("plugin.serialization") version "2.1.10"
-    id("io.github.0ffz.github-packages") version "1.2.1"
 }
 
 group = property("maven_group")!!
@@ -43,7 +42,7 @@ repositories {
     maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
     maven("https://maven.blamejared.com/")
     maven("https://modmaven.dev/")
-    maven(githubPackage.invoke("The-Aether-Team/The-Aether"))
+    maven("https://packages.aether-mod.net/The-Aether")
 }
 
 fabricApi {
@@ -80,10 +79,18 @@ dependencies {
     modCompileOnly("com.aetherteam.aether:aether:${properties["aether_version"]}-fabric")
 
     // Cobblemon
-    modImplementation("com.cobblemon:fabric:${properties["cobblemon_version"]}")
 
+    if (properties["uses_snapshots"].toString().toBooleanStrict()) {
+        modImplementation("com.cobblemon:fabric:${properties["cobblemon_version_snapshot"]}")
+    } else {
+        modImplementation("com.cobblemon:fabric:${properties["cobblemon_version"]}")
+    }
     // Radical Cobblemon Trainers API
-    modImplementation("maven.modrinth:rctapi:${properties["rctapi_fabric_version"]}")
+    if (properties["uses_snapshots"].toString().toBooleanStrict()) {
+        modImplementation("com.gitlab.srcmc:rctapi-fabric-1.21.1:${properties["rctapi_fabric_version_snapshot"]}")
+    } else {
+        modImplementation("maven.modrinth:rctapi:${properties["rctapi_fabric_version"]}")
+    }
 
     // Recipes
     modCompileOnlyApi("mezz.jei:jei-${properties["minecraft_version"]}-fabric-api:${properties["jei_version"]}")
@@ -119,6 +126,10 @@ tasks {
                 )
             )
         }
+    }
+
+    runClient {
+        args("--username", "Developer")
     }
 
     jar {
