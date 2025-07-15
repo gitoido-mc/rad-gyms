@@ -15,7 +15,7 @@ import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_USAGE
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.ID_USAGE
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text.translatable
@@ -24,7 +24,7 @@ import net.minecraft.util.math.BlockPos
 
 class GymEntranceScreen(
     override val type: String? = null,
-    override val id: Identifier = GymGUIIdentifiers.UI_GYM_ENTRANCE,
+    override val id: Identifier = GymGuiIdentifiers.UI_GYM_ENTRANCE,
     override val player: PlayerEntity,
     private val blockPos: BlockPos,
     private val usesLeft: Int
@@ -41,6 +41,10 @@ class GymEntranceScreen(
 
     override fun close() {
         super.close()
+    }
+
+    override fun getGymType(): String? {
+        return this.type
     }
 
     override fun sendStartGymPacket() {

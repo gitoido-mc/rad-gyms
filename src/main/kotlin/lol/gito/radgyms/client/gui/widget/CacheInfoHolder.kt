@@ -17,6 +17,8 @@ import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.cache.CacheHandler
+import lol.gito.radgyms.client.gui.CacheAttuneScreen
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.ID_SELECT
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.MutableText
@@ -29,7 +31,8 @@ class CacheInfoHolder(
     val player: PlayerEntity,
     val type: ElementalType,
     val rarity: Rarity,
-    private val shinyBoost: Int
+    private val shinyBoost: Int,
+    private val parentScreen: CacheAttuneScreen
 ) : FlowLayout(Sizing.expand(), Sizing.content(), Algorithm.HORIZONTAL) {
     fun build(): CacheInfoHolder {
         val typeSize = Quartet(1, 1, 16, 16)
@@ -70,22 +73,22 @@ class CacheInfoHolder(
 
         info.child(pokeList)
 
-        child(info)
-        child(
-            Components.button(
-                translatable(Identifier.of("gui:proceed").toTranslationKey())
-            ) {
-                CHANNEL.clientHandle().send(
-                    NetworkStackHandler.CacheOpen(
-                        type = type.name,
-                        rarity = rarity,
-                        shinyBoost = shinyBoost,
-                    )
+        val select = Components.button(translatable(Identifier.of("gui:proceed").toTranslationKey())) {
+            CHANNEL.clientHandle().send(
+                NetworkStackHandler.CacheOpen(
+                    type = type.name,
+                    rarity = rarity,
+                    shinyBoost = shinyBoost,
                 )
-            }.apply {
-                this.margins(Insets.right(5))
-            }
-        )
+            )
+            parentScreen.close()
+        }.apply {
+            this.id(ID_SELECT)
+            this.margins(Insets.right(5))
+        }
+
+        child(info)
+        child(select)
 
         return this
     }

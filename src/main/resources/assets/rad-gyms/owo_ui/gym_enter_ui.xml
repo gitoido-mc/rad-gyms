@@ -1,5 +1,13 @@
+<!--
+  ~ Copyright (c) 2025. gitoido-mc
+  ~ This Source Code Form is subject to the terms of the MIT License.
+  ~ If a copy of the MIT License was not distributed with this file,
+  ~ you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+  ~
+  -->
+
 <owo-ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/wisp-forest/owo-lib/1.20/owo-ui.xsd">
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/wisp-forest/owo-lib/1.21/owo-ui.xsd">
     <components>
         <flow-layout direction="vertical">
             <children>
@@ -7,8 +15,8 @@
                     <children>
                         <flow-layout direction="vertical">
                             <children>
-                                <label>
-                                    <text translate="true">rad-gyms.gui.common.set-gym-level</text>
+                                <label id="typing">
+                                    <text translate="true"/>
                                     <max-width>250</max-width>
                                     <horizontal-text-alignment>center</horizontal-text-alignment>
                                     <sizing>

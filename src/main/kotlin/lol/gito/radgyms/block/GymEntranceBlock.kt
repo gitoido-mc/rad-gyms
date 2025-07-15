@@ -58,7 +58,7 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
             if (party.all { it.isFainted() }) {
                 player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
                 debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
-                return ActionResult.PASS
+                return ActionResult.FAIL
             }
         }
 
@@ -67,7 +67,7 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
         if (gymEntrance.usesLeftForPlayer(player) == 0) {
             if (!world.isClient) player.sendMessage(translatable(modId("message.info.gym_entrance_exhausted").toTranslationKey()))
             debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
-            return ActionResult.PASS
+            return ActionResult.FAIL
         }
 
         if (world.isClient) {

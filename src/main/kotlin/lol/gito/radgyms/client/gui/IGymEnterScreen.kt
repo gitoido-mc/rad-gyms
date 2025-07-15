@@ -19,4 +19,5 @@ interface IGymEnterScreen {
     fun sendStartGymPacket()
     fun updateSlider()
     fun close()
+    fun getGymType(): String?
 }

@@ -15,17 +15,8 @@ import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.util.Rarity
 
 class BlockRegistry : BlockRegistryContainer {
-    class EpicShardBlock : PokeShardBlockBase(rarity = Rarity.EPIC)
-
-    class RareShardBlock : PokeShardBlockBase(rarity = Rarity.RARE)
-
-    class UncommonShardBlock : PokeShardBlockBase(rarity = Rarity.UNCOMMON)
-
-    class CommonShardBlock : PokeShardBlockBase(rarity = Rarity.COMMON)
-
     companion object {
         @JvmField
         val GYM_ENTRANCE = GymEntranceBlock(AbstractBlock.Settings.copy(Blocks.END_STONE_BRICKS))

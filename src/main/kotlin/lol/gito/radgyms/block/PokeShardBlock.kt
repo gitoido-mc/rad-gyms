@@ -17,3 +17,11 @@ import net.minecraft.util.Rarity
 open class PokeShardBlockBase(val rarity: Rarity) : Block(Settings.copy(Blocks.LAPIS_BLOCK)) {
     override fun getRenderType(state: BlockState): BlockRenderType = BlockRenderType.MODEL
 }
+
+class EpicShardBlock : PokeShardBlockBase(rarity = Rarity.EPIC)
+
+class RareShardBlock : PokeShardBlockBase(rarity = Rarity.RARE)
+
+class UncommonShardBlock : PokeShardBlockBase(rarity = Rarity.UNCOMMON)
+
+class CommonShardBlock : PokeShardBlockBase(rarity = Rarity.COMMON)

@@ -15,6 +15,7 @@ import lol.gito.radgyms.item.group.ItemGroupManager
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
+import net.minecraft.util.Rarity
 import java.util.concurrent.CompletableFuture
 
 class EnUSLocaleProvider(
@@ -77,9 +78,9 @@ class EnUSLocaleProvider(
             modId("gym_reward").toTranslationKey("item") to
                     "Level %s %s gym reward cache",
             modId("gui.common.set-gym-level").toTranslationKey() to
-                    "Select desirable gym level",
+                    "Select desirable %s gym level",
             modId("gui.common.select-cache-type").toTranslationKey() to
-                    "Select desirable gym level",
+                    "Select desirable cache reward",
             modId("gui.common.leave-gym").toTranslationKey() to
                     "You want to leave? Rewards will be lost if leader is not beaten.",
             modId("gui.common.leave").toTranslationKey() to
@@ -130,6 +131,10 @@ class EnUSLocaleProvider(
                     "Cannot find template provided",
             modId("message.error.command.debug_reward.no_player").toTranslationKey() to
                     "Command was not executed by player",
+            modId("label.rarity.${Rarity.COMMON.name}").toTranslationKey() to "Common",
+            modId("label.rarity.${Rarity.UNCOMMON.name}").toTranslationKey() to "Uncommon",
+            modId("label.rarity.${Rarity.RARE.name}").toTranslationKey() to "Rare",
+            modId("label.rarity.${Rarity.EPIC.name}").toTranslationKey() to "Epic",
         )
     }
 

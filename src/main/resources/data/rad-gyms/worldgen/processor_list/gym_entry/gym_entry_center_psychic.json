@@ -1310,7 +1310,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "type": "fire"
+              "type": "psychic"
             }
           }
         }

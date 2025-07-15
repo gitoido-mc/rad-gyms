@@ -15,9 +15,9 @@ import io.wispforest.owo.ui.component.ButtonComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.Insets
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_CANCEL
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_TYPES
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.UI_CACHE_ATTUNE
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.ID_CANCEL
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.ID_TYPES
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.UI_CACHE_ATTUNE
 import lol.gito.radgyms.client.gui.widget.CacheInfoHolder
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Rarity
@@ -38,6 +38,9 @@ class CacheAttuneScreen(
         root.childById(ButtonComponent::class.java, ID_CANCEL).onPress {
             this.close()
         }
+        root.childById(ButtonComponent::class.java, ID_CANCEL).onPress {
+            this.close()
+        }
     }
 
     private fun buildElementalTypesCollection(): MutableCollection<out Component> {
@@ -51,7 +54,7 @@ class CacheAttuneScreen(
     }
 
     private fun buildElementalTypeComposable(type: ElementalType): Component {
-        val panel = CacheInfoHolder(player, type, rarity, shinyBoost)
+        val panel = CacheInfoHolder(player, type, rarity, shinyBoost, this)
         panel.padding(Insets.bottom(2))
         panel.id("cache")
         panel.build()

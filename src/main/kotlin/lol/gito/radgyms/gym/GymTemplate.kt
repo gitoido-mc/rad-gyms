@@ -173,10 +173,18 @@ object GymTemplate {
         } else {
             val species = PokemonSpecies.implemented.asSequence()
                 .filter { species -> species.name !in CONFIG.ignoredSpecies!! }
-                .associateWith { species -> species.forms.filter { form -> form.name !in CONFIG.ignoredForms!! } }
+                .filter { species ->
+                    species.implemented
+                }
+                .associateWith { species ->
+                    species
+                        .forms
+                        .filter { form -> form.name !in CONFIG.ignoredForms!! }
+                }
                 .flatMap { (species, forms) ->
                     forms.map { form -> species to form }
-                }.random()
+                }
+                .random()
 
             debug("Picked ${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} from random pool")
 

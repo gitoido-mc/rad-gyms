@@ -15,8 +15,8 @@ import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_GYM_SLIDER
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.UI_GYM_ENTER
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.ID_GYM_SLIDER
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.UI_GYM_ENTER
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
@@ -36,11 +36,15 @@ open class GymEnterScreen(
 
     override fun build(root: FlowLayout) {
         this.root = root
-        GymScreenCommons.enterScreenControls(root, this)
+        GymScreenCommons.gymScreenCommonControls(root, this)
     }
 
     override fun close() {
         super.close()
+    }
+
+    override fun getGymType(): String? {
+        return this.type
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

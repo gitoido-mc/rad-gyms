@@ -1305,7 +1305,7 @@
             "predicate_type": "minecraft:always_true"
           },
           "output_state": {
-            "Name": "rad-gyms:gym_entrance_entity",
+            "Name": "rad-gyms:gym_entrance",
             "Properties": []
           },
           "block_entity_modifier": {

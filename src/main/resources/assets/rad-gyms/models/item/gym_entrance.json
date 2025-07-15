@@ -1,6 +1,3 @@
 {
-  "model": {
-    "type": "minecraft:models",
-    "model": "rad-gyms:block/gym_entrance"
-  }
+  "parent": "rad-gyms:block/gym_entrance"
 }

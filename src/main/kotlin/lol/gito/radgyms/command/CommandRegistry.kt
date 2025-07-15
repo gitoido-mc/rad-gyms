@@ -10,6 +10,7 @@ package lol.gito.radgyms.command
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.runOnServer
 import com.mojang.brigadier.context.CommandContext
 import de.maxhenkel.admiral.MinecraftAdmiral
@@ -144,7 +145,9 @@ object CommandRegistry {
                         addToParty = true
                     )
                     context.source.player!!.sendMessage(
-                        literal("Rolled $rarity $type ${poke.species.name} shiny: ${poke.shiny}")
+                        literal(
+                            "Rolled ${modId("label.rarity.${rarityEnum.name}")} ${translatable(cobblemonResource("type.${typeEnum.name}").toTranslationKey())} ${poke.species.name} shiny: ${poke.shiny}"
+                        )
                     )
                 }
             } catch (e: Exception) {

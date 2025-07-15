@@ -14,9 +14,9 @@ import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_CANCEL
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_OK
-import lol.gito.radgyms.client.gui.GymGUIIdentifiers.UI_GYM_LEAVE
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.ID_CANCEL
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.ID_OK
+import lol.gito.radgyms.client.gui.GymGuiIdentifiers.UI_GYM_LEAVE
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
 import org.lwjgl.glfw.GLFW

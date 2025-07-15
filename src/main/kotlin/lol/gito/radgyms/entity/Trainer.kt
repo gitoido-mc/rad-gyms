@@ -67,8 +67,15 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
 
             var npcTrainer: TrainerNPC?
             RadGyms.RCT.trainerRegistry.let { registry ->
-                val entity = this
-                npcTrainer = RadGyms.RCT.trainerRegistry.getById(uuid.toString()) as TrainerNPC
+                npcTrainer = RadGyms.RCT.trainerRegistry.getById(uuid.toString()) as TrainerNPC?
+            }
+
+            if (npcTrainer == null) {
+                npcTrainer = RadGyms.RCT.trainerRegistry.registerNPC(
+                    gymNpcPair.first.toString(),
+                    gymNpcPair.second.trainer
+                )
+                npcTrainer.entity = this
             }
 
             if (requires != null) {
