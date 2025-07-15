@@ -15,13 +15,13 @@ import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.entity.GymEntranceEntity
 import lol.gito.radgyms.client.gui.GuiHandler
+import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
@@ -29,18 +29,17 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
+
 class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
+    override fun getRenderType(state: BlockState): BlockRenderType = BlockRenderType.MODEL
+
     override fun getCodec(): MapCodec<out BlockWithEntity> =
         createCodec { settings: Settings -> GymEntranceBlock(settings) }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
 
     override fun onPlaced(
-        world: World,
-        pos: BlockPos,
-        state: BlockState,
-        placer: LivingEntity?,
-        itemStack: ItemStack?
+        world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack?
     ) {
         super.onPlaced(world, pos, state, placer, itemStack)
 
@@ -50,36 +49,28 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
     }
 
     override fun onUse(
-        state: BlockState,
-        world: World,
-        pos: BlockPos,
-        player: PlayerEntity,
-        hit: BlockHitResult
+        state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hit: BlockHitResult
     ): ActionResult {
         if (world.getBlockEntity(pos) !is GymEntranceEntity) return super.onUse(state, world, pos, player, hit)
+
+        if (!world.isClient) {
+            val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
+            if (party.all { it.isFainted() }) {
+                player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
+                debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
+                return ActionResult.PASS
+            }
+        }
+
         val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
 
-
-        // fainted party check
-        if (!validateParty(world, player, pos)) return ActionResult.FAIL
-
-        if (validateMainHandStickPresence(player)) {
-            gymEntrance.resetPlayerUseCounter()
-            return ActionResult.SUCCESS_NO_ITEM_USED
-        }
-
-
         if (gymEntrance.usesLeftForPlayer(player) == 0) {
-            if (!world.isClient) {
-                player.sendMessage(
-                    translatable(modId("message.info.gym_entrance_exhausted").toTranslationKey())
-                )
-            }
+            if (!world.isClient) player.sendMessage(translatable(modId("message.info.gym_entrance_exhausted").toTranslationKey()))
             debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
-            return ActionResult.FAIL
+            return ActionResult.PASS
         }
 
-        if (world.isClient && !player.mainHandStack.isOf(Items.DEBUG_STICK)) {
+        if (world.isClient) {
             debug(
                 "Client: Opening gym entry screen for player ${player.uuid} (tries left: ${
                     gymEntrance.usesLeftForPlayer(
@@ -88,28 +79,8 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
                 })"
             )
             GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos, gymEntrance.usesLeftForPlayer(player))
-            return ActionResult.SUCCESS
         }
 
-        return ActionResult.FAIL
-    }
-
-    private fun validateMainHandStickPresence(player: PlayerEntity): Boolean =
-        player.mainHandStack.isOf(Items.DEBUG_STICK)
-
-    private fun validateParty(
-        world: World,
-        player: PlayerEntity,
-        pos: BlockPos
-    ): Boolean {
-        if (!world.isClient) {
-            val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
-            if (party.all { it.isFainted() }) {
-                player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
-                debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
-                return false
-            }
-        }
-        return true
+        return ActionResult.SUCCESS
     }
 }
