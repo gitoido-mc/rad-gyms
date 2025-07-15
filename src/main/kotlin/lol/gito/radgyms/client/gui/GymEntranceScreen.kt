@@ -1,14 +1,20 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.client.gui
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.util.runOnServer
 import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.block.entity.GymEntranceEntity
 import lol.gito.radgyms.client.gui.GymGUIIdentifiers.ID_USAGE
 import lol.gito.radgyms.network.NetworkStackHandler
 import net.minecraft.entity.player.PlayerEntity
@@ -26,9 +32,6 @@ class GymEntranceScreen(
     GymEnterScreen(type, id, player),
     IGymEnterScreen {
     override fun build(root: FlowLayout) {
-        val entity = player.world.getBlockEntity(blockPos)
-        if (entity != null && entity is GymEntranceEntity) {
-        }
         this.root = root
         root.childById(LabelComponent::class.java, ID_USAGE).text(
             translatable(modId("gui.common.uses_left").toTranslationKey(), usesLeft)
@@ -38,9 +41,6 @@ class GymEntranceScreen(
 
     override fun close() {
         super.close()
-        val entity = player.world.getBlockEntity(blockPos)
-        if (entity != null && entity is GymEntranceEntity) {
-        }
     }
 
     override fun sendStartGymPacket() {

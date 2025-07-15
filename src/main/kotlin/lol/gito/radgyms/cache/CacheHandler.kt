@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.cache
 
 import com.cobblemon.mod.common.Cobblemon
@@ -10,10 +18,8 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
-import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_RARITY
-import net.minecraft.item.Item
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.server.network.ServerPlayerEntity

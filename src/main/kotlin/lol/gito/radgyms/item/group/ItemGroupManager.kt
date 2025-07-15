@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.item.group
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -6,7 +14,6 @@ import io.wispforest.owo.itemgroup.OwoItemGroup
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.gym.GymManager
-import lol.gito.radgyms.item.CommonPokeCache
 import lol.gito.radgyms.item.GymKey
 import lol.gito.radgyms.item.ItemRegistry
 import lol.gito.radgyms.item.PokeCache

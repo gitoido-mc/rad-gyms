@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.client.gui
 
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -26,7 +34,7 @@ class CacheAttuneScreen(
         this.root = root
 
         root.childById(FlowLayout::class.java, ID_TYPES).children(buildElementalTypesCollection())
-        root.childById(FlowLayout::class.java,"cache")
+        root.childById(FlowLayout::class.java, "cache")
         root.childById(ButtonComponent::class.java, ID_CANCEL).onPress {
             this.close()
         }

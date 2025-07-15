@@ -1,3 +1,6 @@
 {
-  "parent": "rad-gyms:block/cobblemon/gym_entrance"
+  "model": {
+    "type": "minecraft:models",
+    "model": "rad-gyms:block/gym_entrance"
+  }
 }

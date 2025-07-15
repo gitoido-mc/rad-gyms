@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.gym
 
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
@@ -285,7 +293,7 @@ object GymManager {
         template
             .lootTables
             .filter {
-               level in it.levels.first..it.levels.second
+                level in it.levels.first..it.levels.second
             }
             .forEach { table ->
                 debug("Settling level $level rewards for player ${serverPlayer.name.literalString} after beating leader")

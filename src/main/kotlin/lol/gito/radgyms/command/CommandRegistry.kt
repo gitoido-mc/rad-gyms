@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.command
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -27,6 +35,8 @@ import net.minecraft.util.Rarity
 
 @Command("radgyms")
 object CommandRegistry {
+
+    @Suppress("UNUSED")
     @Command("kick")
     @RequiresPermissionLevel(4)
     fun kick(
@@ -51,6 +61,7 @@ object CommandRegistry {
         return 1
     }
 
+    @Suppress("UNUSED")
     @Command("config_reload")
     @RequiresPermissionLevel(4)
     fun reloadConfig(
@@ -60,6 +71,7 @@ object CommandRegistry {
         return 1
     }
 
+    @Suppress("UNUSED")
     @Command("debug_reward")
     @RequiresPermissionLevel(4)
     fun debugReward(
@@ -112,6 +124,7 @@ object CommandRegistry {
         return 1
     }
 
+    @Suppress("UNUSED")
     @Command("debug_cache")
     @RequiresPermissionLevel(4)
     fun debugCache(

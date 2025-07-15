@@ -1,0 +1,125 @@
+{
+  "interior_template": "rad-gyms:gym_interior_default",
+  "exit_block_pos": [16, 2, 16],
+  "player_spawn_relative": {
+    "pos": [16.5, 2, 27],
+    "yaw": -180.0
+  },
+  "reward_loot_tables":  [
+    {
+      "id": "rad-gyms:gyms/default/shared_loot_table",
+      "minLevel": 1,
+      "maxLevel": 100
+    },
+    {
+      "id": "rad-gyms:gyms/default/common_loot_table",
+      "maxLevel": 25
+    },
+    {
+      "id": "rad-gyms:gyms/default/uncommon_loot_table",
+      "minLevel": 26,
+      "maxLevel": 50
+    },
+    {
+      "id": "rad-gyms:gyms/default/rare_loot_table",
+      "minLevel": 51,
+      "maxLevel": 75
+    },
+    {
+      "id": "rad-gyms:gyms/default/epic_loot_table",
+      "minLevel": 76
+    }
+  ],
+  "trainers": [
+    {
+      "id": "rad_gym_default_trainer_junior",
+      "name": "rad-gyms.npc.trainer_junior",
+      "spawn_relative": {
+        "pos": [26.5, 2, 15.5],
+        "yaw": 42.5
+      },
+      "ai": {
+        "type": "rct",
+        "data": {
+          "maxSelectMargin": 0.15
+        }
+      },
+      "battleRules": {
+        "maxItemUses": 5
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "count_per_level_threshold": [
+        [1, 2],
+        [50, 3],
+        [80, 4]
+      ],
+      "team_type": "GENERATED"
+    },
+    {
+      "id": "rad_gym_default_trainer_senior",
+      "name": "rad-gyms.npc.trainer_senior",
+      "requires": "rad_gym_default_trainer_junior",
+      "team_type": "GENERATED",
+      "spawn_relative": {
+        "pos": [5.5, 2, 15.5],
+        "yaw": -42.5
+      },
+      "ai": {
+        "type": "rct",
+        "data": {
+          "maxSelectMargin": 0.15
+        }
+      },
+      "battleRules": {
+        "maxItemUses": 5
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "count_per_level_threshold": [
+        [1, 3],
+        [50, 4],
+        [80, 5]
+      ]
+    },
+    {
+      "id": "rad_gym_default_trainer_leader",
+      "name": "rad-gyms.npc.leader",
+      "requires": "rad_gym_default_trainer_senior",
+      "leader": true,
+      "spawn_relative": {
+        "pos": [16, 2, 6],
+        "yaw": 0.01
+      },
+      "team_type": "GENERATED",
+      "ai": {
+        "type": "rct",
+        "data": {
+          "maxSelectMargin": 0.15
+        }
+      },
+      "battleRules": {
+        "maxItemUses": 5
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "count_per_level_threshold": [
+        [1, 4],
+        [50, 5],
+        [80, 6]
+      ]
+    }
+  ]
+}

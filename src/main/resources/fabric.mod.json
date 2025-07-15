@@ -54,7 +54,7 @@
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
 		"architectury": ">=13.0.8",
-		"rctapi": ">=0.14.0-beta",
+		"rctapi": ">=0.13.6-beta",
 		"cobblemon": ">=1.6.1+1.21.1",
 		"admiral": "0.4.7+1.21.1+fabric"
 	},

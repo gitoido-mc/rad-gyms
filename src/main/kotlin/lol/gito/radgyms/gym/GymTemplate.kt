@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -156,7 +164,9 @@ object GymTemplate {
     private fun generatePokemon(level: Int, type: String?): PokemonModel {
         debug("Generating pokemon with level $level and type $type")
         if (type != null && type != "default") {
-            val species = SpeciesManager.SPECIES_BY_TYPE[type]?.toList()?.random()!!
+            val species = SpeciesManager.SPECIES_BY_TYPE[type]
+                ?.toList()
+                ?.random()!!
             debug("Picked ${species.first.showdownId()} form=${species.second.formOnlyShowdownId()} level=${level}")
 
             return fillPokemonModel(species, level)

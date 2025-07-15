@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.mixin;
 
 import lol.gito.radgyms.item.dataComponent.DataComponentManager;
@@ -17,9 +25,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class BundleItemMixin {
     @Inject(method = "dropAllBundledItems", at = @At("RETURN"), cancellable = true)
     private static void RadGyms$dropAllBundledItems(
-        ItemStack stack,
-        PlayerEntity player,
-        CallbackInfoReturnable<Boolean> cir
+            ItemStack stack,
+            PlayerEntity player,
+            CallbackInfoReturnable<Boolean> cir
     ) {
         Boolean bundleComponent = stack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
 
@@ -35,11 +43,11 @@ public abstract class BundleItemMixin {
 
     @Inject(method = "onStackClicked", at = @At("HEAD"), cancellable = true)
     private void RadGyms$preventOnStackClicked(
-        ItemStack stack,
-        Slot slot,
-        ClickType clickType,
-        PlayerEntity player,
-        CallbackInfoReturnable<Boolean> cir
+            ItemStack stack,
+            Slot slot,
+            ClickType clickType,
+            PlayerEntity player,
+            CallbackInfoReturnable<Boolean> cir
     ) {
         Boolean bundleComponent = stack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
 
@@ -50,13 +58,13 @@ public abstract class BundleItemMixin {
 
     @Inject(method = "onClicked", at = @At("HEAD"), cancellable = true)
     private void RadGyms$preventOnClicked(
-        ItemStack stack,
-        ItemStack otherStack,
-        Slot slot,
-        ClickType clickType,
-        PlayerEntity player,
-        StackReference cursorStackReference,
-        CallbackInfoReturnable<Boolean> cir
+            ItemStack stack,
+            ItemStack otherStack,
+            Slot slot,
+            ClickType clickType,
+            PlayerEntity player,
+            StackReference cursorStackReference,
+            CallbackInfoReturnable<Boolean> cir
     ) {
         Boolean bundleComponent = stack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
         Boolean bundleOtherComponent = otherStack.get(DataComponentManager.INSTANCE.getRAD_GYM_BUNDLE_COMPONENT());
@@ -65,5 +73,4 @@ public abstract class BundleItemMixin {
             cir.setReturnValue(false);
         }
     }
-
 }

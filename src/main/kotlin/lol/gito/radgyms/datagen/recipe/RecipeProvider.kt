@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.datagen.recipe
 
 import com.cobblemon.mod.common.CobblemonItems
@@ -8,7 +16,10 @@ import com.cobblemon.mod.common.item.CobblemonItem
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.block.BlockRegistry
 import lol.gito.radgyms.datagen.json.builder.ShapelessWithComponentRecipeJsonBuilder
-import lol.gito.radgyms.item.*
+import lol.gito.radgyms.item.GymKey
+import lol.gito.radgyms.item.ItemRegistry
+import lol.gito.radgyms.item.PokeCache
+import lol.gito.radgyms.item.PokeShardBase
 import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
@@ -268,8 +279,6 @@ class RecipeProvider(
                     ItemRegistry.CACHE_EPIC
                 )
             }
-
-            else -> null
         }
     }
 }

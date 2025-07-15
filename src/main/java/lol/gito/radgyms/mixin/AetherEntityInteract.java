@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.mixin;
 
 import com.aetherteam.aether.event.listeners.EntityListener;
@@ -16,11 +24,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 class AetherEntityInteract {
     @Inject(method = "onInteractWithEntity", at = @At("HEAD"), cancellable = true)
     private static void RadGyms$onEntityInteract(
-        Entity targetEntity,
-        PlayerEntity player,
-        Hand interactionHand,
-        EntityHitResult hitResult,
-        CallbackInfoReturnable<ActionResult> cir
+            Entity targetEntity,
+            PlayerEntity player,
+            Hand interactionHand,
+            EntityHitResult hitResult,
+            CallbackInfoReturnable<ActionResult> cir
     ) {
         if (targetEntity instanceof Trainer) {
             cir.setReturnValue(ActionResult.PASS);
