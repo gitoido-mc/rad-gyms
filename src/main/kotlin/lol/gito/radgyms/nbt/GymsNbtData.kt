@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.nbt
 
 import lol.gito.radgyms.RadGyms.modId
@@ -10,7 +18,7 @@ object GymsNbtData {
     private val returnCoordsKey: String = modId("return_coords").toTranslationKey()
 
     fun incrementVisitCount(player: EntityDataSaver): Int {
-        val nbt: NbtCompound = player.getPersistentData()
+        val nbt: NbtCompound = player.getGymsPersistentData()
         var count: Int = nbt.getInt(visitedCountKey)
 
         count++
@@ -21,7 +29,7 @@ object GymsNbtData {
     }
 
     fun getReturnDimension(player: EntityDataSaver): String? {
-        val nbt: NbtCompound = player.getPersistentData()
+        val nbt: NbtCompound = player.getGymsPersistentData()
         if (nbt.contains(returnDimensionKey)) {
             return nbt.getString(returnDimensionKey)
         }
@@ -29,7 +37,7 @@ object GymsNbtData {
     }
 
     fun setReturnDimension(player: EntityDataSaver, dim: String?): String? {
-        val nbt: NbtCompound = player.getPersistentData()
+        val nbt: NbtCompound = player.getGymsPersistentData()
         if (dim != null) {
             nbt.putString(returnDimensionKey, dim)
             return dim
@@ -41,7 +49,7 @@ object GymsNbtData {
     }
 
     fun getReturnCoordinates(player: EntityDataSaver): BlockPos? {
-        val nbt: NbtCompound = player.getPersistentData()
+        val nbt: NbtCompound = player.getGymsPersistentData()
 
         if (nbt.contains(returnCoordsKey)) {
             val data = nbt.getIntArray(returnCoordsKey)
@@ -57,7 +65,7 @@ object GymsNbtData {
     }
 
     fun setReturnCoordinates(player: EntityDataSaver, coords: BlockPos?): BlockPos? {
-        val nbt: NbtCompound = player.getPersistentData()
+        val nbt: NbtCompound = player.getGymsPersistentData()
 
         if (coords != null) {
             val nbtPos = intArrayOf(coords.x, coords.y, coords.z)

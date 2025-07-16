@@ -1,6 +1,6 @@
 {
   "variants": {
-    "" : {
+    "": {
       "model": "rad-gyms:block/gym_exit"
     }
   }

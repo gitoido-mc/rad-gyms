@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.mixin;
 
 import kotlin.Suppress;
@@ -20,24 +28,26 @@ import java.util.UUID;
 @Mixin(Entity.class)
 @Suppress(names = "unused")
 public abstract class DataSaver implements EntityDataSaver {
-    @Shadow public abstract UUID getUuid();
+    @Shadow
+    public abstract UUID getUuid();
 
     @Unique
-    private NbtCompound persistentData;
+    private NbtCompound gymsPersistentData;
 
-    public @NotNull NbtCompound getPersistentData() {
-        if (this.persistentData == null) {
-            this.persistentData = new NbtCompound();
+    @Unique
+    public @NotNull NbtCompound getGymsPersistentData() {
+        if (this.gymsPersistentData == null) {
+            this.gymsPersistentData = new NbtCompound();
             RadGyms.INSTANCE.debug("PersistentData created for player " + this.getUuid());
         }
 
-        return persistentData;
+        return gymsPersistentData;
     }
 
     @Inject(method = "writeNbt", at = @At("HEAD"))
     protected void RadGyms$injectWriteMethod(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if (persistentData != null) {
-            nbt.put(RadGyms.MOD_ID + ".entity_data", persistentData);
+        if (gymsPersistentData != null) {
+            nbt.put(RadGyms.MOD_ID + ".entity_data", gymsPersistentData);
             RadGyms.INSTANCE.debug("PersistentData wrote for player " + this.getUuid());
         }
     }
@@ -45,7 +55,7 @@ public abstract class DataSaver implements EntityDataSaver {
     @Inject(method = "readNbt", at = @At("HEAD"))
     protected void RadGyms$injectReadMethod(NbtCompound nbt, CallbackInfo info) {
         if (nbt.contains(RadGyms.MOD_ID + ".entity_data", NbtElement.COMPOUND_TYPE)) {
-            persistentData = nbt.getCompound(RadGyms.MOD_ID + ".entity_data");
+            gymsPersistentData = nbt.getCompound(RadGyms.MOD_ID + ".entity_data");
             RadGyms.INSTANCE.debug("PersistentData read for player " + this.getUuid());
         }
     }

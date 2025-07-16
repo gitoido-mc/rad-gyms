@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -115,7 +123,7 @@ object GymTemplate {
                 }
             } else {
                 for (pokeParams in trainer.team!!) {
-                    val props = PokemonProperties.parse(pokeParams)
+                    val props = PokemonProperties.parse("level=$level $pokeParams")
                     val poke = props.create()
 
                     team.add(fillPokemonModelFromPokemon(poke))
@@ -156,17 +164,27 @@ object GymTemplate {
     private fun generatePokemon(level: Int, type: String?): PokemonModel {
         debug("Generating pokemon with level $level and type $type")
         if (type != null && type != "default") {
-            val species = SpeciesManager.SPECIES_BY_TYPE[type]?.toList()?.random()!!
+            val species = SpeciesManager.SPECIES_BY_TYPE[type]
+                ?.toList()
+                ?.random()!!
             debug("Picked ${species.first.showdownId()} form=${species.second.formOnlyShowdownId()} level=${level}")
 
             return fillPokemonModel(species, level)
         } else {
             val species = PokemonSpecies.implemented.asSequence()
                 .filter { species -> species.name !in CONFIG.ignoredSpecies!! }
-                .associateWith { species -> species.forms.filter { form -> form.name !in CONFIG.ignoredForms!! } }
+                .filter { species ->
+                    species.implemented
+                }
+                .associateWith { species ->
+                    species
+                        .forms
+                        .filter { form -> form.name !in CONFIG.ignoredForms!! }
+                }
                 .flatMap { (species, forms) ->
                     forms.map { form -> species to form }
-                }.random()
+                }
+                .random()
 
             debug("Picked ${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} from random pool")
 

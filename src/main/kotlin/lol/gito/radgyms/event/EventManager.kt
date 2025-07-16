@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.event
 
 import com.cobblemon.mod.common.api.Priority
@@ -25,14 +33,13 @@ import lol.gito.radgyms.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.network.NetworkStackHandler
 import lol.gito.radgyms.world.DimensionManager
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
+import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -87,24 +94,22 @@ object EventManager {
         state: BlockState,
         entity: BlockEntity?
     ): Boolean {
+        var allowBreak = true
         if (world.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) {
-            return false
+            allowBreak = false
         }
 
         if (state.block == BlockRegistry.GYM_ENTRANCE) {
-            var allowBreak = false
-            if (player.isSneaking) {
-                player.sendMessage(Text.translatable(modId("message.error.gym_entrance.not-sneaking").toTranslationKey()))
+            if (!player.isSneaking) {
+                player.sendMessage(translatable(modId("message.info.gym_entrance_breaking").toTranslationKey()))
+                player.sendMessage(translatable(modId("message.error.gym_entrance.not-sneaking").toTranslationKey()))
+                allowBreak = false
+            } else {
                 allowBreak = true
             }
-            if (!allowBreak) {
-                player.sendMessage(Text.translatable(modId("message.info.gym_entrance_breaking").toTranslationKey()))
-            }
-            return allowBreak
-
         }
 
-        return true
+        return allowBreak
     }
 
     private fun onServerStart(event: ServerEvent.Starting) {
@@ -154,8 +159,9 @@ object EventManager {
                 (loser.entity as Trainer).let { trainer ->
                     trainer.defeated = true
                     if (trainer.leader) {
+                        val gym = PLAYER_GYMS[player.uuid]!!
                         GymManager.handleLeaderBattleWon(player)
-                        GymManager.handleLootDistribution(player)
+                        GymManager.handleLootDistribution(player, gym.template, gym.level, gym.type)
                     }
                 }
             }

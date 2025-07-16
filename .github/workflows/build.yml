@@ -51,12 +51,10 @@ jobs:
           game-versions: "1.21.1"
           java: 21
 
-          files: |
-            !build/libs/*{all,sources}.jar
-
           dependencies: |
             fabric-api(required){curseforge:306612}{modrinth:P7dR8mSH}
             cobblemon(required){curseforge:687131}{modrinth:MdwFAVRL}
             radical-cobblemon-trainers-api(required){curseforge:1152792}{modrinth:CBfM2yw7}
             architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
             owo-lib(required){curseforge:532610}{modrinth:ccKDOlHs}
+            admiral@0.4.7+1.21.1+fabric(embedded)

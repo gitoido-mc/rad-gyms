@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.block.entity
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -13,18 +21,27 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.math.BlockPos
 
-class GymEntranceEntity(pos: BlockPos, state: BlockState) : BlockEntity(BlockEntityRegistry.GYM_ENTRANCE_ENTITY, pos, state) {
+class GymEntranceEntity(pos: BlockPos, state: BlockState) :
+    BlockEntity(BlockEntityRegistry.GYM_ENTRANCE_ENTITY, pos, state) {
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
-    var gymType: String = ElementalTypes.all().random().name
     private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
+    var gymType: String = ElementalTypes.all().random().name
 
     fun incrementPlayerUseCount(player: PlayerEntity) {
         val useCounter = playerUseCounter.getOrDefault(player.uuid.toString(), 0)
 
         playerUseCounter[player.uuid.toString()] = useCounter + 1
         markDirty()
-        debug("Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance")
+        debug(
+            "Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance"
+        )
+    }
+
+    fun resetPlayerUseCounter() {
+        playerUseCounter.clear()
+        markDirty()
+        debug("Reset usage count for $pos gym entrance")
     }
 
     override fun toUpdatePacket(): Packet<ClientPlayPacketListener> = BlockEntityUpdateS2CPacket.create(this)

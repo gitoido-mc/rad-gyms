@@ -1,0 +1,36 @@
+{
+  "name": "rad-gyms:gym_entrance/dark",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad-gyms:gym_entrance/gym_entrance_center1a",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad-gyms:gym_entry/gym_entry_center_dark",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad-gyms:gym_entrance/gym_entrance_center1b",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad-gyms:gym_entry/gym_entry_center_dark",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad-gyms:gym_entrance/gym_entrance_center1c",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad-gyms:gym_entry/gym_entry_center_dark",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

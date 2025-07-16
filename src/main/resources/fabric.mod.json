@@ -1,51 +1,70 @@
 {
-	"schemaVersion": 1,
-	"id": "rad-gyms",
-	"version": "${version}",
-	"name": "Rad Gyms",
-	"description": "Adds roguelike gyms in Cobblemon. RCT Api based mod.",
-	"authors": [
-		"Gitoido"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/rad-gyms/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			{
-				"value": "lol.gito.radgyms.RadGyms::init",
-				"adapter": "kotlin"
-			}
-		],
-		"client": [
-			{
-				"value": "lol.gito.radgyms.RadGymsClient::init",
-				"adapter": "kotlin"
-			}
-		],
-		"fabric-datagen": [
-			{
-				"value": "lol.gito.radgyms.datagen.RadGymsDataGenerator",
-				"adapter": "kotlin"
-			}
-		]
-	},
-	"mixins": [
-		"rad-gyms.mixins.json"
-	],
-	"depends": {
-		"minecraft": "~1.21.1",
-		"fabricloader": ">=0.16.14",
-		"fabric": "*",
-		"fabric-api": "*",
-		"fabric-language-kotlin": "*",
-		"architectury": ">=13.0.8",
-		"rctapi": ">=0.16.0-beta",
-		"cobblemon": ">=1.6.1+1.21.1",
-		"java": ">=21"
-	}
+  "schemaVersion": 1,
+  "id": "rad-gyms",
+  "version": "${version}",
+  "name": "Rad Gyms",
+  "description": "Adds roguelike gyms in Cobblemon. RCT Api based mod.",
+  "authors": [
+    "Gitoido <corpa@gito.lol>"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/rad-gyms/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "value": "lol.gito.radgyms.RadGyms::init",
+        "adapter": "kotlin"
+      }
+    ],
+    "client": [
+      {
+        "value": "lol.gito.radgyms.RadGymsClient::init",
+        "adapter": "kotlin"
+      }
+    ],
+    "fabric-datagen": [
+      {
+        "value": "lol.gito.radgyms.datagen.RadGymsDataGenerator",
+        "adapter": "kotlin"
+      }
+    ],
+    "jei_mod_plugin": [
+      "lol.gito.radgyms.compat.jei.IntegrationPlugin"
+    ],
+    "rei_common": [
+      "lol.gito.radgyms.compat.rei.IntegrationPlugin"
+    ],
+    "emi": [
+      "lol.gito.radgyms.compat.emi.IntegrationPlugin"
+    ]
+  },
+  "mixins": [
+    "rad-gyms.mixins.json"
+  ],
+  "depends": {
+    "java": ">=21",
+    "minecraft": "~1.21.1",
+    "fabricloader": ">=0.16.14",
+    "fabric": "*",
+    "fabric-api": "*",
+    "fabric-language-kotlin": "*",
+    "architectury": ">=13.0.8",
+    "rctapi": ">=0.13.6-beta",
+    "cobblemon": ">=1.6.1+1.21.1",
+    "admiral": "0.4.7+1.21.1+fabric"
+  },
+  "suggests": {
+    "jei": ">=19.21.0.247"
+  },
+  "custom": {
+    "mc-publish": {
+      "modrinth": "eF8kqlHd",
+      "curseforge": "1196570"
+    }
+  }
 }

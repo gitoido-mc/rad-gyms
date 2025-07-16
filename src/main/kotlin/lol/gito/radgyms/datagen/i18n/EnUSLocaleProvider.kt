@@ -1,12 +1,21 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.datagen.i18n
 
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.BlockRegistry
-import lol.gito.radgyms.item.group.ItemGroupManager
 import lol.gito.radgyms.item.ItemRegistry
+import lol.gito.radgyms.item.group.ItemGroupManager
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
+import net.minecraft.util.Rarity
 import java.util.concurrent.CompletableFuture
 
 class EnUSLocaleProvider(
@@ -32,26 +41,48 @@ class EnUSLocaleProvider(
                     "Gym key",
             ItemRegistry.GYM_KEY.translationKey.plus(".attuned") to
                     "Attuned to %s",
+            ItemRegistry.CACHE_COMMON.translationKey to
+                    "Common Pokemon cache",
+            ItemRegistry.CACHE_UNCOMMON.translationKey to
+                    "Uncommon Pokemon cache",
+            ItemRegistry.CACHE_RARE.translationKey to
+                    "Rare Pokemon cache",
+            ItemRegistry.CACHE_EPIC.translationKey to
+                    "Epic Pokemon cache",
+            ItemRegistry.SHARD_COMMON.translationKey to
+                    "Common cache shard",
+            ItemRegistry.SHARD_UNCOMMON.translationKey to
+                    "Uncommon cache shard",
+            ItemRegistry.SHARD_RARE.translationKey to
+                    "Rare cache shard",
+            ItemRegistry.SHARD_EPIC.translationKey to
+                    "Epic cache shard",
             BlockRegistry.GYM_ENTRANCE.translationKey to
                     "Gym Entrance",
             BlockRegistry.GYM_EXIT.translationKey to
                     "Gym Exit",
-            modId("type").withSuffixedPath(".chaos").toTranslationKey() to
+            BlockRegistry.SHARD_BLOCK_COMMON.translationKey to
+                    "Common shard block",
+            BlockRegistry.SHARD_BLOCK_UNCOMMON.translationKey to
+                    "Uncommon shard block",
+            BlockRegistry.SHARD_BLOCK_RARE.translationKey to
+                    "Rare shard block",
+            BlockRegistry.SHARD_BLOCK_EPIC.translationKey to
+                    "Epic shard block",
+            modId("item.component.type.chaos").toTranslationKey() to
                     "Chaos",
+            modId("item.component.gym_type").toTranslationKey() to
+                    "Attuned to %s",
+            modId("item.component.shiny_boost").toTranslationKey() to
+                    "Shiny chance boosted x%s time(s)",
             modId("gym_reward").toTranslationKey("item") to
                     "Level %s %s gym reward cache",
             modId("gui.common.set-gym-level").toTranslationKey() to
-                    "Select desirable gym level",
+                    "Select desirable %s gym level",
+            modId("gui.common.select-cache-type").toTranslationKey() to
+                    "Select desirable cache reward",
             modId("gui.common.leave-gym").toTranslationKey() to
                     "You want to leave? Rewards will be lost if leader is not beaten.",
-            modId("gui.common.increase").toTranslationKey() to
-                    "+1",
-            modId("gui.common.increase-ten").toTranslationKey() to
-                    "+10",
-            modId("gui.common.decrease").toTranslationKey() to
-                    "-1",
-            modId("gui.common.decrease-ten").toTranslationKey() to
-                    "-10",
             modId("gui.common.leave").toTranslationKey() to
                     "Leave Gym",
             modId("gui.common.start").toTranslationKey() to
@@ -84,12 +115,26 @@ class EnUSLocaleProvider(
                     "Mysterious forces are teleporting you to %s trial",
             modId("message.info.gym_complete").toTranslationKey() to
                     "An exit appeared somewhere in gym",
+            modId("message.info.command.op_kick").toTranslationKey() to
+                    "Mysterious forces are forcibly extracting you out from trial",
+            modId("message.info.command.debug_reward").toTranslationKey() to
+                    "Generated rewards for gym template %s with poke typing %s with level %s",
             modId("message.error.common.no-response").toTranslationKey() to
                     "Cannot acquire server response, try again",
             modId("message.error.key.not-in-main-hand").toTranslationKey() to
                     "Gym key must be in your main hand",
             modId("message.error.gym_entrance.not-sneaking").toTranslationKey() to
                     "You need to sneak to break gym entrance",
+            modId("message.error.command.op_kick").toTranslationKey() to
+                    "Cannot kick player %s from gym, they are not in it",
+            modId("message.error.command.debug_reward.no_template").toTranslationKey() to
+                    "Cannot find template provided",
+            modId("message.error.command.debug_reward.no_player").toTranslationKey() to
+                    "Command was not executed by player",
+            modId("label.rarity.${Rarity.COMMON.name}").toTranslationKey() to "Common",
+            modId("label.rarity.${Rarity.UNCOMMON.name}").toTranslationKey() to "Uncommon",
+            modId("label.rarity.${Rarity.RARE.name}").toTranslationKey() to "Rare",
+            modId("label.rarity.${Rarity.EPIC.name}").toTranslationKey() to "Epic",
         )
     }
 
