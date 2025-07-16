@@ -118,7 +118,7 @@ class EnUSLocaleProvider(
             modId("message.info.command.op_kick").toTranslationKey() to
                     "Mysterious forces are forcibly extracting you out from trial",
             modId("message.info.command.debug_reward").toTranslationKey() to
-                    "Generated rewards for gym template %s, level %s",
+                    "Generated rewards for gym template %s with poke typing %s with level %s",
             modId("message.error.common.no-response").toTranslationKey() to
                     "Cannot acquire server response, try again",
             modId("message.error.key.not-in-main-hand").toTranslationKey() to

@@ -2,7 +2,7 @@
   "biomes": "#rad-gyms:is_surface",
   "spawn_overrides": {},
   "type": "minecraft:jigsaw",
-  "start_pool": "cobblemon:ruins/solrock_henge_ruins",
+  "start_pool": "rad-gyms:gym_entrance/grass",
   "size": 7,
   "step": "surface_structures",
   "start_height": {

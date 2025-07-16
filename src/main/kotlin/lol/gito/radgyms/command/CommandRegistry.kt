@@ -37,19 +37,17 @@ import net.minecraft.util.Rarity
 @Command("radgyms")
 object CommandRegistry {
 
-    @Suppress("UNUSED")
+    @Suppress("unused")
     @Command("kick")
     @RequiresPermissionLevel(4)
     fun kick(
-        context: CommandContext<ServerCommandSource>,
-        @Name("player") player: ServerPlayerEntity
+        context: CommandContext<ServerCommandSource>, @Name("player") player: ServerPlayerEntity
     ): Int {
         if (player.world.registryKey != RADGYMS_LEVEL_KEY) {
             if (context.source.isExecutedByPlayer) {
                 context.source.sendError(
                     translatable(
-                        modId("message.error.command.kick").toTranslationKey(),
-                        context.source.player!!.name
+                        modId("message.error.command.kick").toTranslationKey(), context.source.player!!.name
                     )
                 )
             }
@@ -62,7 +60,7 @@ object CommandRegistry {
         return 1
     }
 
-    @Suppress("UNUSED")
+    @Suppress("unused")
     @Command("config_reload")
     @RequiresPermissionLevel(4)
     fun reloadConfig(
@@ -72,7 +70,7 @@ object CommandRegistry {
         return 1
     }
 
-    @Suppress("UNUSED")
+    @Suppress("unused")
     @Command("debug_reward")
     @RequiresPermissionLevel(4)
     fun debugReward(
@@ -87,8 +85,7 @@ object CommandRegistry {
             if (gymDto == null) {
                 context.source.sendError(
                     translatable(
-                        modId("message.error.command.debug_reward.no_template").toTranslationKey(),
-                        template
+                        modId("message.error.command.debug_reward.no_template").toTranslationKey(), template
                     )
                 )
                 return -1
@@ -104,16 +101,17 @@ object CommandRegistry {
             }
 
             GymManager.handleLootDistribution(
-                context.source.playerOrThrow,
-                GymTemplate.fromGymDto(gymDto, level, type),
-                level,
-                gymType
+                context.source.playerOrThrow, GymTemplate.fromGymDto(gymDto, level, type), level, gymType
             )
 
             context.source.sendMessage(
                 translatable(
                     modId("message.info.command.debug_reward").toTranslationKey(),
-                    context.source.playerOrThrow.name
+                    template,
+                    translatable(
+                        cobblemonResource("type.${type}").toTranslationKey()
+                    ),
+                    level
                 )
             )
         } else {
@@ -125,13 +123,11 @@ object CommandRegistry {
         return 1
     }
 
-    @Suppress("UNUSED")
+    @Suppress("unused")
     @Command("debug_cache")
     @RequiresPermissionLevel(4)
     fun debugCache(
-        context: CommandContext<ServerCommandSource>,
-        @Name("type") type: String,
-        @Name("rarity") rarity: String
+        context: CommandContext<ServerCommandSource>, @Name("type") type: String, @Name("rarity") rarity: String
     ): Int {
         if (context.source.player != null) {
             try {
@@ -139,14 +135,15 @@ object CommandRegistry {
                 val typeEnum = ElementalTypes.get(type) ?: throw RuntimeException("cannot get elemental type: $type")
                 runOnServer {
                     val poke: Pokemon = CacheHandler.getPoke(
-                        typeEnum,
-                        rarityEnum,
-                        context.source.player!!,
-                        addToParty = true
+                        typeEnum, rarityEnum, context.source.player!!, addToParty = true
                     )
                     context.source.player!!.sendMessage(
                         literal(
-                            "Rolled ${modId("label.rarity.${rarityEnum.name}")} ${translatable(cobblemonResource("type.${typeEnum.name}").toTranslationKey())} ${poke.species.name} shiny: ${poke.shiny}"
+                            "Rolled ${modId("label.rarity.${rarityEnum.name.lowercase()}")} ${
+                                translatable(
+                                    cobblemonResource("type.${typeEnum.name}").toTranslationKey()
+                                )
+                            } ${poke.species.name} shiny: ${poke.shiny}"
                         )
                     )
                 }
@@ -169,11 +166,7 @@ object CommandRegistry {
         debug("Registering chat commands")
         CommandRegistrationCallback.EVENT.register(
             CommandRegistrationCallback { dispatcher, registryAccess, _ ->
-                MinecraftAdmiral
-                    .builder(dispatcher, registryAccess)
-                    .addCommandClasses(this::class.java)
-                    .build()
-            }
-        )
+                MinecraftAdmiral.builder(dispatcher, registryAccess).addCommandClasses(this::class.java).build()
+            })
     }
 }

@@ -1,34 +1,34 @@
 {
-  "name": "rad-gyms:gym_entrance_steel/start_pool",
+  "name": "rad-gyms:gym_entrance/fairy",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "cobblemon:ruins/solrock_center1a",
+        "location": "rad-gyms:gym_entrance/gym_entrance_center1a",
         "element_type": "minecraft:single_pool_element",
         "override_liquid_settings": "apply_waterlogging",
-        "processors": "rad-gyms:gym_entry/gym_entry_center_steel",
+        "processors": "rad-gyms:gym_entry/gym_entry_center_fairy",
         "projection": "rigid"
       }
     },
     {
       "weight": 1,
       "element": {
-        "location": "cobblemon:ruins/solrock_center1b",
+        "location": "rad-gyms:gym_entrance/gym_entrance_center1b",
         "element_type": "minecraft:single_pool_element",
         "override_liquid_settings": "apply_waterlogging",
-        "processors": "rad-gyms:gym_entry/gym_entry_center_steel",
+        "processors": "rad-gyms:gym_entry/gym_entry_center_fairy",
         "projection": "rigid"
       }
     },
     {
       "weight": 1,
       "element": {
-        "location": "cobblemon:ruins/solrock_center1c",
+        "location": "rad-gyms:gym_entrance/gym_entrance_center1c",
         "element_type": "minecraft:single_pool_element",
         "override_liquid_settings": "apply_waterlogging",
-        "processors": "rad-gyms:gym_entry/gym_entry_center_steel",
+        "processors": "rad-gyms:gym_entry/gym_entry_center_fairy",
         "projection": "rigid"
       }
     }

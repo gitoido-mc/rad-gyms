@@ -29,8 +29,8 @@ object GymScreenCommons {
         val typingLabel = root.childById(LabelComponent::class.java, ID_TYPING)
         val intermediate = modId("gui.common.set-gym-level")
         val gymType = when (screen.getGymType()) {
-            null -> modId("item.component.type.chaos").toTranslationKey()
-            else -> cobblemonResource("type.${screen.getGymType()}").toTranslationKey()
+            null -> translatable(modId("item.component.type.chaos").toTranslationKey())
+            else -> translatable(cobblemonResource("type.${screen.getGymType()}").toTranslationKey())
         }
         typingLabel.text(
             translatable(

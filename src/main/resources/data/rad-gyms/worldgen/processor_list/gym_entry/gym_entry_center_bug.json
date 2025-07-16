@@ -1298,8 +1298,27 @@
         },
         {
           "input_predicate": {
-            "predicate_type": "minecraft:block_match",
-            "block": "minecraft:chest"
+            "block": "minecraft:obsidian",
+            "predicate_type": "minecraft:block_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "rad-gyms:gym_entrance",
+            "Properties": []
+          },
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "type": "bug"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:chest",
+            "predicate_type": "minecraft:block_match"
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
