@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
 package lol.gito.radgyms.item.renderer
 
 import com.mojang.blaze3d.systems.RenderSystem
@@ -82,7 +90,7 @@ abstract class SpecialItemRenderer {
             ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, renderLayer, true, stack.hasGlint())
         } else {
             ItemRenderer.getItemGlintConsumer(vertexConsumers, renderLayer, true, stack.hasGlint())
-        }   
+        }
 
         renderBakedItemModel(model, stack, light, overlay, matrices, vertexConsumer)
 
@@ -143,5 +151,4 @@ abstract class SpecialItemRenderer {
             vertices.quad(entry, bakedQuad, red, green, blue, alpha, light, overlay)
         }
     }
-
 }
