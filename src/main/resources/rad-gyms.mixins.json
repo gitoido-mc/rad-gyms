@@ -10,7 +10,10 @@
   "server": [
     "OnServerPlayerDeath"
   ],
-  "client": [],
+  "client": [
+    "OnLoadModels",
+    "OnRenderItemModel"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
