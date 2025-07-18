@@ -131,10 +131,10 @@ class EnUSLocaleProvider(
                     "Cannot find template provided",
             modId("message.error.command.debug_reward.no_player").toTranslationKey() to
                     "Command was not executed by player",
-            modId("label.rarity.${Rarity.COMMON.name}").toTranslationKey() to "Common",
-            modId("label.rarity.${Rarity.UNCOMMON.name}").toTranslationKey() to "Uncommon",
-            modId("label.rarity.${Rarity.RARE.name}").toTranslationKey() to "Rare",
-            modId("label.rarity.${Rarity.EPIC.name}").toTranslationKey() to "Epic",
+            modId("label.rarity.${Rarity.COMMON.name.lowercase()}").toTranslationKey() to "Common",
+            modId("label.rarity.${Rarity.UNCOMMON.name.lowercase()}").toTranslationKey() to "Uncommon",
+            modId("label.rarity.${Rarity.RARE.name.lowercase()}").toTranslationKey() to "Rare",
+            modId("label.rarity.${Rarity.EPIC.name.lowercase()}").toTranslationKey() to "Epic",
         )
     }
 

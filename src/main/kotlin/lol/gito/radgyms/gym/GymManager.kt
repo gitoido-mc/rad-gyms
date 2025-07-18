@@ -68,90 +68,67 @@ object GymManager {
         val gymLevel = level.coerceIn(5..100)
         val gymDimension = serverPlayer.getServer()?.getWorld(DimensionManager.RADGYMS_LEVEL_KEY) ?: return false
 
+        if (serverWorld.registryKey == DimensionManager.RADGYMS_LEVEL_KEY) return false
 
-        if (serverWorld.registryKey != DimensionManager.RADGYMS_LEVEL_KEY) {
-            val pos = serverPlayer.pos
-            val gymType = if (type in GYM_TEMPLATES.keys) type else "default"
-            debug("Initializing $gymType template for $type gym")
-            debug("Available templates ${GYM_TEMPLATES.keys}")
+        val pos = serverPlayer.pos
+        val gymType = if (type in GYM_TEMPLATES.keys) type else "default"
+        debug("Initializing $gymType template for $type gym")
+        debug("Available templates ${GYM_TEMPLATES.keys}")
 
-            val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(it, gymLevel, type) }
-            if (gym != null) {
-                val coords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
-
-                val destX = coords.x + gym.relativePlayerSpawn.x
-                val destY = coords.y + gym.relativePlayerSpawn.y
-                val destZ = coords.z + gym.relativePlayerSpawn.z
-
-                ScheduledTask.Builder()
-                    .tracker(ServerTaskTracker)
-                    .delay(0.1f)
-                    .execute {
-                        debug("Trying to place gym structure with ${gym.structure} at ${coords.x} ${coords.y} ${coords.z} ")
-                        StructureManager.placeStructure(
-                            gymDimension,
-                            coords,
-                            gym.structure
-                        )
-                    }
-                    .build()
-
-                ScheduledTask.Builder()
-                    .tracker(ServerTaskTracker)
-                    .execute {
-                        debug("return dim ${serverWorld.registryKey.value}")
-                        GymsNbtData.setReturnDimension(
-                            serverPlayer as EntityDataSaver,
-                            serverWorld.registryKey.value.toString()
-                        )
-                        GymsNbtData.setReturnCoordinates(serverPlayer as EntityDataSaver, pos.toBlockPos())
-
-                        PlayerSpawnHelper.teleportPlayer(
-                            serverPlayer,
-                            gymDimension,
-                            destX,
-                            destY,
-                            destZ,
-                            gym.playerYaw,
-                            0.0F
-                        )
-                    }
-                    .build()
-
-                ScheduledTask.Builder()
-                    .tracker(ServerTaskTracker)
-                    .delay(1f)
-                    .execute {
-                        val trainerUUIDs = buildTrainers(gym, gymDimension, coords)
-                        val chaosTranslatable = translatable(
-                            modId("type").withSuffixedPath(".chaos").toTranslationKey()
-                        )
-
-                        val label = when (gymType) {
-                            "default" -> when (type) {
-                                "default" -> chaosTranslatable.string
-                                null -> chaosTranslatable.string
-                                else -> translatable(
-                                    cobblemonResource("type.${type}").toTranslationKey()
-                                ).string
-                            }
-
-                            null -> chaosTranslatable.string
-                            else -> translatable(cobblemonResource("type.${type}").toTranslationKey()).string
-                        }
-                        PLAYER_GYMS[serverPlayer.uuid] = GymInstance(gym, trainerUUIDs, coords, gymLevel, label)
-                    }
-                    .build()
-
-                debug("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
-                return true
-            } else {
-                LOGGER.warn("Gym $gymType could not be initialized, no such type in template registry")
-                return false
-            }
+        val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(it, gymLevel, type) }
+        if (gym == null) {
+            LOGGER.warn("Gym $gymType could not be initialized, no such type in template registry")
+            return false
         }
 
-        return false
+        val coords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
+        val destX = coords.x + gym.relativePlayerSpawn.x
+        val destY = coords.y + gym.relativePlayerSpawn.y
+        val destZ = coords.z + gym.relativePlayerSpawn.z
+
+        debug("Trying to place gym structure with ${gym.structure} at ${coords.x} ${coords.y} ${coords.z} ")
+            .also { StructureManager.placeStructure(gymDimension, coords, gym.structure) }
+            .also { debug("return dim ${serverWorld.registryKey.value}") }
+            .also {
+                GymsNbtData.setReturnDimension(
+                    serverPlayer as EntityDataSaver,
+                    serverWorld.registryKey.value.toString()
+                )
+            }
+            .also { GymsNbtData.setReturnCoordinates(serverPlayer as EntityDataSaver, pos.toBlockPos()) }
+            .also {
+                PlayerSpawnHelper.teleportPlayer(
+                    serverPlayer,
+                    gymDimension,
+                    destX,
+                    destY,
+                    destZ,
+                    gym.playerYaw,
+                    0.0F
+                )
+            }
+            .also {
+                val trainerUUIDs = buildTrainers(gym, gymDimension, coords)
+                val chaosTranslatable = translatable(
+                    modId("item.component.type.chaos").toTranslationKey()
+                )
+
+                val label = when (gymType) {
+                    "default" -> when (type) {
+                        "default" -> chaosTranslatable.string
+                        null -> chaosTranslatable.string
+                        else -> translatable(
+                            cobblemonResource("type.${type}").toTranslationKey()
+                        ).string
+                    }
+
+                    null -> chaosTranslatable.string
+                    else -> translatable(cobblemonResource("type.${type}").toTranslationKey()).string
+                }
+                PLAYER_GYMS[serverPlayer.uuid] = GymInstance(gym, trainerUUIDs, coords, gymLevel, label)
+                debug("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
+            }
+        return true
     }
 
     private fun buildTrainers(

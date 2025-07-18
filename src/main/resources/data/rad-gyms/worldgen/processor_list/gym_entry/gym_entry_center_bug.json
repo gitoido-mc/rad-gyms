@@ -6,7 +6,7 @@
         {
           "block_entity_modifier": {
             "type": "minecraft:append_loot",
-            "loot_table": "cobblemon:ruins/common/sol_henge_ruins"
+            "loot_table": "rad-gyms:structures/entrance/bug"
           },
           "input_predicate": {
             "block": "minecraft:gravel",
@@ -1298,25 +1298,6 @@
         },
         {
           "input_predicate": {
-            "block": "minecraft:obsidian",
-            "predicate_type": "minecraft:block_match"
-          },
-          "location_predicate": {
-            "predicate_type": "minecraft:always_true"
-          },
-          "output_state": {
-            "Name": "rad-gyms:gym_entrance",
-            "Properties": []
-          },
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "type": "bug"
-            }
-          }
-        },
-        {
-          "input_predicate": {
             "block": "minecraft:chest",
             "predicate_type": "minecraft:block_match"
           },
@@ -1343,7 +1324,7 @@
           {
             "block_entity_modifier": {
               "type": "minecraft:append_loot",
-              "loot_table": "cobblemon:ruins/uncommon/sol_henge_ruins"
+              "loot_table": "rad-gyms:structures/entrance/bug"
             },
             "input_predicate": {
               "block": "minecraft:suspicious_gravel",
@@ -1369,7 +1350,7 @@
           {
             "block_entity_modifier": {
               "type": "minecraft:append_loot",
-              "loot_table": "cobblemon:ruins/rare/sky_tumblestone"
+              "loot_table": "rad-gyms:structures/entrance/bug"
             },
             "input_predicate": {
               "block": "minecraft:suspicious_gravel",
