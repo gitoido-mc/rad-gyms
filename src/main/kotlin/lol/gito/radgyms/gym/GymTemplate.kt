@@ -83,15 +83,22 @@ object GymTemplate {
         playerYaw = dto.playerSpawnRelative.yaw.toFloat()
 
         trainers = dto.trainers.map trainerMap@{ trainer ->
-            val battleConfig = if (trainer.ai.data != null) {
-                RCTBattleAIConfig.Builder()
-                    .withMoveBias(trainer.ai.data.moveBias ?: 1.0)
-                    .withStatusMoveBias(trainer.ai.data.statusMoveBias ?: 0.85)
-                    .withSwitchBias(trainer.ai.data.switchBias ?: 0.85)
-                    .withItemBias(trainer.ai.data.itemBias ?: 0.85)
-                    .withMaxSelectMargin(trainer.ai.data.maxSelectMargin ?: 0.25)
-            } else {
-                RCTBattleAIConfig.Builder()
+            var battleConfig = RCTBattleAIConfig.Builder()
+
+            if (trainer.ai.data?.moveBias != null) {
+                battleConfig = battleConfig.withMoveBias(trainer.ai.data.moveBias)
+            }
+            if (trainer.ai.data?.statusMoveBias != null) {
+                battleConfig = battleConfig.withStatusMoveBias(trainer.ai.data.statusMoveBias)
+            }
+            if (trainer.ai.data?.switchBias != null) {
+                battleConfig = battleConfig.withSwitchBias(trainer.ai.data.switchBias)
+            }
+            if (trainer.ai.data?.itemBias != null) {
+                battleConfig = battleConfig.withItemBias(trainer.ai.data.itemBias)
+            }
+            if (trainer.ai.data?.maxSelectMargin != null) {
+                battleConfig = battleConfig.withMaxSelectMargin(trainer.ai.data.maxSelectMargin)
             }
 
             val ai = RCTBattleAI(

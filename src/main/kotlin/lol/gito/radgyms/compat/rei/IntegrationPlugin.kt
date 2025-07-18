@@ -8,6 +8,13 @@
 
 package lol.gito.radgyms.compat.rei
 
+import me.shedaniel.rei.api.common.entry.type.EntryTypeRegistry
 import me.shedaniel.rei.api.common.plugins.REIServerPlugin
 
-class IntegrationPlugin : REIServerPlugin
+class IntegrationPlugin : REIServerPlugin {
+    override fun registerEntryTypes(registry: EntryTypeRegistry) {
+//        val exitRope = ItemEntryDefinition();
+//        exitRope.
+//        registry.register(VanillaEntryTypes.ITEM)
+    }
+}
