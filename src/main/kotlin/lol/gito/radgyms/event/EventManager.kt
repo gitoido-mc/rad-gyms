@@ -121,6 +121,7 @@ object EventManager {
     private fun onPlayerJoin(event: ServerPlayerEvent) {
         debug("Adding player ${event.player.name} in RadGyms trainer registry")
         RCT.trainerRegistry.registerPlayer(event.player.uuid.toString(), event.player)
+        CHANNEL.serverHandle(event.player).send(NetworkStackHandler.CachePokeSync())
     }
 
     private fun onPlayerDisconnect(event: ServerPlayerEvent) {

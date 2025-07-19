@@ -110,7 +110,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
                 BattleRules()
             )
 
-            return ActionResult.SUCCESS
+            return ActionResult.SUCCESS_NO_ITEM_USED
         }
 
         return ActionResult.PASS

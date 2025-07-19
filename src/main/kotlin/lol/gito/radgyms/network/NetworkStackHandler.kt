@@ -9,12 +9,15 @@
 package lol.gito.radgyms.network
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.util.ifClient
 import io.wispforest.owo.network.ClientAccess
 import io.wispforest.owo.network.ServerAccess
 import lol.gito.radgyms.RadGyms.CHANNEL
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.block.entity.GymEntranceEntity
+import lol.gito.radgyms.cache.CacheDTO
+import lol.gito.radgyms.gym.SpeciesManager
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
@@ -27,6 +30,7 @@ object NetworkStackHandler {
     val PACKET_ENTER_KEY = modId("net.gym_enter_key")
     val PACKET_LEAVE = modId("net.gym_leave")
     val PACKET_OPEN_CACHE = modId("net.cache_open")
+    val PACKET_CACHE_POKEMONS_SYNC = modId("net.cache_poke_sync")
 
     @JvmRecord
     data class GymEnterWithCoords(
@@ -57,12 +61,19 @@ object NetworkStackHandler {
         val shinyBoost: Int,
     )
 
+    @JvmRecord
+    data class CachePokeSync(
+        val id: Identifier = PACKET_CACHE_POKEMONS_SYNC,
+        val data: HashMap<String, CacheDTO> = SpeciesManager.SPECIES_BY_RARITY
+    )
+
     fun register() {
         debug("Registering network stack handler")
         CHANNEL.registerServerbound(GymEnterWithCoords::class.java, ::handleGymEnterBlockPacket)
         CHANNEL.registerServerbound(GymEnterWithoutCoords::class.java, ::handleGymEnterKeyPacket)
         CHANNEL.registerServerbound(GymLeave::class.java, ::handleGymLeavePacket)
         CHANNEL.registerServerbound(CacheOpen::class.java, ::handleCacheOpenPacket)
+        CHANNEL.registerServerbound(CachePokeSync::class.java, ::handleCachePokeSyncPacket)
         CHANNEL.registerClientboundDeferred(CacheOpen::class.java)
         CHANNEL.registerClientboundDeferred(GymLeave::class.java)
     }
@@ -126,12 +137,19 @@ object NetworkStackHandler {
         }
     }
 
-    @Suppress("unused")
+    @Suppress("unused_parameter")
+    private fun handleCachePokeSyncPacket(packet: CachePokeSync, context: ServerAccess) {
+        ifClient {
+            SpeciesManager.SPECIES_BY_RARITY = packet.data
+        }
+    }
+
+    @Suppress("unused_parameter")
     fun handleGymServerLeavePacket(packet: GymLeave, context: ClientAccess) {
         CHANNEL.clientHandle().send(packet)
     }
 
-    @Suppress("unused")
+    @Suppress("unused_parameter")
     fun handleCacheServerOpenPacket(packet: CacheOpen, context: ClientAccess) {
         CHANNEL.clientHandle().send(packet)
     }
