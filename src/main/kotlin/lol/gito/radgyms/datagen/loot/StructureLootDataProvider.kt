@@ -11,9 +11,9 @@ package lol.gito.radgyms.datagen.loot
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import lol.gito.radgyms.item.ItemRegistry
-import lol.gito.radgyms.item.dataComponent.DataComponentManager
-import lol.gito.radgyms.loot.StructureLootTables
+import lol.gito.radgyms.common.registry.DataComponentRegistry
+import lol.gito.radgyms.common.registry.ItemRegistry
+import lol.gito.radgyms.common.registry.StructureLootTableRegistry
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.item.Item
@@ -45,24 +45,24 @@ class StructureLootDataProvider(
 
     override fun accept(lootTableBiConsumer: BiConsumer<RegistryKey<LootTable>, LootTable.Builder>) {
         val structureTypeMap = mapOf(
-            StructureLootTables.BUG_GRAVEL to ElementalTypes.BUG,
-            StructureLootTables.DARK_GRAVEL to ElementalTypes.DARK,
-            StructureLootTables.DRAGON_GRAVEL to ElementalTypes.DRAGON,
-            StructureLootTables.ELECTRIC_GRAVEL to ElementalTypes.ELECTRIC,
-            StructureLootTables.FAIRY_GRAVEL to ElementalTypes.FAIRY,
-            StructureLootTables.FIGHTING_GRAVEL to ElementalTypes.FIGHTING,
-            StructureLootTables.FIRE_GRAVEL to ElementalTypes.FIRE,
-            StructureLootTables.FLYING_GRAVEL to ElementalTypes.FLYING,
-            StructureLootTables.GHOST_GRAVEL to ElementalTypes.GHOST,
-            StructureLootTables.GRASS_GRAVEL to ElementalTypes.GRASS,
-            StructureLootTables.GROUND_GRAVEL to ElementalTypes.GROUND,
-            StructureLootTables.ICE_GRAVEL to ElementalTypes.ICE,
-            StructureLootTables.NORMAL_GRAVEL to ElementalTypes.NORMAL,
-            StructureLootTables.POISON_GRAVEL to ElementalTypes.POISON,
-            StructureLootTables.PSYCHIC_GRAVEL to ElementalTypes.PSYCHIC,
-            StructureLootTables.ROCK_GRAVEL to ElementalTypes.ROCK,
-            StructureLootTables.STEEL_GRAVEL to ElementalTypes.STEEL,
-            StructureLootTables.WATER_GRAVEL to ElementalTypes.WATER,
+            StructureLootTableRegistry.BUG_GRAVEL to ElementalTypes.BUG,
+            StructureLootTableRegistry.DARK_GRAVEL to ElementalTypes.DARK,
+            StructureLootTableRegistry.DRAGON_GRAVEL to ElementalTypes.DRAGON,
+            StructureLootTableRegistry.ELECTRIC_GRAVEL to ElementalTypes.ELECTRIC,
+            StructureLootTableRegistry.FAIRY_GRAVEL to ElementalTypes.FAIRY,
+            StructureLootTableRegistry.FIGHTING_GRAVEL to ElementalTypes.FIGHTING,
+            StructureLootTableRegistry.FIRE_GRAVEL to ElementalTypes.FIRE,
+            StructureLootTableRegistry.FLYING_GRAVEL to ElementalTypes.FLYING,
+            StructureLootTableRegistry.GHOST_GRAVEL to ElementalTypes.GHOST,
+            StructureLootTableRegistry.GRASS_GRAVEL to ElementalTypes.GRASS,
+            StructureLootTableRegistry.GROUND_GRAVEL to ElementalTypes.GROUND,
+            StructureLootTableRegistry.ICE_GRAVEL to ElementalTypes.ICE,
+            StructureLootTableRegistry.NORMAL_GRAVEL to ElementalTypes.NORMAL,
+            StructureLootTableRegistry.POISON_GRAVEL to ElementalTypes.POISON,
+            StructureLootTableRegistry.PSYCHIC_GRAVEL to ElementalTypes.PSYCHIC,
+            StructureLootTableRegistry.ROCK_GRAVEL to ElementalTypes.ROCK,
+            StructureLootTableRegistry.STEEL_GRAVEL to ElementalTypes.STEEL,
+            StructureLootTableRegistry.WATER_GRAVEL to ElementalTypes.WATER,
         )
 
         structureTypeMap.forEach { (id, type) ->
@@ -73,7 +73,7 @@ class StructureLootDataProvider(
                     pool.also { it.with(ItemEntry.builder(item).weight(weight)) }
                 } else {
                     val componentsFunction = SetComponentsLootFunction.builder(
-                        DataComponentManager.GYM_TYPE_COMPONENT,
+                        DataComponentRegistry.GYM_TYPE_COMPONENT,
                         type.name
                     )
 
@@ -91,7 +91,7 @@ class StructureLootDataProvider(
         }
 
         lootTableBiConsumer.accept(
-            StructureLootTables.COMMON_GRAVEL,
+            StructureLootTableRegistry.COMMON_GRAVEL,
             LootTable.builder().pool(commonLootPool)
         )
     }
