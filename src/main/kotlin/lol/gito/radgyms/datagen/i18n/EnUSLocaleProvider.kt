@@ -8,10 +8,10 @@
 
 package lol.gito.radgyms.datagen.i18n
 
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.block.BlockRegistry
-import lol.gito.radgyms.item.ItemRegistry
-import lol.gito.radgyms.item.group.ItemGroupManager
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.registry.BlockRegistry
+import lol.gito.radgyms.common.registry.ItemGroupRegistry
+import lol.gito.radgyms.common.registry.ItemRegistry
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
@@ -26,11 +26,14 @@ class EnUSLocaleProvider(
     "en_us",
     registryLookup
 ) {
-
     private fun provideTranslations(): MutableMap<String, String> {
         return mutableMapOf(
-            ItemGroupManager.GYMS_GROUP.displayName.string to
-                    "Rad Gyms",
+            ItemGroupRegistry.GENERAL_GROUP.displayName.string to
+                    "Rad Gyms: General",
+            ItemGroupRegistry.KEYS_GROUP.displayName.string to
+                    "Rad Gyms: Keys",
+            ItemGroupRegistry.CACHES_GROUP.displayName.string to
+                    "Rad Gyms: Pokémon caches",
             ItemRegistry.EXIT_ROPE.translationKey to
                     "Exit rope",
             ItemRegistry.EXIT_ROPE.translationKey.plus(".tooltip") to

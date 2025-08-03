@@ -76,7 +76,6 @@ dependencies {
 
     // Helpers
     modImplementation("dev.architectury:architectury-fabric:${properties["architectury_api_version"]}")
-    modImplementation("io.wispforest:owo-lib:${properties["owo_version"]}")
     include(
         modImplementation(
             "maven.modrinth:admiral:${properties["admiral_version"]}+${properties["minecraft_version"]}+fabric"

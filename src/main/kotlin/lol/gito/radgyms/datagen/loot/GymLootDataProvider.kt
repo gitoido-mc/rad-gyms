@@ -10,8 +10,8 @@ package lol.gito.radgyms.datagen.loot
 
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import lol.gito.radgyms.item.ItemRegistry
-import lol.gito.radgyms.loot.GymLootTables
+import lol.gito.radgyms.common.registry.GymLootTableRegistry
+import lol.gito.radgyms.common.registry.ItemRegistry
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.item.Items
@@ -33,23 +33,23 @@ class GymLootDataProvider(
 ) : SimpleFabricLootTableProvider(output, registryLookup, LootContextTypes.GENERIC) {
     override fun accept(lootTableBiConsumer: BiConsumer<RegistryKey<LootTable>, LootTable.Builder>) {
         lootTableBiConsumer.accept(
-            GymLootTables.SHARED_LOOT_TABLE,
+            GymLootTableRegistry.SHARED_LOOT_TABLE,
             generateSharedDefaultLootTable()
         )
         lootTableBiConsumer.accept(
-            GymLootTables.COMMON_LOOT_TABLE,
+            GymLootTableRegistry.COMMON_LOOT_TABLE,
             generateCommonLootTable()
         )
         lootTableBiConsumer.accept(
-            GymLootTables.UNCOMMON_LOOT_TABLE,
+            GymLootTableRegistry.UNCOMMON_LOOT_TABLE,
             generateUncommonLootTable()
         )
         lootTableBiConsumer.accept(
-            GymLootTables.RARE_LOOT_TABLE,
+            GymLootTableRegistry.RARE_LOOT_TABLE,
             generateRareLootTable()
         )
         lootTableBiConsumer.accept(
-            GymLootTables.EPIC_LOOT_TABLE,
+            GymLootTableRegistry.EPIC_LOOT_TABLE,
             generateEpicLootTable()
         )
     }
