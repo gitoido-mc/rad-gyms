@@ -5,7 +5,8 @@
   "mixins": [
     "AetherEntityInteract",
     "BundleItemMixin",
-    "DataSaver"
+    "DataSaver",
+    "OnServerPlayerCopy"
   ],
   "server": [
     "OnServerPlayerDeath"

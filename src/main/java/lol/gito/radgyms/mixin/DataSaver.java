@@ -44,6 +44,11 @@ public abstract class DataSaver implements EntityDataSaver {
         return gymsPersistentData;
     }
 
+    @Unique
+    public void setGymsPersistentData(NbtCompound gymsPersistentData) {
+        this.gymsPersistentData = gymsPersistentData;
+    }
+
     @Inject(method = "writeNbt", at = @At("HEAD"))
     protected void RadGyms$injectWriteMethod(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if (gymsPersistentData != null) {
