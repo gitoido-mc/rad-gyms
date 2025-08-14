@@ -12,4 +12,5 @@ import net.minecraft.nbt.NbtCompound
 
 interface EntityDataSaver {
     fun getGymsPersistentData(): NbtCompound
+    fun setGymsPersistentData(data: NbtCompound)
 }
