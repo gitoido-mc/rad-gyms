@@ -8,10 +8,10 @@
 
 package lol.gito.radgyms.datagen.i18n
 
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.block.BlockRegistry
-import lol.gito.radgyms.item.ItemRegistry
-import lol.gito.radgyms.item.group.ItemGroupManager
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.registry.BlockRegistry
+import lol.gito.radgyms.common.registry.ItemGroupRegistry
+import lol.gito.radgyms.common.registry.ItemRegistry
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
@@ -26,11 +26,14 @@ class EnUSLocaleProvider(
     "en_us",
     registryLookup
 ) {
-
     private fun provideTranslations(): MutableMap<String, String> {
         return mutableMapOf(
-            ItemGroupManager.GYMS_GROUP.displayName.string to
-                    "Rad Gyms",
+            ItemGroupRegistry.GENERAL_GROUP.displayName.string to
+                    "Rad Gyms: General",
+            ItemGroupRegistry.KEYS_GROUP.displayName.string to
+                    "Rad Gyms: Keys",
+            ItemGroupRegistry.CACHES_GROUP.displayName.string to
+                    "Rad Gyms: Pokémon caches",
             ItemRegistry.EXIT_ROPE.translationKey to
                     "Exit rope",
             ItemRegistry.EXIT_ROPE.translationKey.plus(".tooltip") to
@@ -59,6 +62,10 @@ class EnUSLocaleProvider(
                     "Epic cache shard",
             BlockRegistry.GYM_ENTRANCE.translationKey to
                     "Gym Entrance",
+            BlockRegistry.GYM_ENTRANCE.translationKey.plus(".tooltip") to
+                    "Type can be changed by using Debug Stick on the block.",
+            BlockRegistry.GYM_ENTRANCE.translationKey.plus(".tooltip2") to
+                    "All players entry count can be reset by using Debug Stick on it while crouching.",
             BlockRegistry.GYM_EXIT.translationKey to
                     "Gym Exit",
             BlockRegistry.SHARD_BLOCK_COMMON.translationKey to
@@ -82,7 +89,7 @@ class EnUSLocaleProvider(
             modId("gui.common.select-cache-type").toTranslationKey() to
                     "Select desirable cache reward",
             modId("gui.common.leave-gym").toTranslationKey() to
-                    "You want to leave? Rewards will be lost if leader is not beaten.",
+                    "You want to leave?\nRewards will be lost if leader is not beaten.",
             modId("gui.common.leave").toTranslationKey() to
                     "Leave Gym",
             modId("gui.common.start").toTranslationKey() to

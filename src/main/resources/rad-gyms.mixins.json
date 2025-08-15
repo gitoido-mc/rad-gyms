@@ -3,17 +3,15 @@
   "package": "lol.gito.radgyms.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AetherEntityInteract",
-    "BundleItemMixin",
-    "DataSaver",
-    "OnServerPlayerCopy"
+    "common.BundleItemMixin",
+    "common.OnAetherEntityInteract"
   ],
   "server": [
-    "OnServerPlayerDeath"
+    "server.OnServerPlayerEntityDeath"
   ],
   "client": [
-    "OnLoadModels",
-    "OnRenderItemModel"
+    "client.OnLoadModels",
+    "client.OnRenderItemModel"
   ],
   "injectors": {
     "defaultRequire": 1

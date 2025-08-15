@@ -8,7 +8,7 @@
 
 package lol.gito.radgyms.datagen.tag
 
-import lol.gito.radgyms.block.BlockRegistry
+import lol.gito.radgyms.common.registry.BlockRegistry
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.minecraft.block.Block

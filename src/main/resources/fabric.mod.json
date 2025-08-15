@@ -17,13 +17,13 @@
   "entrypoints": {
     "main": [
       {
-        "value": "lol.gito.radgyms.RadGyms::init",
+        "value": "lol.gito.radgyms.common.RadGyms::init",
         "adapter": "kotlin"
       }
     ],
     "client": [
       {
-        "value": "lol.gito.radgyms.RadGymsClient::init",
+        "value": "lol.gito.radgyms.client.RadGymsClient::init",
         "adapter": "kotlin"
       }
     ],
@@ -34,13 +34,13 @@
       }
     ],
     "jei_mod_plugin": [
-      "lol.gito.radgyms.compat.jei.IntegrationPlugin"
+      "lol.gito.radgyms.common.compat.jei.IntegrationPlugin"
     ],
     "rei_common": [
-      "lol.gito.radgyms.compat.rei.IntegrationPlugin"
+      "lol.gito.radgyms.common.compat.rei.IntegrationPlugin"
     ],
     "emi": [
-      "lol.gito.radgyms.compat.emi.IntegrationPlugin"
+      "lol.gito.radgyms.common.compat.emi.IntegrationPlugin"
     ]
   },
   "mixins": [

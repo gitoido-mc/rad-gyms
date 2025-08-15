@@ -13,14 +13,14 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.CobblemonItem
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.block.BlockRegistry
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.item.GymKey
+import lol.gito.radgyms.common.item.PokeCache
+import lol.gito.radgyms.common.item.PokeShardBase
+import lol.gito.radgyms.common.registry.BlockRegistry
+import lol.gito.radgyms.common.registry.DataComponentRegistry
+import lol.gito.radgyms.common.registry.ItemRegistry
 import lol.gito.radgyms.datagen.json.builder.ShapelessWithComponentRecipeJsonBuilder
-import lol.gito.radgyms.item.GymKey
-import lol.gito.radgyms.item.ItemRegistry
-import lol.gito.radgyms.item.PokeCache
-import lol.gito.radgyms.item.PokeShardBase
-import lol.gito.radgyms.item.dataComponent.DataComponentManager
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.minecraft.component.ComponentMap
@@ -66,7 +66,7 @@ class RecipeProvider(
 
             val keyComponents = ComponentMap.builder()
                 .add(DataComponentTypes.RARITY, Rarity.RARE)
-                .add(DataComponentManager.GYM_TYPE_COMPONENT, type.name)
+                .add(DataComponentRegistry.GYM_TYPE_COMPONENT, type.name)
 
             ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, pair.first)
                 .input(ItemRegistry.GYM_KEY)
@@ -78,51 +78,48 @@ class RecipeProvider(
 
             Rarity.entries.forEach { rarity ->
                 val cache = cacheForRarity(rarity)
-                if (cache != null) {
-                    val attunedCachePair = elementalTypeCacheConfig(cache, type)
-                    val cacheComponents = ComponentMap.builder()
-                        .add(DataComponentTypes.RARITY, rarity)
-                        .add(DataComponentManager.GYM_TYPE_COMPONENT, type.name)
+                val attunedCachePair = elementalTypeCacheConfig(cache, type)
+                val cacheComponents = ComponentMap.builder()
+                    .add(DataComponentTypes.RARITY, rarity)
+                    .add(DataComponentRegistry.GYM_TYPE_COMPONENT, type.name)
 
-                    ShapelessWithComponentRecipeJsonBuilder(
-                        RecipeCategory.MISC,
-                        attunedCachePair.first,
-                        1
+                ShapelessWithComponentRecipeJsonBuilder(
+                    RecipeCategory.MISC,
+                    attunedCachePair.first,
+                    1
+                )
+                    .input(attunedCachePair.first.asItem())
+                    .input(attunedCachePair.second.asItem())
+                    .group("multi_bench")
+                    .withComponentMap(cacheComponents.build())
+                    .criterion(
+                        hasItem(attunedCachePair.second),
+                        conditionsFromItem(attunedCachePair.first)
                     )
-                        .input(attunedCachePair.first.asItem())
-                        .input(attunedCachePair.second.asItem())
-                        .group("multi_bench")
-                        .withComponentMap(cacheComponents.build())
-                        .criterion(
-                            hasItem(attunedCachePair.second),
-                            conditionsFromItem(attunedCachePair.first)
-                        )
-                        .offerTo(
-                            recipeExporter,
-                            "cache_${rarity.name.replace("minecraft:", "").lowercase()}_${type.name}"
-                        )
-                }
+                    .offerTo(
+                        recipeExporter,
+                        "cache_${rarity.name.replace("minecraft:", "").lowercase()}_${type.name}"
+                    )
             }
         }
 
         Rarity.entries.forEach { rarity ->
             val shardPair = shardConfig(rarity)
-            if (shardPair != null) {
-                ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, shardPair.second, 1)
-                    .pattern("sss")
-                    .pattern("sss")
-                    .pattern("sss")
-                    .input('s', shardPair.first)
-                    .group("multi_bench")
-                    .criterion(hasItem(shardPair.first), conditionsFromItem(Items.CRAFTING_TABLE))
-                    .offerTo(recipeExporter, "shards_to_block_${rarity.name.replace("minecraft:", "").lowercase()}")
+            ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, shardPair.second, 1)
+                .pattern("sss")
+                .pattern("sss")
+                .pattern("sss")
+                .input('s', shardPair.first)
+                .group("multi_bench")
+                .criterion(hasItem(shardPair.first), conditionsFromItem(Items.CRAFTING_TABLE))
+                .offerTo(recipeExporter, "shards_to_block_${rarity.name.replace("minecraft:", "").lowercase()}")
 
-                ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, shardPair.first, 9)
-                    .input(shardPair.second.asItem())
-                    .group("multi_bench")
-                    .criterion(hasItem(shardPair.second), conditionsFromItem(shardPair.first))
-                    .offerTo(recipeExporter, "block_to_shards_${rarity.name.replace("minecraft:", "").lowercase()}")
-            }
+            ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, shardPair.first, 9)
+                .input(shardPair.second.asItem())
+                .group("multi_bench")
+                .criterion(hasItem(shardPair.second), conditionsFromItem(shardPair.first))
+                .offerTo(recipeExporter, "block_to_shards_${rarity.name.replace("minecraft:", "").lowercase()}")
+
 
             val cachePair = cacheConfig(rarity)
             if (cachePair != null) {
@@ -156,15 +153,12 @@ class RecipeProvider(
         }
     }
 
-    private fun cacheForRarity(rarity: Rarity): PokeCache? {
+    private fun cacheForRarity(rarity: Rarity): PokeCache {
         return when (rarity) {
             Rarity.COMMON -> ItemRegistry.CACHE_COMMON
             Rarity.UNCOMMON -> ItemRegistry.CACHE_UNCOMMON
             Rarity.RARE -> ItemRegistry.CACHE_RARE
             Rarity.EPIC -> ItemRegistry.CACHE_EPIC
-            else -> {
-                null
-            }
         }
     }
 
@@ -220,13 +214,12 @@ class RecipeProvider(
             }
         }
 
-    private fun shardConfig(rarity: Rarity): Pair<PokeShardBase, Item>? {
+    private fun shardConfig(rarity: Rarity): Pair<PokeShardBase, Item> {
         return when (rarity) {
             Rarity.COMMON -> Pair(ItemRegistry.SHARD_COMMON, BlockRegistry.SHARD_BLOCK_COMMON.asItem())
             Rarity.UNCOMMON -> Pair(ItemRegistry.SHARD_UNCOMMON, BlockRegistry.SHARD_BLOCK_UNCOMMON.asItem())
             Rarity.RARE -> Pair(ItemRegistry.SHARD_RARE, BlockRegistry.SHARD_BLOCK_RARE.asItem())
             Rarity.EPIC -> Pair(ItemRegistry.SHARD_EPIC, BlockRegistry.SHARD_BLOCK_EPIC.asItem())
-            else -> null
         }
     }
 
