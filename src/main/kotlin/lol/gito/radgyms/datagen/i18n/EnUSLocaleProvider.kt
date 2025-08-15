@@ -62,6 +62,10 @@ class EnUSLocaleProvider(
                     "Epic cache shard",
             BlockRegistry.GYM_ENTRANCE.translationKey to
                     "Gym Entrance",
+            BlockRegistry.GYM_ENTRANCE.translationKey.plus(".tooltip") to
+                    "Type can be changed by using Debug Stick on the block.",
+            BlockRegistry.GYM_ENTRANCE.translationKey.plus(".tooltip2") to
+                    "All players entry count can be reset by using Debug Stick on it while crouching.",
             BlockRegistry.GYM_EXIT.translationKey to
                     "Gym Exit",
             BlockRegistry.SHARD_BLOCK_COMMON.translationKey to
@@ -85,7 +89,7 @@ class EnUSLocaleProvider(
             modId("gui.common.select-cache-type").toTranslationKey() to
                     "Select desirable cache reward",
             modId("gui.common.leave-gym").toTranslationKey() to
-                    "You want to leave? Rewards will be lost if leader is not beaten.",
+                    "You want to leave?\nRewards will be lost if leader is not beaten.",
             modId("gui.common.leave").toTranslationKey() to
                     "Leave Gym",
             modId("gui.common.start").toTranslationKey() to

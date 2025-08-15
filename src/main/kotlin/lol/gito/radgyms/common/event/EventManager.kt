@@ -31,6 +31,7 @@ import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
+import lol.gito.radgyms.server.state.RadGymsState
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.BlockState
@@ -69,17 +70,14 @@ object EventManager {
         hand: Hand,
         result: BlockHitResult,
     ): ActionResult {
-        if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-            return if (playerEntity.mainHandStack.item == BlockRegistry.GYM_EXIT.asItem()) {
-                ActionResult.CONSUME
-            } else {
-                when (world.getBlockState(result.blockPos).block != BlockRegistry.GYM_EXIT) {
-                    true -> ActionResult.FAIL
-                    false -> ActionResult.PASS
+        if (!world.isClient) {
+            if (world.registryKey.equals(DimensionRegistry.RADGYMS_LEVEL_KEY)) {
+                debug((world.getBlockState(result.blockPos).block == BlockRegistry.GYM_EXIT).toString())
+                return when (world.getBlockState(result.blockPos).block == BlockRegistry.GYM_EXIT) {
+                    true -> ActionResult.SUCCESS
+                    false -> ActionResult.FAIL
                 }
             }
-
-
         }
         return ActionResult.PASS
     }
@@ -119,7 +117,8 @@ object EventManager {
     private fun onPlayerJoin(event: ServerPlayerEvent) {
         debug("Adding player ${event.player.name} in RadGyms trainer registry")
         RCT.trainerRegistry.registerPlayer(event.player.uuid.toString(), event.player)
-//        CHANNEL.serverHandle(event.player).send(CachePokeSync())
+        val playerData = RadGymsState.getPlayerState(event.player)
+        debug("player gym visits: ${playerData.visits}, has return coords? ${playerData.returnCoords != null}")
     }
 
     private fun onPlayerDisconnect(event: ServerPlayerEvent) {
@@ -127,14 +126,8 @@ object EventManager {
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
         if (event.player.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-//            CHANNEL.serverHandle(event.player).send(GymLeave(teleport = true))
-        }
-
-        PLAYER_GYMS[event.player.uuid]?.npcList?.forEach {
-            debug("Removing trainer ${it.second} from registry and discarding associated entity")
-            val trainer = RCT.trainerRegistry.getById(it.first.toString())
-            trainer.entity.discard()
-            RCT.trainerRegistry.unregisterById(it.first.toString())
+            GymManager.spawnExitBlock(event.player.uuid)
+            GymManager.destructGym(event.player, removeCoords = false)
         }
     }
 
@@ -159,8 +152,9 @@ object EventManager {
                     trainer.defeated = true
                     if (trainer.leader) {
                         val gym = PLAYER_GYMS[player.uuid]!!
-                        GymManager.handleLeaderBattleWon(player)
+                        GymManager.spawnExitBlock(player.uuid)
                         GymManager.handleLootDistribution(player, gym.template, gym.level, gym.type)
+                        player.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
                     }
                 }
             }
@@ -182,7 +176,7 @@ object EventManager {
         event.battle.players
             .filter { it.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY }
             .forEach { player ->
-//                CHANNEL.serverHandle(player).send(GymLeave(teleport = true))
+                GymManager.handleGymLeave(player)
             }
     }
 
@@ -197,7 +191,7 @@ object EventManager {
         event.battle.players
             .filter { it.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY }
             .forEach { player ->
-//                CHANNEL.serverHandle(player).send(GymLeave(teleport = true))
+                GymManager.handleGymLeave(player)
             }
     }
 }

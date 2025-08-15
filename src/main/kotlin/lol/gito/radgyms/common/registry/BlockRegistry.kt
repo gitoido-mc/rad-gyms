@@ -26,17 +26,17 @@ import kotlin.reflect.full.memberProperties
 
 
 object BlockRegistry {
+    val GYM_EXIT: GymExitBlock = Registry.register(
+        Registries.BLOCK,
+        modId("gym_exit"),
+        GymExitBlock(AbstractBlock.Settings.copy(Blocks.END_STONE_BRICKS))
+    )
+
     @RegisterBlockItem("gym_entrance")
     val GYM_ENTRANCE: GymEntranceBlock = Registry.register(
         Registries.BLOCK,
         modId("gym_entrance"),
         GymEntranceBlock(AbstractBlock.Settings.copy(Blocks.END_STONE_BRICKS))
-    )
-
-    val GYM_EXIT: GymExitBlock = Registry.register(
-        Registries.BLOCK,
-        modId("gym_exit"),
-        GymExitBlock(AbstractBlock.Settings.copy(Blocks.END_STONE_BRICKS))
     )
 
     @RegisterBlockItem("shard_block_common")

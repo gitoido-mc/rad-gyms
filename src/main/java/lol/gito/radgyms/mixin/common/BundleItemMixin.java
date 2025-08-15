@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.mixin.server;
+package lol.gito.radgyms.mixin.common;
 
 import lol.gito.radgyms.common.registry.DataComponentRegistry;
 import net.minecraft.entity.player.PlayerEntity;

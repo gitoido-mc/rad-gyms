@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.events.pokemon.ShinyChanceCalculationEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
@@ -31,6 +32,21 @@ import kotlin.random.Random
 object CacheHandler {
     private fun Float.checkRate(): Boolean =
         if (this >= 1) (Random.Default.nextFloat() < 1 / this) else Random.Default.nextFloat() < this
+
+
+    fun getPoke(
+        type: String,
+        rarity: Rarity,
+        player: ServerPlayerEntity,
+        shinyBoost: Int? = 0,
+        addToParty: Boolean? = false
+    ): Pokemon = getPoke(
+        ElementalTypes.get(type) ?: ElementalTypes.all().random(),
+        rarity,
+        player,
+        shinyBoost,
+        addToParty
+    )
 
     fun getPoke(
         type: ElementalType,

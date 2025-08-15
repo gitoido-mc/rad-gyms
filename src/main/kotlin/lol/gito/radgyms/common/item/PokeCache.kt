@@ -9,11 +9,14 @@
 package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.network.payload.CacheOpen
 import lol.gito.radgyms.common.registry.DataComponentRegistry.CACHE_SHINY_BOOST_COMPONENT
 import lol.gito.radgyms.common.registry.DataComponentRegistry.GYM_TYPE_COMPONENT
-import lol.gito.radgyms.common.util.TranslationUtil.attuneType
+import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.component.DataComponentTypes.RARITY
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -60,21 +63,17 @@ open class PokeCache(private val rarity: Rarity) : Item(Settings().rarity(rarity
         }
 
         if (world.isClient) {
-            if (type == null || type == "chaos") {
-//                GuiHandler.openCacheAttuneScreen(
-//                    user,
-//                    this.rarity,
-//                    user.getStackInHand(hand).getOrDefault(CACHE_SHINY_BOOST_COMPONENT, 0)
-//                )
-            } else {
-//                CHANNEL.clientHandle().send(
-//                    CacheOpen(
-//                        type = type,
-//                        rarity = rarity,
-//                        shinyBoost = boost,
-//                    )
-//                )
+            val cacheType = when (type) {
+                "chaos", null -> ElementalTypes.all().random().name.lowercase()
+                else -> type
             }
+            ClientPlayNetworking.send(
+                CacheOpen(
+                    type = cacheType,
+                    rarity = rarity,
+                    shinyBoost = boost,
+                )
+            )
         }
 
         return TypedActionResult.success(user.getStackInHand(hand), true)
@@ -91,28 +90,14 @@ open class PokeCache(private val rarity: Rarity) : Item(Settings().rarity(rarity
         if (shinyBoost != null && shinyBoost > 0) {
             val tooltipText = translatable(
                 modId("item.component.shiny_boost").toTranslationKey(),
-                shinyBoost.toString()
+                "1/${(Cobblemon.config.shinyRate.toInt() - shinyBoost).coerceAtLeast(1)}"
             )
 
             tooltip.addLast(tooltipText.formatted(Formatting.GOLD).formatted(Formatting.BOLD))
         }
 
-        if (cacheType != null) {
-            val tooltipText: MutableText = attuneType(cacheType)
-            tooltip.addLast(tooltipText.styled { it.withColor(Formatting.GOLD) })
-        } else {
-            val tooltipText: MutableText = translatable(
-                modId("item.component.gym_type").toTranslationKey(),
-                translatable(modId("item.component.type.chaos").toTranslationKey()).styled {
-                    it.withFormatting(Formatting.OBFUSCATED)
-                }
-            )
-            tooltip.addLast(
-                tooltipText.styled {
-                    it.withColor(Formatting.DARK_PURPLE)
-                }
-            )
-        }
+        val tooltipText: MutableText = buildPrefixedSuffixedTypeText(cacheType)
+        tooltip.addLast(tooltipText)
     }
 
     override fun getDefaultStack(): ItemStack {

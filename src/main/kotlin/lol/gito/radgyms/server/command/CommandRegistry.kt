@@ -55,7 +55,8 @@ object CommandRegistry {
         player.sendMessage(
             translatable(modId("message.info.command.op_kick").toTranslationKey())
         )
-//        CHANNEL.serverHandle(player).send(GymLeave(teleport = true))
+
+        GymManager.handleGymLeave(player)
         return 1
     }
 

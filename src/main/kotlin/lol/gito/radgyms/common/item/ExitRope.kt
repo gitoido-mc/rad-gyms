@@ -8,8 +8,10 @@
 
 package lol.gito.radgyms.common.item
 
+import lol.gito.radgyms.client.gui.screen.GymLeaveScreen
 import lol.gito.radgyms.common.registry.DimensionRegistry
 import lol.gito.radgyms.common.registry.ItemRegistry.EXIT_ROPE
+import net.minecraft.client.MinecraftClient
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -27,7 +29,7 @@ class ExitRope : Item(Settings()) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         if (world.isClient) {
             if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-//                GuiHandler.openGymLeaveScreen(user)
+                MinecraftClient.getInstance().setScreen(GymLeaveScreen())
             } else {
                 user.sendMessage(translatable(EXIT_ROPE.translationKey.plus(".failed")))
             }

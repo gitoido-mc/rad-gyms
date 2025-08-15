@@ -11,6 +11,7 @@ package lol.gito.radgyms.common.gym
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.toBlockPos
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.RCT
@@ -18,13 +19,13 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.entity.EntityManager
 import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.nbt.EntityDataSaver
-import lol.gito.radgyms.common.nbt.GymsNbtData
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructureManager
+import lol.gito.radgyms.server.state.PlayerData
+import lol.gito.radgyms.server.state.RadGymsState
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.BundleContentsComponent
 import net.minecraft.entity.ItemEntity
@@ -43,16 +44,14 @@ import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.minecraft.world.dimension.DimensionTypes
 import java.util.*
 import kotlin.time.TimeSource.Monotonic.markNow
 
 data class GymInstance(
     val template: GymTemplate,
-    val npcList: List<Pair<UUID, GymTrainer>>,
+    val npcList: Map<UUID, GymTrainer>,
     val coords: BlockPos,
     val level: Int,
     val type: String
@@ -82,27 +81,29 @@ object GymManager {
         }
 
         val coords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
-        val destX = coords.x + gym.relativePlayerSpawn.x
-        val destY = coords.y + gym.relativePlayerSpawn.y
-        val destZ = coords.z + gym.relativePlayerSpawn.z
+        val dest = BlockPos.ofFloored(
+            coords.x + gym.relativePlayerSpawn.x,
+            coords.y + gym.relativePlayerSpawn.y,
+            coords.z + gym.relativePlayerSpawn.z
+        )
 
         debug("Trying to place gym structure with ${gym.structure} at ${coords.x} ${coords.y} ${coords.z} ")
             .also { StructureManager.placeStructure(gymDimension, coords, gym.structure) }
             .also { debug("return dim ${serverWorld.registryKey.value}") }
             .also {
-                GymsNbtData.setReturnDimension(
-                    serverPlayer as EntityDataSaver,
-                    serverWorld.registryKey.value.toString()
+                RadGymsState.setReturnCoordsForPlayer(
+                    serverPlayer,
+                    PlayerData.ReturnCoords(
+                        serverWorld.registryKey.value,
+                        pos.toBlockPos()
+                    )
                 )
             }
-            .also { GymsNbtData.setReturnCoordinates(serverPlayer as EntityDataSaver, pos.toBlockPos()) }
             .also {
                 PlayerSpawnHelper.teleportPlayer(
                     serverPlayer,
                     gymDimension,
-                    destX,
-                    destY,
-                    destZ,
+                    dest,
                     gym.playerYaw,
                     0.0F
                 )
@@ -135,7 +136,7 @@ object GymManager {
         template: GymTemplate,
         gymDimension: ServerWorld,
         coords: BlockPos
-    ): List<Pair<UUID, GymTrainer>> {
+    ): Map<UUID, GymTrainer> {
         val trainerIds = mutableMapOf<String, Pair<UUID, GymTrainer>>()
 
         template.trainers.forEach {
@@ -150,7 +151,7 @@ object GymManager {
             }
         }
 
-        return trainerIds.map { it.value }
+        return trainerIds.map { it.value }.associate { it.first to it.second }
     }
 
     private fun buildTrainerEntity(
@@ -186,8 +187,8 @@ object GymManager {
         return Pair(trainerEntity.uuid, trainerTemplate)
     }
 
-    fun handleLeaderBattleWon(serverPlayer: ServerPlayerEntity) {
-        val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
+    fun spawnExitBlock(serverPlayer: UUID) {
+        val gym = PLAYER_GYMS[serverPlayer] ?: return
 
         val exitPos = BlockPos(
             (gym.coords.x + gym.template.relativeExitBlockSpawn.x).toInt(),
@@ -195,54 +196,54 @@ object GymManager {
             (gym.coords.z + gym.template.relativeExitBlockSpawn.z).toInt(),
         )
 
-        serverPlayer.world.setBlockState(
+        val world = server()!!.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
+
+        world.setBlockState(
             exitPos,
             BlockRegistry.GYM_EXIT.defaultState
         )
-        serverPlayer.world.markDirty(exitPos)
-        serverPlayer.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
+        world.markDirty(exitPos)
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayerEntity) {
-        val returnDim = when (GymsNbtData.getReturnDimension(serverPlayer as EntityDataSaver)) {
-            null -> DimensionTypes.OVERWORLD_ID
-            else -> Identifier.of(GymsNbtData.getReturnDimension(serverPlayer as EntityDataSaver))
+        val state = RadGymsState.getPlayerState(serverPlayer)
+        var preloadPos: BlockPos
+        var preloadDim: ServerWorld
+        if (state.returnCoords != null) {
+            preloadPos = state.returnCoords!!.position
+            preloadDim = server()!!.getWorld(
+                RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    state.returnCoords!!.dimension
+                )
+            )!!
+        } else {
+            preloadDim = server()!!.getWorld(serverPlayer.spawnPointDimension)!!
+            preloadPos = serverPlayer.spawnPointPosition ?: preloadDim.spawnPos
         }
-        val dim = serverPlayer.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, returnDim))!!
-        val returnCoords = GymsNbtData.getReturnCoordinates(serverPlayer as EntityDataSaver) ?: dim.spawnPos
 
         destructGym(serverPlayer)
 
-        ScheduledTask.Builder()
-            .tracker(ServerTaskTracker)
-            .execute {
-                val returnBlockPos = BlockPos(returnCoords.x, returnCoords.y, returnCoords.z)
-                val preloadPos = serverPlayer.world.getChunk(returnBlockPos)
-                dim.chunkManager.addTicket(
-                    ChunkTicketType.PORTAL,
-                    preloadPos.pos,
-                    1,
-                    returnBlockPos
-                )
-            }
-            .build()
+        preloadDim.chunkManager.addTicket(
+            ChunkTicketType.PORTAL,
+            preloadDim.getChunk(preloadPos).pos,
+            1,
+            preloadPos
+        )
 
         ScheduledTask.Builder()
             .tracker(ServerTaskTracker)
-            .delay(1f)
+            .delay(2f)
             .execute {
-                returnCoords.let {
-                    PlayerSpawnHelper.teleportPlayer(
-                        serverPlayer,
-                        dim,
-                        it.x.toDouble(),
-                        it.y.toDouble(),
-                        it.z.toDouble(),
-                        yaw = serverPlayer.yaw,
-                        pitch = serverPlayer.pitch,
-                    ).also {
-                        debug("Gym instance removed from memory")
-                    }
+                PlayerSpawnHelper.teleportPlayer(
+                    serverPlayer,
+                    preloadDim,
+                    preloadPos,
+                    yaw = serverPlayer.yaw,
+                    pitch = serverPlayer.pitch,
+                ).also {
+                    debug("Gym instance removed from memory")
+                    RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
                 }
             }
             .build()
@@ -250,17 +251,20 @@ object GymManager {
         return
     }
 
-    fun destructGym(serverPlayer: ServerPlayerEntity) {
+    fun destructGym(serverPlayer: ServerPlayerEntity, removeCoords: Boolean? = true) {
         val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
 
-        val world = serverPlayer.world
+        val world = server()!!.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
 
         gym.npcList.forEach {
-            debug("Removing trainer ${it.second} from registry and detaching associated entity")
-            RCT.trainerRegistry.unregisterById(it.first.toString())
-            (world as ServerWorld).getEntity(it.first)?.discard()
+            debug("Removing trainer ${it.value} from registry and detaching associated entity")
+            RCT.trainerRegistry.unregisterById(it.key.toString())
+            world.getEntity(it.key)?.discard()
         }
 
+        if (removeCoords == true) {
+            RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
+        }
         PLAYER_GYMS.remove(serverPlayer.uuid)
     }
 

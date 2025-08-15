@@ -22,8 +22,14 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.math.BlockPos
 
-class GymEntranceEntity(pos: BlockPos, state: BlockState) :
-    BlockEntity(BlockEntityRegistry.GYM_ENTRANCE_ENTITY, pos, state) {
+class GymEntranceEntity(
+    pos: BlockPos,
+    state: BlockState
+) : BlockEntity(
+    BlockEntityRegistry.GYM_ENTRANCE_ENTITY,
+    pos,
+    state
+) {
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
     private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()

@@ -8,43 +8,65 @@
 
 package lol.gito.radgyms.common.item
 
-import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.util.party
+import lol.gito.radgyms.client.RadGymsClient
+import lol.gito.radgyms.client.gui.screen.GymEnterScreen
 import lol.gito.radgyms.client.renderer.GymKeyRenderer
 import lol.gito.radgyms.client.renderer.ISpecialItemModel
 import lol.gito.radgyms.client.renderer.SpecialItemRenderer
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.registry.DataComponentRegistry
-import lol.gito.radgyms.common.util.TranslationUtil.attuneType
+import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
-import net.minecraft.util.*
+import net.minecraft.util.Hand
+import net.minecraft.util.Identifier
+import net.minecraft.util.Rarity
+import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import java.util.function.Consumer
 import java.util.stream.Stream
 
-class GymKey : Item(
+class GymKey : ISpecialItemModel, Item(
     Settings().also { settings ->
         settings
             .rarity(Rarity.UNCOMMON)
             .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)
     }
-), ISpecialItemModel {
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-//        if (world.isClient) {
-//            GuiHandler.openGymKeyScreen(user)
-//        }
+) {
+    override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        if (!world.isClient) {
+            val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
+            if (party.occupied() == 0) {
+                player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
+                debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
+                return TypedActionResult.pass(player.getStackInHand(hand))
+            }
 
-        return super.use(world, user, hand)
+            if (party.all { it.isFainted() }) {
+                player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
+                debug("Player ${player.uuid} tried to use gym key with party fainted, denying...")
+                return TypedActionResult.pass(player.getStackInHand(hand))
+            }
+        } else {
+            MinecraftClient.getInstance().setScreen(
+                GymEnterScreen(true, player.getStackInHand(hand).get(DataComponentRegistry.GYM_TYPE_COMPONENT))
+            )
+        }
+
+        return super.use(world, player, hand)
     }
 
     override fun appendTooltip(
@@ -54,25 +76,7 @@ class GymKey : Item(
         type: TooltipType
     ) {
         val attuned = itemStack.get(DataComponentRegistry.GYM_TYPE_COMPONENT)
-        if (attuned != null) {
-            val tooltipText: MutableText = attuneType(attuned)
-            tooltip.addLast(tooltipText.formatted(Formatting.GOLD))
-        } else {
-            val tooltipText: MutableText = translatable(
-                modId("item.component.gym_type").toTranslationKey(),
-                translatable(
-                    cobblemonResource("type.suffix").toTranslationKey(),
-                    translatable(modId("item.component.type.chaos").toTranslationKey()).styled {
-                        it.withFormatting(Formatting.OBFUSCATED)
-                    }
-                )
-            )
-            tooltip.addLast(
-                tooltipText.styled {
-                    it.withColor(Formatting.DARK_PURPLE)
-                }
-            )
-        }
+        tooltip.addLast(buildPrefixedSuffixedTypeText(attuned))
     }
 
     override fun getDefaultStack(): ItemStack {
@@ -89,7 +93,7 @@ class GymKey : Item(
     ) {
         unbakedModels.forEach {
             if (it.namespace.equals(RadGyms.MOD_ID) && it.path.startsWith("gym_key")) {
-                loader.accept(RadGyms.modModelId(it, "inventory"))
+                loader.accept(RadGymsClient.modModelId(it, "inventory"))
             }
         }
     }

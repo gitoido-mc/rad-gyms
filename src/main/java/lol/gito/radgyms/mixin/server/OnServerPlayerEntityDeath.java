@@ -24,7 +24,7 @@ public abstract class OnServerPlayerEntityDeath {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
 
         if (player.getWorld().getRegistryKey() == DimensionRegistry.INSTANCE.getRADGYMS_LEVEL_KEY()) {
-            GymManager.INSTANCE.destructGym(player);
+            GymManager.INSTANCE.destructGym(player, true);
         }
     }
 }

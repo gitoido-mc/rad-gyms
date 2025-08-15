@@ -6,12 +6,12 @@
  *
  */
 
-package lol.gito.radgyms.common.nbt
+package lol.gito.radgyms.common.registry
 
-import net.minecraft.nbt.NbtCompound
+import lol.gito.radgyms.common.RadGyms.debug
 
-interface EntityDataSaver {
-    @Suppress("FunctionName")
-    fun `RadGyms$getGymsPersistentData`(): NbtCompound
-    fun `RadGyms$setGymsPersistentData`(data: NbtCompound)
+object NetworkRegistry {
+    fun register() {
+        debug("Registering network stack")
+    }
 }

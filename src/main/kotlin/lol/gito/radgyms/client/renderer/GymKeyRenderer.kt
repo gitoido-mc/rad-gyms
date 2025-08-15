@@ -8,7 +8,7 @@
 
 package lol.gito.radgyms.client.renderer
 
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.client.RadGymsClient
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.VertexConsumerProvider
@@ -30,9 +30,9 @@ class GymKeyRenderer : SpecialItemRenderer() {
         light: Int,
         overlay: Int
     ) {
-        var model = RadGyms.modModelId("gym_key_default", "inventory")
+        var model = RadGymsClient.modModelId("gym_key_default", "inventory")
         val type = stack.get(DataComponentRegistry.GYM_TYPE_COMPONENT)
-        val overrideModel = RadGyms.modModelId("gym_keys/$type", "inventory")
+        val overrideModel = RadGymsClient.modModelId("gym_keys/$type", "inventory")
         val modelManager = MinecraftClient.getInstance().bakedModelManager
 
         if (modelManager.getModel(overrideModel) != modelManager.missingModel) {

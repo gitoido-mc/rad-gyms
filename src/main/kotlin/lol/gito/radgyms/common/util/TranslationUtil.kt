@@ -8,28 +8,45 @@
 
 package lol.gito.radgyms.common.util
 
+import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.cobblemonResource
 import lol.gito.radgyms.common.RadGyms.modId
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text.translatable
+import net.minecraft.util.Formatting
 
 object TranslationUtil {
-    fun attuneType(cacheType: String?): MutableText = if (cacheType?.let { ElementalTypes.get(it) } != null) {
-        translatable(
-            modId("item.component.gym_type").toTranslationKey(),
-            translatable(
-                cobblemonResource("type.suffix").toTranslationKey(),
-                translatable(cobblemonResource("type.$cacheType").toTranslationKey())
-            )
-        )
-    } else {
-        translatable(
-            modId("item.component.gym_type").toTranslationKey(),
-            translatable(
-                cobblemonResource("type.suffix").toTranslationKey(),
-                modId("item.component.type.$cacheType").toTranslationKey()
-            )
-        )
+    fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): MutableText =
+        buildPrefixedSuffixedTypeText(elementalType?.name?.lowercase())
+
+    fun buildPrefixedSuffixedTypeText(elementalType: String? = null): MutableText = translatable(
+        modId("item.component.gym_type").toTranslationKey(),
+        buildSuffixedTypeText(elementalType)
+    )
+
+    fun buildSuffixedTypeText(elementalType: ElementalType? = null): MutableText =
+        buildSuffixedTypeText(elementalType?.name?.lowercase())
+
+    fun buildSuffixedTypeText(elementalType: String? = null): MutableText = translatable(
+        cobblemonResource("type.suffix").toTranslationKey(),
+        buildTypeText(elementalType)
+    )
+
+    fun buildTypeText(elementalType: ElementalType? = null): MutableText =
+        buildTypeText(elementalType?.name?.lowercase())
+
+    fun buildTypeText(elementalType: String? = null): MutableText = when {
+        (elementalType == null) -> translatable(modId("item.component.type.chaos").toTranslationKey()).styled {
+            it.withFormatting(Formatting.OBFUSCATED).withFormatting(Formatting.DARK_GRAY)
+        }
+
+        (ElementalTypes.get(elementalType) != null) -> translatable(cobblemonResource("type.$elementalType").toTranslationKey()).styled {
+            it.withFormatting(Formatting.DARK_PURPLE)
+        }
+
+        else -> translatable(modId("item.component.type.$elementalType").toTranslationKey()).styled {
+            it.withFormatting(Formatting.GOLD)
+        }
     }
 }

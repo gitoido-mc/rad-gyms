@@ -17,12 +17,9 @@ import lol.gito.radgyms.common.entity.EntityManager
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager
-//import lol.gito.radgyms.common.network.NetworkStackHandler
+import lol.gito.radgyms.common.network.CommonNetworkStack
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.server.command.CommandRegistry
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
-import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,12 +28,11 @@ import java.io.File
 object RadGyms {
     const val MOD_ID: String = "rad-gyms"
     private const val CONFIG_PATH: String = "config/${MOD_ID}_server.json"
-    lateinit var CONFIG: RadGymsConfig
-    val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
-
-    //    val CHANNEL: OwoNetChannel = OwoNetChannel.create(modId("main"))
-    val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
     private val GYM_LOADER: RadGymsDataLoader = RadGymsDataLoader()
+    val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
+    val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
+
+    lateinit var CONFIG: RadGymsConfig
 
     fun init() {
         LOGGER.info("Initializing the mod")
@@ -62,21 +58,12 @@ object RadGyms {
         CommandRegistry.register()
 
         // Network
-//        NetworkStackHandler.register()
+        CommonNetworkStack.register()
+
     }
 
     fun modId(name: String): Identifier {
         return Identifier.of(MOD_ID, name)
-    }
-
-    @Environment(EnvType.CLIENT)
-    fun modModelId(id: Identifier, variant: String): ModelIdentifier {
-        return ModelIdentifier(id, variant)
-    }
-
-    @Environment(EnvType.CLIENT)
-    fun modModelId(name: String, variant: String): ModelIdentifier {
-        return modModelId(modId(name), variant)
     }
 
     fun debug(message: String) {
@@ -121,6 +108,4 @@ object RadGyms {
             debug("Saving config")
         }
     }
-
-
 }

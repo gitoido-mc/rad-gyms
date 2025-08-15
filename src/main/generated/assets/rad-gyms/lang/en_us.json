@@ -1,5 +1,7 @@
 {
   "block.rad-gyms.gym_entrance": "Gym Entrance",
+  "block.rad-gyms.gym_entrance.tooltip": "Type can be changed by using Debug Stick on the block.",
+  "block.rad-gyms.gym_entrance.tooltip2": "All players entry count can be reset by using Debug Stick on it while crouching.",
   "block.rad-gyms.gym_exit": "Gym Exit",
   "block.rad-gyms.shard_block_common": "Common shard block",
   "block.rad-gyms.shard_block_epic": "Epic shard block",

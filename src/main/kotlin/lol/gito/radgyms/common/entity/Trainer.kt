@@ -12,6 +12,7 @@ import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.gym.GymManager.PLAYER_GYMS
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.attribute.DefaultAttributeContainer
@@ -19,8 +20,8 @@ import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -59,23 +60,26 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
     }
 
     override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
-        if (player is ServerPlayerEntity && world is ServerWorld) {
+        if (!this.world.isClient) {
             val trainerRegistry = RadGyms.RCT.trainerRegistry
             val rctBattleManager = RadGyms.RCT.battleManager
             val playerTrainer = trainerRegistry.getById(player.uuid.toString())
-            val gymNpcPair = PLAYER_GYMS[player.uuid]!!.npcList.first { it.first == uuid }
+            val gymNpc = PLAYER_GYMS[player.uuid]!!.npcList[uuid]!!
 
-            var npcTrainer: TrainerNPC?
+            var npcTrainer: TrainerNPC? = null
             RadGyms.RCT.trainerRegistry.let { registry ->
-                npcTrainer = RadGyms.RCT.trainerRegistry.getById(uuid.toString()) as TrainerNPC?
+                npcTrainer = RadGyms.RCT.trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
             }
 
             if (npcTrainer == null) {
+                debug("no trainer in registry")
                 npcTrainer = RadGyms.RCT.trainerRegistry.registerNPC(
-                    gymNpcPair.first.toString(),
-                    gymNpcPair.second.trainer
+                    uuid.toString(),
+                    gymNpc.trainer
                 )
                 npcTrainer.entity = this
+            } else {
+                debug("found trainer in registry")
             }
 
             if (requires != null) {
@@ -100,9 +104,10 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
                 }
 
                 player.sendMessage(Text.translatable(messageKey), true)
+                sayNo()
                 return ActionResult.FAIL
             }
-
+//
             rctBattleManager.startBattle(
                 listOf(playerTrainer),
                 listOf(npcTrainer),
@@ -110,10 +115,15 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
                 BattleRules()
             )
 
-            return ActionResult.SUCCESS_NO_ITEM_USED
+            return ActionResult.success(this.world.isClient)
+        } else {
+            if (defeated) {
+                sayNo()
+                return ActionResult.FAIL
+            }
         }
 
-        return ActionResult.PASS
+        return ActionResult.success(true)
     }
 
     override fun writeNbt(nbt: NbtCompound): NbtCompound {
@@ -144,6 +154,13 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
         }
         if (nbt.contains(leaderKey)) {
             leader = nbt.getBoolean(leaderKey)
+        }
+    }
+
+    private fun sayNo() {
+        this.headRollingTimeLeft = 40
+        if (!this.world.isClient()) {
+            this.playSound(SoundEvents.ENTITY_VILLAGER_NO)
         }
     }
 }

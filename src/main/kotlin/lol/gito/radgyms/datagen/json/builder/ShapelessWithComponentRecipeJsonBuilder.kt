@@ -102,7 +102,7 @@ class ShapelessWithComponentRecipeJsonBuilder(
         exporter.accept(
             recipeId,
             shapelessRecipe,
-            builder.build(recipeId.withPrefixedPath("recipes/" + category.name + "/"))
+            builder.build(recipeId.withPrefixedPath("recipes/" + category.name.lowercase() + "/"))
         )
     }
 
