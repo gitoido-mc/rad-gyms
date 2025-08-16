@@ -30,6 +30,7 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
+import net.minecraft.util.Colors
 import net.minecraft.util.math.BlockPos
 
 
@@ -52,7 +53,7 @@ class GymEnterScreen(val key: Boolean, val type: String? = null, val pos: BlockP
         const val BASE_WIDTH = 300
         const val BASE_HEIGHT = 80
 
-        private val panelResource = radGymsResource("textures/gui/panel.png")
+        private val panelResource = radGymsResource("textures/gui/gym_enter.png")
     }
 
     val middleX: Int
@@ -183,10 +184,11 @@ class GymEnterScreen(val key: Boolean, val type: String? = null, val pos: BlockP
         // Box Label
         drawScaledText(
             context = context,
-            text = message.withColor(4210752),
+            text = message,
             x = x + (BASE_WIDTH / 2),
             y = y + 10,
-            centered = true
+            centered = true,
+            colour = Colors.BLACK
         )
 
         super.render(context, mouseX, mouseY, delta)

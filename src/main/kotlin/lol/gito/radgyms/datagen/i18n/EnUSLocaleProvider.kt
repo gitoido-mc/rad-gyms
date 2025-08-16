@@ -91,7 +91,7 @@ class EnUSLocaleProvider(
             modId("gui.common.leave-gym").toTranslationKey() to
                     "You want to leave?",
             modId("gui.common.leave-gym-reward").toTranslationKey() to
-                    "Rewards will be lost if leader is not beaten.",
+                    "Rewards will be lost if leader is not defeated.",
             modId("gui.common.leave").toTranslationKey() to
                     "Leave Gym",
             modId("gui.common.uses_left").toTranslationKey() to
@@ -106,7 +106,7 @@ class EnUSLocaleProvider(
                     "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance",
             modId("message.info.gym_entrance_exhausted").toTranslationKey() to
                     "This gym entrance lost all his energies, look for another one",
-            modId("message.info.gym_entrance_party_fainted").toTranslationKey() to
+            modId("message.info.gym_entrance_party_empty").toTranslationKey() to
                     "Your pokemon party is empty",
             modId("message.info.gym_entrance_party_fainted").toTranslationKey() to
                     "Your pokemon party requires healing",

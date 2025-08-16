@@ -32,7 +32,7 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
         const val BASE_WIDTH = 300
         const val BASE_HEIGHT = 80
 
-        private val panelResource = radGymsResource("textures/gui/panel.png")
+        private val panelResource = radGymsResource("textures/gui/gym_leave.png")
     }
 
     val middleX: Int
@@ -94,24 +94,27 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
         // Box Label
         drawScaledText(
             context = context,
-            text = translatable(modId("gui.common.leave").toTranslationKey()).withColor(4210752),
+            text = translatable(modId("gui.common.leave").toTranslationKey()),
             x = x + (BASE_WIDTH / 2),
             y = y + 10,
-            centered = true
+            centered = true,
+            colour = Colors.BLACK
         )
         drawScaledText(
             context = context,
-            text = translatable(modId("gui.common.leave-gym").toTranslationKey()).withColor(Colors.BLACK),
+            text = translatable(modId("gui.common.leave-gym").toTranslationKey()),
             x = x + (BASE_WIDTH / 2),
             y = middleY - 16,
-            centered = true
+            centered = true,
+            colour = Colors.BLACK
         )
         drawScaledText(
             context = context,
-            text = translatable(modId("gui.common.leave-gym-reward").toTranslationKey()).withColor(Colors.BLACK),
+            text = translatable(modId("gui.common.leave-gym-reward").toTranslationKey()),
             x = x + (BASE_WIDTH / 2),
-            y = middleY - 2,
-            centered = true
+            y = middleY - 4,
+            centered = true,
+            colour = Colors.BLACK
         )
 
         super.render(context, mouseX, mouseY, delta)
