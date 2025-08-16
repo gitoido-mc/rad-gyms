@@ -49,8 +49,14 @@ repositories {
     maven("https://maven.impactdev.net/repository/development/")
     maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
     maven("https://maven.blamejared.com/")
-    maven("https://modmaven.dev/")
-    maven("https://packages.aether-mod.net/The-Aether")
+    maven {
+        url = URI("https://packages.aether-mod.net/The-Aether")
+        content {
+            includeGroup("com.aetherteam.aether")
+            includeGroup("com.aetherteam.cumulus")
+            includeGroup("com.aetherteam.nitrogen")
+        }
+    }
 }
 
 fabricApi {
