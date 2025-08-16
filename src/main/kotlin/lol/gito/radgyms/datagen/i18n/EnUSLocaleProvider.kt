@@ -86,16 +86,14 @@ class EnUSLocaleProvider(
                     "Level %s %s gym reward cache",
             modId("gui.common.set-gym-level").toTranslationKey() to
                     "Select desirable %s gym level",
-            modId("gui.common.select-cache-type").toTranslationKey() to
-                    "Select desirable cache reward",
+            modId("gui.common.set-gym-level-entry").toTranslationKey() to
+                    "Select desirable %s gym level (Uses left: %s)",
             modId("gui.common.leave-gym").toTranslationKey() to
-                    "You want to leave?\nRewards will be lost if leader is not beaten.",
+                    "You want to leave?",
+            modId("gui.common.leave-gym-reward").toTranslationKey() to
+                    "Rewards will be lost if leader is not beaten.",
             modId("gui.common.leave").toTranslationKey() to
                     "Leave Gym",
-            modId("gui.common.start").toTranslationKey() to
-                    "Start Gym",
-            modId("gui.common.cancel").toTranslationKey() to
-                    "Cancel",
             modId("gui.common.uses_left").toTranslationKey() to
                     "Entrance uses left: %s",
             modId("npc.trainer_junior").toTranslationKey() to
@@ -109,7 +107,9 @@ class EnUSLocaleProvider(
             modId("message.info.gym_entrance_exhausted").toTranslationKey() to
                     "This gym entrance lost all his energies, look for another one",
             modId("message.info.gym_entrance_party_fainted").toTranslationKey() to
-                    "Your party requires healing",
+                    "Your pokemon party is empty",
+            modId("message.info.gym_entrance_party_fainted").toTranslationKey() to
+                    "Your pokemon party requires healing",
             modId("message.info.trainer_required").toTranslationKey() to
                     "Go fight %s before challenging me.",
             modId("message.info.trainer_defeated").toTranslationKey() to
