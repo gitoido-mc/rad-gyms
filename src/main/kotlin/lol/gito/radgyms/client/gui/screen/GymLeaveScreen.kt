@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import lol.gito.radgyms.client.radGymsResource
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.network.payload.GymLeave
+import lol.gito.radgyms.common.network.payload.GymLeaveC2S
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -23,6 +23,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text.translatable
+import net.minecraft.util.Colors
 
 
 @Environment(EnvType.CLIENT)
@@ -31,7 +32,7 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
         const val BASE_WIDTH = 300
         const val BASE_HEIGHT = 80
 
-        private val panelResource = radGymsResource("textures/gui/panel.png")
+        private val panelResource = radGymsResource("textures/gui/gym_leave.png")
     }
 
     val middleX: Int
@@ -56,7 +57,7 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
         val proceedButton = ButtonWidget
             .builder(ScreenTexts.PROCEED) {
                 debug(level.toString())
-                ClientPlayNetworking.send(GymLeave(true))
+                ClientPlayNetworking.send(GymLeaveC2S(true))
                 close()
             }
             .size(50, 20)
@@ -93,17 +94,27 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
         // Box Label
         drawScaledText(
             context = context,
-            text = translatable(modId("gui.common.leave").toTranslationKey()).withColor(4210752),
+            text = translatable(modId("gui.common.leave").toTranslationKey()),
             x = x + (BASE_WIDTH / 2),
             y = y + 10,
-            centered = true
+            centered = true,
+            colour = Colors.BLACK
         )
         drawScaledText(
             context = context,
-            text = translatable(modId("gui.common.leave-gym").toTranslationKey()).withColor(4210752),
+            text = translatable(modId("gui.common.leave-gym").toTranslationKey()),
             x = x + (BASE_WIDTH / 2),
-            y = middleY - 15,
-            centered = true
+            y = middleY - 16,
+            centered = true,
+            colour = Colors.BLACK
+        )
+        drawScaledText(
+            context = context,
+            text = translatable(modId("gui.common.leave-gym-reward").toTranslationKey()),
+            x = x + (BASE_WIDTH / 2),
+            y = middleY - 4,
+            centered = true,
+            colour = Colors.BLACK
         )
 
         super.render(context, mouseX, mouseY, delta)

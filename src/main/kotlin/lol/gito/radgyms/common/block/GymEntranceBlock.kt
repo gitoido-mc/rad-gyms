@@ -11,21 +11,22 @@ package lol.gito.radgyms.common.block
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
-import lol.gito.radgyms.client.gui.screen.GymEnterScreen
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
+import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.BlockRegistry.GYM_ENTRANCE
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
@@ -50,48 +51,38 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
         player: PlayerEntity,
         hit: BlockHitResult
     ): ActionResult {
+        if (world.isClient) return ActionResult.PASS
         if (world.getBlockEntity(pos) !is GymEntranceEntity) return super.onUse(state, world, pos, player, hit)
 
-        if (!world.isClient) {
-            val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
-            if (party.occupied() == 0) {
-                player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
-                debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
-                return ActionResult.FAIL
-            }
+        val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
+        if (party.occupied() == 0) {
+            player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
+            debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
+            return ActionResult.FAIL
+        }
 
-            party.forEach { it.heal() }
-
-            if (party.all { it.isFainted() }) {
-                player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
-                debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
-                return ActionResult.FAIL
-            }
+        if (party.all { it.isFainted() }) {
+            player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
+            debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
+            return ActionResult.FAIL
         }
 
         val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
 
         if (gymEntrance.usesLeftForPlayer(player) == 0) {
-            if (!world.isClient) player.sendMessage(translatable(modId("message.info.gym_entrance_exhausted").toTranslationKey()))
+            player.sendMessage(translatable(modId("message.info.gym_entrance_exhausted").toTranslationKey()))
             debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
             return ActionResult.FAIL
         }
 
-        if (world.isClient) {
-            debug(
-                "Client: Opening gym entry screen for player ${player.uuid} (tries left: ${
-                    gymEntrance.usesLeftForPlayer(
-                        player
-                    )
-                })"
+        ServerPlayNetworking.send(
+            player as ServerPlayerEntity,
+            OpenGymEnterScreenS2C(
+                false,
+                gymEntrance.gymType,
+                pos
             )
-
-
-            MinecraftClient.getInstance().setScreen(
-                GymEnterScreen(true, gymEntrance.gymType)
-            )
-//            GuiHandler.openGymEntranceScreen(player, gymEntrance.gymType, pos, gymEntrance.usesLeftForPlayer(player))
-        }
+        )
 
         return ActionResult.SUCCESS
     }

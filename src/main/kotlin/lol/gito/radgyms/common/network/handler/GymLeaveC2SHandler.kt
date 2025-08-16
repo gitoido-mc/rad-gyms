@@ -10,13 +10,13 @@ package lol.gito.radgyms.common.network.handler
 
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.gym.GymManager
-import lol.gito.radgyms.common.network.payload.GymLeave
+import lol.gito.radgyms.common.network.payload.GymLeaveC2S
 import lol.gito.radgyms.common.registry.ItemRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.text.Text
 
 @Suppress("unused")
-class GymLeavePacketHandler(payload: GymLeave, context: ServerPlayNetworking.Context) {
+class GymLeaveC2SHandler(payload: GymLeaveC2S, context: ServerPlayNetworking.Context) {
     init {
         val stack = context.player().mainHandStack
         if (stack.item == ItemRegistry.EXIT_ROPE && !context.player().isCreative) {

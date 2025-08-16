@@ -2,6 +2,7 @@
 
 .gradle/
 build/
+datagen/
 out/
 classes/
 

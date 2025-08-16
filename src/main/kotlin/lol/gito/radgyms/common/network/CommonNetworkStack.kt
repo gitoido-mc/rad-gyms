@@ -8,32 +8,38 @@
 
 package lol.gito.radgyms.common.network
 
-import lol.gito.radgyms.common.network.handler.CacheOpenPacketHandler
-import lol.gito.radgyms.common.network.handler.GymEnterPacketHandler
-import lol.gito.radgyms.common.network.handler.GymLeavePacketHandler
-import lol.gito.radgyms.common.network.payload.CacheOpen
-import lol.gito.radgyms.common.network.payload.GymEnter
-import lol.gito.radgyms.common.network.payload.GymLeave
+import lol.gito.radgyms.common.network.handler.CacheOpenC2SHandler
+import lol.gito.radgyms.common.network.handler.GymEnterC2SHandler
+import lol.gito.radgyms.common.network.handler.GymLeaveC2SHandler
+import lol.gito.radgyms.common.network.payload.*
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 
 object CommonNetworkStack {
     fun register() {
         PayloadTypeRegistry.playC2S().register(
-            GymEnter.ID,
-            GymEnter.PACKET_CODEC
+            GymEnterC2S.ID,
+            GymEnterC2S.PACKET_CODEC
         )
         PayloadTypeRegistry.playC2S().register(
-            GymLeave.ID,
-            GymLeave.PACKET_CODEC
+            GymLeaveC2S.ID,
+            GymLeaveC2S.PACKET_CODEC
         )
         PayloadTypeRegistry.playC2S().register(
-            CacheOpen.ID,
-            CacheOpen.PACKET_CODEC
+            CacheOpenC2S.ID,
+            CacheOpenC2S.PACKET_CODEC
+        )
+        PayloadTypeRegistry.playS2C().register(
+            OpenGymEnterScreenS2C.ID,
+            OpenGymEnterScreenS2C.PACKET_CODEC
+        )
+        PayloadTypeRegistry.playS2C().register(
+            OpenGymLeaveScreenS2C.ID,
+            OpenGymLeaveScreenS2C.PACKET_CODEC
         )
 
-        ServerPlayNetworking.registerGlobalReceiver(GymEnter.ID, ::GymEnterPacketHandler)
-        ServerPlayNetworking.registerGlobalReceiver(GymLeave.ID, ::GymLeavePacketHandler)
-        ServerPlayNetworking.registerGlobalReceiver(CacheOpen.ID, ::CacheOpenPacketHandler)
+        ServerPlayNetworking.registerGlobalReceiver(GymEnterC2S.ID, ::GymEnterC2SHandler)
+        ServerPlayNetworking.registerGlobalReceiver(GymLeaveC2S.ID, ::GymLeaveC2SHandler)
+        ServerPlayNetworking.registerGlobalReceiver(CacheOpenC2S.ID, ::CacheOpenC2SHandler)
     }
 }

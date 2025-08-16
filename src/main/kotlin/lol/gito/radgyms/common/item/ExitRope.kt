@@ -8,15 +8,16 @@
 
 package lol.gito.radgyms.common.item
 
-import lol.gito.radgyms.client.gui.screen.GymLeaveScreen
+import lol.gito.radgyms.common.network.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.DimensionRegistry
 import lol.gito.radgyms.common.registry.ItemRegistry.EXIT_ROPE
-import net.minecraft.client.MinecraftClient
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
@@ -26,16 +27,20 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
 class ExitRope : Item(Settings()) {
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         if (world.isClient) {
-            if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-                MinecraftClient.getInstance().setScreen(GymLeaveScreen())
-            } else {
-                user.sendMessage(translatable(EXIT_ROPE.translationKey.plus(".failed")))
-            }
+            return TypedActionResult.pass(player.getStackInHand(hand))
         }
 
-        return super.use(world, user, hand)
+        if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
+            ServerPlayNetworking.send(
+                player as ServerPlayerEntity, OpenGymLeaveScreenS2C(OpenGymLeaveScreenS2C.PACKET_ID)
+            )
+        } else {
+            player.sendMessage(translatable(EXIT_ROPE.translationKey.plus(".failed")))
+        }
+
+        return super.use(world, player, hand)
     }
 
     override fun getDefaultStack(): ItemStack {

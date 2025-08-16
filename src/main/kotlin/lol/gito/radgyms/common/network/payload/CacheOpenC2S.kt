@@ -13,28 +13,29 @@ import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.network.packet.CustomPayload
+import net.minecraft.util.Rarity
 
-class GymEnter(
-    val key: Boolean,
-    val level: Int,
-    val type: String? = null
+class CacheOpenC2S(
+    val type: String,
+    val rarity: Rarity,
+    val shinyBoost: Int,
 ) : CustomPayload {
     override fun getId(): CustomPayload.Id<out CustomPayload> = ID
 
     companion object {
-        val PACKET_ID = modId("net.gym_enter")
-        val ID = CustomPayload.Id<GymEnter>(PACKET_ID)
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, GymEnter> = PacketCodec.of<RegistryByteBuf, GymEnter>(
+        val PACKET_ID = modId("net.cache_open")
+        val ID = CustomPayload.Id<CacheOpenC2S>(PACKET_ID)
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, CacheOpenC2S> = PacketCodec.of<RegistryByteBuf, CacheOpenC2S>(
             { value, buffer ->
-                PacketCodecs.BOOL.encode(buffer, value.key)
-                PacketCodecs.INTEGER.encode(buffer, value.level)
-                PacketCodecs.STRING.apply(PacketCodecs::optional).encode(buffer, value.type)
+                PacketCodecs.STRING.encode(buffer, value.type)
+                Rarity.PACKET_CODEC.encode(buffer, value.rarity)
+                PacketCodecs.INTEGER.encode(buffer, value.shinyBoost)
             },
             { buffer ->
-                GymEnter(
-                    PacketCodecs.BOOL.decode(buffer),
-                    PacketCodecs.INTEGER.decode(buffer),
-                    PacketCodecs.STRING.apply(PacketCodecs::optional).decode(buffer)
+                CacheOpenC2S(
+                    PacketCodecs.STRING.decode(buffer),
+                    Rarity.PACKET_CODEC.decode(buffer),
+                    PacketCodecs.INTEGER.decode(buffer)
                 )
             }
         )
