@@ -9,15 +9,16 @@
 package lol.gito.radgyms.common.network.handler
 
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.gym.GymManager
-import lol.gito.radgyms.common.network.payload.GymEnter
+import lol.gito.radgyms.common.network.payload.GymEnterC2S
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import lol.gito.radgyms.common.registry.ItemRegistry
 import lol.gito.radgyms.common.util.TranslationUtil
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.text.Text
 
-class GymEnterPacketHandler(payload: GymEnter, context: ServerPlayNetworking.Context) {
+class GymEnterC2SHandler(payload: GymEnterC2S, context: ServerPlayNetworking.Context) {
     init {
         RadGyms.debug("Using key? : ${payload.key}")
         var message = Text.translatable(
@@ -46,7 +47,11 @@ class GymEnterPacketHandler(payload: GymEnter, context: ServerPlayNetworking.Con
                     )
                 )
             }
+        }
 
+        if (payload.pos != null) {
+            val gymEntrance: GymEntranceEntity = context.player().world.getBlockEntity(payload.pos) as GymEntranceEntity
+            gymEntrance.incrementPlayerUseCount(context.player())
         }
 
         context.player().sendMessage(message)

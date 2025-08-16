@@ -17,33 +17,37 @@ import lol.gito.radgyms.client.gui.widget.LevelSliderWidget
 import lol.gito.radgyms.client.radGymsResource
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.network.payload.GymEnter
+import lol.gito.radgyms.common.block.entity.GymEntranceEntity
+import lol.gito.radgyms.common.network.payload.GymEnterC2S
 import lol.gito.radgyms.common.util.TranslationUtil.buildTypeText
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
+import net.minecraft.util.math.BlockPos
 
 
 @Environment(EnvType.CLIENT)
-class GymEnterScreen(val key: Boolean, val type: String? = null) : CobblemonRenderable, Screen(
-    when {
-        (type == null || ElementalTypes.get(type) != null) -> translatable(
-            modId("gui.common.set-gym-level").toTranslationKey(),
-            buildTypeText(type)
-        )
+class GymEnterScreen(val key: Boolean, val type: String? = null, val pos: BlockPos? = null) : CobblemonRenderable,
+    Screen(
+        when {
+            (type == null || ElementalTypes.get(type) != null) -> translatable(
+                modId("gui.common.set-gym-level").toTranslationKey(),
+                buildTypeText(type)
+            )
 
-        else -> translatable(
-            modId("gui.common.set-custom-gym-level").toTranslationKey(),
-            buildTypeText(type)
-        )
-    }
-) {
+            else -> translatable(
+                modId("gui.common.set-custom-gym-level").toTranslationKey(),
+                buildTypeText(type)
+            )
+        }
+    ) {
     companion object {
         const val BASE_WIDTH = 300
         const val BASE_HEIGHT = 80
@@ -62,6 +66,15 @@ class GymEnterScreen(val key: Boolean, val type: String? = null) : CobblemonRend
         get() = middleY - BASE_HEIGHT / 2
 
     var level: Int = 10
+
+    val usesLeft: Int? = when (pos) {
+        null -> null
+        else -> {
+            val player = MinecraftClient.getInstance().player
+            val gymEntrance: GymEntranceEntity = player!!.world.getBlockEntity(pos) as GymEntranceEntity
+            gymEntrance.usesLeftForPlayer(player)
+        }
+    }
 
     override fun applyBlur(delta: Float) {}
 
@@ -117,7 +130,7 @@ class GymEnterScreen(val key: Boolean, val type: String? = null) : CobblemonRend
         val proceedButton = ButtonWidget
             .builder(ScreenTexts.PROCEED) {
                 debug(level.toString())
-                ClientPlayNetworking.send(GymEnter(key, level, type))
+                ClientPlayNetworking.send(GymEnterC2S(key, level, type, pos))
                 close()
             }
             .size(50, 20)
@@ -156,10 +169,21 @@ class GymEnterScreen(val key: Boolean, val type: String? = null) : CobblemonRend
             height = BASE_HEIGHT
         )
 
+        val message = when (pos) {
+            null -> translatable("rad-gyms.gui.common.set-gym-level", buildTypeText(type))
+            else -> {
+                translatable(
+                    "rad-gyms.gui.common.set-gym-level-entry",
+                    buildTypeText(type),
+                    usesLeft
+                )
+            }
+        }
+
         // Box Label
         drawScaledText(
             context = context,
-            text = translatable("rad-gyms.gui.common.set-gym-level", buildTypeText(type)).withColor(4210752),
+            text = message.withColor(4210752),
             x = x + (BASE_WIDTH / 2),
             y = y + 10,
             centered = true

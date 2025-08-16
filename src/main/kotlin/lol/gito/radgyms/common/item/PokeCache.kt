@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.network.payload.CacheOpen
+import lol.gito.radgyms.common.network.payload.CacheOpenC2S
 import lol.gito.radgyms.common.registry.DataComponentRegistry.CACHE_SHINY_BOOST_COMPONENT
 import lol.gito.radgyms.common.registry.DataComponentRegistry.GYM_TYPE_COMPONENT
 import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
@@ -68,7 +68,7 @@ open class PokeCache(private val rarity: Rarity) : Item(Settings().rarity(rarity
                 else -> type
             }
             ClientPlayNetworking.send(
-                CacheOpen(
+                CacheOpenC2S(
                     type = cacheType,
                     rarity = rarity,
                     shinyBoost = boost,

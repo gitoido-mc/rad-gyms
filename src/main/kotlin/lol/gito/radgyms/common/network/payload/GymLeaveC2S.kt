@@ -14,20 +14,20 @@ import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.network.packet.CustomPayload
 
-class GymLeave(
+class GymLeaveC2S(
     val teleport: Boolean
 ) : CustomPayload {
     override fun getId(): CustomPayload.Id<out CustomPayload> = ID
 
     companion object {
         val PACKET_ID = modId("net.gym_leave")
-        val ID = CustomPayload.Id<GymLeave>(PACKET_ID)
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, GymLeave> = PacketCodec.of<RegistryByteBuf, GymLeave>(
+        val ID = CustomPayload.Id<GymLeaveC2S>(PACKET_ID)
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, GymLeaveC2S> = PacketCodec.of<RegistryByteBuf, GymLeaveC2S>(
             { value, buffer ->
                 PacketCodecs.BOOL.encode(buffer, value.teleport)
             },
             { buffer ->
-                GymLeave(PacketCodecs.BOOL.decode(buffer))
+                GymLeaveC2S(PacketCodecs.BOOL.decode(buffer))
             }
         )
     }

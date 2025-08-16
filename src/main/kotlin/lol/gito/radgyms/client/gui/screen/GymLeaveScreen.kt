@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import lol.gito.radgyms.client.radGymsResource
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.network.payload.GymLeave
+import lol.gito.radgyms.common.network.payload.GymLeaveC2S
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -23,6 +23,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text.translatable
+import net.minecraft.util.Colors
 
 
 @Environment(EnvType.CLIENT)
@@ -56,7 +57,7 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
         val proceedButton = ButtonWidget
             .builder(ScreenTexts.PROCEED) {
                 debug(level.toString())
-                ClientPlayNetworking.send(GymLeave(true))
+                ClientPlayNetworking.send(GymLeaveC2S(true))
                 close()
             }
             .size(50, 20)
@@ -100,9 +101,16 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
         )
         drawScaledText(
             context = context,
-            text = translatable(modId("gui.common.leave-gym").toTranslationKey()).withColor(4210752),
+            text = translatable(modId("gui.common.leave-gym").toTranslationKey()).withColor(Colors.BLACK),
             x = x + (BASE_WIDTH / 2),
-            y = middleY - 15,
+            y = middleY - 16,
+            centered = true
+        )
+        drawScaledText(
+            context = context,
+            text = translatable(modId("gui.common.leave-gym-reward").toTranslationKey()).withColor(Colors.BLACK),
+            x = x + (BASE_WIDTH / 2),
+            y = middleY - 2,
             centered = true
         )
 

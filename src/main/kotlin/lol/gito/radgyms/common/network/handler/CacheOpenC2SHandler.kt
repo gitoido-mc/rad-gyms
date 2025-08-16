@@ -10,14 +10,14 @@ package lol.gito.radgyms.common.network.handler
 
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.network.payload.CacheOpen
+import lol.gito.radgyms.common.network.payload.CacheOpenC2S
 import lol.gito.radgyms.common.pokecache.CacheHandler
 import lol.gito.radgyms.common.util.TranslationUtil.buildSuffixedTypeText
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 
-class CacheOpenPacketHandler(payload: CacheOpen, context: ServerPlayNetworking.Context) {
+class CacheOpenC2SHandler(payload: CacheOpenC2S, context: ServerPlayNetworking.Context) {
     init {
         val poke: Pokemon = CacheHandler.getPoke(
             payload.type,
