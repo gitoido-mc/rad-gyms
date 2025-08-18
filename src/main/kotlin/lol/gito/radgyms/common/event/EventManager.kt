@@ -70,13 +70,11 @@ object EventManager {
         hand: Hand,
         result: BlockHitResult,
     ): ActionResult {
-        if (!world.isClient) {
-            if (world.registryKey.equals(DimensionRegistry.RADGYMS_LEVEL_KEY)) {
-                debug((world.getBlockState(result.blockPos).block == BlockRegistry.GYM_EXIT).toString())
-                return when (world.getBlockState(result.blockPos).block == BlockRegistry.GYM_EXIT) {
-                    true -> ActionResult.SUCCESS
-                    false -> ActionResult.FAIL
-                }
+        if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
+            if (world.isClient) return ActionResult.PASS
+            return when (world.getBlockState(result.blockPos).block == BlockRegistry.GYM_EXIT) {
+                true -> ActionResult.PASS
+                false -> ActionResult.FAIL
             }
         }
         return ActionResult.PASS

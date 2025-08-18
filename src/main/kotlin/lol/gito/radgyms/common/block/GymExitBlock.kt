@@ -42,8 +42,8 @@ class GymExitBlock(settings: Settings) : BlockWithEntity(settings) {
         player: PlayerEntity,
         hit: BlockHitResult
     ): ActionResult {
-        if (world.isClient) return ActionResult.PASS
         if (world.getBlockEntity(pos) !is GymExitEntity) return super.onUse(state, world, pos, player, hit)
+        if (world.isClient) return ActionResult.PASS
 
         debug("Gym exit block used by player ${player.uuid} at $pos in ${world.registryKey}")
 
