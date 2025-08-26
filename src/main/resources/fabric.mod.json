@@ -49,7 +49,7 @@
   "depends": {
     "java": ">=21",
     "minecraft": "~1.21.1",
-    "fabricloader": ">=0.16.14",
+    "fabricloader": ">=0.16.5",
     "fabric": "*",
     "fabric-api": "*",
     "fabric-language-kotlin": "*",
