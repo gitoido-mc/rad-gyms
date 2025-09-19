@@ -85,20 +85,21 @@ object GymTemplate {
         trainers = dto.trainers.map trainerMap@{ trainer ->
             var battleConfig = RCTBattleAIConfig.Builder()
 
-            if (trainer.ai.data?.moveBias != null) {
-                battleConfig = battleConfig.withMoveBias(trainer.ai.data.moveBias)
-            }
-            if (trainer.ai.data?.statusMoveBias != null) {
-                battleConfig = battleConfig.withStatusMoveBias(trainer.ai.data.statusMoveBias)
-            }
-            if (trainer.ai.data?.switchBias != null) {
-                battleConfig = battleConfig.withSwitchBias(trainer.ai.data.switchBias)
-            }
-            if (trainer.ai.data?.itemBias != null) {
-                battleConfig = battleConfig.withItemBias(trainer.ai.data.itemBias)
-            }
-            if (trainer.ai.data?.maxSelectMargin != null) {
-                battleConfig = battleConfig.withMaxSelectMargin(trainer.ai.data.maxSelectMargin)
+            when {
+                trainer.ai.data?.moveBias != null -> battleConfig = battleConfig
+                    .withMoveBias(trainer.ai.data.moveBias)
+
+                trainer.ai.data?.statusMoveBias != null -> battleConfig = battleConfig
+                    .withStatusMoveBias(trainer.ai.data.statusMoveBias)
+
+                trainer.ai.data?.switchBias != null -> battleConfig = battleConfig
+                    .withSwitchBias(trainer.ai.data.switchBias)
+
+                trainer.ai.data?.itemBias != null -> battleConfig = battleConfig
+                    .withItemBias(trainer.ai.data.itemBias)
+
+                trainer.ai.data?.maxSelectMargin != null -> battleConfig = battleConfig
+                    .withMaxSelectMargin(trainer.ai.data.maxSelectMargin)
             }
 
             val ai = RCTBattleAI(
@@ -120,10 +121,10 @@ object GymTemplate {
 
                 debug("Derived pokemon count for level $level is $pokemonCount")
 
-                val elementType: String? = if (type == "default") {
-                    ElementalTypes.all().random().name
-                } else null
-
+                val elementType: String? = when (type) {
+                    "default" -> ElementalTypes.all().random().name
+                    else -> null
+                }
 
                 (1..pokemonCount).forEach { i ->
                     team.add(generatePokemon(level, elementType ?: type))

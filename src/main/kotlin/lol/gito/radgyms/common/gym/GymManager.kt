@@ -254,7 +254,7 @@ object GymManager {
     fun destructGym(serverPlayer: ServerPlayerEntity, removeCoords: Boolean? = true) {
         val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
 
-        val world = server()!!.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
+        val world = serverPlayer.server.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
 
         gym.npcList.forEach {
             debug("Removing trainer ${it.value} from registry and detaching associated entity")

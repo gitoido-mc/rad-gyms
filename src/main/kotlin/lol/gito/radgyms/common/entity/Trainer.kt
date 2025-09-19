@@ -20,6 +20,7 @@ import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
@@ -61,27 +62,6 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
 
     override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
         if (!this.world.isClient) {
-            val trainerRegistry = RadGyms.RCT.trainerRegistry
-            val rctBattleManager = RadGyms.RCT.battleManager
-            val playerTrainer = trainerRegistry.getById(player.uuid.toString())
-            val gymNpc = PLAYER_GYMS[player.uuid]!!.npcList[uuid]!!
-
-            var npcTrainer: TrainerNPC? = null
-            RadGyms.RCT.trainerRegistry.let { registry ->
-                npcTrainer = RadGyms.RCT.trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
-            }
-
-            if (npcTrainer == null) {
-                debug("no trainer in registry")
-                npcTrainer = RadGyms.RCT.trainerRegistry.registerNPC(
-                    uuid.toString(),
-                    gymNpc.trainer
-                )
-                npcTrainer.entity = this
-            } else {
-                debug("found trainer in registry")
-            }
-
             if (requires != null) {
                 val trainerToFight = (world as ServerWorld).getEntity(requires) as Trainer
 
@@ -107,15 +87,47 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
                 sayNo()
                 return ActionResult.FAIL
             }
-//
+
+            val trainerRegistry = RadGyms.RCT.trainerRegistry
+            val rctBattleManager = RadGyms.RCT.battleManager
+            val playerTrainer = trainerRegistry.getById(player.uuid.toString())
+            val gymNpc = PLAYER_GYMS[player.uuid]!!.npcList[uuid]!!
+
+            val npcTrainer: TrainerNPC = when (trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)) {
+                null -> {
+                    debug("no trainer in registry")
+                    trainerRegistry.registerNPC(
+                        uuid.toString(),
+                        gymNpc.trainer
+                    )
+                    trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
+                }
+
+                else -> trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
+            } as TrainerNPC
+
+            // Check for being in battle just in case
+            // Force all battles for player to end
+            rctBattleManager.apply {
+                this.states.forEach { state ->
+                    state.battle.apply {
+                        val actor = this.actors.firstOrNull { actor -> actor.isForPlayer(player as ServerPlayerEntity) }
+                        if (actor != null && !this.ended) {
+                            debug("Uh-oh, found stuck battle for player actor, ending it")
+                            this.end()
+                            rctBattleManager.end(this.battleId, true)
+                        }
+                    }
+                }
+            }
+
+            npcTrainer.entity = this
             rctBattleManager.startBattle(
                 listOf(playerTrainer),
                 listOf(npcTrainer),
                 BattleFormat.GEN_9_SINGLES,
                 BattleRules()
             )
-
-            return ActionResult.success(this.world.isClient)
         } else {
             if (defeated) {
                 sayNo()
@@ -123,7 +135,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
             }
         }
 
-        return ActionResult.success(true)
+        return ActionResult.success(this.world.isClient)
     }
 
     override fun writeNbt(nbt: NbtCompound): NbtCompound {
@@ -159,7 +171,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
 
     private fun sayNo() {
         this.headRollingTimeLeft = 40
-        if (!this.world.isClient()) {
+        if (!this.world.isClient) {
             this.playSound(SoundEvents.ENTITY_VILLAGER_NO)
         }
     }
