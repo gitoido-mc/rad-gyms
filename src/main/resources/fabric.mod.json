@@ -32,15 +32,6 @@
         "value": "lol.gito.radgyms.datagen.RadGymsDataGenerator",
         "adapter": "kotlin"
       }
-    ],
-    "jei_mod_plugin": [
-      "lol.gito.radgyms.common.compat.jei.IntegrationPlugin"
-    ],
-    "rei_common": [
-      "lol.gito.radgyms.common.compat.rei.IntegrationPlugin"
-    ],
-    "emi": [
-      "lol.gito.radgyms.common.compat.emi.IntegrationPlugin"
     ]
   },
   "mixins": [
@@ -57,9 +48,6 @@
     "rctapi": ">=0.13.8-beta",
     "cobblemon": ">=1.6.1+1.21.1",
     "admiral": "0.4.7+1.21.1+fabric"
-  },
-  "suggests": {
-    "jei": ">=19.21.0.247"
   },
   "custom": {
     "mc-publish": {
