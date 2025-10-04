@@ -120,7 +120,7 @@ class GymEnterScreen(val key: Boolean, val type: String? = null, val pos: BlockP
             .build()
 
         val inc10Button = ButtonWidget
-            .builder(Text.of("-10")) {
+            .builder(Text.of("+10")) {
                 level = level.plus(10).coerceIn(10, Cobblemon.config.maxPokemonLevel)
                 levelSelectSlider.updateLevel(level)
             }

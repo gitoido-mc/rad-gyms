@@ -13,7 +13,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
-import lol.gito.radgyms.common.entity.EntityManager
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager
@@ -38,7 +37,7 @@ object RadGyms {
         LOGGER.info("Initializing the mod")
         loadConfig()
         // Data
-        EntityManager.register()
+        EntityRegistry.register()
         GymManager.register()
         GYM_LOADER.register()
 

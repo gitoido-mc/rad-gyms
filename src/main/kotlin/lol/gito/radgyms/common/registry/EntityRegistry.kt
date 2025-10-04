@@ -6,25 +6,25 @@
  *
  */
 
-package lol.gito.radgyms.common.entity
+package lol.gito.radgyms.common.registry
 
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.entity.Trainer
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 
-object EntityManager {
+object EntityRegistry {
     val GYM_TRAINER: EntityType<Trainer> = Registry.register(
         Registries.ENTITY_TYPE,
-        modId("gym_trainer"),
-        EntityType.Builder.create(::Trainer, SpawnGroup.CREATURE).build(modId("gym_trainer").toString())
+        RadGyms.modId("gym_trainer"),
+        EntityType.Builder.create(::Trainer, SpawnGroup.CREATURE).build(RadGyms.modId("gym_trainer").toString())
     )
 
     fun register() {
-        debug("Registering mod entities")
+        RadGyms.debug("Registering mod entities")
         FabricDefaultAttributeRegistry.register(GYM_TRAINER, Trainer.createAttributes())
     }
 }

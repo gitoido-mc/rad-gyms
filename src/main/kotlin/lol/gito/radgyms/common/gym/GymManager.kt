@@ -17,11 +17,11 @@ import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.entity.EntityManager
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
+import lol.gito.radgyms.common.registry.EntityRegistry
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructureManager
 import lol.gito.radgyms.server.state.PlayerData
@@ -161,7 +161,7 @@ object GymManager {
         trainerUUID: UUID,
         requiredUUID: UUID?
     ): Pair<UUID, GymTrainer> {
-        val trainerEntity = Trainer(EntityManager.GYM_TRAINER, gymDimension)
+        val trainerEntity = Trainer(EntityRegistry.GYM_TRAINER, gymDimension)
             .apply {
                 setPersistent()
                 uuid = trainerUUID

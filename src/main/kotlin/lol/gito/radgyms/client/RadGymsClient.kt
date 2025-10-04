@@ -10,11 +10,11 @@ package lol.gito.radgyms.client
 
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.entity.EntityManager
 import lol.gito.radgyms.common.network.handler.OpenGymEnterScreenS2CHandler
 import lol.gito.radgyms.common.network.handler.OpenGymLeaveScreenS2CHandler
 import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.network.payload.OpenGymLeaveScreenS2C
+import lol.gito.radgyms.common.registry.EntityRegistry
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -27,7 +27,7 @@ object RadGymsClient {
     @Environment(EnvType.CLIENT)
     fun init() {
         RadGyms.debug("Initializing client")
-        EntityRendererRegistry.register(EntityManager.GYM_TRAINER) { context ->
+        EntityRendererRegistry.register(EntityRegistry.GYM_TRAINER) { context ->
             VillagerEntityRenderer(context)
         }
 
