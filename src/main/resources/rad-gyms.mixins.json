@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "common.BundleItemMixin",
-    "common.OnAetherEntityInteract"
+    "common.OnAetherEntityInteract",
+    "common.RCTBattleAIAccessor"
   ],
   "server": [
     "server.OnServerPlayerEntityDeath"
