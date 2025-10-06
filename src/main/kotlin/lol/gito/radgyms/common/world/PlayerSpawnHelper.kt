@@ -23,8 +23,8 @@ object PlayerSpawnHelper {
         val seed = Random(serverPlayer.uuid.mostSignificantBits and border.maxRadius.toLong())
         val playerX: Int = seed.nextInt(
             border.boundNorth.toInt(),
-            border.boundSouth.toInt(),
-        ) // get uniq x coord based on player uuid
+            0,
+        ) // get uniq z coord based on player uuid
         val playerZ: Int = RadGymsState
             .also { it.incrementVisitsForPlayer(serverPlayer) }
             .getPlayerState(serverPlayer)
@@ -36,7 +36,7 @@ object PlayerSpawnHelper {
         return BlockPos(
             playerX,
             0,
-            border.boundWest.toInt() + playerZ, // world border
+            0 + playerZ, // world border
         )
     }
 
