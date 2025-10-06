@@ -37,6 +37,7 @@
   "mixins": [
     "rad-gyms.mixins.json"
   ],
+  "accessWidener": "rad-gyms.accesswidener",
   "depends": {
     "java": ">=21",
     "minecraft": "~1.21.1",
