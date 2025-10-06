@@ -35,7 +35,6 @@ import net.minecraft.util.Rarity
 
 @Command("radgyms")
 object CommandRegistry {
-
     @Suppress("unused")
     @Command("kick")
     @RequiresPermissionLevel(4)
@@ -106,12 +105,9 @@ object CommandRegistry {
 
             context.source.sendMessage(
                 translatable(
-                    modId("message.info.command.debug_reward").toTranslationKey(),
-                    template,
-                    translatable(
+                    modId("message.info.command.debug_reward").toTranslationKey(), template, translatable(
                         cobblemonResource("type.${type}").toTranslationKey()
-                    ),
-                    level
+                    ), level
                 )
             )
         } else {
