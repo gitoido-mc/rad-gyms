@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
+import lol.gito.radgyms.api.context.LevelBoundsContext
+import lol.gito.radgyms.api.event.LevelBoundsCallback
 import lol.gito.radgyms.client.gui.widget.LevelSliderWidget
 import lol.gito.radgyms.client.radGymsResource
 import lol.gito.radgyms.common.RadGyms.debug
@@ -84,9 +86,21 @@ class GymEnterScreen(val key: Boolean, val type: String? = null, val pos: BlockP
     override fun close() = this.client!!.setScreen(null)
 
     override fun init() {
+        val defaultMin = 10
+        val defaultMax = Cobblemon.config.maxPokemonLevel
+
+        val res = LevelBoundsCallback.EVENT.invoker().onDecideBounds(LevelBoundsContext(defaultMin, defaultMax))
+
+        val minLevel = res.minOverride() ?: defaultMin;
+        val maxLevel = res.maxOverride() ?: defaultMax;
+
+        this.level = this.level.coerceIn(minLevel, maxLevel)
+
         val levelSelectSlider = LevelSliderWidget(
             x = leftX + 55,
             y = topY + 25,
+            minLevel,
+            maxLevel
         ) { level ->
             this.level = level
             this.tick()
@@ -94,25 +108,25 @@ class GymEnterScreen(val key: Boolean, val type: String? = null, val pos: BlockP
 
         val decButton = ButtonWidget
             .builder(Text.of("-1")) {
-                level = level.dec().coerceIn(10, Cobblemon.config.maxPokemonLevel)
+                level = level.dec().coerceIn(minLevel, maxLevel)
                 levelSelectSlider.updateLevel(level)
             }
             .size(20, 20)
-            .position(leftX + 10, topY + 25)
+            .position(leftX + 35, topY + 25)
             .build()
 
         val dec10Button = ButtonWidget
             .builder(Text.of("-10")) {
-                level = level.minus(10).coerceIn(10, Cobblemon.config.maxPokemonLevel)
+                level = level.minus(10).coerceIn(minLevel, maxLevel)
                 levelSelectSlider.updateLevel(level)
             }
             .size(25, 20)
-            .position(leftX + 30, topY + 25)
+            .position(leftX + 10, topY + 25)
             .build()
 
         val incButton = ButtonWidget
             .builder(Text.of("+1")) {
-                level = level.inc().coerceIn(10, Cobblemon.config.maxPokemonLevel)
+                level = level.inc().coerceIn(minLevel, maxLevel)
                 levelSelectSlider.updateLevel(level)
             }
             .size(20, 20)
@@ -121,7 +135,7 @@ class GymEnterScreen(val key: Boolean, val type: String? = null, val pos: BlockP
 
         val inc10Button = ButtonWidget
             .builder(Text.of("+10")) {
-                level = level.plus(10).coerceIn(10, Cobblemon.config.maxPokemonLevel)
+                level = level.plus(10).coerceIn(minLevel, maxLevel)
                 levelSelectSlider.updateLevel(level)
             }
             .size(25, 20)
@@ -145,8 +159,8 @@ class GymEnterScreen(val key: Boolean, val type: String? = null, val pos: BlockP
             .build()
 
         this.addDrawableChild(levelSelectSlider)
-        this.addDrawableChild(decButton)
         this.addDrawableChild(dec10Button)
+        this.addDrawableChild(decButton)
         this.addDrawableChild(incButton)
         this.addDrawableChild(inc10Button)
         this.addDrawableChild(proceedButton)

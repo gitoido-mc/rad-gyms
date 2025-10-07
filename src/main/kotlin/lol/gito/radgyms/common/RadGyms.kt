@@ -58,7 +58,6 @@ object RadGyms {
 
         // Network
         CommonNetworkStack.register()
-
     }
 
     fun modId(name: String): Identifier {

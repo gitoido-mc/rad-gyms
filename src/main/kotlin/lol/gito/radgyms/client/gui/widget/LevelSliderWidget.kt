@@ -9,6 +9,9 @@
 package lol.gito.radgyms.client.gui.widget
 
 import com.cobblemon.mod.common.Cobblemon
+import lol.gito.radgyms.api.LevelBoundsResult
+import lol.gito.radgyms.api.context.LevelBoundsContext
+import lol.gito.radgyms.api.event.LevelBoundsCallback
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.DrawContext
@@ -16,9 +19,11 @@ import net.minecraft.client.gui.widget.SliderWidget
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text
 import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
 
 @Environment(EnvType.CLIENT)
-class LevelSliderWidget(x: Int, y: Int, private val onChange: (Int) -> Unit) : SliderWidget(
+class LevelSliderWidget(x: Int, y: Int, private var minLevel: Int, private var maxLevel: Int, private val onChange: (Int) -> Unit) : SliderWidget(
     x,
     y,
     190,
@@ -26,9 +31,8 @@ class LevelSliderWidget(x: Int, y: Int, private val onChange: (Int) -> Unit) : S
     ScreenTexts.EMPTY,
     0.0
 ) {
-    private val minLevel: Int = 10
 
-    var level: Int = 10
+    var level: Int = minLevel;
 
     override fun updateMessage() {
         this.message = Text.literal(level.toString())
@@ -45,11 +49,28 @@ class LevelSliderWidget(x: Int, y: Int, private val onChange: (Int) -> Unit) : S
     }
 
     fun updateLevel(level: Int) {
-        this.level = level
-        this.value = level.toDouble().minus(minLevel).div(Cobblemon.config.maxPokemonLevel.minus(minLevel))
+        normalizeBounds()
+        val clamped = level.coerceIn(minLevel, maxLevel)
+        this.level = clamped
+        val range = (maxLevel - minLevel).coerceAtLeast(1)
+        this.value = (clamped - minLevel).toDouble() / range.toDouble()
     }
 
-    private fun fromSliderValue(): Int = floor(
-        (value - 0.0).times(Cobblemon.config.maxPokemonLevel - minLevel).div(1.0 - 0.0).plus(minLevel)
-    ).toInt()
+    private fun fromSliderValue(): Int {
+        normalizeBounds()
+        val range = (maxLevel - minLevel).coerceAtLeast(1)
+        return floor(value * range + minLevel).toInt().coerceIn(minLevel, maxLevel)
+    }
+
+    private fun normalizeBounds() {
+        if (maxLevel < minLevel) {
+            val t = minLevel
+            minLevel = maxLevel
+            maxLevel = t
+        }
+
+        if(maxLevel == minLevel) {
+            maxLevel = minLevel +1
+        }
+    }
 }
