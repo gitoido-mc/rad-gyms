@@ -54,15 +54,14 @@ data class GymInstance(
     val npcList: Map<UUID, GymTrainer>,
     val coords: BlockPos,
     val level: Int,
-    val type: String
+    val type: String,
+    val label: String
 )
 
 object GymManager {
     val GYM_TEMPLATES: MutableMap<String, GymDTO> = mutableMapOf()
-    val PLAYER_GYMS: MutableMap<UUID, GymInstance> = mutableMapOf()
 
     fun initInstance(serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld, level: Int, type: String?): Boolean {
-        PLAYER_GYMS.remove(serverPlayer.uuid)
         val startTime = markNow()
         val gymLevel = level.coerceIn(5..100)
         val gymDimension = serverPlayer.getServer()?.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY) ?: return false
@@ -126,8 +125,22 @@ object GymManager {
                     null -> chaosTranslatable.string
                     else -> translatable(cobblemonResource("type.${type}").toTranslationKey()).string
                 }
-                PLAYER_GYMS[serverPlayer.uuid] = GymInstance(gym, trainerUUIDs, coords, gymLevel, label)
-                debug("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds}ms")
+
+                val gymInstance = GymInstance(gym, trainerUUIDs, coords, gymLevel, type ?: "default", label)
+
+                RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
+
+                val trainerRegistry = RCT.trainerRegistry
+                gymInstance.npcList.forEach { (uuid, npc) ->
+                    val trainer = trainerRegistry.registerNPC(
+                        uuid.toString(),
+                        npc.trainer
+                    )
+
+                    trainer.entity = gymDimension.getEntity(uuid) as Trainer
+                }
+
+                debug("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds} ms")
             }
         return true
     }
@@ -187,8 +200,10 @@ object GymManager {
         return Pair(trainerEntity.uuid, trainerTemplate)
     }
 
-    fun spawnExitBlock(serverPlayer: UUID) {
-        val gym = PLAYER_GYMS[serverPlayer] ?: return
+    fun spawnExitBlock(serverPlayer: ServerPlayerEntity) {
+        if (!RadGymsState.hasGymForPlayer(serverPlayer)) return
+
+        val gym = RadGymsState.getGymForPlayer(serverPlayer)!!
 
         val exitPos = BlockPos(
             (gym.coords.x + gym.template.relativeExitBlockSpawn.x).toInt(),
@@ -252,8 +267,9 @@ object GymManager {
     }
 
     fun destructGym(serverPlayer: ServerPlayerEntity, removeCoords: Boolean? = true) {
-        val gym = PLAYER_GYMS[serverPlayer.uuid] ?: return
+        if (!RadGymsState.hasGymForPlayer(serverPlayer)) return
 
+        val gym = RadGymsState.getGymForPlayer(serverPlayer)!!
         val world = serverPlayer.server.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
 
         gym.npcList.forEach {
@@ -265,7 +281,7 @@ object GymManager {
         if (removeCoords == true) {
             RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
         }
-        PLAYER_GYMS.remove(serverPlayer.uuid)
+        RadGymsState.removeGymForPlayer(serverPlayer)
     }
 
     fun handleLootDistribution(serverPlayer: ServerPlayerEntity, template: GymTemplate, level: Int, type: String) {

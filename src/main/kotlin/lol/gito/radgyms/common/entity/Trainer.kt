@@ -13,7 +13,6 @@ import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.gym.GymManager.PLAYER_GYMS
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.damage.DamageSource
@@ -62,6 +61,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
 
     override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
         if (!this.world.isClient) {
+            val player = player as ServerPlayerEntity
             if (requires != null) {
                 val trainerToFight = (world as ServerWorld).getEntity(requires) as Trainer
 
@@ -91,27 +91,14 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
             val trainerRegistry = RadGyms.RCT.trainerRegistry
             val rctBattleManager = RadGyms.RCT.battleManager
             val playerTrainer = trainerRegistry.getById(player.uuid.toString())
-            val gymNpc = PLAYER_GYMS[player.uuid]!!.npcList[uuid]!!
-
-            val npcTrainer: TrainerNPC = when (trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)) {
-                null -> {
-                    debug("no trainer in registry")
-                    trainerRegistry.registerNPC(
-                        uuid.toString(),
-                        gymNpc.trainer
-                    )
-                    trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
-                }
-
-                else -> trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
-            } as TrainerNPC
+            val npcTrainer: TrainerNPC = trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
 
             // Check for being in battle just in case
             // Force all battles for player to end
             rctBattleManager.apply {
                 this.states.forEach { state ->
                     state.battle.apply {
-                        val actor = this.actors.firstOrNull { actor -> actor.isForPlayer(player as ServerPlayerEntity) }
+                        val actor = this.actors.firstOrNull { actor -> actor.isForPlayer(player) }
                         if (actor != null && !this.ended) {
                             debug("Uh-oh, found stuck battle for player actor, ending it")
                             this.end()
@@ -121,7 +108,6 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
                 }
             }
 
-            npcTrainer.entity = this
             rctBattleManager.startBattle(
                 listOf(playerTrainer),
                 listOf(npcTrainer),

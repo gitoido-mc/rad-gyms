@@ -21,12 +21,12 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
+import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymManager
-import lol.gito.radgyms.common.gym.GymManager.PLAYER_GYMS
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.registry.BlockRegistry
@@ -71,6 +71,10 @@ object EventManager {
         result: BlockHitResult,
     ): ActionResult {
         if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
+            if (RadGyms.CONFIG.debug == true) {
+                return ActionResult.PASS
+            }
+
             if (world.isClient) return ActionResult.PASS
             return when (world.getBlockState(result.blockPos).block == BlockRegistry.GYM_EXIT) {
                 true -> ActionResult.PASS
@@ -89,7 +93,10 @@ object EventManager {
         entity: BlockEntity?
     ): Boolean {
         var allowBreak = true
+
         if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
+            if (RadGyms.CONFIG.debug == true) return true
+
             allowBreak = false
         }
 
@@ -124,12 +131,14 @@ object EventManager {
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
         if (event.player.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-            GymManager.spawnExitBlock(event.player.uuid)
+            GymManager.spawnExitBlock(event.player)
             GymManager.destructGym(event.player, removeCoords = false)
         }
     }
 
     private fun onGymBattleWon(event: BattleVictoryEvent) {
+
+
         if (event.wasWildCapture) {
             return
         }
@@ -149,8 +158,8 @@ object EventManager {
                 (loser.entity as Trainer).let { trainer ->
                     trainer.defeated = true
                     if (trainer.leader) {
-                        val gym = PLAYER_GYMS[player.uuid]!!
-                        GymManager.spawnExitBlock(player.uuid)
+                        val gym = RadGymsState.getGymForPlayer(player)!!
+                        GymManager.spawnExitBlock(player)
                         GymManager.handleLootDistribution(player, gym.template, gym.level, gym.type)
                         player.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
                     }
