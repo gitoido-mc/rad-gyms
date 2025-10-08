@@ -41,6 +41,10 @@ replay_*.log
 *.hprof
 *.jfr
 
+# kotlin
+.kotlin
+
+# project
 docs/_site/
 docs/.cache/
 docs/node_modules/
