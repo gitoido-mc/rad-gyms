@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
@@ -21,6 +22,9 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
+import lol.gito.radgyms.api.events.CacheEvents
+import lol.gito.radgyms.api.events.GymEvents
+import lol.gito.radgyms.api.events.gym.GenerateRewardEvent
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
@@ -31,6 +35,8 @@ import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
+import lol.gito.radgyms.server.event.cache.CacheRollPokeHandler
+import lol.gito.radgyms.server.event.gyms.*
 import lol.gito.radgyms.server.state.RadGymsState
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
@@ -48,19 +54,37 @@ import net.minecraft.world.World
 object EventManager {
     fun register() {
         debug("Registering event handlers")
+        // Minecraft events
         UseBlockCallback.EVENT.register(::onBlockInteract)
         PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
         PlatformEvents.SERVER_STARTING.subscribe(Priority.LOW, ::onServerStart)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.LOW, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
+
+        // Cobblemon events
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onGymBattleWon)
         CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onGymBattleFled)
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
-
         PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
             debug("Cobblemon species observable triggered, updating elemental gyms species map")
             onSpeciesUpdate()
         }
+
+        // Mod events
+        GymEvents.GYM_ENTER.subscribe(Priority.LOWEST, ::GymEnterHandler)
+        GymEvents.GYM_LEAVE.subscribe(Priority.LOWEST, ::GymLeaveHandler)
+
+        GymEvents.TRAINER_INTERACT.subscribe(Priority.LOWEST, ::TrainerInteractHandler)
+        GymEvents.TRAINER_BATTLE_START.subscribe(Priority.LOWEST, ::TrainerBattleStartHandler)
+        GymEvents.TRAINER_BATTLE_END.subscribe(Priority.LOWEST, ::TrainerBattleEndHandler)
+
+        GymEvents.GENERATE_REWARD.subscribe(Priority.LOWEST, ::GenerateRewardHandler)
+        GymEvents.GENERATE_TEAM.subscribe(Priority.NORMAL) { event ->
+            debug("added zubat")
+            event.team.add(PokemonProperties.parse("zubat level=100"))
+        }
+
+        CacheEvents.CACHE_ROLL_POKE.subscribe(Priority.LOWEST, ::CacheRollPokeHandler)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -160,7 +184,7 @@ object EventManager {
                     if (trainer.leader) {
                         val gym = RadGymsState.getGymForPlayer(player)!!
                         GymManager.spawnExitBlock(player)
-                        GymManager.handleLootDistribution(player, gym.template, gym.level, gym.type)
+                        GymEvents.GENERATE_REWARD.emit(GenerateRewardEvent(player, gym.template, gym.level, gym.type))
                         player.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
                     }
                 }

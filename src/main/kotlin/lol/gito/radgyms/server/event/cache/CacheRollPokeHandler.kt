@@ -1,0 +1,18 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the MIT License.
+ * If a copy of the MIT License was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ *
+ */
+
+package lol.gito.radgyms.server.event.cache
+
+import lol.gito.radgyms.api.events.cache.CacheRollPokeEvent
+import lol.gito.radgyms.common.RadGyms.debug
+
+class CacheRollPokeHandler(event: CacheRollPokeEvent) {
+    init {
+        debug("cache roll poke event triggered - rarity is ${event.rarity.name}")
+    }
+}

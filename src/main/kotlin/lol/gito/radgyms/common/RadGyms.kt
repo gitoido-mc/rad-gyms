@@ -79,6 +79,8 @@ object RadGyms {
             maxEntranceUses = 3,
             lapisBoostAmount = 1,
             shardRewards = true,
+            minLevel = 10,
+            maxLevel = 100,
             ignoredSpecies = emptyList(),
             ignoredForms = mutableListOf("gmax"),
         )

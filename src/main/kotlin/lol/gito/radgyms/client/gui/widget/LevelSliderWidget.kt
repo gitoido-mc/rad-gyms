@@ -8,7 +8,6 @@
 
 package lol.gito.radgyms.client.gui.widget
 
-import com.cobblemon.mod.common.Cobblemon
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.DrawContext
@@ -18,7 +17,13 @@ import net.minecraft.text.Text
 import kotlin.math.floor
 
 @Environment(EnvType.CLIENT)
-class LevelSliderWidget(x: Int, y: Int, private val onChange: (Int) -> Unit) : SliderWidget(
+class LevelSliderWidget(
+    x: Int,
+    y: Int,
+    private val minLevel: Int,
+    private val maxLevel: Int,
+    private val onChange: (Int) -> Unit
+) : SliderWidget(
     x,
     y,
     190,
@@ -26,8 +31,6 @@ class LevelSliderWidget(x: Int, y: Int, private val onChange: (Int) -> Unit) : S
     ScreenTexts.EMPTY,
     0.0
 ) {
-    private val minLevel: Int = 10
-
     var level: Int = 10
 
     override fun updateMessage() {
@@ -46,10 +49,10 @@ class LevelSliderWidget(x: Int, y: Int, private val onChange: (Int) -> Unit) : S
 
     fun updateLevel(level: Int) {
         this.level = level
-        this.value = level.toDouble().minus(minLevel).div(Cobblemon.config.maxPokemonLevel.minus(minLevel))
+        this.value = level.toDouble().minus(this.minLevel).div(maxLevel.minus(minLevel))
     }
 
     private fun fromSliderValue(): Int = floor(
-        (value - 0.0).times(Cobblemon.config.maxPokemonLevel - minLevel).div(1.0 - 0.0).plus(minLevel)
+        (value - 0.0).times(maxLevel - minLevel).div(1.0 - 0.0).plus(minLevel)
     ).toInt()
 }

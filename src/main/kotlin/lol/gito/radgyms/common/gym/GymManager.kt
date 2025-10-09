@@ -19,31 +19,19 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.BlockRegistry
-import lol.gito.radgyms.common.registry.DataComponentRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
 import lol.gito.radgyms.common.registry.EntityRegistry
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructureManager
 import lol.gito.radgyms.server.state.PlayerData
 import lol.gito.radgyms.server.state.RadGymsState
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.component.type.BundleContentsComponent
-import net.minecraft.entity.ItemEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.loot.context.LootContextParameterSet
-import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ChunkTicketType
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.MutableText
-import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
-import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import java.util.*
@@ -73,7 +61,7 @@ object GymManager {
         debug("Initializing $gymType template for $type gym")
         debug("Available templates ${GYM_TEMPLATES.keys}")
 
-        val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(it, gymLevel, type) }
+        val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(serverPlayer, it, gymLevel, type) }
         if (gym == null) {
             LOGGER.warn("Gym $gymType could not be initialized, no such type in template registry")
             return false
@@ -282,66 +270,6 @@ object GymManager {
             RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
         }
         RadGymsState.removeGymForPlayer(serverPlayer)
-    }
-
-    fun handleLootDistribution(serverPlayer: ServerPlayerEntity, template: GymTemplate, level: Int, type: String) {
-        val bundle = ItemStack(Items.BUNDLE)
-        val bundleContents = BundleContentsComponent.Builder(BundleContentsComponent.DEFAULT)
-        template
-            .lootTables
-            .filter {
-                level in it.levels.first..it.levels.second
-            }
-            .forEach { table ->
-                debug("Settling level $level rewards for player ${serverPlayer.name.literalString} after beating leader")
-                val registryLootTable = serverPlayer
-                    .server
-                    .reloadableRegistries
-                    .registryManager
-                    .get(RegistryKeys.LOOT_TABLE)
-                    .get(table.id) ?: return@forEach
-
-                val lootContextParameterSet = LootContextParameterSet.Builder(serverPlayer.world as ServerWorld)
-                    .add(LootContextParameters.THIS_ENTITY, serverPlayer)
-                    .add(LootContextParameters.ORIGIN, serverPlayer.pos)
-                    .build(LootContextTypes.GIFT)
-
-
-
-                registryLootTable
-                    .generateLoot(lootContextParameterSet)
-                    .forEach { itemStack ->
-                        bundleContents.add(itemStack)
-                    }
-            }
-
-        val styledLevel = MutableText.of(Text.literal(level.toString()).content).formatted(Formatting.GOLD)
-        val styledType = translatable(cobblemonResource("type.${type.lowercase()}").toTranslationKey())
-            .setStyle(
-                Style.EMPTY.withColor(Formatting.GREEN).withItalic(true)
-            )
-
-        bundle.set(
-            DataComponentTypes.CUSTOM_NAME,
-            translatable(
-                modId("gym_reward").toTranslationKey("item"),
-                styledLevel, styledType
-            )
-        )
-        bundle.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContents.build())
-        bundle.set(DataComponentRegistry.RAD_GYM_BUNDLE_COMPONENT, true)
-        if (!serverPlayer.giveItemStack(bundle)) {
-            ItemEntity(
-                serverPlayer.world,
-                serverPlayer.pos.x,
-                serverPlayer.pos.y,
-                serverPlayer.pos.z,
-                bundle,
-            ).let {
-                serverPlayer.world.spawnEntity(it)
-            }
-
-        }
     }
 
     fun register() {

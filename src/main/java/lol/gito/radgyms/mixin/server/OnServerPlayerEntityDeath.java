@@ -8,8 +8,12 @@
 
 package lol.gito.radgyms.mixin.server;
 
-import lol.gito.radgyms.common.gym.GymManager;
+import lol.gito.radgyms.api.enumeration.GymLeaveReason;
+import lol.gito.radgyms.api.events.GymEvents;
+import lol.gito.radgyms.api.events.gym.GymLeaveEvent;
+import lol.gito.radgyms.common.gym.GymInstance;
 import lol.gito.radgyms.common.registry.DimensionRegistry;
+import lol.gito.radgyms.server.state.RadGymsState;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +28,18 @@ public abstract class OnServerPlayerEntityDeath {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
 
         if (player.getWorld().getRegistryKey() == DimensionRegistry.INSTANCE.getRADGYMS_LEVEL_KEY()) {
-            GymManager.INSTANCE.destructGym(player, true);
+            GymInstance gym = RadGymsState.Companion.getGymForPlayer(player);
+            if (gym != null) {
+                GymEvents.GYM_LEAVE.emit(new GymLeaveEvent(
+                        GymLeaveReason.PLAYER_DEATH,
+                        player,
+                        gym,
+                        gym.getType(),
+                        gym.getLevel(),
+                        false,
+                        false
+                ));
+            }
         }
     }
 }

@@ -19,6 +19,8 @@ import de.maxhenkel.admiral.annotations.Command
 import de.maxhenkel.admiral.annotations.MinMax
 import de.maxhenkel.admiral.annotations.Name
 import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
+import lol.gito.radgyms.api.events.GymEvents
+import lol.gito.radgyms.api.events.gym.GenerateRewardEvent
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.loadConfig
 import lol.gito.radgyms.common.RadGyms.modId
@@ -99,8 +101,13 @@ object CommandRegistry {
                 else -> type
             }
 
-            GymManager.handleLootDistribution(
-                context.source.playerOrThrow, GymTemplate.fromGymDto(gymDto, level, type), level, gymType
+            GymEvents.GENERATE_REWARD.emit(
+                GenerateRewardEvent(
+                    context.source.playerOrThrow,
+                    GymTemplate.fromGymDto(context.source.playerOrThrow, gymDto, level, type),
+                    level,
+                    gymType
+                )
             )
 
             context.source.sendMessage(

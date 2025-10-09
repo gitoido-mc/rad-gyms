@@ -13,6 +13,6 @@ import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.util.Identifier
 
 
-fun radGymsResource(path: String) = Identifier.of(MOD_ID, path)
-fun radGymsModel(path: String, variant: String) =
+fun radGymsResource(path: String): Identifier = Identifier.of(MOD_ID, path)
+fun radGymsModel(path: String, variant: String): ModelIdentifier =
     ModelIdentifier(radGymsResource(path), variant)

@@ -9,6 +9,7 @@
 package lol.gito.radgyms.server.state
 
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
+import com.cobblemon.mod.common.util.server
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.common.RadGyms
@@ -72,6 +73,7 @@ class RadGymsState : PersistentState() {
                 val gymDataNbt = nbt.getCompound("Gyms").getCompound(uuidString)
                 val gymTemplate = GYM_TEMPLATES[gymDataNbt.getString("Type")]?.let {
                     GymTemplate.fromGymDto(
+                        server()!!.playerManager.getPlayer(uuid)!!,
                         it,
                         gymDataNbt.getInt("Level"),
                         gymDataNbt.getString("Type")

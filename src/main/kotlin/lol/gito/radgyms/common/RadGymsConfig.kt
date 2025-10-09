@@ -18,6 +18,8 @@ data class RadGymsConfig(
     val lapisBoostAmount: Int? = null,
     val ignoredSpecies: List<String>? = null,
     val ignoredForms: List<String>? = null,
+    val minLevel: Int = 10,
+    val maxLevel: Int = 100,
 ) {
     fun combine(other: RadGymsConfig): RadGymsConfig {
         return this.copy(
@@ -26,7 +28,8 @@ data class RadGymsConfig(
             shardRewards = other.shardRewards ?: shardRewards,
             lapisBoostAmount = other.lapisBoostAmount ?: lapisBoostAmount,
             ignoredSpecies = other.ignoredSpecies ?: ignoredSpecies,
-            ignoredForms = other.ignoredForms ?: ignoredForms
+            ignoredForms = other.ignoredForms ?: ignoredForms,
+            minLevel = other.minLevel
         )
     }
 }
