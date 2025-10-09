@@ -35,12 +35,6 @@ jobs:
           echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
       - name: build
         run: ./gradlew build
-      - name: capture build artifacts
-        if: ${{ matrix.java == '21' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: Artifacts
-          path: build/libs/
       - name: Update nightly release
         uses: andelf/nightly-release@main
         env:
@@ -51,4 +45,4 @@ jobs:
           prerelease: true
           body: 'TODO: Add nightly release notes'
           files: |
-            ./build/libs
+            ./build/libs/*
