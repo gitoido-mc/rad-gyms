@@ -8,11 +8,14 @@
 
 package lol.gito.radgyms.api.events.cache
 
+import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Rarity
 
 data class CacheRollPokeEvent(
     val player: ServerPlayerEntity,
-    val rarity: Rarity,
-
-    )
+    var poke: Pokemon,
+    var type: String,
+    var rarity: Rarity,
+    var shinyBoost: Int
+)

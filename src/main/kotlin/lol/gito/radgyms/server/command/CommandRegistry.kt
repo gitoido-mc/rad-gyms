@@ -12,14 +12,15 @@ package lol.gito.radgyms.server.command
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.runOnServer
 import com.mojang.brigadier.context.CommandContext
 import de.maxhenkel.admiral.MinecraftAdmiral
 import de.maxhenkel.admiral.annotations.Command
 import de.maxhenkel.admiral.annotations.MinMax
 import de.maxhenkel.admiral.annotations.Name
 import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
+import lol.gito.radgyms.api.events.CacheEvents
 import lol.gito.radgyms.api.events.GymEvents
+import lol.gito.radgyms.api.events.cache.CacheRollPokeEvent
 import lol.gito.radgyms.api.events.gym.GenerateRewardEvent
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.loadConfig
@@ -130,26 +131,32 @@ object CommandRegistry {
     @Command("debug_cache")
     @RequiresPermissionLevel(4)
     fun debugCache(
-        context: CommandContext<ServerCommandSource>, @Name("type") type: String, @Name("rarity") rarity: String
+        context: CommandContext<ServerCommandSource>,
+        @Name("type") type: String,
+        @Name("rarity") rarity: String,
+        @Name("shiny_boost") shinyBoost: Int?
     ): Int {
         if (context.source.player != null) {
             try {
                 val rarityEnum = Rarity.valueOf(rarity.uppercase())
                 val typeEnum = ElementalTypes.get(type) ?: throw RuntimeException("cannot get elemental type: $type")
-                runOnServer {
-                    val poke: Pokemon = CacheHandler.getPoke(
-                        typeEnum, rarityEnum, context.source.player!!, addToParty = true
+                val poke: Pokemon = CacheHandler.getPoke(
+                    typeEnum,
+                    rarityEnum,
+                    context.source.player!!,
+                    shinyBoost
+                )
+
+                CacheEvents.CACHE_ROLL_POKE.emit(
+                    CacheRollPokeEvent(
+                        context.source.player!!,
+                        poke,
+                        typeEnum.toString().lowercase(),
+                        rarityEnum,
+                        shinyBoost ?: 0
                     )
-                    context.source.player!!.sendMessage(
-                        literal(
-                            "Rolled ${modId("label.rarity.${rarityEnum.name.lowercase()}")} ${
-                                translatable(
-                                    cobblemonResource("type.${typeEnum.name}").toTranslationKey()
-                                )
-                            } ${poke.species.name} shiny: ${poke.shiny}"
-                        )
-                    )
-                }
+                )
+
             } catch (e: Exception) {
                 context.source.player!!.sendMessage(
                     literal("Cannot generate $rarity $type poke, caught error: ${e.message}")

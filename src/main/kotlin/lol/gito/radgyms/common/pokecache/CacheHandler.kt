@@ -8,84 +8,48 @@
 
 package lol.gito.radgyms.common.pokecache
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.pokemon.ShinyChanceCalculationEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.party
-import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_RARITY
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
+import lol.gito.radgyms.server.util.isShiny
+import lol.gito.radgyms.server.util.shinyRoll
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Rarity
-import kotlin.random.Random
 
 object CacheHandler {
-    private fun Float.checkRate(): Boolean =
-        if (this >= 1) (Random.Default.nextFloat() < 1 / this) else Random.Default.nextFloat() < this
-
-
     fun getPoke(
         type: String,
         rarity: Rarity,
         player: ServerPlayerEntity,
-        shinyBoost: Int? = 0,
-        addToParty: Boolean? = false
+        shinyBoost: Int? = 0
     ): Pokemon = getPoke(
         ElementalTypes.get(type) ?: ElementalTypes.all().random(),
         rarity,
         player,
-        shinyBoost,
-        addToParty
+        shinyBoost
     )
 
     fun getPoke(
         type: ElementalType,
         rarity: Rarity,
         player: ServerPlayerEntity,
-        shinyBoost: Int? = 0,
-        addToParty: Boolean? = false
+        shinyBoost: Int? = 0
     ): Pokemon {
         val cache = SPECIES_BY_RARITY[type.name]!!.forRarity(rarity)
 
         val pokeProps = PokemonProperties.parse(cache.shuffle().first())
         val poke = pokeProps.create()
 
-        poke.shiny = shinyRoll(poke, player, shinyBoost).checkRate()
-        val hasShinyCharm = player.inventory.contains(
-            TagKey.of(
-                RegistryKeys.ITEM,
-                modId("items/shiny_chance_items")
-            )
-        )
-
-        if (!poke.shiny && hasShinyCharm) {
-            poke.shiny = shinyRoll(poke, player, shinyBoost).checkRate()
-        }
+        poke.shiny = shinyRoll(poke, player, shinyBoost).isShiny()
 
         poke.updateAspects()
         poke.updateForm()
 
         val instance = poke.initialize()
 
-        if (addToParty == true) {
-            player.party().add(instance)
-        }
-
         return instance
     }
 
-    private fun shinyRoll(poke: Pokemon, player: ServerPlayerEntity, shinyBoost: Int? = 0): Float {
-        var shinyRate = Cobblemon.config.shinyRate - (shinyBoost ?: 0).toFloat()
-        val event = ShinyChanceCalculationEvent(shinyRate, poke)
-        CobblemonEvents.SHINY_CHANCE_CALCULATION.post(event) {
-            shinyRate = it.calculate(player)
-        }
-        if (shinyRate == 0f) return 1f
-        return shinyRate
-    }
 }

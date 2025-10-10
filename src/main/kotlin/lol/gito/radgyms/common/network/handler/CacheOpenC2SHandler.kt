@@ -9,13 +9,11 @@
 package lol.gito.radgyms.common.network.handler
 
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.api.events.CacheEvents
+import lol.gito.radgyms.api.events.cache.CacheRollPokeEvent
 import lol.gito.radgyms.common.network.payload.CacheOpenC2S
 import lol.gito.radgyms.common.pokecache.CacheHandler
-import lol.gito.radgyms.common.util.TranslationUtil.buildSuffixedTypeText
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 
 class CacheOpenC2SHandler(payload: CacheOpenC2S, context: ServerPlayNetworking.Context) {
     init {
@@ -23,23 +21,17 @@ class CacheOpenC2SHandler(payload: CacheOpenC2S, context: ServerPlayNetworking.C
             payload.type,
             payload.rarity,
             context.player(),
-            payload.shinyBoost,
-            addToParty = true
+            payload.shinyBoost
         )
-        context.player().sendMessage(
-            Text.of(
-                "Rolled %1s %2s %3s%4s".format(
-                    payload.rarity.toString().lowercase(),
-                    buildSuffixedTypeText(payload.type),
-                    when (poke.shiny) {
-                        true -> Text.literal("SHINY ").formatted(Formatting.GOLD)
-                        false -> Text.literal("")
-                    },
-                    poke.species.name
-                )
+
+        CacheEvents.CACHE_ROLL_POKE.emit(
+            CacheRollPokeEvent(
+                context.player(),
+                poke,
+                payload.type,
+                payload.rarity,
+                payload.shinyBoost
             )
         )
-        RadGyms.LOGGER.info("shiny boost: ${payload.shinyBoost}")
-        context.player().mainHandStack.decrementUnlessCreative(1, context.player())
     }
 }

@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
@@ -36,6 +35,7 @@ import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
 import lol.gito.radgyms.server.event.cache.CacheRollPokeHandler
+import lol.gito.radgyms.server.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.server.event.gyms.*
 import lol.gito.radgyms.server.state.RadGymsState
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
@@ -79,11 +79,8 @@ object EventManager {
         GymEvents.TRAINER_BATTLE_END.subscribe(Priority.LOWEST, ::TrainerBattleEndHandler)
 
         GymEvents.GENERATE_REWARD.subscribe(Priority.LOWEST, ::GenerateRewardHandler)
-        GymEvents.GENERATE_TEAM.subscribe(Priority.NORMAL) { event ->
-            debug("added zubat")
-            event.team.add(PokemonProperties.parse("zubat level=100"))
-        }
 
+        CacheEvents.CACHE_ROLL_POKE.subscribe(Priority.LOW, ::ShinyCharmCheckHandler)
         CacheEvents.CACHE_ROLL_POKE.subscribe(Priority.LOWEST, ::CacheRollPokeHandler)
     }
 
