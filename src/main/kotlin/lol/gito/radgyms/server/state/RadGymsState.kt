@@ -20,9 +20,9 @@ import lol.gito.radgyms.common.gym.GymManager.GYM_TEMPLATES
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.gym.GymTrainer
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
-import lol.gito.radgyms.common.util.getBlockPos
-import lol.gito.radgyms.common.util.putBlockPos
 import lol.gito.radgyms.mixin.common.RCTBattleAIAccessor
+import lol.gito.radgyms.server.util.getBlockPos
+import lol.gito.radgyms.server.util.putBlockPos
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.RegistryWrapper

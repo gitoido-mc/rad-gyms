@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.common.util.annotation
+package lol.gito.radgyms.api.annotation
 
 @Target(AnnotationTarget.PROPERTY)
 annotation class RegisterBlockItem(

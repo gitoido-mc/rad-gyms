@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.common.util
+package lol.gito.radgyms.server.util
 
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.BlockPos

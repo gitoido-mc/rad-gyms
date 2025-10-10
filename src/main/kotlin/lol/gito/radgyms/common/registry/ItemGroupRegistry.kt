@@ -9,10 +9,10 @@
 package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import lol.gito.radgyms.api.annotation.RegisterBlockItem
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.gym.GymManager
-import lol.gito.radgyms.common.util.annotation.RegisterBlockItem
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.block.Block

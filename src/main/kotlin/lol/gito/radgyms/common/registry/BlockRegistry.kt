@@ -8,10 +8,10 @@
 
 package lol.gito.radgyms.common.registry
 
+import lol.gito.radgyms.api.annotation.RegisterBlockItem
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.*
-import lol.gito.radgyms.common.util.annotation.RegisterBlockItem
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
