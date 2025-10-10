@@ -16,6 +16,9 @@ import lol.gito.radgyms.common.RadGyms.debug
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.data.DataTracker
+import net.minecraft.entity.data.TrackedData
+import net.minecraft.entity.data.TrackedDataHandlerRegistry
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
@@ -26,19 +29,50 @@ import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.math.Vec3d
+import net.minecraft.village.VillagerData
 import net.minecraft.world.World
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
-class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntity(entityType, world) {
+class Trainer(entityType: EntityType<out Trainer>, world: World) :
+    VillagerEntity(entityType, world) {
+    private val gymTrainerIdKey = "gymTrainerId"
     private val trainerIdKey = "trainerId"
     private val requiresKey = "requires"
     private val defeatedKey = "isDefeated"
     private val leaderKey = "isLeader"
 
-    var trainerId: UUID? = null
-    var requires: UUID? = null
-    var defeated: Boolean = false
-    var leader: Boolean = false
+    var gymId: String
+        get() {
+            return this.dataTracker?.get(GYM_ID) ?: "default_trainer"
+        }
+        set(value) {
+            this.dataTracker?.set(GYM_ID, value)
+        }
+
+    var trainerId: UUID?
+        get() = this.dataTracker?.get(TRAINER_ID)?.getOrNull()
+        set(value) {
+            this.dataTracker?.set(TRAINER_ID, Optional<UUID>.ofNullable(value))
+        }
+
+    var requires: UUID?
+        get() = this.dataTracker?.get(REQUIRES)?.getOrNull()
+        set(value) {
+            this.dataTracker?.set(REQUIRES, Optional<UUID>.ofNullable(value))
+        }
+
+    var defeated: Boolean
+        get() = this.dataTracker?.get(DEFEATED) ?: false
+        set(value) {
+            this.dataTracker?.set(DEFEATED, value)
+        }
+
+    var leader: Boolean
+        get() = this.dataTracker?.get(LEADER) ?: false
+        set(value) {
+            this.dataTracker?.set(LEADER, value)
+        }
 
     init {
         this.world = world
@@ -47,6 +81,35 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
 
     companion object {
         fun createAttributes(): DefaultAttributeContainer.Builder = createVillagerAttributes()
+        val GYM_ID: TrackedData<String> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.STRING)
+        val TRAINER_ID: TrackedData<Optional<UUID>> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.OPTIONAL_UUID)
+        val REQUIRES: TrackedData<Optional<UUID>> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.OPTIONAL_UUID)
+        val DEFEATED: TrackedData<Boolean> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.BOOLEAN)
+        val LEADER: TrackedData<Boolean> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.BOOLEAN)
+    }
+
+    override fun initDataTracker(builder: DataTracker.Builder) {
+        super.initDataTracker(
+            builder
+                .add(GYM_ID, "default_trainer")
+                .add(TRAINER_ID, Optional<UUID>.ofNullable(null))
+                .add(REQUIRES, Optional<UUID>.ofNullable(null))
+                .add(DEFEATED, false)
+                .add(LEADER, false)
+        )
+    }
+
+    override fun onTrackedDataSet(data: TrackedData<*>) {
+        super.onTrackedDataSet(data)
+    }
+
+    override fun setVillagerData(villagerData: VillagerData?) {
+        super.setVillagerData(villagerData)
     }
 
     override fun getMaxLookYawChange(): Int = 360
@@ -88,6 +151,8 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
                 return ActionResult.FAIL
             }
 
+            debug(gymId)
+
             val trainerRegistry = RadGyms.RCT.trainerRegistry
             val rctBattleManager = RadGyms.RCT.battleManager
             val playerTrainer = trainerRegistry.getById(player.uuid.toString())
@@ -126,6 +191,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
 
     override fun writeNbt(nbt: NbtCompound): NbtCompound {
         super.writeNbt(nbt)
+        nbt.putString(gymTrainerIdKey, gymId)
         nbt.putBoolean(leaderKey, leader)
         nbt.putBoolean(defeatedKey, defeated)
 
@@ -141,6 +207,9 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
+        if (nbt.contains(gymTrainerIdKey)) {
+            gymId = nbt.getString(gymTrainerIdKey)
+        }
         if (nbt.contains(trainerIdKey)) {
             trainerId = nbt.getUuid(trainerIdKey)
         }
@@ -157,8 +226,6 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) : VillagerEntit
 
     private fun sayNo() {
         this.headRollingTimeLeft = 40
-        if (!this.world.isClient) {
-            this.playSound(SoundEvents.ENTITY_VILLAGER_NO)
-        }
+        this.playSoundIfNotSilent(SoundEvents.ENTITY_VILLAGER_NO)
     }
 }

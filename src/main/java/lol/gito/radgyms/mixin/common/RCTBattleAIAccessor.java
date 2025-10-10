@@ -14,18 +14,18 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(RCTBattleAI.class)
 public interface RCTBattleAIAccessor {
-    @Accessor("moveBias")
+    @Accessor(value = "moveBias", remap = false)
     double getMoveBias();
 
-    @Accessor("statusMoveBias")
+    @Accessor(value = "statusMoveBias", remap = false)
     double getStatusMoveBias();
 
-    @Accessor("switchBias")
+    @Accessor(value = "switchBias", remap = false)
     double getSwitchBias();
 
-    @Accessor("itemBias")
+    @Accessor(value = "itemBias", remap = false)
     double getItemBias();
 
-    @Accessor("maxSelectMargin")
+    @Accessor(value = "maxSelectMargin", remap = false)
     double getMaxSelectMargin();
 }

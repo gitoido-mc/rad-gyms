@@ -9,7 +9,12 @@
 package lol.gito.radgyms.api.events.gui
 
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
+import net.minecraft.util.math.BlockPos
 
 data class GymEnterScreenCloseEvent(
-    val choice: GuiScreenCloseChoice
+    val choice: GuiScreenCloseChoice,
+    val key: Boolean,
+    val level: Int,
+    val type: String? = null,
+    val pos: BlockPos? = null
 )

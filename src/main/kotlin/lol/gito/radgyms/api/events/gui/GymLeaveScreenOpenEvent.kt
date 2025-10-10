@@ -8,8 +8,8 @@
 
 package lol.gito.radgyms.api.events.gui
 
+import net.minecraft.util.Identifier
+
 data class GymLeaveScreenOpenEvent(
-    val usedRope: Boolean,
-    val gymCompleted: Boolean,
-    val gymType: String
+    val id: Identifier
 )

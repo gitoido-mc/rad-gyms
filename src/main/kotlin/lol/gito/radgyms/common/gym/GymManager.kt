@@ -177,6 +177,7 @@ object GymManager {
                         coords.z + trainerTemplate.npc.relativePosition.z
                     )
                 )
+                gymId = trainerTemplate.id
                 trainerId = trainerUUID
                 requires = requiredUUID
                 leader = trainerTemplate.leader

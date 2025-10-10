@@ -9,12 +9,17 @@
 package lol.gito.radgyms.client
 
 import com.cobblemon.mod.common.api.Priority
+import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.api.events.GuiEvents
 import lol.gito.radgyms.client.gui.screen.GymEnterScreen
+import lol.gito.radgyms.client.gui.screen.GymLeaveScreen
+import lol.gito.radgyms.client.renderer.entity.TrainerEntityRenderer
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.network.handler.OpenGymEnterScreenS2CHandler
 import lol.gito.radgyms.common.network.handler.OpenGymLeaveScreenS2CHandler
+import lol.gito.radgyms.common.network.payload.GymEnterC2S
+import lol.gito.radgyms.common.network.payload.GymLeaveC2S
 import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.network.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.EntityRegistry
@@ -23,7 +28,6 @@ import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.render.entity.VillagerEntityRenderer
 import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.util.Identifier
 
@@ -32,7 +36,7 @@ object RadGymsClient {
     fun init() {
         debug("Initializing client")
         EntityRendererRegistry.register(EntityRegistry.GYM_TRAINER) { context ->
-            VillagerEntityRenderer(context)
+            TrainerEntityRenderer(context)
         }
 
         ClientPlayNetworking.registerGlobalReceiver(OpenGymEnterScreenS2C.ID, ::OpenGymEnterScreenS2CHandler)
@@ -48,6 +52,29 @@ object RadGymsClient {
                     it.pos,
                 )
             )
+        }
+        GuiEvents.ENTER_SCREEN_CLOSE.subscribe(Priority.LOWEST) {
+            if (it.choice == GuiScreenCloseChoice.PROCEED) {
+                ClientPlayNetworking.send(
+                    GymEnterC2S(
+                        it.key,
+                        it.level,
+                        it.type,
+                        it.pos
+                    )
+                )
+            }
+            MinecraftClient.getInstance().setScreen(null)
+        }
+
+        GuiEvents.LEAVE_SCREEN_OPEN.subscribe(Priority.LOWEST) {
+            MinecraftClient.getInstance().setScreen(GymLeaveScreen())
+        }
+        GuiEvents.LEAVE_SCREEN_CLOSE.subscribe(Priority.LOWEST) {
+            if (it.choice == GuiScreenCloseChoice.PROCEED) {
+                ClientPlayNetworking.send(GymLeaveC2S(true))
+            }
+            MinecraftClient.getInstance().setScreen(null)
         }
     }
 

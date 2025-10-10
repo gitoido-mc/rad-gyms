@@ -12,18 +12,17 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
+import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.api.events.GuiEvents
+import lol.gito.radgyms.api.events.gui.GymEnterScreenCloseEvent
 import lol.gito.radgyms.client.gui.widget.LevelSliderWidget
 import lol.gito.radgyms.client.radGymsResource
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
-import lol.gito.radgyms.common.network.payload.GymEnterC2S
 import lol.gito.radgyms.common.util.TranslationUtil.buildTypeText
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
@@ -33,6 +32,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Colors
 import net.minecraft.util.math.BlockPos
+import org.lwjgl.glfw.GLFW
 
 
 @Environment(EnvType.CLIENT)
@@ -86,11 +86,36 @@ class GymEnterScreen(
         }
     }
 
+    private var closeReason: GuiScreenCloseChoice = GuiScreenCloseChoice.CANCEL
+
     override fun applyBlur(delta: Float) {}
 
     override fun renderDarkening(context: DrawContext) {}
 
-    override fun close() = this.client!!.setScreen(null)
+    override fun close() {
+        GuiEvents.ENTER_SCREEN_CLOSE.emit(
+            GymEnterScreenCloseEvent(
+                this.closeReason,
+                this.key,
+                this.level,
+                this.type,
+                this.pos
+            )
+        )
+    }
+
+    fun close(reason: GuiScreenCloseChoice) {
+        this.closeReason = reason
+        this.close()
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
+            this.close(GuiScreenCloseChoice.CANCEL)
+            return true
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
 
     override fun init() {
         val levelSelectSlider = LevelSliderWidget(
@@ -142,17 +167,16 @@ class GymEnterScreen(
 
         val proceedButton = ButtonWidget
             .builder(ScreenTexts.PROCEED) {
-                debug(level.toString())
-                ClientPlayNetworking.send(GymEnterC2S(key, level, type, pos))
-                GuiEvents.ENTER_SCREEN_CLOSE.emit()
-                close()
+                close(GuiScreenCloseChoice.PROCEED)
             }
             .size(50, 20)
             .position(leftX + 10, topY + (BASE_HEIGHT - 30))
             .build()
 
         val cancelButton = ButtonWidget
-            .builder(ScreenTexts.CANCEL) { close() }
+            .builder(ScreenTexts.CANCEL) {
+                close(GuiScreenCloseChoice.CANCEL)
+            }
             .size(50, 20)
             .position(leftX + (BASE_WIDTH - 60), topY + (BASE_HEIGHT - 30))
             .build()

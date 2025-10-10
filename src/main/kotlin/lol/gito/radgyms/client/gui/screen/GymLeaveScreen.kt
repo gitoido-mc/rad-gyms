@@ -11,19 +11,20 @@ package lol.gito.radgyms.client.gui.screen
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
+import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
+import lol.gito.radgyms.api.events.GuiEvents
+import lol.gito.radgyms.api.events.gui.GymLeaveScreenCloseEvent
 import lol.gito.radgyms.client.radGymsResource
-import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.network.payload.GymLeaveC2S
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Colors
+import org.lwjgl.glfw.GLFW
 
 
 @Environment(EnvType.CLIENT)
@@ -45,27 +46,43 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
     val topY: Int
         get() = middleY - BASE_HEIGHT / 2
 
-    var level: Int = 10
+    private var closeReason: GuiScreenCloseChoice = GuiScreenCloseChoice.CANCEL
 
     override fun applyBlur(delta: Float) {}
 
     override fun renderDarkening(context: DrawContext) {}
 
-    override fun close() = this.client!!.setScreen(null)
+    override fun close() {
+        GuiEvents.LEAVE_SCREEN_CLOSE.emit(
+            GymLeaveScreenCloseEvent(this.closeReason)
+        )
+    }
+
+    fun close(reason: GuiScreenCloseChoice) {
+        this.closeReason = reason
+        this.close()
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
+            this.close(GuiScreenCloseChoice.CANCEL)
+            return true
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
 
     override fun init() {
         val proceedButton = ButtonWidget
             .builder(ScreenTexts.PROCEED) {
-                debug(level.toString())
-                ClientPlayNetworking.send(GymLeaveC2S(true))
-                close()
+                close(GuiScreenCloseChoice.PROCEED)
             }
             .size(50, 20)
             .position(leftX + 10, topY + (BASE_HEIGHT - 30))
             .build()
 
         val cancelButton = ButtonWidget
-            .builder(ScreenTexts.CANCEL) { close() }
+            .builder(ScreenTexts.CANCEL) { close(GuiScreenCloseChoice.CANCEL) }
             .size(50, 20)
             .position(leftX + (BASE_WIDTH - 60), topY + (BASE_HEIGHT - 30))
             .build()
