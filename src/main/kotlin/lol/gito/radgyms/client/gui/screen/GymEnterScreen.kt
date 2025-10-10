@@ -38,10 +38,12 @@ import net.minecraft.util.math.BlockPos
 @Environment(EnvType.CLIENT)
 class GymEnterScreen(
     val key: Boolean,
+    val selectedLevel: Int,
+    val minLevel: Int = RadGyms.CONFIG.minLevel!!,
+    val maxLevel: Int = RadGyms.CONFIG.maxLevel!!,
     val type: String? = null,
-    val pos: BlockPos? = null,
-    val minLevel: Int = RadGyms.CONFIG.minLevel,
-    val maxLevel: Int = RadGyms.CONFIG.maxLevel
+    val pos: BlockPos? = null
+
 ) : CobblemonRenderable,
     Screen(
         when {
@@ -73,7 +75,7 @@ class GymEnterScreen(
     val topY: Int
         get() = middleY - BASE_HEIGHT / 2
 
-    var level: Int = 10
+    var level: Int = this.selectedLevel.coerceIn(this.minLevel, this.maxLevel)
 
     val usesLeft: Int? = when (pos) {
         null -> null
@@ -94,6 +96,7 @@ class GymEnterScreen(
         val levelSelectSlider = LevelSliderWidget(
             x = leftX + 55,
             y = topY + 25,
+            initialLevel = this.level,
             minLevel = this.minLevel,
             maxLevel = this.maxLevel,
         ) { level ->

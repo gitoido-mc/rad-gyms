@@ -18,8 +18,9 @@ data class RadGymsConfig(
     val lapisBoostAmount: Int? = null,
     val ignoredSpecies: List<String>? = null,
     val ignoredForms: List<String>? = null,
-    val minLevel: Int = 10,
-    val maxLevel: Int = 100,
+    val minLevel: Int? = null,
+    val maxLevel: Int? = null,
+    val deriveAverageGymLevel: Boolean? = null
 ) {
     fun combine(other: RadGymsConfig): RadGymsConfig {
         return this.copy(
@@ -29,7 +30,9 @@ data class RadGymsConfig(
             lapisBoostAmount = other.lapisBoostAmount ?: lapisBoostAmount,
             ignoredSpecies = other.ignoredSpecies ?: ignoredSpecies,
             ignoredForms = other.ignoredForms ?: ignoredForms,
-            minLevel = other.minLevel
+            minLevel = other.minLevel ?: minLevel,
+            maxLevel = other.maxLevel ?: maxLevel,
+            deriveAverageGymLevel = other.deriveAverageGymLevel ?: deriveAverageGymLevel
         )
     }
 }

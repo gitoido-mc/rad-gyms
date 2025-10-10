@@ -15,5 +15,6 @@ data class GymEnterScreenOpenEvent(
     val key: Boolean,
     var type: String,
     var minLevel: Int,
-    var maxLevel: Int
+    var maxLevel: Int,
+    var selectedLevel: Int
 )

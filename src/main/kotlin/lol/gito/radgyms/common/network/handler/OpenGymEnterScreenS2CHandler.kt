@@ -22,8 +22,9 @@ class OpenGymEnterScreenS2CHandler(payload: OpenGymEnterScreenS2C, context: Clie
                 payload.pos,
                 payload.key,
                 payload.type,
-                RadGyms.CONFIG.minLevel,
-                RadGyms.CONFIG.maxLevel,
+                RadGyms.CONFIG.minLevel!!,
+                RadGyms.CONFIG.maxLevel!!,
+                payload.derivedLevel // @TODO: do something about this hardcoded var
             )
         )
     }

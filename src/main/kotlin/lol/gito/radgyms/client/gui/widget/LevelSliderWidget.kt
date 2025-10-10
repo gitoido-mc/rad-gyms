@@ -8,6 +8,7 @@
 
 package lol.gito.radgyms.client.gui.widget
 
+import lol.gito.radgyms.common.RadGyms
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.DrawContext
@@ -20,6 +21,7 @@ import kotlin.math.floor
 class LevelSliderWidget(
     x: Int,
     y: Int,
+    private val initialLevel: Int = RadGyms.CONFIG.minLevel!!,
     private val minLevel: Int,
     private val maxLevel: Int,
     private val onChange: (Int) -> Unit
@@ -31,7 +33,7 @@ class LevelSliderWidget(
     ScreenTexts.EMPTY,
     0.0
 ) {
-    var level: Int = 10
+    var level: Int = this.initialLevel
 
     override fun updateMessage() {
         this.message = Text.literal(level.toString())
@@ -43,6 +45,7 @@ class LevelSliderWidget(
     }
 
     override fun renderWidget(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        updateLevel(this.level)
         updateMessage()
         super.renderWidget(context, mouseX, mouseY, delta)
     }

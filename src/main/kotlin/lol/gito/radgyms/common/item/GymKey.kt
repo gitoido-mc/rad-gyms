@@ -20,6 +20,7 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
+import lol.gito.radgyms.server.util.averagePokePartyLevel
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
@@ -68,6 +69,10 @@ class GymKey : ISpecialItemModel, Item(
 
         ServerPlayNetworking.send(
             player as ServerPlayerEntity, OpenGymEnterScreenS2C(
+                when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
+                    true -> player.averagePokePartyLevel()
+                    false -> RadGyms.CONFIG.minLevel!!
+                },
                 true,
                 player.getStackInHand(hand).get(DataComponentRegistry.GYM_TYPE_COMPONENT)!!
             )

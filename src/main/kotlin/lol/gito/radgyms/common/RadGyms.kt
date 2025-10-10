@@ -76,11 +76,17 @@ object RadGyms {
 
         CONFIG = RadGymsConfig(
             debug = false,
-            maxEntranceUses = 3,
-            lapisBoostAmount = 1,
-            shardRewards = true,
+            // Should average team level be derived automatically
+            deriveAverageGymLevel = true,
+            // Gym level bounds
             minLevel = 10,
             maxLevel = 100,
+            // Gym entrance max uses per player
+            maxEntranceUses = 3,
+            // Cache shiny boost amount per unit of lapis
+            lapisBoostAmount = 1,
+            // Add shard rewards
+            shardRewards = true,
             ignoredSpecies = emptyList(),
             ignoredForms = mutableListOf("gmax"),
         )

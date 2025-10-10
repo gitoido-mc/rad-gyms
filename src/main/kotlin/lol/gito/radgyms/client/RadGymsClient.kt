@@ -38,22 +38,16 @@ object RadGymsClient {
         ClientPlayNetworking.registerGlobalReceiver(OpenGymEnterScreenS2C.ID, ::OpenGymEnterScreenS2CHandler)
         ClientPlayNetworking.registerGlobalReceiver(OpenGymLeaveScreenS2C.ID, ::OpenGymLeaveScreenS2CHandler)
         GuiEvents.ENTER_SCREEN_OPEN.subscribe(Priority.LOWEST) {
-            debug("Enter screen event emitted - lower prio - set max level to ${it.maxLevel}")
             MinecraftClient.getInstance().setScreen(
                 GymEnterScreen(
                     it.key,
-                    it.type,
-                    it.pos,
+                    it.selectedLevel,
                     it.minLevel,
                     it.maxLevel,
+                    it.type,
+                    it.pos,
                 )
             )
-        }
-
-
-        GuiEvents.ENTER_SCREEN_OPEN.subscribe(Priority.NORMAL) {
-            debug("Enter screen event emitted - normal prio - set max level to 30")
-            it.maxLevel = 30
         }
     }
 

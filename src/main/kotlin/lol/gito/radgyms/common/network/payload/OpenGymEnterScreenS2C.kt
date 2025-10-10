@@ -8,6 +8,7 @@
 
 package lol.gito.radgyms.common.network.payload
 
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
@@ -18,6 +19,7 @@ import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 class OpenGymEnterScreenS2C(
+    val derivedLevel: Int,
     val key: Boolean,
     val type: String,
     val pos: BlockPos? = null
@@ -30,6 +32,8 @@ class OpenGymEnterScreenS2C(
         val PACKET_CODEC: PacketCodec<RegistryByteBuf, OpenGymEnterScreenS2C> =
             PacketCodec.of<RegistryByteBuf, OpenGymEnterScreenS2C>(
                 { value, buffer ->
+                    debug("Derived level is ${value.derivedLevel}")
+                    PacketCodecs.INTEGER.encode(buffer, value.derivedLevel)
                     PacketCodecs.BOOL.encode(buffer, value.key)
                     PacketCodecs.STRING.encode(buffer, value.type)
                     PacketCodecs.optional(BlockPos.PACKET_CODEC).encode(buffer, Optional.ofNullable(value.pos))
@@ -37,6 +41,7 @@ class OpenGymEnterScreenS2C(
                 },
                 { buffer ->
                     OpenGymEnterScreenS2C(
+                        PacketCodecs.INTEGER.decode(buffer),
                         PacketCodecs.BOOL.decode(buffer),
                         PacketCodecs.STRING.decode(buffer),
                         PacketCodecs.optional(BlockPos.PACKET_CODEC).decode(buffer).getOrNull()
