@@ -41,6 +41,8 @@ class EpicPokeCache : PokeCache(Rarity.EPIC)
 
 open class PokeCache(private val rarity: Rarity) : Item(Settings().rarity(rarity)) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        if (hand != Hand.MAIN_HAND) return TypedActionResult.fail(user.getStackInHand(hand))
+
         val stack = user.getStackInHand(hand)
         val offhand = user.offHandStack
         val boost = stack.getOrDefault(CACHE_SHINY_BOOST_COMPONENT, 0)
