@@ -14,5 +14,7 @@ import net.minecraft.util.Identifier
 
 
 fun radGymsResource(path: String): Identifier = Identifier.of(MOD_ID, path)
+
+@Suppress("unused")
 fun radGymsModel(path: String, variant: String): ModelIdentifier =
     ModelIdentifier(radGymsResource(path), variant)

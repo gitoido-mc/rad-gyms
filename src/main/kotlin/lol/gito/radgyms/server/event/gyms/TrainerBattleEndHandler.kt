@@ -11,7 +11,7 @@ package lol.gito.radgyms.server.event.gyms
 import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms.debug
 
-class TrainerBattleEndHandler(event: ModEvents.TrainerBattleEndEvent) {
+class TrainerBattleEndHandler(@Suppress("unused") event: ModEvents.TrainerBattleEndEvent) {
     init {
         debug("Trainer battle end triggered")
     }
