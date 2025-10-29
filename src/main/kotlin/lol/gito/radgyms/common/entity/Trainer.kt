@@ -8,11 +8,8 @@
 
 package lol.gito.radgyms.common.entity
 
-import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
-import com.gitlab.srcmc.rctapi.api.battle.BattleRules
-import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.api.events.ModEvents
+import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_INTERACT
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.damage.DamageSource
@@ -23,9 +20,6 @@ import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.SoundEvents
-import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.math.Vec3d
@@ -123,70 +117,15 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) :
     }
 
     override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
-        if (!this.world.isClient) {
-            val player = player as ServerPlayerEntity
-            if (requires != null) {
-                val trainerToFight = (world as ServerWorld).getEntity(requires) as Trainer
-
-                if (!trainerToFight.defeated) {
-                    player.sendMessage(
-                        Text.translatable(
-                            "rad-gyms.message.info.trainer_required",
-                            trainerToFight.name
-                        ),
-                        true
-                    )
-                    return ActionResult.FAIL
-                }
-            }
-
-            if (defeated) {
-                val messageKey = when (leader) {
-                    true -> "rad-gyms.message.info.leader_defeated"
-                    false -> "rad-gyms.message.info.trainer_defeated"
-                }
-
-                player.sendMessage(Text.translatable(messageKey), true)
-                sayNo()
-                return ActionResult.FAIL
-            }
-
-            debug(gymId)
-
-            val trainerRegistry = RadGyms.RCT.trainerRegistry
-            val rctBattleManager = RadGyms.RCT.battleManager
-            val playerTrainer = trainerRegistry.getById(player.uuid.toString())
-            val npcTrainer: TrainerNPC = trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
-
-            // Check for being in battle just in case
-            // Force all battles for player to end
-            rctBattleManager.apply {
-                this.states.forEach { state ->
-                    state.battle.apply {
-                        val actor = this.actors.firstOrNull { actor -> actor.isForPlayer(player) }
-                        if (actor != null && !this.ended) {
-                            debug("Uh-oh, found stuck battle for player actor, ending it")
-                            this.end()
-                            rctBattleManager.end(this.battleId, true)
-                        }
-                    }
-                }
-            }
-
-            rctBattleManager.startBattle(
-                listOf(playerTrainer),
-                listOf(npcTrainer),
-                BattleFormat.GEN_9_SINGLES,
-                BattleRules()
+        if (!world.isClient) {
+            TRAINER_INTERACT.postThen(
+                ModEvents.TrainerInteractEvent(player as ServerPlayerEntity, this),
+                { event -> return ActionResult.FAIL },
+                { event -> return ActionResult.success(world.isClient) },
             )
-        } else {
-            if (defeated) {
-                sayNo()
-                return ActionResult.FAIL
-            }
         }
 
-        return ActionResult.success(this.world.isClient)
+        return ActionResult.success(world.isClient)
     }
 
     override fun writeNbt(nbt: NbtCompound): NbtCompound {
@@ -222,10 +161,5 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) :
         if (nbt.contains(leaderKey)) {
             leader = nbt.getBoolean(leaderKey)
         }
-    }
-
-    private fun sayNo() {
-        this.headRollingTimeLeft = 40
-        this.playSoundIfNotSilent(SoundEvents.ENTITY_VILLAGER_NO)
     }
 }

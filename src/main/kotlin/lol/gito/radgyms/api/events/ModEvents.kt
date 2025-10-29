@@ -8,6 +8,8 @@
 
 package lol.gito.radgyms.api.events
 
+import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -96,12 +98,16 @@ object ModEvents {
     )
 
     data class TrainerBattleEndEvent(
-        val player: ServerPlayerEntity
+        val winners: List<BattleActor>,
+        val losers: List<BattleActor>,
+        val battle: PokemonBattle
     )
 
     data class TrainerBattleStartEvent(
-        val player: ServerPlayerEntity
-    )
+        val players: List<ServerPlayerEntity>,
+        val trainers: List<Trainer>,
+        val battle: PokemonBattle
+    ) : Cancelable()
 
     data class TrainerInteractEvent(
         val player: ServerPlayerEntity,

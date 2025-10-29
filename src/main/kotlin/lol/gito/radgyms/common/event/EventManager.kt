@@ -9,10 +9,13 @@
 package lol.gito.radgyms.common.event
 
 import com.cobblemon.mod.common.api.Priority
+import com.cobblemon.mod.common.api.battles.model.actor.AIBattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
+import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
+import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -67,6 +70,7 @@ object EventManager {
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
 
         // Cobblemon events
+        CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.LOWEST, ::onGymBattleStart)
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onGymBattleWon)
         CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onGymBattleFled)
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
@@ -162,11 +166,32 @@ object EventManager {
         }
     }
 
+    private fun onGymBattleStart(event: BattleStartedPreEvent) {
+        val players = event.battle.players
+        val trainers = event.battle.actors
+            .filter { it -> it.type == ActorType.NPC && it is AIBattleActor }
+            .map { it as AIBattleActor }
+            .map { RCT.trainerRegistry.getById(it.uuid.toString())?.entity as Trainer }
+
+        TRAINER_BATTLE_START.postThen(
+            ModEvents.TrainerBattleStartEvent(players, trainers, event.battle),
+            { subEvent -> if (subEvent.isCanceled) event.cancel() },
+            { subEvent -> debug("Gym trainer battle started") },
+        )
+    }
+
     private fun onGymBattleWon(event: BattleVictoryEvent) {
-
-
         if (event.wasWildCapture) {
             return
+        }
+
+        val trainerPredicate: (BattleActor) -> Boolean =
+            { it.type == ActorType.NPC && it is TrainerEntityBattleActor && it.entity is Trainer }
+
+        val hasGymTrainers = event.winners.any(trainerPredicate).or(event.losers.any(trainerPredicate))
+
+        if (hasGymTrainers) {
+            TRAINER_BATTLE_END.emit(ModEvents.TrainerBattleEndEvent(event.winners, event.losers, event.battle))
         }
 
         if (event.losers.none { it.type == ActorType.NPC }) {
@@ -210,6 +235,21 @@ object EventManager {
     }
 
     private fun onGymBattleFled(event: BattleFledEvent) {
+        val trainerPredicate: (BattleActor) -> Boolean =
+            { it.type == ActorType.NPC && it is TrainerEntityBattleActor && it.entity is Trainer }
+
+        val hasGymTrainers = event.battle.losers.any(trainerPredicate).or(event.battle.winners.any(trainerPredicate))
+
+        if (hasGymTrainers) {
+            TRAINER_BATTLE_END.emit(
+                ModEvents.TrainerBattleEndEvent(
+                    event.battle.winners,
+                    event.battle.losers,
+                    event.battle
+                )
+            )
+        }
+
         val loser = event.player
         if (loser.type != ActorType.PLAYER) return
 
@@ -221,6 +261,21 @@ object EventManager {
     }
 
     private fun onGymBattleFainted(event: BattleFaintedEvent) {
+        val trainerPredicate: (BattleActor) -> Boolean =
+            { it.type == ActorType.NPC && it is TrainerEntityBattleActor && it.entity is Trainer }
+
+        val hasGymTrainers = event.battle.losers.any(trainerPredicate).or(event.battle.winners.any(trainerPredicate))
+
+        if (hasGymTrainers) {
+            TRAINER_BATTLE_END.emit(
+                ModEvents.TrainerBattleEndEvent(
+                    event.battle.winners,
+                    event.battle.losers,
+                    event.battle
+                )
+            )
+        }
+
         val killed = event.killed
         val entity = killed.entity ?: return
         val owner = entity.owner ?: return

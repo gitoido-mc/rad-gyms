@@ -34,7 +34,7 @@ object EventRegistry {
     val TRAINER_INTERACT = CancelableObservable<ModEvents.TrainerInteractEvent>()
 
     @JvmField
-    val TRAINER_BATTLE_START = SimpleObservable<ModEvents.TrainerBattleStartEvent>()
+    val TRAINER_BATTLE_START = CancelableObservable<ModEvents.TrainerBattleStartEvent>()
 
     @JvmField
     val TRAINER_BATTLE_END = SimpleObservable<ModEvents.TrainerBattleEndEvent>()
