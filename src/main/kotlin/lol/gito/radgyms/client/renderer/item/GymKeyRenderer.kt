@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.client.renderer
+package lol.gito.radgyms.client.renderer.item
 
 import lol.gito.radgyms.client.RadGymsClient
 import lol.gito.radgyms.common.registry.DataComponentRegistry

@@ -6,8 +6,9 @@
  *
  */
 
-package lol.gito.radgyms.client.renderer
+package lol.gito.radgyms.client.model
 
+import lol.gito.radgyms.client.renderer.item.SpecialItemRenderer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.util.ModelIdentifier

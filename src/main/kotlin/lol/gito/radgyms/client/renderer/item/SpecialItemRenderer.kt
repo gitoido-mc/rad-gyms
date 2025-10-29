@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.client.renderer
+package lol.gito.radgyms.client.renderer.item
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.block.Block
@@ -30,7 +30,6 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
 
 abstract class SpecialItemRenderer {
-
     abstract fun render(
         stack: ItemStack,
         mode: ModelTransformationMode,
