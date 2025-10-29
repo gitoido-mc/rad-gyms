@@ -8,21 +8,48 @@
 
 package lol.gito.radgyms.common.network.handler
 
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.gym.GymManager
+import lol.gito.radgyms.api.enumeration.GymLeaveReason
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.network.payload.GymLeaveC2S
+import lol.gito.radgyms.common.registry.EventRegistry.GYM_LEAVE
 import lol.gito.radgyms.common.registry.ItemRegistry
+import lol.gito.radgyms.server.state.RadGymsState
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.text.Text
 
 @Suppress("unused")
 class GymLeaveC2SHandler(payload: GymLeaveC2S, context: ServerPlayNetworking.Context) {
     init {
         val stack = context.player().mainHandStack
-        if (stack.item == ItemRegistry.EXIT_ROPE && !context.player().isCreative) {
-            stack.decrement(1)
+        val gym = RadGymsState.getGymForPlayer(context.player())
+
+        if (gym != null) {
+            if (stack.item == ItemRegistry.EXIT_ROPE && !context.player().isCreative) {
+                stack.decrement(1)
+
+                GYM_LEAVE.emit(
+                    ModEvents.GymLeaveEvent(
+                        reason = GymLeaveReason.USED_ITEM,
+                        player = context.player(),
+                        gym = gym,
+                        type = gym.type,
+                        level = gym.level,
+                        completed = false,
+                        usedRope = true
+                    )
+                )
+            } else {
+                GYM_LEAVE.emit(
+                    ModEvents.GymLeaveEvent(
+                        reason = GymLeaveReason.USED_BLOCK,
+                        player = context.player(),
+                        gym = gym,
+                        type = gym.type,
+                        level = gym.level,
+                        completed = true,
+                        usedRope = false
+                    )
+                )
+            }
         }
-        GymManager.handleGymLeave(context.player())
-        context.player().sendMessage(Text.translatable(RadGyms.modId("message.info.gym_failed").toTranslationKey()))
     }
 }

@@ -148,10 +148,6 @@ tasks {
         }
     }
 
-    runClient {
-        args("--username", "Developer")
-    }
-
     jar {
         from("LICENSE")
     }

@@ -9,8 +9,7 @@
 package lol.gito.radgyms.mixin.server;
 
 import lol.gito.radgyms.api.enumeration.GymLeaveReason;
-import lol.gito.radgyms.api.events.GymEvents;
-import lol.gito.radgyms.api.events.gym.GymLeaveEvent;
+import lol.gito.radgyms.api.events.ModEvents;
 import lol.gito.radgyms.common.gym.GymInstance;
 import lol.gito.radgyms.common.registry.DimensionRegistry;
 import lol.gito.radgyms.server.state.RadGymsState;
@@ -21,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static lol.gito.radgyms.common.registry.EventRegistry.GYM_LEAVE;
+
 @Mixin(ServerPlayerEntity.class)
 public abstract class OnServerPlayerEntityDeath {
     @Inject(method = "onDeath", at = @At("TAIL"))
@@ -30,7 +31,7 @@ public abstract class OnServerPlayerEntityDeath {
         if (player.getWorld().getRegistryKey() == DimensionRegistry.INSTANCE.getRADGYMS_LEVEL_KEY()) {
             GymInstance gym = RadGymsState.Companion.getGymForPlayer(player);
             if (gym != null) {
-                GymEvents.GYM_LEAVE.emit(new GymLeaveEvent(
+                GYM_LEAVE.emit(new ModEvents.GymLeaveEvent(
                         GymLeaveReason.PLAYER_DEATH,
                         player,
                         gym,

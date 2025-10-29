@@ -12,9 +12,9 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
-import lol.gito.radgyms.api.events.GuiEvents
-import lol.gito.radgyms.api.events.gui.GymLeaveScreenCloseEvent
-import lol.gito.radgyms.client.radGymsResource
+import lol.gito.radgyms.api.events.ModEvents
+import lol.gito.radgyms.client.registry.GuiEvents.LEAVE_SCREEN_CLOSE
+import lol.gito.radgyms.client.util.radGymsResource
 import lol.gito.radgyms.common.RadGyms.modId
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -53,8 +53,8 @@ class GymLeaveScreen : CobblemonRenderable, Screen(translatable(modId("gui.commo
     override fun renderDarkening(context: DrawContext) {}
 
     override fun close() {
-        GuiEvents.LEAVE_SCREEN_CLOSE.emit(
-            GymLeaveScreenCloseEvent(this.closeReason)
+        LEAVE_SCREEN_CLOSE.emit(
+            ModEvents.GymLeaveScreenCloseEvent(this.closeReason)
         )
     }
 

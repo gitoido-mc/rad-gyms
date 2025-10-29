@@ -228,7 +228,6 @@ class RadGymsState : PersistentState() {
                 trainerNbt.put("Bag", trainerBagNbt)
                 trainerNbt.put("Team", trainerTeamNbt)
                 gymTrainers.put(uuid.toString(), trainerNbt)
-                debug("get data")
             }
             gymData.put("Trainers", gymTrainers)
             gymNbtCompound.put(gymUuid.toString(), gymData)

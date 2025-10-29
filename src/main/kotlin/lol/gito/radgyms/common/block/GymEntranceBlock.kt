@@ -19,32 +19,72 @@ import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.BlockRegistry.GYM_ENTRANCE
 import lol.gito.radgyms.server.util.averagePokePartyLevel
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.block.BlockRenderType
-import net.minecraft.block.BlockState
-import net.minecraft.block.BlockWithEntity
+import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
+import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.state.StateManager
+import net.minecraft.state.property.DirectionProperty
+import net.minecraft.state.property.Properties
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
+import net.minecraft.util.shape.VoxelShape
+import net.minecraft.util.shape.VoxelShapes
+import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
+private val gymEntranceHorizontalFacing: DirectionProperty = Properties.HORIZONTAL_FACING
+
 class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
+    private val bounds = VoxelShapes.union(
+        createCuboidShape(3.75, 1.75, 3.75, 12.25, 10.25, 12.25),
+        createCuboidShape(6.5, 10.0, 6.5, 9.5, 11.0, 9.5)
+    )
+
+    init {
+        defaultState = defaultState.with(gymEntranceHorizontalFacing, Direction.NORTH)
+    }
+
     override fun getRenderType(state: BlockState): BlockRenderType = BlockRenderType.MODEL
+
+    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
 
     override fun getCodec(): MapCodec<out BlockWithEntity> =
         createCodec { settings: Settings -> GymEntranceBlock(settings) }
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
+    override fun getOutlineShape(
+        state: BlockState,
+        world: BlockView,
+        pos: BlockPos,
+        context: ShapeContext
+    ): VoxelShape = bounds
+
+    override fun getCollisionShape(
+        state: BlockState,
+        world: BlockView,
+        pos: BlockPos,
+        context: ShapeContext
+    ): VoxelShape = bounds
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        builder.add(Properties.HORIZONTAL_FACING)
+    }
+
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = this.defaultState.with(
+        gymEntranceHorizontalFacing,
+        ctx.horizontalPlayerFacing.opposite
+    )
 
     override fun onUse(
         state: BlockState,

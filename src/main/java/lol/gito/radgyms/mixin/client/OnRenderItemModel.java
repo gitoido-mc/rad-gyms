@@ -8,7 +8,7 @@
 
 package lol.gito.radgyms.mixin.client;
 
-import lol.gito.radgyms.client.renderer.ISpecialItemModel;
+import lol.gito.radgyms.client.model.ISpecialItemModel;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;

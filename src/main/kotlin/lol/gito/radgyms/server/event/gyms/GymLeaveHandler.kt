@@ -8,13 +8,13 @@
 
 package lol.gito.radgyms.server.event.gyms
 
-import lol.gito.radgyms.api.events.gym.GymLeaveEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.gym.GymManager.destructGym
+import lol.gito.radgyms.common.gym.GymManager.handleGymLeave
 
-class GymLeaveHandler(event: GymLeaveEvent) {
+class GymLeaveHandler(event: ModEvents.GymLeaveEvent) {
     init {
         debug("gym leave triggered")
-        destructGym(event.player, true)
+        handleGymLeave(event.player)
     }
 }

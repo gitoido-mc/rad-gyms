@@ -9,10 +9,10 @@
 package lol.gito.radgyms.common.network.handler
 
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.api.events.CacheEvents
-import lol.gito.radgyms.api.events.cache.CacheRollPokeEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.network.payload.CacheOpenC2S
 import lol.gito.radgyms.common.pokecache.CacheHandler
+import lol.gito.radgyms.common.registry.EventRegistry.CACHE_ROLL_POKE
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 
 class CacheOpenC2SHandler(payload: CacheOpenC2S, context: ServerPlayNetworking.Context) {
@@ -24,8 +24,8 @@ class CacheOpenC2SHandler(payload: CacheOpenC2S, context: ServerPlayNetworking.C
             payload.shinyBoost
         )
 
-        CacheEvents.CACHE_ROLL_POKE.emit(
-            CacheRollPokeEvent(
+        CACHE_ROLL_POKE.emit(
+            ModEvents.CacheRollPokeEvent(
                 context.player(),
                 poke,
                 payload.type,

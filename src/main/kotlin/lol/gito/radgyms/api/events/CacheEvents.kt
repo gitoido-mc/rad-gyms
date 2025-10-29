@@ -8,11 +8,6 @@
 
 package lol.gito.radgyms.api.events
 
-import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import lol.gito.radgyms.api.events.cache.CacheRollPokeEvent
-
 @Suppress("unused")
 object CacheEvents {
-    @JvmField
-    val CACHE_ROLL_POKE = SimpleObservable<CacheRollPokeEvent>()
 }

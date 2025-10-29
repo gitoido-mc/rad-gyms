@@ -9,7 +9,7 @@
 package lol.gito.radgyms.server.event.gyms
 
 import com.cobblemon.mod.common.util.cobblemonResource
-import lol.gito.radgyms.api.events.gym.GenerateRewardEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
@@ -31,7 +31,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
 
-class GenerateRewardHandler(event: GenerateRewardEvent) {
+class GenerateRewardHandler(event: ModEvents.GenerateRewardEvent) {
     init {
         val bundle = ItemStack(Items.BUNDLE)
         val bundleContents = BundleContentsComponent.Builder(BundleContentsComponent.DEFAULT)
@@ -82,7 +82,7 @@ class GenerateRewardHandler(event: GenerateRewardEvent) {
     }
 
     private fun createBundle(
-        event: GenerateRewardEvent,
+        event: ModEvents.GenerateRewardEvent,
         bundle: ItemStack,
         bundleContents: BundleContentsComponent.Builder,
         rewards: List<ItemStack>

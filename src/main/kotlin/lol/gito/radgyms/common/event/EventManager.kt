@@ -21,9 +21,7 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
-import lol.gito.radgyms.api.events.CacheEvents
-import lol.gito.radgyms.api.events.GymEvents
-import lol.gito.radgyms.api.events.gym.GenerateRewardEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
@@ -34,6 +32,13 @@ import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
+import lol.gito.radgyms.common.registry.EventRegistry.CACHE_ROLL_POKE
+import lol.gito.radgyms.common.registry.EventRegistry.GENERATE_REWARD
+import lol.gito.radgyms.common.registry.EventRegistry.GYM_ENTER
+import lol.gito.radgyms.common.registry.EventRegistry.GYM_LEAVE
+import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_BATTLE_END
+import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_BATTLE_START
+import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_INTERACT
 import lol.gito.radgyms.server.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.server.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.server.event.gyms.*
@@ -71,17 +76,17 @@ object EventManager {
         }
 
         // Mod events
-        GymEvents.GYM_ENTER.subscribe(Priority.LOWEST, ::GymEnterHandler)
-        GymEvents.GYM_LEAVE.subscribe(Priority.LOWEST, ::GymLeaveHandler)
+        GYM_ENTER.subscribe(Priority.LOWEST, ::GymEnterHandler)
+        GYM_LEAVE.subscribe(Priority.LOWEST, ::GymLeaveHandler)
 
-        GymEvents.TRAINER_INTERACT.subscribe(Priority.LOWEST, ::TrainerInteractHandler)
-        GymEvents.TRAINER_BATTLE_START.subscribe(Priority.LOWEST, ::TrainerBattleStartHandler)
-        GymEvents.TRAINER_BATTLE_END.subscribe(Priority.LOWEST, ::TrainerBattleEndHandler)
+        TRAINER_INTERACT.subscribe(Priority.LOWEST, ::TrainerInteractHandler)
+        TRAINER_BATTLE_START.subscribe(Priority.LOWEST, ::TrainerBattleStartHandler)
+        TRAINER_BATTLE_END.subscribe(Priority.LOWEST, ::TrainerBattleEndHandler)
 
-        GymEvents.GENERATE_REWARD.subscribe(Priority.LOWEST, ::GenerateRewardHandler)
+        GENERATE_REWARD.subscribe(Priority.LOWEST, ::GenerateRewardHandler)
 
-        CacheEvents.CACHE_ROLL_POKE.subscribe(Priority.LOW, ::ShinyCharmCheckHandler)
-        CacheEvents.CACHE_ROLL_POKE.subscribe(Priority.LOWEST, ::CacheRollPokeHandler)
+        CACHE_ROLL_POKE.subscribe(Priority.LOW, ::ShinyCharmCheckHandler)
+        CACHE_ROLL_POKE.subscribe(Priority.LOWEST, ::CacheRollPokeHandler)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -181,7 +186,14 @@ object EventManager {
                     if (trainer.leader) {
                         val gym = RadGymsState.getGymForPlayer(player)!!
                         GymManager.spawnExitBlock(player)
-                        GymEvents.GENERATE_REWARD.emit(GenerateRewardEvent(player, gym.template, gym.level, gym.type))
+                        GENERATE_REWARD.emit(
+                            ModEvents.GenerateRewardEvent(
+                                player,
+                                gym.template,
+                                gym.level,
+                                gym.type
+                            )
+                        )
                         player.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
                     }
                 }

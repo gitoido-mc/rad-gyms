@@ -18,10 +18,7 @@ import de.maxhenkel.admiral.annotations.Command
 import de.maxhenkel.admiral.annotations.MinMax
 import de.maxhenkel.admiral.annotations.Name
 import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
-import lol.gito.radgyms.api.events.CacheEvents
-import lol.gito.radgyms.api.events.GymEvents
-import lol.gito.radgyms.api.events.cache.CacheRollPokeEvent
-import lol.gito.radgyms.api.events.gym.GenerateRewardEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.loadConfig
 import lol.gito.radgyms.common.RadGyms.modId
@@ -29,6 +26,8 @@ import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.pokecache.CacheHandler
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.registry.EventRegistry.CACHE_ROLL_POKE
+import lol.gito.radgyms.common.registry.EventRegistry.GENERATE_REWARD
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -102,8 +101,8 @@ object CommandRegistry {
                 else -> type
             }
 
-            GymEvents.GENERATE_REWARD.emit(
-                GenerateRewardEvent(
+            GENERATE_REWARD.emit(
+                ModEvents.GenerateRewardEvent(
                     context.source.playerOrThrow,
                     GymTemplate.fromGymDto(context.source.playerOrThrow, gymDto, level, type),
                     level,
@@ -147,8 +146,8 @@ object CommandRegistry {
                     shinyBoost
                 )
 
-                CacheEvents.CACHE_ROLL_POKE.emit(
-                    CacheRollPokeEvent(
+                CACHE_ROLL_POKE.emit(
+                    ModEvents.CacheRollPokeEvent(
                         context.source.player!!,
                         poke,
                         typeEnum.toString().lowercase(),

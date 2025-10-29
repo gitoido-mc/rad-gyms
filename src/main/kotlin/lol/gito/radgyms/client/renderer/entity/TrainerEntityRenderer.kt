@@ -30,10 +30,6 @@ class TrainerEntityRenderer(ctx: EntityRendererFactory.Context) :
         val TEXTURE: Identifier = modId("textures/npc/default_trainer.png")
     }
 
-//    init {
-//        this.addFeature(GymTrainerIdFeature(this))
-//    }
-
     override fun getTexture(entity: Trainer): Identifier {
         return try {
             val id = entity.dataTracker.get(Trainer.GYM_ID)

@@ -8,10 +8,10 @@
 
 package lol.gito.radgyms.server.event.gyms
 
-import lol.gito.radgyms.api.events.gym.TrainerInteractEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms.debug
 
-class TrainerInteractHandler(event: TrainerInteractEvent) {
+class TrainerInteractHandler(event: ModEvents.TrainerInteractEvent) {
     init {
         debug("trainer interact triggered")
     }

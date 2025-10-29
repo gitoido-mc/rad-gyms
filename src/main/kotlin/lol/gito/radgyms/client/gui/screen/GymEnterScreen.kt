@@ -13,10 +13,10 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
-import lol.gito.radgyms.api.events.GuiEvents
-import lol.gito.radgyms.api.events.gui.GymEnterScreenCloseEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.client.gui.widget.LevelSliderWidget
-import lol.gito.radgyms.client.radGymsResource
+import lol.gito.radgyms.client.registry.GuiEvents.ENTER_SCREEN_CLOSE
+import lol.gito.radgyms.client.util.radGymsResource
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
@@ -93,8 +93,8 @@ class GymEnterScreen(
     override fun renderDarkening(context: DrawContext) {}
 
     override fun close() {
-        GuiEvents.ENTER_SCREEN_CLOSE.emit(
-            GymEnterScreenCloseEvent(
+        ENTER_SCREEN_CLOSE.emit(
+            ModEvents.GymEnterScreenCloseEvent(
                 this.closeReason,
                 this.key,
                 this.level,

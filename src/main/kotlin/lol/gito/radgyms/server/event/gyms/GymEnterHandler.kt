@@ -8,10 +8,10 @@
 
 package lol.gito.radgyms.server.event.gyms
 
-import lol.gito.radgyms.api.events.gym.GymEnterEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms.debug
 
-class GymEnterHandler(event: GymEnterEvent) {
+class GymEnterHandler(event: ModEvents.GymEnterEvent) {
     init {
         debug("Gym enter event triggered")
     }

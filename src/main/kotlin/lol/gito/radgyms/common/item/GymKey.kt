@@ -11,9 +11,9 @@ package lol.gito.radgyms.common.item
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.client.RadGymsClient
-import lol.gito.radgyms.client.renderer.GymKeyRenderer
-import lol.gito.radgyms.client.renderer.ISpecialItemModel
-import lol.gito.radgyms.client.renderer.SpecialItemRenderer
+import lol.gito.radgyms.client.model.ISpecialItemModel
+import lol.gito.radgyms.client.renderer.item.GymKeyRenderer
+import lol.gito.radgyms.client.renderer.item.SpecialItemRenderer
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId

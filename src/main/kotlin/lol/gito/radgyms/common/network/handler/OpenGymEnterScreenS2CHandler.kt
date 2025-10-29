@@ -8,8 +8,8 @@
 
 package lol.gito.radgyms.common.network.handler
 
-import lol.gito.radgyms.api.events.GuiEvents
-import lol.gito.radgyms.api.events.gui.GymEnterScreenOpenEvent
+import lol.gito.radgyms.api.events.ModEvents
+import lol.gito.radgyms.client.registry.GuiEvents.ENTER_SCREEN_OPEN
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -17,8 +17,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 @Suppress("unused")
 class OpenGymEnterScreenS2CHandler(payload: OpenGymEnterScreenS2C, context: ClientPlayNetworking.Context) {
     init {
-        GuiEvents.ENTER_SCREEN_OPEN.emit(
-            GymEnterScreenOpenEvent(
+        ENTER_SCREEN_OPEN.emit(
+            ModEvents.GymEnterScreenOpenEvent(
                 payload.pos,
                 payload.key,
                 payload.type,

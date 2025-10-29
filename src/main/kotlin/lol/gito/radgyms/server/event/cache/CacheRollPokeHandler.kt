@@ -9,12 +9,12 @@
 package lol.gito.radgyms.server.event.cache
 
 import com.cobblemon.mod.common.util.party
-import lol.gito.radgyms.api.events.cache.CacheRollPokeEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.util.rainbow
 import net.minecraft.text.Text.translatable
 
-class CacheRollPokeHandler(event: CacheRollPokeEvent) {
+class CacheRollPokeHandler(event: ModEvents.CacheRollPokeEvent) {
     init {
         event.player.party().add(event.poke)
 

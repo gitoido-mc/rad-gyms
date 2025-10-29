@@ -8,10 +8,10 @@
 
 package lol.gito.radgyms.server.event.gyms
 
-import lol.gito.radgyms.api.events.gym.TrainerBattleEndEvent
+import lol.gito.radgyms.api.events.ModEvents
 import lol.gito.radgyms.common.RadGyms.debug
 
-class TrainerBattleEndHandler(event: TrainerBattleEndEvent) {
+class TrainerBattleEndHandler(event: ModEvents.TrainerBattleEndEvent) {
     init {
         debug("Trainer battle end triggered")
     }

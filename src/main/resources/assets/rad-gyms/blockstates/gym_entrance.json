@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "rad-gyms:block/gym_entrance"
+    },
+    "facing=east": {
+      "model": "rad-gyms:block/gym_entrance",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "rad-gyms:block/gym_entrance",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "rad-gyms:block/gym_entrance",
+      "y": 270
     }
   }
 }
