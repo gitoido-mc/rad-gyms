@@ -71,8 +71,8 @@ loom {
     runs {
         getByName("client") {
             programArgs(
-                "--username", "AshKetchum",
-                "--uuid", "93e4e551-589a-41cb-ab2d-435266c8e035"
+                "--username", "Gitoiod",
+                "--uuid", "23131d78-9edb-48a4-902a-e22e572e9f2b"
             )
         }
     }

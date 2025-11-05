@@ -39,7 +39,7 @@
   "rad-gyms.label.rarity.uncommon": "Uncommon",
   "rad-gyms.message.error.command.debug_reward.no_player": "Command was not executed by player",
   "rad-gyms.message.error.command.debug_reward.no_template": "Cannot find template provided",
-  "rad-gyms.message.error.command.op_kick": "Cannot kick player %s from gym, they are not in it",
+  "rad-gyms.message.error.command.op_kick": "Cannot kick player %s from gym",
   "rad-gyms.message.error.common.no-response": "Cannot acquire server response, try again",
   "rad-gyms.message.error.gym_entrance.not-sneaking": "You need to sneak to break gym entrance",
   "rad-gyms.message.error.key.not-in-main-hand": "Gym key must be in your main hand",

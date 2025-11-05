@@ -11,7 +11,6 @@ package lol.gito.radgyms.common.event
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.battles.model.actor.AIBattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
-import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
@@ -42,6 +41,7 @@ import lol.gito.radgyms.common.registry.EventRegistry.GYM_LEAVE
 import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_BATTLE_END
 import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_BATTLE_START
 import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_INTERACT
+import lol.gito.radgyms.common.util.hasRadGymsTrainers
 import lol.gito.radgyms.server.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.server.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.server.event.gyms.*
@@ -70,9 +70,9 @@ object EventManager {
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
 
         // Cobblemon events
-        CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.LOWEST, ::onGymBattleStart)
-        CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onGymBattleWon)
-        CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onGymBattleFled)
+        CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.LOWEST, ::onBattleStart)
+        CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onBattleWon)
+        CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onBattleFled)
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
         PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
             debug("Cobblemon species observable triggered, updating elemental gyms species map")
@@ -92,6 +92,7 @@ object EventManager {
         CACHE_ROLL_POKE.subscribe(Priority.LOW, ::ShinyCharmCheckHandler)
         CACHE_ROLL_POKE.subscribe(Priority.LOWEST, ::CacheRollPokeHandler)
     }
+
 
     @Suppress("UNUSED_PARAMETER")
     private fun onBlockInteract(
@@ -166,41 +167,34 @@ object EventManager {
         }
     }
 
-    private fun onGymBattleStart(event: BattleStartedPreEvent) {
+    private fun onBattleStart(event: BattleStartedPreEvent) {
+        // Early bail if not gym related
+        if (!hasRadGymsTrainers(event)) return
+
         val players = event.battle.players
         val trainers = event.battle.actors
             .filter { it -> it.type == ActorType.NPC && it is AIBattleActor }
             .map { it as AIBattleActor }
-            .map { RCT.trainerRegistry.getById(it.uuid.toString())?.entity as Trainer }
+            .mapNotNull { RCT.trainerRegistry.getById(it.uuid.toString())?.entity }
+            .filter { it is Trainer }
 
         TRAINER_BATTLE_START.postThen(
-            ModEvents.TrainerBattleStartEvent(players, trainers, event.battle),
+            ModEvents.TrainerBattleStartEvent(players, trainers.map { it as Trainer }, event.battle),
             { subEvent -> if (subEvent.isCanceled) event.cancel() },
             { subEvent -> debug("Gym trainer battle started") },
         )
     }
 
-    private fun onGymBattleWon(event: BattleVictoryEvent) {
-        if (event.wasWildCapture) {
-            return
-        }
+    private fun onBattleWon(event: BattleVictoryEvent) {
+        // Early bail if it was wild poke battle
+        if (event.wasWildCapture) return
+        // Early bail if not gym related
+        if (!hasRadGymsTrainers(event)) return
 
-        val trainerPredicate: (BattleActor) -> Boolean =
-            { it.type == ActorType.NPC && it is TrainerEntityBattleActor && it.entity is Trainer }
+        TRAINER_BATTLE_END.emit(ModEvents.TrainerBattleEndEvent(event.winners, event.losers, event.battle))
 
-        val hasGymTrainers = event.winners.any(trainerPredicate).or(event.losers.any(trainerPredicate))
-
-        if (hasGymTrainers) {
-            TRAINER_BATTLE_END.emit(ModEvents.TrainerBattleEndEvent(event.winners, event.losers, event.battle))
-        }
-
-        if (event.losers.none { it.type == ActorType.NPC }) {
-            return
-        }
-
-        if (event.winners.none { it.type == ActorType.PLAYER }) {
-            return
-        }
+        if (event.losers.none { it.type == ActorType.NPC }) return
+        if (event.winners.none { it.type == ActorType.PLAYER }) return
 
         val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
         val player = winnerBattleActor.entity as ServerPlayerEntity
@@ -234,47 +228,37 @@ object EventManager {
         }
     }
 
-    private fun onGymBattleFled(event: BattleFledEvent) {
-        val trainerPredicate: (BattleActor) -> Boolean =
-            { it.type == ActorType.NPC && it is TrainerEntityBattleActor && it.entity is Trainer }
+    private fun onBattleFled(event: BattleFledEvent) {
+        // Early bail if not gym related
+        if (!hasRadGymsTrainers(event)) return
 
-        val hasGymTrainers = event.battle.losers.any(trainerPredicate).or(event.battle.winners.any(trainerPredicate))
-
-        if (hasGymTrainers) {
-            TRAINER_BATTLE_END.emit(
-                ModEvents.TrainerBattleEndEvent(
-                    event.battle.winners,
-                    event.battle.losers,
-                    event.battle
-                )
+        TRAINER_BATTLE_END.emit(
+            ModEvents.TrainerBattleEndEvent(
+                event.battle.winners,
+                event.battle.losers,
+                event.battle
             )
-        }
-
-        val loser = event.player
-        if (loser.type != ActorType.PLAYER) return
+        )
 
         event.battle.players
             .filter { it.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY }
             .forEach { player ->
                 GymManager.handleGymLeave(player)
             }
+
     }
 
     private fun onGymBattleFainted(event: BattleFaintedEvent) {
-        val trainerPredicate: (BattleActor) -> Boolean =
-            { it.type == ActorType.NPC && it is TrainerEntityBattleActor && it.entity is Trainer }
+        // Early bail if not gym related
+        if (!hasRadGymsTrainers(event)) return
 
-        val hasGymTrainers = event.battle.losers.any(trainerPredicate).or(event.battle.winners.any(trainerPredicate))
-
-        if (hasGymTrainers) {
-            TRAINER_BATTLE_END.emit(
-                ModEvents.TrainerBattleEndEvent(
-                    event.battle.winners,
-                    event.battle.losers,
-                    event.battle
-                )
+        TRAINER_BATTLE_END.emit(
+            ModEvents.TrainerBattleEndEvent(
+                event.battle.winners,
+                event.battle.losers,
+                event.battle
             )
-        }
+        )
 
         val killed = event.killed
         val entity = killed.entity ?: return
