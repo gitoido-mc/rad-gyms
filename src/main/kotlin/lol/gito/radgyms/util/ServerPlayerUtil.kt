@@ -6,10 +6,10 @@
  *
  */
 
-package lol.gito.radgyms.server.util
+package lol.gito.radgyms.util
 
 import com.cobblemon.mod.common.Cobblemon
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.RadGyms
 import net.minecraft.server.network.ServerPlayerEntity
 import kotlin.math.roundToInt
 

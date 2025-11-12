@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.server.util
+package lol.gito.radgyms.util
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.events.CobblemonEvents

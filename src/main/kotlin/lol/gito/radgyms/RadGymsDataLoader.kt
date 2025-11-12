@@ -6,12 +6,14 @@
  *
  */
 
-package lol.gito.radgyms.common
+package lol.gito.radgyms
 
 import com.cobblemon.mod.common.util.endsWith
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.gym.GymDTO
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager
@@ -27,7 +29,7 @@ import java.io.File
 class RadGymsDataLoader {
     companion object GymsResourceReloadListener : SimpleSynchronousResourceReloadListener {
         override fun getFabricId(): Identifier {
-            return RadGyms.modId("gyms")
+            return modId("gyms")
         }
 
         @OptIn(ExperimentalSerializationApi::class)
@@ -40,7 +42,7 @@ class RadGymsDataLoader {
                     try {
                         val templateName = File(id.path).nameWithoutExtension
                         GymManager.GYM_TEMPLATES[templateName] = Json.Default.decodeFromStream<GymDTO>(res.inputStream)
-                        RadGyms.debug("Loaded $templateName template from ${File(id.path).name} gym config")
+                        debug("Loaded $templateName template from ${File(id.path).name} gym config")
                     } catch (e: Exception) {
                         RadGyms.LOGGER.warn("Could not parse ${File(id.path).name} gym data", e)
                     }

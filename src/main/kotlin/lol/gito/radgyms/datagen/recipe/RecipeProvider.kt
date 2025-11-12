@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.CobblemonItem
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.common.item.GymKey
 import lol.gito.radgyms.common.item.PokeCache
 import lol.gito.radgyms.common.item.PokeShardBase

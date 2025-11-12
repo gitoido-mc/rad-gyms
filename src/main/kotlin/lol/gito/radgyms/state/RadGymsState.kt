@@ -6,23 +6,23 @@
  *
  */
 
-package lol.gito.radgyms.server.state
+package lol.gito.radgyms.state
 
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.util.server
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.MOD_ID
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.MOD_ID
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.common.gym.GymInstance
 import lol.gito.radgyms.common.gym.GymManager.GYM_TEMPLATES
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.gym.GymTrainer
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
-import lol.gito.radgyms.mixin.common.RCTBattleAIAccessor
-import lol.gito.radgyms.server.util.getBlockPos
-import lol.gito.radgyms.server.util.putBlockPos
+import lol.gito.radgyms.mixin.util.RCTBattleAIAccessor
+import lol.gito.radgyms.util.getBlockPos
+import lol.gito.radgyms.util.putBlockPos
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.RegistryWrapper

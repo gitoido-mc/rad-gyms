@@ -6,19 +6,20 @@
  *
  */
 
-package lol.gito.radgyms.common
+package lol.gito.radgyms
 
 import com.gitlab.srcmc.rctapi.api.RCTApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
+import lol.gito.radgyms.common.command.CommandRegistry
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager
 import lol.gito.radgyms.common.network.CommonNetworkStack
 import lol.gito.radgyms.common.registry.*
-import lol.gito.radgyms.server.command.CommandRegistry
+import lol.gito.radgyms.config.RadGymsConfig
 import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -61,10 +62,9 @@ object RadGyms {
 
     }
 
-    fun modId(name: String): Identifier {
-        return Identifier.of(MOD_ID, name)
-    }
-
+    fun modId(name: String): Identifier = Identifier.of(MOD_ID, name)
+    fun log(message: String): Unit = LOGGER.info(message)
+    fun warn(message: String): Unit = LOGGER.warn(message)
     fun debug(message: String) {
         if (CONFIG.debug == true) LOGGER.info(message)
     }

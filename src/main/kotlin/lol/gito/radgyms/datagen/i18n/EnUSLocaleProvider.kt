@@ -8,7 +8,7 @@
 
 package lol.gito.radgyms.datagen.i18n
 
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.ItemGroupRegistry
 import lol.gito.radgyms.common.registry.ItemRegistry

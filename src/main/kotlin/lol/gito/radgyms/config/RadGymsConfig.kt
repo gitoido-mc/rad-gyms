@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.common
+package lol.gito.radgyms.config
 
 import kotlinx.serialization.Serializable
 

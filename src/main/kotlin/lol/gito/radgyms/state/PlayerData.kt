@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.server.state
+package lol.gito.radgyms.state
 
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
