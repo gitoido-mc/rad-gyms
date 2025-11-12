@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.mixin.common;
+package lol.gito.radgyms.mixin.util;
 
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI;
 import org.spongepowered.asm.mixin.Mixin;
