@@ -6,10 +6,10 @@
  *
  */
 
-package lol.gito.radgyms.client.renderer.entity
+package lol.gito.radgyms.render.entity
 
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.entity.Trainer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
