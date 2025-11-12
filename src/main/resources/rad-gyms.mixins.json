@@ -3,18 +3,15 @@
   "package": "lol.gito.radgyms.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "common.BundleItemMixin",
-    "common.OnAetherEntityInteract",
-    "common.RCTBattleAIAccessor"
-  ],
-  "server": [
-    "server.OnServerPlayerEntityDeath"
-  ],
-  "client": [
-    "client.OnLoadModels",
-    "client.OnRenderItemModel"
+    "server.compat.OnAetherEntityInteract",
+    "server.event.OnServerPlayerEntityDeath",
+    "server.item.BundleItemMixin",
+    "util.RCTBattleAIAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
   }
 }

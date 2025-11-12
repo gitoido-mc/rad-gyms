@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.mixin.common;
+package lol.gito.radgyms.mixin.server.compat;
 
 import com.aetherteam.aether.event.listeners.EntityListener;
 import lol.gito.radgyms.common.entity.Trainer;

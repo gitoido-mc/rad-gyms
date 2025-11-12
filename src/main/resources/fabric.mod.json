@@ -9,7 +9,7 @@
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/gitoido-mc/rad-gyms"
   },
   "license": "MIT",
   "icon": "assets/rad-gyms/icon.png",
@@ -17,13 +17,13 @@
   "entrypoints": {
     "main": [
       {
-        "value": "lol.gito.radgyms.common.RadGyms::init",
+        "value": "lol.gito.radgyms.RadGyms::init",
         "adapter": "kotlin"
       }
     ],
     "client": [
       {
-        "value": "lol.gito.radgyms.client.RadGymsClient::init",
+        "value": "lol.gito.radgyms.RadGymsClient::init",
         "adapter": "kotlin"
       }
     ],
@@ -35,7 +35,11 @@
     ]
   },
   "mixins": [
-    "rad-gyms.mixins.json"
+    "rad-gyms.mixins.json",
+    {
+      "config": "rad-gyms.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "accessWidener": "rad-gyms.accesswidener",
   "depends": {
