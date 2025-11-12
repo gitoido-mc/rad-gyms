@@ -9,10 +9,12 @@
 package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.util.cobblemonResource
+import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.common.item.PokeShardBase
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.BundleContentsComponent
@@ -60,7 +62,13 @@ class GenerateRewardHandler(event: ModEvents.GenerateRewardEvent) {
                     .add(LootContextParameters.ORIGIN, event.player.pos)
                     .build(LootContextTypes.GIFT)
 
-                event.rewards.addAll(registryLootTable.generateLoot(lootContextParameterSet))
+                registryLootTable.generateLoot(lootContextParameterSet).let { loot ->
+                    if (RadGyms.CONFIG.shardRewards == true) {
+                        event.rewards.addAll(loot)
+                    } else {
+                        event.rewards.addAll(loot.filter { it.item !is PokeShardBase })
+                    }
+                }
             }
 
 
