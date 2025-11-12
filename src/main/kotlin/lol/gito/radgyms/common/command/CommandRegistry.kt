@@ -8,7 +8,6 @@
 
 package lol.gito.radgyms.common.command
 
-//import lol.gito.radgyms.RadGyms.CHANNEL
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
