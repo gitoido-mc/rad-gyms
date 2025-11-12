@@ -11,13 +11,13 @@ package lol.gito.radgyms.common.block
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.BlockRegistry.GYM_ENTRANCE
-import lol.gito.radgyms.server.util.averagePokePartyLevel
+import lol.gito.radgyms.util.averagePokePartyLevel
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity

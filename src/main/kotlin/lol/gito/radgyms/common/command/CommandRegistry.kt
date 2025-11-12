@@ -6,9 +6,9 @@
  *
  */
 
-package lol.gito.radgyms.server.command
+package lol.gito.radgyms.common.command
 
-//import lol.gito.radgyms.common.RadGyms.CHANNEL
+//import lol.gito.radgyms.RadGyms.CHANNEL
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -18,10 +18,10 @@ import de.maxhenkel.admiral.annotations.Command
 import de.maxhenkel.admiral.annotations.MinMax
 import de.maxhenkel.admiral.annotations.Name
 import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
-import lol.gito.radgyms.api.events.ModEvents
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.loadConfig
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.loadConfig
+import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.api.event.ModEvents
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.pokecache.CacheHandler

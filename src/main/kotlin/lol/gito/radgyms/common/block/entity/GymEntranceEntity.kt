@@ -9,8 +9,8 @@
 package lol.gito.radgyms.common.block.entity
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import lol.gito.radgyms.common.RadGyms.CONFIG
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms.CONFIG
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.common.registry.BlockEntityRegistry
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
