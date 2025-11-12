@@ -13,8 +13,8 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
-import lol.gito.radgyms.common.RadGyms.CONFIG
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms.CONFIG
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.common.pokecache.CacheDTO
 
 object SpeciesManager {
