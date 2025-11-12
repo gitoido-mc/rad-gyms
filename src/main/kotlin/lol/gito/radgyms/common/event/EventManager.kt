@@ -82,7 +82,6 @@ object EventManager {
         GYM_LEAVE.subscribe(Priority.LOWEST, ::GymLeaveHandler)
 
         TRAINER_INTERACT.subscribe(Priority.LOWEST, ::TrainerInteractHandler)
-        TRAINER_BATTLE_START.subscribe(Priority.LOWEST, ::TrainerBattleStartHandler)
         TRAINER_BATTLE_END.subscribe(Priority.LOWEST, ::TrainerBattleEndHandler)
 
         GENERATE_REWARD.subscribe(Priority.LOWEST, ::GenerateRewardHandler)
