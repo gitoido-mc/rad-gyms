@@ -13,18 +13,18 @@ import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.toBlockPos
-import lol.gito.radgyms.common.RadGyms.LOGGER
-import lol.gito.radgyms.common.RadGyms.RCT
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.RCT
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
 import lol.gito.radgyms.common.registry.EntityRegistry
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructureManager
-import lol.gito.radgyms.server.state.PlayerData
-import lol.gito.radgyms.server.state.RadGymsState
+import lol.gito.radgyms.state.PlayerData
+import lol.gito.radgyms.state.RadGymsState
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.network.ServerPlayerEntity
@@ -87,6 +87,13 @@ object GymManager {
                 )
             }
             .also {
+                gymDimension.chunkManager.addTicket(
+                    ChunkTicketType.PORTAL,
+                    gymDimension.getChunk(dest).pos,
+                    4,
+                    dest
+                )
+
                 PlayerSpawnHelper.teleportPlayer(
                     serverPlayer,
                     gymDimension,
@@ -231,26 +238,39 @@ object GymManager {
         preloadDim.chunkManager.addTicket(
             ChunkTicketType.PORTAL,
             preloadDim.getChunk(preloadPos).pos,
-            1,
+            2,
             preloadPos
         )
+        serverPlayer.sendMessage(Text.of("5..."), true)
 
-        ScheduledTask.Builder()
-            .tracker(ServerTaskTracker)
-            .delay(2f)
-            .execute {
-                PlayerSpawnHelper.teleportPlayer(
-                    serverPlayer,
-                    preloadDim,
-                    preloadPos,
-                    yaw = serverPlayer.yaw,
-                    pitch = serverPlayer.pitch,
-                ).also {
-                    debug("Gym instance removed from memory")
-                    RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
-                }
+        delayExecute(1f) {
+            serverPlayer.sendMessage(Text.of("4..."), true)
+        }
+
+        delayExecute(2f) {
+            serverPlayer.sendMessage(Text.of("3..."), true)
+        }
+
+        delayExecute(3f) {
+            serverPlayer.sendMessage(Text.of("2..."), true)
+        }
+
+        delayExecute(4f) {
+            serverPlayer.sendMessage(Text.of("1..."), true)
+        }
+
+        delayExecute(5f) {
+            PlayerSpawnHelper.teleportPlayer(
+                serverPlayer,
+                preloadDim,
+                preloadPos,
+                yaw = serverPlayer.yaw,
+                pitch = serverPlayer.pitch,
+            ).also {
+                debug("Gym instance removed from memory")
+                RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
             }
-            .build()
+        }
 
         return
     }
@@ -272,6 +292,13 @@ object GymManager {
         }
         RadGymsState.removeGymForPlayer(serverPlayer)
     }
+
+    private fun delayExecute(delay: Float, execute: (ScheduledTask) -> Unit) =
+        ScheduledTask.Builder()
+            .tracker(ServerTaskTracker)
+            .delay(delay)
+            .execute(execute)
+            .build()
 
     fun register() {
         debug("GymManager init")
