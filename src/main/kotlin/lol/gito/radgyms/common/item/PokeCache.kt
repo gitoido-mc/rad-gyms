@@ -10,19 +10,22 @@ package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import lol.gito.radgyms.common.RadGyms.CONFIG
-import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.network.payload.CacheOpenC2S
+import com.cobblemon.mod.common.pokemon.Pokemon
+import lol.gito.radgyms.RadGyms.CONFIG
+import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.common.pokecache.CacheHandler
 import lol.gito.radgyms.common.registry.DataComponentRegistry.CACHE_SHINY_BOOST_COMPONENT
 import lol.gito.radgyms.common.registry.DataComponentRegistry.GYM_TYPE_COMPONENT
+import lol.gito.radgyms.common.registry.EventRegistry.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.component.DataComponentTypes.RARITY
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
@@ -41,22 +44,27 @@ class EpicPokeCache : PokeCache(Rarity.EPIC)
 
 open class PokeCache(private val rarity: Rarity) : Item(Settings().rarity(rarity)) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        if (world.isClient) return TypedActionResult.success(user.getStackInHand(hand), true)
         if (hand != Hand.MAIN_HAND) return TypedActionResult.fail(user.getStackInHand(hand))
 
         val stack = user.getStackInHand(hand)
         val offhand = user.offHandStack
-        val boost = stack.getOrDefault(CACHE_SHINY_BOOST_COMPONENT, 0)
-        val type = stack.getOrDefault(GYM_TYPE_COMPONENT, null)
-        if (offhand.isOf(Items.LAPIS_LAZULI) && !world.isClient && boost < Cobblemon.config.shinyRate) {
-            stack.set(CACHE_SHINY_BOOST_COMPONENT, boost.plus(CONFIG.lapisBoostAmount!!))
+        var boost = stack.getOrDefault(CACHE_SHINY_BOOST_COMPONENT, 0)
+        val type = when (stack.getOrDefault(GYM_TYPE_COMPONENT, ElementalTypes.all().random().name.lowercase())) {
+            "chaos" -> ElementalTypes.all().random().name.lowercase()
+            else -> stack.getOrDefault(GYM_TYPE_COMPONENT, ElementalTypes.all().random().name.lowercase())
         }
-        if (offhand.isOf(Items.LAPIS_BLOCK) && !world.isClient && boost < Cobblemon.config.shinyRate) {
-            val newBoost = when (boost.plus(RG_CACHE_BLOCK_BOOST) > Cobblemon.config.shinyRate) {
+        if (offhand.isOf(Items.LAPIS_LAZULI) && boost < Cobblemon.config.shinyRate) {
+            boost = boost.plus(CONFIG.lapisBoostAmount!!)
+            stack.set(CACHE_SHINY_BOOST_COMPONENT, boost)
+        }
+        if (offhand.isOf(Items.LAPIS_BLOCK) && boost < Cobblemon.config.shinyRate) {
+            boost = when (boost.plus(RG_CACHE_BLOCK_BOOST) > Cobblemon.config.shinyRate) {
                 true -> Cobblemon.config.shinyRate.toInt()
                 false -> boost.plus(RG_CACHE_BLOCK_BOOST * CONFIG.lapisBoostAmount!!)
                     .coerceAtMost(Cobblemon.config.shinyRate.toInt() - 1)
             }
-            stack.set(CACHE_SHINY_BOOST_COMPONENT, newBoost)
+            stack.set(CACHE_SHINY_BOOST_COMPONENT, boost)
         }
 
         if (offhand.isOf(Items.LAPIS_LAZULI) || offhand.isOf(Items.LAPIS_BLOCK)) {
@@ -64,21 +72,25 @@ open class PokeCache(private val rarity: Rarity) : Item(Settings().rarity(rarity
             return TypedActionResult.success(user.getStackInHand(hand), true)
         }
 
-        if (world.isClient) {
-            val cacheType = when (type) {
-                "chaos", null -> ElementalTypes.all().random().name.lowercase()
-                else -> type
-            }
-            ClientPlayNetworking.send(
-                CacheOpenC2S(
-                    type = cacheType,
-                    rarity = rarity,
-                    shinyBoost = boost,
-                )
-            )
-        }
+        val rarity = stack.getOrDefault(RARITY, Rarity.COMMON)
+        val poke: Pokemon = CacheHandler.getPoke(
+            type,
+            rarity,
+            user as ServerPlayerEntity,
+            boost
+        )
 
-        return TypedActionResult.success(user.getStackInHand(hand), true)
+        CACHE_ROLL_POKE.emit(
+            ModEvents.CacheRollPokeEvent(
+                user,
+                poke,
+                type,
+                rarity,
+                boost
+            )
+        )
+
+        return TypedActionResult.success(user.getStackInHand(hand))
     }
 
     override fun appendTooltip(
