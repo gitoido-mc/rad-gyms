@@ -8,7 +8,7 @@
 
 package lol.gito.radgyms.common.registry
 
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.common.entity.Trainer
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.minecraft.entity.EntityType

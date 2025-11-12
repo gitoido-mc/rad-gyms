@@ -8,8 +8,8 @@
 
 package lol.gito.radgyms.common.registry
 
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.block.entity.GymExitEntity
 import net.minecraft.block.entity.BlockEntityType
