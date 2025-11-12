@@ -6,12 +6,12 @@
  *
  */
 
-package lol.gito.radgyms.server.event.cache
+package lol.gito.radgyms.common.event.cache
 
-import lol.gito.radgyms.api.events.ModEvents
-import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.server.util.isShiny
-import lol.gito.radgyms.server.util.shinyRoll
+import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.util.isShiny
+import lol.gito.radgyms.util.shinyRoll
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 

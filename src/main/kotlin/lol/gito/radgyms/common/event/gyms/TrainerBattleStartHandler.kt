@@ -6,13 +6,13 @@
  *
  */
 
-package lol.gito.radgyms.server.event.gyms
+package lol.gito.radgyms.common.event.gyms
 
-import lol.gito.radgyms.api.events.ModEvents
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.api.event.ModEvents
 
-class GymEnterHandler(@Suppress("unused") event: ModEvents.GymEnterEvent) {
+class TrainerBattleStartHandler(@Suppress("unused") event: ModEvents.TrainerBattleStartEvent) {
     init {
-        debug("Gym enter event triggered")
+        debug("Trainer battle start event triggered")
     }
 }

@@ -6,14 +6,14 @@
  *
  */
 
-package lol.gito.radgyms.server.event.gyms
+package lol.gito.radgyms.common.event.gyms
 
 import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
-import lol.gito.radgyms.api.events.ModEvents
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.api.event.ModEvents
 import lol.gito.radgyms.common.entity.Trainer
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
@@ -22,10 +22,12 @@ class TrainerInteractHandler(event: ModEvents.TrainerInteractEvent) {
     init {
         var requiredTrainer: Trainer? = null
         if (event.trainer.requires != null) {
+            debug("Trainer has linked trainer in props, fetching...")
             requiredTrainer = (event.trainer.world as ServerWorld).getEntity(event.trainer.requires) as Trainer
         }
 
         if (requiredTrainer != null && !requiredTrainer.defeated) {
+            debug("Linked trainer is not defeated yet, sending chat message")
             event.player.sendMessage(
                 Text.translatable(
                     "rad-gyms.message.info.trainer_required",
@@ -44,9 +46,7 @@ class TrainerInteractHandler(event: ModEvents.TrainerInteractEvent) {
 
             event.player.sendMessage(Text.translatable(messageKey), true)
             event.cancel()
-        }
-
-        if (!event.isCanceled) {
+        } else {
             val trainerRegistry = RadGyms.RCT.trainerRegistry
             val rctBattleManager = RadGyms.RCT.battleManager
             val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
@@ -67,10 +67,17 @@ class TrainerInteractHandler(event: ModEvents.TrainerInteractEvent) {
                 }
             }
 
+            val format = when (event.trainer.format) {
+                "singles" -> BattleFormat.GEN_9_SINGLES
+                "doubles" -> BattleFormat.GEN_9_DOUBLES
+                "triples" -> BattleFormat.GEN_9_TRIPLES
+                else -> BattleFormat.GEN_9_SINGLES
+            }
+
             rctBattleManager.startBattle(
                 listOf(playerTrainer),
                 listOf(npcTrainer),
-                BattleFormat.GEN_9_SINGLES,
+                format,
                 BattleRules()
             )
         }

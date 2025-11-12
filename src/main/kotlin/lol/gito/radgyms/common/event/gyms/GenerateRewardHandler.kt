@@ -6,13 +6,13 @@
  *
  */
 
-package lol.gito.radgyms.server.event.gyms
+package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.util.cobblemonResource
-import lol.gito.radgyms.api.events.ModEvents
-import lol.gito.radgyms.common.RadGyms.LOGGER
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.api.event.ModEvents
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.BundleContentsComponent

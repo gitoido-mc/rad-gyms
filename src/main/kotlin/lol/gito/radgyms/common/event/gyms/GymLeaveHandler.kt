@@ -6,10 +6,10 @@
  *
  */
 
-package lol.gito.radgyms.server.event.gyms
+package lol.gito.radgyms.common.event.gyms
 
-import lol.gito.radgyms.api.events.ModEvents
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.api.event.ModEvents
 import lol.gito.radgyms.common.gym.GymManager.handleGymLeave
 
 class GymLeaveHandler(event: ModEvents.GymLeaveEvent) {
