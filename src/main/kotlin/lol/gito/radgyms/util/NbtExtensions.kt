@@ -6,6 +6,8 @@
  *
  */
 
+@file:Suppress("unused")
+
 package lol.gito.radgyms.util
 
 import net.minecraft.nbt.NbtCompound

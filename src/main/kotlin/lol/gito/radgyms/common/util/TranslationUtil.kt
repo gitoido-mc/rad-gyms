@@ -16,6 +16,7 @@ import net.minecraft.text.MutableText
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
 
+@Suppress("unused")
 object TranslationUtil {
     fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): MutableText =
         buildPrefixedSuffixedTypeText(elementalType?.name?.lowercase())

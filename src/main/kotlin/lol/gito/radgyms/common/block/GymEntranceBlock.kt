@@ -97,7 +97,7 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
         if (world.getBlockEntity(pos) !is GymEntranceEntity) return super.onUse(state, world, pos, player, hit)
 
         val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
-        if (party.occupied() == 0) {
+        if (party.occupied() < 3) {
             player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
             debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
             return ActionResult.FAIL

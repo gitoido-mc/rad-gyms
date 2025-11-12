@@ -188,8 +188,10 @@ object GymManager {
                 trainerId = trainerUUID
                 requires = requiredUUID
                 leader = trainerTemplate.leader
+                format = trainerTemplate.format
             }.also {
                 debug("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
+                debug("Selected ${trainerTemplate.format} battle format for trainer")
                 gymDimension.spawnEntity(it)
             }
 

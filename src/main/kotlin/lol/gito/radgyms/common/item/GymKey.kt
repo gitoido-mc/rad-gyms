@@ -45,7 +45,7 @@ class GymKey : Item(
 
 
         val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
-        if (party.occupied() == 0) {
+        if (party.occupied() < 3) {
             player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
             debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
             return TypedActionResult.fail(player.getStackInHand(hand))

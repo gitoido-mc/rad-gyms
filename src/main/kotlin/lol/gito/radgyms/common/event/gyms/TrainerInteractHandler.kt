@@ -73,7 +73,6 @@ class TrainerInteractHandler(event: ModEvents.TrainerInteractEvent) {
                 "triples" -> BattleFormat.GEN_9_TRIPLES
                 else -> BattleFormat.GEN_9_SINGLES
             }
-
             rctBattleManager.startBattle(
                 listOf(playerTrainer),
                 listOf(npcTrainer),
