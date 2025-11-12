@@ -69,6 +69,7 @@ data class GymTrainerDTO(
     ),
     val battleRules: GymTrainerBattleRulesDTO? = null,
     val team: List<String>? = null,
+    val possibleFormats: List<String> = listOf("singles", "doubles", "multi"),
     val leader: Boolean = false,
     val requires: String? = null,
 ) {
