@@ -10,7 +10,6 @@ package lol.gito.radgyms
 
 import com.cobblemon.mod.common.api.Priority
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.api.event.ModEvents
 import lol.gito.radgyms.common.network.payload.GymEnterC2S
@@ -38,10 +37,7 @@ import net.minecraft.util.Identifier
 
 @Environment(EnvType.CLIENT)
 object RadGymsClient {
-    var gymKeyModels: MutableMap<Identifier, ModelIdentifier> = mutableMapOf()
-
     fun modModelId(id: Identifier, variant: String): ModelIdentifier = ModelIdentifier(id, variant)
-    fun modModelId(name: String, variant: String): ModelIdentifier = modModelId(modId(name), variant)
 
     fun init() {
         debug("Initializing client")
@@ -59,7 +55,7 @@ object RadGymsClient {
                     payload.type,
                     RadGyms.CONFIG.minLevel!!,
                     RadGyms.CONFIG.maxLevel!!,
-                    payload.derivedLevel // @TODO: do something about this hardcoded var
+                    payload.derivedLevel
                 )
             )
         }
