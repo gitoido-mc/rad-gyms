@@ -67,13 +67,21 @@ fabricApi {
 
 loom {
     accessWidenerPath = file("src/main/resources/rad-gyms.accesswidener")
+    splitEnvironmentSourceSets()
 
     runs {
         getByName("client") {
             programArgs(
-                "--username", "Gitoiod",
+                "--username", "Gito",
                 "--uuid", "23131d78-9edb-48a4-902a-e22e572e9f2b"
             )
+        }
+    }
+
+    mods {
+        create("rad-gyms") {
+            sourceSet(sourceSets.main.get())
+            sourceSet(sourceSets.getByName("client"))
         }
     }
 }
