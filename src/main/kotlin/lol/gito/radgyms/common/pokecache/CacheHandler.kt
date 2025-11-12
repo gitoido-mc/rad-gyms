@@ -13,8 +13,8 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_RARITY
-import lol.gito.radgyms.server.util.isShiny
-import lol.gito.radgyms.server.util.shinyRoll
+import lol.gito.radgyms.util.isShiny
+import lol.gito.radgyms.util.shinyRoll
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Rarity
 
