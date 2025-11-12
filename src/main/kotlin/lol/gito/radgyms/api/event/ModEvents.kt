@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.api.events
+package lol.gito.radgyms.api.event
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
+import lol.gito.radgyms.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymInstance
@@ -98,6 +99,7 @@ object ModEvents {
     )
 
     data class TrainerBattleEndEvent(
+        val reason: GymBattleEndReason,
         val winners: List<BattleActor>,
         val losers: List<BattleActor>,
         val battle: PokemonBattle
