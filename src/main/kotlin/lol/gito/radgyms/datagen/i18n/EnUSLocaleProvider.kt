@@ -8,7 +8,7 @@
 
 package lol.gito.radgyms.datagen.i18n
 
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.ItemGroupRegistry
 import lol.gito.radgyms.common.registry.ItemRegistry
@@ -107,7 +107,7 @@ class EnUSLocaleProvider(
             modId("message.info.gym_entrance_exhausted").toTranslationKey() to
                     "This gym entrance lost all his energies, look for another one",
             modId("message.info.gym_entrance_party_empty").toTranslationKey() to
-                    "Your pokemon party is empty",
+                    "Your Pokemon party is not enough. Bring at least 3 Pokemon",
             modId("message.info.gym_entrance_party_fainted").toTranslationKey() to
                     "Your pokemon party requires healing",
             modId("message.info.trainer_required").toTranslationKey() to

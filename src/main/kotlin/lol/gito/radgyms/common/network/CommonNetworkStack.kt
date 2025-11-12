@@ -8,10 +8,12 @@
 
 package lol.gito.radgyms.common.network
 
-import lol.gito.radgyms.common.network.handler.CacheOpenC2SHandler
 import lol.gito.radgyms.common.network.handler.GymEnterC2SHandler
 import lol.gito.radgyms.common.network.handler.GymLeaveC2SHandler
-import lol.gito.radgyms.common.network.payload.*
+import lol.gito.radgyms.common.network.payload.GymEnterC2S
+import lol.gito.radgyms.common.network.payload.GymLeaveC2S
+import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
+import lol.gito.radgyms.common.network.payload.OpenGymLeaveScreenS2C
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 
@@ -25,10 +27,6 @@ object CommonNetworkStack {
             GymLeaveC2S.ID,
             GymLeaveC2S.PACKET_CODEC
         )
-        PayloadTypeRegistry.playC2S().register(
-            CacheOpenC2S.ID,
-            CacheOpenC2S.PACKET_CODEC
-        )
         PayloadTypeRegistry.playS2C().register(
             OpenGymEnterScreenS2C.ID,
             OpenGymEnterScreenS2C.PACKET_CODEC
@@ -40,6 +38,5 @@ object CommonNetworkStack {
 
         ServerPlayNetworking.registerGlobalReceiver(GymEnterC2S.ID, ::GymEnterC2SHandler)
         ServerPlayNetworking.registerGlobalReceiver(GymLeaveC2S.ID, ::GymLeaveC2SHandler)
-        ServerPlayNetworking.registerGlobalReceiver(CacheOpenC2S.ID, ::CacheOpenC2SHandler)
     }
 }

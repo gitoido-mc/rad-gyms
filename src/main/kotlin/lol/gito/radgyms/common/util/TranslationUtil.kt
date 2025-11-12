@@ -11,24 +11,25 @@ package lol.gito.radgyms.common.util
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.cobblemonResource
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.RadGyms.modId
 import net.minecraft.text.MutableText
-import net.minecraft.text.Text
+import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
 
+@Suppress("unused")
 object TranslationUtil {
     fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): MutableText =
         buildPrefixedSuffixedTypeText(elementalType?.name?.lowercase())
 
-    fun buildPrefixedSuffixedTypeText(elementalType: String? = null): MutableText = Text.translatable(
-        RadGyms.modId("item.component.gym_type").toTranslationKey(),
+    fun buildPrefixedSuffixedTypeText(elementalType: String? = null): MutableText = translatable(
+        modId("item.component.gym_type").toTranslationKey(),
         buildSuffixedTypeText(elementalType)
     )
 
     fun buildSuffixedTypeText(elementalType: ElementalType? = null): MutableText =
         buildSuffixedTypeText(elementalType?.name?.lowercase())
 
-    fun buildSuffixedTypeText(elementalType: String? = null): MutableText = Text.translatable(
+    fun buildSuffixedTypeText(elementalType: String? = null): MutableText = translatable(
         cobblemonResource("type.suffix").toTranslationKey(),
         buildTypeText(elementalType)
     )
@@ -37,17 +38,22 @@ object TranslationUtil {
         buildTypeText(elementalType?.name?.lowercase())
 
     fun buildTypeText(elementalType: String? = null): MutableText = when {
-        (elementalType == null) -> Text.translatable(RadGyms.modId("item.component.type.chaos").toTranslationKey())
+        (elementalType == null) -> translatable(modId("item.component.type.chaos").toTranslationKey())
             .styled {
                 it.withFormatting(Formatting.OBFUSCATED).withFormatting(Formatting.DARK_GRAY)
             }
 
-        (ElementalTypes.get(elementalType) != null) -> Text.translatable(cobblemonResource("type.$elementalType").toTranslationKey())
+        (ElementalTypes.get(elementalType) != null) -> translatable(cobblemonResource("type.$elementalType").toTranslationKey())
             .styled {
                 it.withFormatting(Formatting.DARK_PURPLE)
             }
 
-        else -> Text.translatable(RadGyms.modId("item.component.type.$elementalType").toTranslationKey()).styled {
+        (elementalType == "chaos") -> translatable(modId("item.component.type.chaos").toTranslationKey())
+            .styled {
+                it.withFormatting(Formatting.DARK_GRAY).withFormatting(Formatting.OBFUSCATED)
+            }
+
+        else -> translatable(modId("item.component.type.$elementalType").toTranslationKey()).styled {
             it.withFormatting(Formatting.GOLD)
         }
     }

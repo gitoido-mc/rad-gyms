@@ -11,13 +11,13 @@ package lol.gito.radgyms.common.block
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.BlockRegistry.GYM_ENTRANCE
-import lol.gito.radgyms.server.util.averagePokePartyLevel
+import lol.gito.radgyms.util.averagePokePartyLevel
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
@@ -97,7 +97,7 @@ class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
         if (world.getBlockEntity(pos) !is GymEntranceEntity) return super.onUse(state, world, pos, player, hit)
 
         val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
-        if (party.occupied() == 0) {
+        if (party.occupied() < 3) {
             player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
             debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
             return ActionResult.FAIL

@@ -9,7 +9,7 @@
 package lol.gito.radgyms.common.block
 
 import com.mojang.serialization.MapCodec
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.common.block.entity.GymExitEntity
 import lol.gito.radgyms.common.network.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.DimensionRegistry

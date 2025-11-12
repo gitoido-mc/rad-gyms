@@ -8,7 +8,7 @@
 
 package lol.gito.radgyms.common.registry
 
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.RadGyms
 import net.minecraft.loot.LootTable
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys

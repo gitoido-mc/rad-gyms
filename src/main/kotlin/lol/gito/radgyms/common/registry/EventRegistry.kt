@@ -10,22 +10,21 @@ package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
-import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import lol.gito.radgyms.api.events.ModEvents
+import lol.gito.radgyms.api.event.ModEvents
 
 @Suppress("unused")
 object EventRegistry {
     @JvmField
-    val CACHE_ROLL_POKE = SimpleObservable<ModEvents.CacheRollPokeEvent>()
+    val CACHE_ROLL_POKE = EventObservable<ModEvents.CacheRollPokeEvent>()
 
     @JvmField
-    val GYM_ENTER = SimpleObservable<ModEvents.GymEnterEvent>()
+    val GYM_ENTER = EventObservable<ModEvents.GymEnterEvent>()
 
     @JvmField
-    val GYM_LEAVE = SimpleObservable<ModEvents.GymLeaveEvent>()
+    val GYM_LEAVE = EventObservable<ModEvents.GymLeaveEvent>()
 
     @JvmField
-    val GENERATE_REWARD = SimpleObservable<ModEvents.GenerateRewardEvent>()
+    val GENERATE_REWARD = EventObservable<ModEvents.GenerateRewardEvent>()
 
     @JvmField
     val GENERATE_TEAM = EventObservable<ModEvents.GenerateTeamEvent>()
@@ -37,5 +36,17 @@ object EventRegistry {
     val TRAINER_BATTLE_START = CancelableObservable<ModEvents.TrainerBattleStartEvent>()
 
     @JvmField
-    val TRAINER_BATTLE_END = SimpleObservable<ModEvents.TrainerBattleEndEvent>()
+    val TRAINER_BATTLE_END = EventObservable<ModEvents.TrainerBattleEndEvent>()
+
+    @JvmField
+    val ENTER_SCREEN_OPEN = EventObservable<ModEvents.GymEnterScreenOpenEvent>()
+
+    @JvmField
+    val ENTER_SCREEN_CLOSE = EventObservable<ModEvents.GymEnterScreenCloseEvent>()
+
+    @JvmField
+    val LEAVE_SCREEN_OPEN = EventObservable<ModEvents.GymLeaveScreenOpenEvent>()
+
+    @JvmField
+    val LEAVE_SCREEN_CLOSE = EventObservable<ModEvents.GymLeaveScreenCloseEvent>()
 }

@@ -10,21 +10,14 @@ package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
-import lol.gito.radgyms.client.RadGymsClient
-import lol.gito.radgyms.client.model.ISpecialItemModel
-import lol.gito.radgyms.client.renderer.item.GymKeyRenderer
-import lol.gito.radgyms.client.renderer.item.SpecialItemRenderer
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
-import lol.gito.radgyms.server.util.averagePokePartyLevel
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
+import lol.gito.radgyms.util.averagePokePartyLevel
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -34,14 +27,11 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
 import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
-import java.util.function.Consumer
-import java.util.stream.Stream
 
-class GymKey : ISpecialItemModel, Item(
+class GymKey : Item(
     Settings().also { settings ->
         settings
             .rarity(Rarity.UNCOMMON)
@@ -55,7 +45,7 @@ class GymKey : ISpecialItemModel, Item(
 
 
         val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
-        if (party.occupied() == 0) {
+        if (party.occupied() < 3) {
             player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
             debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
             return TypedActionResult.fail(player.getStackInHand(hand))
@@ -74,7 +64,10 @@ class GymKey : ISpecialItemModel, Item(
                     false -> RadGyms.CONFIG.minLevel!!
                 },
                 true,
-                player.getStackInHand(hand).get(DataComponentRegistry.GYM_TYPE_COMPONENT)!!
+                player.getStackInHand(hand).getOrDefault(
+                    DataComponentRegistry.GYM_TYPE_COMPONENT,
+                    "chaos"
+                )!!
             )
         )
 
@@ -96,22 +89,5 @@ class GymKey : ISpecialItemModel, Item(
         itemStack.set(DataComponentTypes.RARITY, Rarity.UNCOMMON)
 
         return itemStack
-    }
-
-    @Environment(EnvType.CLIENT)
-    override fun loadModels(
-        unbakedModels: Stream<Identifier>,
-        loader: Consumer<ModelIdentifier>
-    ) {
-        unbakedModels.forEach {
-            if (it.namespace.equals(RadGyms.MOD_ID) && it.path.startsWith("gym_key")) {
-                loader.accept(RadGymsClient.modModelId(it, "inventory"))
-            }
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    override fun getRenderer(): SpecialItemRenderer {
-        return GymKeyRenderer.INSTANCE
     }
 }

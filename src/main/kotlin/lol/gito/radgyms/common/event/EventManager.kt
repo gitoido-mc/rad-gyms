@@ -18,17 +18,19 @@ import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
-import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
-import lol.gito.radgyms.api.events.ModEvents
-import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.RCT
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.RCT
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.api.enumeration.GymBattleEndReason
+import lol.gito.radgyms.api.event.ModEvents
 import lol.gito.radgyms.common.entity.Trainer
+import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
+import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
+import lol.gito.radgyms.common.event.gyms.*
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
@@ -42,16 +44,12 @@ import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_BATTLE_END
 import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_BATTLE_START
 import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_INTERACT
 import lol.gito.radgyms.common.util.hasRadGymsTrainers
-import lol.gito.radgyms.server.event.cache.CacheRollPokeHandler
-import lol.gito.radgyms.server.event.cache.ShinyCharmCheckHandler
-import lol.gito.radgyms.server.event.gyms.*
-import lol.gito.radgyms.server.state.RadGymsState
+import lol.gito.radgyms.state.RadGymsState
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -70,10 +68,10 @@ object EventManager {
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
 
         // Cobblemon events
-        CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.LOWEST, ::onBattleStart)
-        CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onBattleWon)
-        CobblemonEvents.BATTLE_FLED.subscribe(Priority.LOWEST, ::onBattleFled)
-        CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, ::onGymBattleFainted)
+        CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.HIGHEST, ::onBattleStart)
+        CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.LOW, ::onBattleWon)
+        CobblemonEvents.BATTLE_FLED.subscribe(Priority.HIGHEST, ::onBattleFled)
+        CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.HIGHEST, ::onBattleFainted)
         PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
             debug("Cobblemon species observable triggered, updating elemental gyms species map")
             onSpeciesUpdate()
@@ -84,12 +82,11 @@ object EventManager {
         GYM_LEAVE.subscribe(Priority.LOWEST, ::GymLeaveHandler)
 
         TRAINER_INTERACT.subscribe(Priority.LOWEST, ::TrainerInteractHandler)
-        TRAINER_BATTLE_START.subscribe(Priority.LOWEST, ::TrainerBattleStartHandler)
         TRAINER_BATTLE_END.subscribe(Priority.LOWEST, ::TrainerBattleEndHandler)
 
         GENERATE_REWARD.subscribe(Priority.LOWEST, ::GenerateRewardHandler)
 
-        CACHE_ROLL_POKE.subscribe(Priority.LOW, ::ShinyCharmCheckHandler)
+        CACHE_ROLL_POKE.subscribe(Priority.LOWEST, ::ShinyCharmCheckHandler)
         CACHE_ROLL_POKE.subscribe(Priority.LOWEST, ::CacheRollPokeHandler)
     }
 
@@ -167,6 +164,14 @@ object EventManager {
         }
     }
 
+    private fun onSpeciesUpdate() {
+        SPECIES_BY_TYPE.clear()
+        ElementalTypes.all().forEach {
+            SPECIES_BY_TYPE[it.name] = speciesOfType(it)
+            debug("Added ${SPECIES_BY_TYPE[it.name]?.size} ${it.name} entries to species map")
+        }
+    }
+
     private fun onBattleStart(event: BattleStartedPreEvent) {
         // Early bail if not gym related
         if (!hasRadGymsTrainers(event)) return
@@ -181,7 +186,7 @@ object EventManager {
         TRAINER_BATTLE_START.postThen(
             ModEvents.TrainerBattleStartEvent(players, trainers.map { it as Trainer }, event.battle),
             { subEvent -> if (subEvent.isCanceled) event.cancel() },
-            { subEvent -> debug("Gym trainer battle started") },
+            { subEvent -> debug("Gym trainer battle started for players: ${players.joinToString(" ") { it.name.string }}") },
         )
     }
 
@@ -190,42 +195,17 @@ object EventManager {
         if (event.wasWildCapture) return
         // Early bail if not gym related
         if (!hasRadGymsTrainers(event)) return
-
-        TRAINER_BATTLE_END.emit(ModEvents.TrainerBattleEndEvent(event.winners, event.losers, event.battle))
-
         if (event.losers.none { it.type == ActorType.NPC }) return
         if (event.winners.none { it.type == ActorType.PLAYER }) return
 
-        val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
-        val player = winnerBattleActor.entity as ServerPlayerEntity
-        event.losers.forEach { loser ->
-            if (loser.type == ActorType.NPC && loser is TrainerEntityBattleActor && loser.entity is Trainer) {
-                (loser.entity as Trainer).let { trainer ->
-                    trainer.defeated = true
-                    if (trainer.leader) {
-                        val gym = RadGymsState.getGymForPlayer(player)!!
-                        GymManager.spawnExitBlock(player)
-                        GENERATE_REWARD.emit(
-                            ModEvents.GenerateRewardEvent(
-                                player,
-                                gym.template,
-                                gym.level,
-                                gym.type
-                            )
-                        )
-                        player.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
-                    }
-                }
-            }
-        }
-    }
-
-    private fun onSpeciesUpdate() {
-        SPECIES_BY_TYPE.clear()
-        ElementalTypes.all().forEach {
-            SPECIES_BY_TYPE[it.name] = speciesOfType(it)
-            debug("Added ${SPECIES_BY_TYPE[it.name]?.size} ${it.name} entries to species map")
-        }
+        TRAINER_BATTLE_END.emit(
+            ModEvents.TrainerBattleEndEvent(
+                GymBattleEndReason.BATTLE_WON,
+                event.winners,
+                event.losers,
+                event.battle
+            )
+        )
     }
 
     private fun onBattleFled(event: BattleFledEvent) {
@@ -234,32 +214,19 @@ object EventManager {
 
         TRAINER_BATTLE_END.emit(
             ModEvents.TrainerBattleEndEvent(
+                GymBattleEndReason.BATTLE_FLED,
                 event.battle.winners,
                 event.battle.losers,
                 event.battle
             )
         )
-
-        event.battle.players
-            .filter { it.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY }
-            .forEach { player ->
-                GymManager.handleGymLeave(player)
-            }
-
     }
 
-    private fun onGymBattleFainted(event: BattleFaintedEvent) {
+    private fun onBattleFainted(event: BattleFaintedEvent) {
         // Early bail if not gym related
         if (!hasRadGymsTrainers(event)) return
 
-        TRAINER_BATTLE_END.emit(
-            ModEvents.TrainerBattleEndEvent(
-                event.battle.winners,
-                event.battle.losers,
-                event.battle
-            )
-        )
-
+        // Kudos Tim for whiteout mod
         val killed = event.killed
         val entity = killed.entity ?: return
         val owner = entity.owner ?: return
@@ -267,10 +234,14 @@ object EventManager {
         if (!killed.actor.pokemonList.all { it.health == 0 }) return
         if (owner.isDead) return
 
-        event.battle.players
-            .filter { it.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY }
-            .forEach { player ->
-                GymManager.handleGymLeave(player)
-            }
+
+        TRAINER_BATTLE_END.emit(
+            ModEvents.TrainerBattleEndEvent(
+                GymBattleEndReason.BATTLE_LOST,
+                event.battle.winners,
+                event.battle.losers,
+                event.battle
+            )
+        )
     }
 }

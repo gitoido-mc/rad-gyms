@@ -8,8 +8,8 @@
 
 package lol.gito.radgyms.common.world
 
-import lol.gito.radgyms.common.RadGyms.LOGGER
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms.LOGGER
+import lol.gito.radgyms.RadGyms.debug
 import net.minecraft.structure.StructurePlacementData
 import net.minecraft.util.BlockMirror
 import net.minecraft.util.BlockRotation

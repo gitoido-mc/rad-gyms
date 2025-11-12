@@ -24,9 +24,9 @@ import com.gitlab.srcmc.rctapi.api.models.BagItemModel
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
-import lol.gito.radgyms.api.events.ModEvents
-import lol.gito.radgyms.common.RadGyms.CONFIG
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.RadGyms.CONFIG
+import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.api.event.ModEvents
 import lol.gito.radgyms.common.registry.EventRegistry.GENERATE_TEAM
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text.translatable
@@ -45,6 +45,7 @@ data class GymTrainer(
     val npc: GymNPC,
     val trainer: TrainerModel,
     val battleRules: BattleRules,
+    val format: String = "singles",
     val leader: Boolean = false,
     val requires: String? = null
 )
@@ -182,6 +183,7 @@ object GymTemplate {
                     team
                 ),
                 rules,
+                trainer.possibleFormats.random(),
                 trainer.leader,
                 trainer.requires
             )

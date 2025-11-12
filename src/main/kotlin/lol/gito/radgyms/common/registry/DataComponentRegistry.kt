@@ -9,7 +9,7 @@
 package lol.gito.radgyms.common.registry
 
 import com.mojang.serialization.Codec
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.RadGyms
 import net.minecraft.component.ComponentType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry

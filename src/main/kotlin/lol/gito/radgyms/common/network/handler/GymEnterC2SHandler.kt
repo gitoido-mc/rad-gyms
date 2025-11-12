@@ -8,7 +8,8 @@
 
 package lol.gito.radgyms.common.network.handler
 
-import lol.gito.radgyms.common.RadGyms
+import com.cobblemon.mod.common.api.types.ElementalTypes
+import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.network.payload.GymEnterC2S
@@ -26,12 +27,22 @@ class GymEnterC2SHandler(payload: GymEnterC2S, context: ServerPlayNetworking.Con
             TranslationUtil.buildTypeText(payload.type)
         )
 
+        val type: String = when (payload.type) {
+            "chaos", null -> ElementalTypes.all().random().name.lowercase()
+            else -> payload.type
+        }
+
         if (payload.key) {
             val stack = context.player().mainHandStack
 
             if (stack.item == ItemRegistry.GYM_KEY) {
                 val stackType =
-                    stack.components.get(DataComponentRegistry.GYM_TYPE_COMPONENT).let { it ?: payload.type }
+                    stack.components
+                        .getOrDefault(
+                            DataComponentRegistry.GYM_TYPE_COMPONENT,
+                            "chaos"
+                        )
+                        .let { it ?: payload.type }
                 RadGyms.debug("Gym key type : $stackType")
 
                 message = Text.translatable(
@@ -55,6 +66,6 @@ class GymEnterC2SHandler(payload: GymEnterC2S, context: ServerPlayNetworking.Con
         }
 
         context.player().sendMessage(message)
-        GymManager.initInstance(context.player(), context.player().serverWorld, payload.level, payload.type)
+        GymManager.initInstance(context.player(), context.player().serverWorld, payload.level, type)
     }
 }
