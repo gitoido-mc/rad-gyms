@@ -26,8 +26,8 @@ import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.RadGyms.CONFIG
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.api.event.ModEvents
-import lol.gito.radgyms.common.registry.EventRegistry.GENERATE_TEAM
+import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Identifier
@@ -132,7 +132,7 @@ object GymTemplate {
 
 
                 val rawTeam = mutableListOf<PokemonProperties>()
-                val generateTeamEvent = ModEvents.GenerateTeamEvent(
+                val generateTeamEvent = GymEvents.GenerateTeamEvent(
                     player,
                     elementType,
                     level,

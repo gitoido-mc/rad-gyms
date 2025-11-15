@@ -11,7 +11,7 @@ package lol.gito.radgyms.mixin.client;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import lol.gito.radgyms.RadGyms;
-import lol.gito.radgyms.RadGymsClient;
+import lol.gito.radgyms.client.RadGymsClient;
 import lol.gito.radgyms.common.registry.DataComponentRegistry;
 import lol.gito.radgyms.common.registry.ItemRegistry;
 import net.minecraft.client.render.VertexConsumerProvider;

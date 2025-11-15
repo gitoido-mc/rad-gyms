@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.util
+package lol.gito.radgyms.client.util
 
 import lol.gito.radgyms.RadGyms.MOD_ID
 import net.minecraft.client.util.ModelIdentifier

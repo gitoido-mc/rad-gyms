@@ -9,7 +9,7 @@
 package lol.gito.radgyms.mixin.client;
 
 import lol.gito.radgyms.RadGyms;
-import lol.gito.radgyms.RadGymsClient;
+import lol.gito.radgyms.client.RadGymsClient;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;

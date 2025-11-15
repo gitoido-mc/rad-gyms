@@ -13,11 +13,11 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.RadGyms.CONFIG
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.pokecache.CacheHandler
 import lol.gito.radgyms.common.registry.DataComponentRegistry.CACHE_SHINY_BOOST_COMPONENT
 import lol.gito.radgyms.common.registry.DataComponentRegistry.GYM_TYPE_COMPONENT
-import lol.gito.radgyms.common.registry.EventRegistry.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
 import net.minecraft.component.DataComponentTypes.RARITY
 import net.minecraft.entity.player.PlayerEntity
@@ -81,7 +81,7 @@ open class PokeCache(private val rarity: Rarity) : Item(Settings().rarity(rarity
         )
 
         CACHE_ROLL_POKE.emit(
-            ModEvents.CacheRollPokeEvent(
+            GymEvents.CacheRollPokeEvent(
                 user,
                 poke,
                 type,

@@ -9,13 +9,13 @@
 package lol.gito.radgyms.common.event.cache
 
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
 import lol.gito.radgyms.util.isShiny
 import lol.gito.radgyms.util.shinyRoll
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 
-class ShinyCharmCheckHandler(event: ModEvents.CacheRollPokeEvent) {
+class ShinyCharmCheckHandler(event: GymEvents.CacheRollPokeEvent) {
     init {
         var hasShinyCharm = event.player.inventory.contains(
             TagKey.of(

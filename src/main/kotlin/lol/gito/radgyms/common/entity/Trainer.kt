@@ -8,8 +8,8 @@
 
 package lol.gito.radgyms.common.entity
 
-import lol.gito.radgyms.api.event.ModEvents
-import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_INTERACT
+import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.api.event.GymEvents.TRAINER_INTERACT
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.damage.DamageSource
@@ -29,6 +29,23 @@ import kotlin.jvm.optionals.getOrNull
 
 class Trainer(entityType: EntityType<out Trainer>, world: World) :
     VillagerEntity(entityType, world) {
+
+    companion object {
+        fun createAttributes(): DefaultAttributeContainer.Builder = createVillagerAttributes()
+        val GYM_ID: TrackedData<String> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.STRING)
+        val FORMAT: TrackedData<String> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.STRING)
+        val TRAINER_ID: TrackedData<Optional<UUID>> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.OPTIONAL_UUID)
+        val REQUIRES: TrackedData<Optional<UUID>> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.OPTIONAL_UUID)
+        val DEFEATED: TrackedData<Boolean> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.BOOLEAN)
+        val LEADER: TrackedData<Boolean> =
+            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.BOOLEAN)
+    }
+
     private val gymTrainerIdKey = "gymTrainerId"
     private val trainerIdKey = "trainerId"
     private val requiresKey = "requires"
@@ -66,21 +83,10 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) :
         this.setPersistent()
     }
 
-    companion object {
-        fun createAttributes(): DefaultAttributeContainer.Builder = createVillagerAttributes()
-        val GYM_ID: TrackedData<String> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.STRING)
-        val FORMAT: TrackedData<String> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.STRING)
-        val TRAINER_ID: TrackedData<Optional<UUID>> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.OPTIONAL_UUID)
-        val REQUIRES: TrackedData<Optional<UUID>> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.OPTIONAL_UUID)
-        val DEFEATED: TrackedData<Boolean> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.BOOLEAN)
-        val LEADER: TrackedData<Boolean> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.BOOLEAN)
-    }
+    override fun getMaxLookYawChange(): Int = 360
+    override fun isSilent(): Boolean = true
+    override fun isPushable(): Boolean = false
+    override fun damage(source: DamageSource, amount: Float): Boolean = false
 
     override fun initDataTracker(builder: DataTracker.Builder) {
         super.initDataTracker(
@@ -98,11 +104,6 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) :
         super.onTrackedDataSet(data)
     }
 
-    override fun getMaxLookYawChange(): Int = 360
-    override fun isSilent(): Boolean = true
-    override fun isPushable(): Boolean = false
-    override fun damage(source: DamageSource, amount: Float): Boolean = false
-
     override fun tickMovement() {
         super.tickMovement()
         velocity = Vec3d.ZERO
@@ -111,7 +112,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) :
     override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
         if (!world.isClient) {
             TRAINER_INTERACT.postThen(
-                ModEvents.TrainerInteractEvent(player as ServerPlayerEntity, this),
+                GymEvents.TrainerInteractEvent(player as ServerPlayerEntity, this),
                 { event -> return ActionResult.FAIL },
                 { event -> return ActionResult.success(world.isClient) },
             )

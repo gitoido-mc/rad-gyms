@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.gui.screen
+package lol.gito.radgyms.client.gui.screen
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -15,12 +15,12 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.api.event.GymEvents.ENTER_SCREEN_CLOSE
+import lol.gito.radgyms.client.gui.widget.LevelSliderWidget
+import lol.gito.radgyms.client.util.radGymsResource
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
-import lol.gito.radgyms.common.registry.EventRegistry.ENTER_SCREEN_CLOSE
 import lol.gito.radgyms.common.util.TranslationUtil.buildTypeText
-import lol.gito.radgyms.gui.widget.LevelSliderWidget
-import lol.gito.radgyms.util.radGymsResource
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
@@ -94,7 +94,7 @@ class GymEnterScreen(
 
     override fun close() {
         ENTER_SCREEN_CLOSE.emit(
-            ModEvents.GymEnterScreenCloseEvent(
+            GymEvents.GymEnterScreenCloseEvent(
                 this.closeReason,
                 this.key,
                 this.level,

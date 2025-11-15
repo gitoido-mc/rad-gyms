@@ -13,12 +13,12 @@ import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 
-class TrainerInteractHandler(event: ModEvents.TrainerInteractEvent) {
+class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
     init {
         var requiredTrainer: Trainer? = null
         if (event.trainer.requires != null) {

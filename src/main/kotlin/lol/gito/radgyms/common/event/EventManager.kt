@@ -26,7 +26,14 @@ import lol.gito.radgyms.RadGyms.RCT
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.api.enumeration.GymBattleEndReason
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.api.event.GymEvents.CACHE_ROLL_POKE
+import lol.gito.radgyms.api.event.GymEvents.GENERATE_REWARD
+import lol.gito.radgyms.api.event.GymEvents.GYM_ENTER
+import lol.gito.radgyms.api.event.GymEvents.GYM_LEAVE
+import lol.gito.radgyms.api.event.GymEvents.TRAINER_BATTLE_END
+import lol.gito.radgyms.api.event.GymEvents.TRAINER_BATTLE_START
+import lol.gito.radgyms.api.event.GymEvents.TRAINER_INTERACT
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
@@ -36,13 +43,6 @@ import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
-import lol.gito.radgyms.common.registry.EventRegistry.CACHE_ROLL_POKE
-import lol.gito.radgyms.common.registry.EventRegistry.GENERATE_REWARD
-import lol.gito.radgyms.common.registry.EventRegistry.GYM_ENTER
-import lol.gito.radgyms.common.registry.EventRegistry.GYM_LEAVE
-import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_BATTLE_END
-import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_BATTLE_START
-import lol.gito.radgyms.common.registry.EventRegistry.TRAINER_INTERACT
 import lol.gito.radgyms.common.util.hasRadGymsTrainers
 import lol.gito.radgyms.state.RadGymsState
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
@@ -184,7 +184,7 @@ object EventManager {
             .filter { it is Trainer }
 
         TRAINER_BATTLE_START.postThen(
-            ModEvents.TrainerBattleStartEvent(players, trainers.map { it as Trainer }, event.battle),
+            GymEvents.TrainerBattleStartEvent(players, trainers.map { it as Trainer }, event.battle),
             { subEvent -> if (subEvent.isCanceled) event.cancel() },
             { subEvent -> debug("Gym trainer battle started for players: ${players.joinToString(" ") { it.name.string }}") },
         )
@@ -199,7 +199,7 @@ object EventManager {
         if (event.winners.none { it.type == ActorType.PLAYER }) return
 
         TRAINER_BATTLE_END.emit(
-            ModEvents.TrainerBattleEndEvent(
+            GymEvents.TrainerBattleEndEvent(
                 GymBattleEndReason.BATTLE_WON,
                 event.winners,
                 event.losers,
@@ -213,7 +213,7 @@ object EventManager {
         if (!hasRadGymsTrainers(event)) return
 
         TRAINER_BATTLE_END.emit(
-            ModEvents.TrainerBattleEndEvent(
+            GymEvents.TrainerBattleEndEvent(
                 GymBattleEndReason.BATTLE_FLED,
                 event.battle.winners,
                 event.battle.losers,
@@ -236,7 +236,7 @@ object EventManager {
 
 
         TRAINER_BATTLE_END.emit(
-            ModEvents.TrainerBattleEndEvent(
+            GymEvents.TrainerBattleEndEvent(
                 GymBattleEndReason.BATTLE_LOST,
                 event.battle.winners,
                 event.battle.losers,

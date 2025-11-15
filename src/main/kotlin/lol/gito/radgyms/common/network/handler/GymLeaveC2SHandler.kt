@@ -9,9 +9,9 @@
 package lol.gito.radgyms.common.network.handler
 
 import lol.gito.radgyms.api.enumeration.GymLeaveReason
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.api.event.GymEvents.GYM_LEAVE
 import lol.gito.radgyms.common.network.payload.GymLeaveC2S
-import lol.gito.radgyms.common.registry.EventRegistry.GYM_LEAVE
 import lol.gito.radgyms.common.registry.ItemRegistry
 import lol.gito.radgyms.state.RadGymsState
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
@@ -27,7 +27,7 @@ class GymLeaveC2SHandler(payload: GymLeaveC2S, context: ServerPlayNetworking.Con
                 stack.decrement(1)
 
                 GYM_LEAVE.emit(
-                    ModEvents.GymLeaveEvent(
+                    GymEvents.GymLeaveEvent(
                         reason = GymLeaveReason.USED_ITEM,
                         player = context.player(),
                         gym = gym,
@@ -39,7 +39,7 @@ class GymLeaveC2SHandler(payload: GymLeaveC2S, context: ServerPlayNetworking.Con
                 )
             } else {
                 GYM_LEAVE.emit(
-                    ModEvents.GymLeaveEvent(
+                    GymEvents.GymLeaveEvent(
                         reason = GymLeaveReason.USED_BLOCK,
                         player = context.player(),
                         gym = gym,

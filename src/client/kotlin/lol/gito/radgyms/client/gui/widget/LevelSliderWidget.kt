@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.gui.widget
+package lol.gito.radgyms.client.gui.widget
 
 import lol.gito.radgyms.RadGyms
 import net.fabricmc.api.EnvType

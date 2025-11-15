@@ -14,16 +14,16 @@ import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
 import lol.gito.radgyms.api.enumeration.GymBattleEndReason
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.api.event.GymEvents.GENERATE_REWARD
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
-import lol.gito.radgyms.common.registry.EventRegistry.GENERATE_REWARD
 import lol.gito.radgyms.state.RadGymsState
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text.translatable
 
-class TrainerBattleEndHandler(@Suppress("unused") event: ModEvents.TrainerBattleEndEvent) {
+class TrainerBattleEndHandler(@Suppress("unused") event: GymEvents.TrainerBattleEndEvent) {
     init {
         debug("Trainer battle end triggered")
 
@@ -33,7 +33,7 @@ class TrainerBattleEndHandler(@Suppress("unused") event: ModEvents.TrainerBattle
         }
     }
 
-    private fun handleGymWin(event: ModEvents.TrainerBattleEndEvent) {
+    private fun handleGymWin(event: GymEvents.TrainerBattleEndEvent) {
         val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
         val player = winnerBattleActor.entity as ServerPlayerEntity
         event.losers.forEach { loser ->
@@ -44,7 +44,7 @@ class TrainerBattleEndHandler(@Suppress("unused") event: ModEvents.TrainerBattle
                         val gym = RadGymsState.getGymForPlayer(player)!!
                         GymManager.spawnExitBlock(player)
                         GENERATE_REWARD.emit(
-                            ModEvents.GenerateRewardEvent(
+                            GymEvents.GenerateRewardEvent(
                                 player,
                                 gym.template,
                                 gym.level,
@@ -58,7 +58,7 @@ class TrainerBattleEndHandler(@Suppress("unused") event: ModEvents.TrainerBattle
         }
     }
 
-    private fun handleGymLeave(event: ModEvents.TrainerBattleEndEvent) {
+    private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) {
         event.battle.players
             .filter { it.world.registryKey == RADGYMS_LEVEL_KEY }
             .forEach { player ->

@@ -20,13 +20,13 @@ import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.loadConfig
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.api.event.GymEvents.CACHE_ROLL_POKE
+import lol.gito.radgyms.api.event.GymEvents.GENERATE_REWARD
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.pokecache.CacheHandler
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
-import lol.gito.radgyms.common.registry.EventRegistry.CACHE_ROLL_POKE
-import lol.gito.radgyms.common.registry.EventRegistry.GENERATE_REWARD
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -101,7 +101,7 @@ object CommandRegistry {
             }
 
             GENERATE_REWARD.emit(
-                ModEvents.GenerateRewardEvent(
+                GymEvents.GenerateRewardEvent(
                     context.source.playerOrThrow,
                     GymTemplate.fromGymDto(context.source.playerOrThrow, gymDto, level, type),
                     level,
@@ -146,7 +146,7 @@ object CommandRegistry {
                 )
 
                 CACHE_ROLL_POKE.emit(
-                    ModEvents.CacheRollPokeEvent(
+                    GymEvents.CacheRollPokeEvent(
                         context.source.player!!,
                         poke,
                         typeEnum.toString().lowercase(),

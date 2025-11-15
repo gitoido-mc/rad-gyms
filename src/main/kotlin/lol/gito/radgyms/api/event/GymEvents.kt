@@ -12,6 +12,8 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.reactive.CancelableObservable
+import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.api.enumeration.GymBattleEndReason
@@ -26,7 +28,7 @@ import net.minecraft.util.Rarity
 import net.minecraft.util.math.BlockPos
 
 @Suppress("unused")
-object ModEvents {
+object GymEvents {
     // GUI
     data class GymEnterScreenCloseEvent(
         val choice: GuiScreenCloseChoice,
@@ -98,6 +100,8 @@ object ModEvents {
         val usedRope: Boolean?
     )
 
+    // Trainer interaction
+
     data class TrainerBattleEndEvent(
         val reason: GymBattleEndReason,
         val winners: List<BattleActor>,
@@ -115,4 +119,40 @@ object ModEvents {
         val player: ServerPlayerEntity,
         val trainer: Trainer
     ) : Cancelable()
+
+    @JvmField
+    val CACHE_ROLL_POKE = EventObservable<CacheRollPokeEvent>()
+
+    @JvmField
+    val GYM_ENTER = EventObservable<GymEnterEvent>()
+
+    @JvmField
+    val GYM_LEAVE = EventObservable<GymLeaveEvent>()
+
+    @JvmField
+    val GENERATE_REWARD = EventObservable<GenerateRewardEvent>()
+
+    @JvmField
+    val GENERATE_TEAM = EventObservable<GenerateTeamEvent>()
+
+    @JvmField
+    val TRAINER_INTERACT = CancelableObservable<TrainerInteractEvent>()
+
+    @JvmField
+    val TRAINER_BATTLE_START = CancelableObservable<TrainerBattleStartEvent>()
+
+    @JvmField
+    val TRAINER_BATTLE_END = EventObservable<TrainerBattleEndEvent>()
+
+    @JvmField
+    val ENTER_SCREEN_OPEN = EventObservable<GymEnterScreenOpenEvent>()
+
+    @JvmField
+    val ENTER_SCREEN_CLOSE = EventObservable<GymEnterScreenCloseEvent>()
+
+    @JvmField
+    val LEAVE_SCREEN_OPEN = EventObservable<GymLeaveScreenOpenEvent>()
+
+    @JvmField
+    val LEAVE_SCREEN_CLOSE = EventObservable<GymLeaveScreenCloseEvent>()
 }

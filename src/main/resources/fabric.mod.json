@@ -23,7 +23,7 @@
     ],
     "client": [
       {
-        "value": "lol.gito.radgyms.RadGymsClient::init",
+        "value": "lol.gito.radgyms.client.RadGymsClient::init",
         "adapter": "kotlin"
       }
     ],

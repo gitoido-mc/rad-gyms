@@ -13,7 +13,7 @@ import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.event.ModEvents
+import lol.gito.radgyms.api.event.GymEvents
 import lol.gito.radgyms.common.item.PokeShardBase
 import lol.gito.radgyms.common.registry.DataComponentRegistry
 import net.minecraft.component.DataComponentTypes
@@ -33,7 +33,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
 
-class GenerateRewardHandler(event: ModEvents.GenerateRewardEvent) {
+class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
     init {
         val bundle = ItemStack(Items.BUNDLE)
         val bundleContents = BundleContentsComponent.Builder(BundleContentsComponent.DEFAULT)
@@ -90,7 +90,7 @@ class GenerateRewardHandler(event: ModEvents.GenerateRewardEvent) {
     }
 
     private fun createBundle(
-        event: ModEvents.GenerateRewardEvent,
+        event: GymEvents.GenerateRewardEvent,
         bundle: ItemStack,
         bundleContents: BundleContentsComponent.Builder,
         rewards: List<ItemStack>

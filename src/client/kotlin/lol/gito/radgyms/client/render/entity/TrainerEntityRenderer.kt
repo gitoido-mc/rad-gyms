@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.render.entity
+package lol.gito.radgyms.client.render.entity
 
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.modId
