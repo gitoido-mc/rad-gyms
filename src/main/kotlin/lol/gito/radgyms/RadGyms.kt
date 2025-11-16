@@ -63,8 +63,14 @@ object RadGyms {
     }
 
     fun modId(name: String): Identifier = Identifier.of(MOD_ID, name)
+
+    @Suppress("unused")
     fun log(message: String): Unit = LOGGER.info(message)
+
+    @Suppress("unused")
     fun warn(message: String): Unit = LOGGER.warn(message)
+
+    @Suppress("unused")
     fun debug(message: String) {
         if (CONFIG.debug == true) LOGGER.info(message)
     }
