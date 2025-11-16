@@ -9,6 +9,7 @@
 package lol.gito.radgyms.datagen
 
 import lol.gito.radgyms.datagen.i18n.EnUSLocaleProvider
+import lol.gito.radgyms.datagen.loot.BlockLootDataProvider
 import lol.gito.radgyms.datagen.loot.GymLootDataProvider
 import lol.gito.radgyms.datagen.loot.StructureLootDataProvider
 import lol.gito.radgyms.datagen.recipe.RecipeProvider
@@ -22,9 +23,10 @@ object RadGymsDataGenerator : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         val pack: Pack = fabricDataGenerator.createPack()
         pack.addProvider(::EnUSLocaleProvider)
-        pack.addProvider(::BlockTagDataProvider)
         pack.addProvider(::RecipeProvider)
+        pack.addProvider(::BlockTagDataProvider)
         pack.addProvider(::GymLootDataProvider)
         pack.addProvider(::StructureLootDataProvider)
+        pack.addProvider(::BlockLootDataProvider)
     }
 }

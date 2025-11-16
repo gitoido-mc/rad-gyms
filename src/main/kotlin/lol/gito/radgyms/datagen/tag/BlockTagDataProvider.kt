@@ -24,6 +24,11 @@ class BlockTagDataProvider(
 
     override fun configure(wrapper: RegistryWrapper.WrapperLookup) {
         this.getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
+            .setReplace(false)
             .add(BlockRegistry.GYM_ENTRANCE)
+            .add(BlockRegistry.SHARD_BLOCK_COMMON)
+            .add(BlockRegistry.SHARD_BLOCK_UNCOMMON)
+            .add(BlockRegistry.SHARD_BLOCK_RARE)
+            .add(BlockRegistry.SHARD_BLOCK_EPIC)
     }
 }
