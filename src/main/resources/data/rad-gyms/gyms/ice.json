@@ -43,7 +43,7 @@
       "id": "default_trainer_junior",
       "name": "rad-gyms.npc.trainer_junior",
       "possibleFormats": [
-        "singles"
+        "SINGLES"
       ],
       "team_type": "GENERATED",
       "spawn_relative": {
@@ -89,8 +89,8 @@
       "name": "rad-gyms.npc.trainer_senior",
       "requires": "default_trainer_junior",
       "possibleFormats": [
-        "singles",
-        "doubles"
+        "SINGLES",
+        "DOUBLES"
       ],
       "team_type": "GENERATED",
       "spawn_relative": {
@@ -137,9 +137,9 @@
       "requires": "default_trainer_senior",
       "leader": true,
       "possibleFormats": [
-        "singles",
-        "doubles",
-        "triples"
+        "SINGLES",
+        "DOUBLES",
+        "TRIPLES"
       ],
       "team_type": "GENERATED",
       "spawn_relative": {

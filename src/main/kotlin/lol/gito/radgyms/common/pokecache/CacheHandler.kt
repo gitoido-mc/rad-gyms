@@ -38,12 +38,10 @@ object CacheHandler {
         shinyBoost: Int? = 0
     ): Pokemon {
         val cache = SPECIES_BY_RARITY[type.name]!!.forRarity(rarity)
-
         val pokeProps = PokemonProperties.parse(cache.shuffle().first())
         val poke = pokeProps.create()
 
         poke.shiny = shinyRoll(poke, player, shinyBoost).isShiny()
-
         poke.updateAspects()
         poke.updateForm()
 
@@ -51,5 +49,4 @@ object CacheHandler {
 
         return instance
     }
-
 }

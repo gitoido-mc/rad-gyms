@@ -14,7 +14,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.common.gym.GymDTO
+import lol.gito.radgyms.api.dto.Gym
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager
 import lol.gito.radgyms.common.pokecache.CacheDTO
@@ -41,7 +41,8 @@ class RadGymsDataLoader {
                 .forEach { (id: Identifier, res: Resource) ->
                     try {
                         val templateName = File(id.path).nameWithoutExtension
-                        GymManager.GYM_TEMPLATES[templateName] = Json.Default.decodeFromStream<GymDTO>(res.inputStream)
+                        GymManager.GYM_TEMPLATES[templateName] =
+                            Json.Default.decodeFromStream<Gym.Json>(res.inputStream)
                         debug("Loaded $templateName template from ${File(id.path).name} gym config")
                     } catch (e: Exception) {
                         RadGyms.LOGGER.warn("Could not parse ${File(id.path).name} gym data", e)

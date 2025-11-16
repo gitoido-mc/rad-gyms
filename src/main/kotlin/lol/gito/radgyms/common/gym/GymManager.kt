@@ -8,23 +8,24 @@
 
 package lol.gito.radgyms.common.gym
 
-import com.cobblemon.mod.common.api.scheduling.ScheduledTask
-import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.toBlockPos
-import lol.gito.radgyms.RadGyms.LOGGER
 import lol.gito.radgyms.RadGyms.RCT
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.api.dto.Gym
+import lol.gito.radgyms.api.dto.TrainerModel
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
 import lol.gito.radgyms.common.registry.EntityRegistry
+import lol.gito.radgyms.common.state.PlayerData
+import lol.gito.radgyms.common.state.RadGymsState
+import lol.gito.radgyms.common.util.delayExecute
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructureManager
-import lol.gito.radgyms.state.PlayerData
-import lol.gito.radgyms.state.RadGymsState
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.network.ServerPlayerEntity
@@ -37,106 +38,99 @@ import net.minecraft.util.math.Vec3d
 import java.util.*
 import kotlin.time.TimeSource.Monotonic.markNow
 
-data class GymInstance(
-    val template: GymTemplate,
-    val npcList: Map<UUID, GymTrainer>,
-    val coords: BlockPos,
-    val level: Int,
-    val type: String,
-    val label: String
-)
-
 object GymManager {
-    val GYM_TEMPLATES: MutableMap<String, GymDTO> = mutableMapOf()
+    val GYM_TEMPLATES: MutableMap<String, Gym.Json> = mutableMapOf()
+
+    fun register() = Unit
 
     fun initInstance(serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld, level: Int, type: String?): Boolean {
         val startTime = markNow()
-        val gymLevel = level.coerceIn(5..100)
-        val gymDimension = serverPlayer.getServer()?.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY) ?: return false
+        val gymLevel = level.coerceIn(5..Cobblemon.config.maxPokemonLevel)
 
+        // Check if we have gym dimension available
+        val gymDimension = serverPlayer.getServer()?.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY) ?: return false
+        // Check if player not in gym dimension
         if (serverWorld.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) return false
 
-        val pos = serverPlayer.pos
-        val gymType = if (type in GYM_TEMPLATES.keys) type else "default"
+        // Get gym template name
+        val gymType = when (type in GYM_TEMPLATES.keys) {
+            true -> type
+            else -> "default"
+        }
+
         debug("Initializing $gymType template for $type gym")
         debug("Available templates ${GYM_TEMPLATES.keys}")
 
-        val gym = GYM_TEMPLATES[gymType]?.let { GymTemplate.fromGymDto(serverPlayer, it, gymLevel, type) }
-        if (gym == null) {
-            LOGGER.warn("Gym $gymType could not be initialized, no such type in template registry")
-            return false
-        }
-
-        val coords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
+        val gym = GymTemplate.fromGymDto(serverPlayer, GYM_TEMPLATES[gymType]!!, gymLevel, type)
+        val playerGymCoords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
         val dest = BlockPos.ofFloored(
-            coords.x + gym.relativePlayerSpawn.x,
-            coords.y + gym.relativePlayerSpawn.y,
-            coords.z + gym.relativePlayerSpawn.z
+            playerGymCoords.x + gym.relativePlayerSpawn.x,
+            playerGymCoords.y + gym.relativePlayerSpawn.y,
+            playerGymCoords.z + gym.relativePlayerSpawn.z
         )
 
-        debug("Trying to place gym structure with ${gym.structure} at ${coords.x} ${coords.y} ${coords.z} ")
-            .also { StructureManager.placeStructure(gymDimension, coords, gym.structure) }
-            .also { debug("return dim ${serverWorld.registryKey.value}") }
-            .also {
-                RadGymsState.setReturnCoordsForPlayer(
-                    serverPlayer,
-                    PlayerData.ReturnCoords(
-                        serverWorld.registryKey.value,
-                        pos.toBlockPos()
-                    )
-                )
+        debug("Trying to place gym structure with ${gym.structure} at ${playerGymCoords.x} ${playerGymCoords.y} ${playerGymCoords.z} ")
+
+        StructureManager.placeStructure(gymDimension, playerGymCoords, gym.structure)
+
+        RadGymsState.setReturnCoordsForPlayer(
+            serverPlayer,
+            PlayerData.ReturnCoords(
+                serverWorld.registryKey.value,
+                serverPlayer.pos.toBlockPos()
+            )
+        )
+
+        gymDimension.chunkManager.addTicket(
+            ChunkTicketType.PORTAL,
+            gymDimension.getChunk(dest).pos,
+            4,
+            dest
+        )
+
+        PlayerSpawnHelper.teleportPlayer(
+            serverPlayer,
+            gymDimension,
+            dest,
+            gym.playerYaw,
+            0.0F
+        )
+
+
+        val trainerUUIDs = buildTrainers(gym, gymDimension, playerGymCoords)
+        val chaosTranslatable = translatable(
+            modId("item.component.type.chaos").toTranslationKey()
+        )
+
+        val label = when (gymType) {
+            "default" -> when (type) {
+                "default" -> chaosTranslatable.string
+                null -> chaosTranslatable.string
+                else -> translatable(
+                    cobblemonResource("type.${type}").toTranslationKey()
+                ).string
             }
-            .also {
-                gymDimension.chunkManager.addTicket(
-                    ChunkTicketType.PORTAL,
-                    gymDimension.getChunk(dest).pos,
-                    4,
-                    dest
-                )
 
-                PlayerSpawnHelper.teleportPlayer(
-                    serverPlayer,
-                    gymDimension,
-                    dest,
-                    gym.playerYaw,
-                    0.0F
-                )
-            }
-            .also {
-                val trainerUUIDs = buildTrainers(gym, gymDimension, coords)
-                val chaosTranslatable = translatable(
-                    modId("item.component.type.chaos").toTranslationKey()
-                )
+            null -> chaosTranslatable.string
+            else -> translatable(cobblemonResource("type.${type}").toTranslationKey()).string
+        }
 
-                val label = when (gymType) {
-                    "default" -> when (type) {
-                        "default" -> chaosTranslatable.string
-                        null -> chaosTranslatable.string
-                        else -> translatable(
-                            cobblemonResource("type.${type}").toTranslationKey()
-                        ).string
-                    }
+        val gymInstance = Gym(gym, trainerUUIDs, playerGymCoords, gymLevel, type ?: "default", label)
 
-                    null -> chaosTranslatable.string
-                    else -> translatable(cobblemonResource("type.${type}").toTranslationKey()).string
-                }
+        RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
 
-                val gymInstance = GymInstance(gym, trainerUUIDs, coords, gymLevel, type ?: "default", label)
+        val trainerRegistry = RCT.trainerRegistry
+        gymInstance.npcList.forEach { (uuid, npc) ->
+            val trainer = trainerRegistry.registerNPC(
+                uuid.toString(),
+                npc.trainer
+            )
 
-                RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
+            trainer.entity = gymDimension.getEntity(uuid) as Trainer
+        }
 
-                val trainerRegistry = RCT.trainerRegistry
-                gymInstance.npcList.forEach { (uuid, npc) ->
-                    val trainer = trainerRegistry.registerNPC(
-                        uuid.toString(),
-                        npc.trainer
-                    )
+        debug("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds} ms")
 
-                    trainer.entity = gymDimension.getEntity(uuid) as Trainer
-                }
-
-                debug("Gym $gymType initialized, took ${startTime.elapsedNow().inWholeMilliseconds} ms")
-            }
         return true
     }
 
@@ -144,8 +138,8 @@ object GymManager {
         template: GymTemplate,
         gymDimension: ServerWorld,
         coords: BlockPos
-    ): Map<UUID, GymTrainer> {
-        val trainerIds = mutableMapOf<String, Pair<UUID, GymTrainer>>()
+    ): Map<UUID, TrainerModel> {
+        val trainerIds = mutableMapOf<String, Pair<UUID, TrainerModel>>()
 
         template.trainers.forEach {
             val uuid = UUID.randomUUID()
@@ -163,39 +157,39 @@ object GymManager {
     }
 
     private fun buildTrainerEntity(
-        trainerTemplate: GymTrainer,
+        trainer: TrainerModel,
         gymDimension: ServerWorld,
         coords: BlockPos,
         trainerUUID: UUID,
         requiredUUID: UUID?
-    ): Pair<UUID, GymTrainer> {
+    ): Pair<UUID, TrainerModel> {
         val trainerEntity = Trainer(EntityRegistry.GYM_TRAINER, gymDimension)
             .apply {
-                setPersistent()
                 uuid = trainerUUID
-                headYaw = trainerTemplate.npc.yaw
-                bodyYaw = trainerTemplate.npc.yaw
-                customName = Text.of(trainerTemplate.npc.name)
-                isCustomNameVisible = true
-                setPosition(
-                    Vec3d(
-                        coords.x + trainerTemplate.npc.relativePosition.x,
-                        coords.y + trainerTemplate.npc.relativePosition.y,
-                        coords.z + trainerTemplate.npc.relativePosition.z
-                    )
-                )
-                gymId = trainerTemplate.id
+                gymId = trainer.id
+                leader = trainer.leader
+                format = trainer.format.name
                 trainerId = trainerUUID
                 requires = requiredUUID
-                leader = trainerTemplate.leader
-                format = trainerTemplate.format
+                headYaw = trainer.npc.yaw
+                bodyYaw = trainer.npc.yaw
+                customName = Text.of(trainer.npc.name)
+                isCustomNameVisible = true
+                setPersistent()
+                setPosition(
+                    Vec3d(
+                        coords.x + trainer.npc.relativePosition.x,
+                        coords.y + trainer.npc.relativePosition.y,
+                        coords.z + trainer.npc.relativePosition.z
+                    )
+                )
             }.also {
                 debug("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
-                debug("Selected ${trainerTemplate.format} battle format for trainer")
+                debug("Selected ${trainer.format} battle format for trainer")
                 gymDimension.spawnEntity(it)
             }
 
-        return Pair(trainerEntity.uuid, trainerTemplate)
+        return Pair(trainerEntity.uuid, trainer)
     }
 
     fun spawnExitBlock(serverPlayer: ServerPlayerEntity) {
@@ -293,16 +287,5 @@ object GymManager {
             RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
         }
         RadGymsState.removeGymForPlayer(serverPlayer)
-    }
-
-    private fun delayExecute(delay: Float, execute: (ScheduledTask) -> Unit) =
-        ScheduledTask.Builder()
-            .tracker(ServerTaskTracker)
-            .delay(delay)
-            .execute(execute)
-            .build()
-
-    fun register() {
-        debug("GymManager init")
     }
 }

@@ -32,6 +32,7 @@ import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting
+import net.minecraft.util.Identifier
 
 class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
     init {
@@ -40,7 +41,7 @@ class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
         event.template
             .lootTables
             .filter {
-                event.level in it.levels.first..it.levels.second
+                event.level in it.minLevel..it.maxLevel
             }
             .forEach { table ->
                 debug(
@@ -55,7 +56,7 @@ class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
                     .reloadableRegistries
                     .registryManager
                     .get(RegistryKeys.LOOT_TABLE)
-                    .get(table.id) ?: return@forEach
+                    .get(Identifier.of(table.id)) ?: return@forEach
 
                 val lootContextParameterSet = LootContextParameterSet.Builder(event.player.world as ServerWorld)
                     .add(LootContextParameters.THIS_ENTITY, event.player)

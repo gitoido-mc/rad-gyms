@@ -20,13 +20,16 @@ import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.RadGyms.loadConfig
 import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.api.event.GymEvents
 import lol.gito.radgyms.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.api.event.GymEvents.GENERATE_REWARD
+import lol.gito.radgyms.api.event.GymEvents.GYM_LEAVE
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.pokecache.CacheHandler
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.state.RadGymsState
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -37,7 +40,7 @@ import net.minecraft.util.Rarity
 @Command("radgyms")
 object CommandRegistry {
     @Suppress("unused")
-    @Command("kick")
+    @Command("op:kick")
     @RequiresPermissionLevel(4)
     fun kick(
         context: CommandContext<ServerCommandSource>, @Name("player") player: ServerPlayerEntity
@@ -52,16 +55,30 @@ object CommandRegistry {
             }
             return -1
         }
+
         player.sendMessage(
             translatable(modId("message.info.command.op_kick").toTranslationKey())
         )
 
-        GymManager.handleGymLeave(player)
+        RadGymsState.getGymForPlayer(player)?.let {
+            GYM_LEAVE.emit(
+                GymEvents.GymLeaveEvent(
+                    reason = GymLeaveReason.KICK_COMMAND,
+                    player = player,
+                    gym = it,
+                    type = it.type,
+                    level = it.level,
+                    completed = false,
+                    usedRope = false
+                )
+            )
+        }
+
         return 1
     }
 
     @Suppress("unused")
-    @Command("config_reload")
+    @Command("reload")
     @RequiresPermissionLevel(4)
     fun reloadConfig(
         context: CommandContext<ServerCommandSource>
@@ -71,7 +88,7 @@ object CommandRegistry {
     }
 
     @Suppress("unused")
-    @Command("debug_reward")
+    @Command("debug:reward")
     @RequiresPermissionLevel(4)
     fun debugReward(
         context: CommandContext<ServerCommandSource>,
@@ -126,7 +143,7 @@ object CommandRegistry {
     }
 
     @Suppress("unused")
-    @Command("debug_cache")
+    @Command("debug:cache")
     @RequiresPermissionLevel(4)
     fun debugCache(
         context: CommandContext<ServerCommandSource>,

@@ -15,11 +15,11 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.pokemon.Pokemon
+import lol.gito.radgyms.api.dto.Gym
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.gym.GymInstance
 import lol.gito.radgyms.common.gym.GymTemplate
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
@@ -84,7 +84,7 @@ object GymEvents {
 
     data class GymEnterEvent(
         val player: ServerPlayerEntity,
-        val gym: GymInstance,
+        val gym: Gym,
         val type: String,
         val level: Int,
         val usedKey: Boolean
@@ -93,7 +93,7 @@ object GymEvents {
     data class GymLeaveEvent(
         val reason: GymLeaveReason,
         val player: ServerPlayerEntity,
-        val gym: GymInstance?,
+        val gym: Gym?,
         val type: String?,
         val level: Int?,
         val completed: Boolean?,

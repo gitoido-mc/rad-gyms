@@ -9,7 +9,7 @@
 package lol.gito.radgyms.common.world
 
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.state.RadGymsState
+import lol.gito.radgyms.common.state.RadGymsState
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos

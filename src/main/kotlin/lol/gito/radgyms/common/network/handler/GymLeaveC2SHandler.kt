@@ -13,7 +13,7 @@ import lol.gito.radgyms.api.event.GymEvents
 import lol.gito.radgyms.api.event.GymEvents.GYM_LEAVE
 import lol.gito.radgyms.common.network.payload.GymLeaveC2S
 import lol.gito.radgyms.common.registry.ItemRegistry
-import lol.gito.radgyms.state.RadGymsState
+import lol.gito.radgyms.common.state.RadGymsState
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 
 @Suppress("unused")

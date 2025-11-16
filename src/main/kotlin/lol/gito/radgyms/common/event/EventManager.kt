@@ -43,8 +43,8 @@ import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.registry.BlockRegistry
 import lol.gito.radgyms.common.registry.DimensionRegistry
+import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.hasRadGymsTrainers
-import lol.gito.radgyms.state.RadGymsState
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.BlockState

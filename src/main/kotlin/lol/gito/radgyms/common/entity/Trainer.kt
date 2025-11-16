@@ -8,6 +8,7 @@
 
 package lol.gito.radgyms.common.entity
 
+import lol.gito.radgyms.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.api.event.GymEvents
 import lol.gito.radgyms.api.event.GymEvents.TRAINER_INTERACT
 import net.minecraft.entity.EntityType
@@ -58,7 +59,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) :
         set(value) = dataTracker.set(GYM_ID, value)
 
     var format: String
-        get() = dataTracker.get(FORMAT) ?: "singles"
+        get() = dataTracker.get(FORMAT) ?: GymBattleFormat.SINGLES.name.lowercase()
         set(value) = dataTracker.set(FORMAT, value)
 
     var trainerId: UUID?

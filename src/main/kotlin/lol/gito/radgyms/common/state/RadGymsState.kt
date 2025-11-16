@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.state
+package lol.gito.radgyms.common.state
 
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.util.server
@@ -15,10 +15,10 @@ import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.MOD_ID
 import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.common.gym.GymInstance
+import lol.gito.radgyms.api.dto.Gym
+import lol.gito.radgyms.api.dto.TrainerModel
 import lol.gito.radgyms.common.gym.GymManager.GYM_TEMPLATES
 import lol.gito.radgyms.common.gym.GymTemplate
-import lol.gito.radgyms.common.gym.GymTrainer
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
 import lol.gito.radgyms.mixin.util.RCTBattleAIAccessor
 import lol.gito.radgyms.util.getBlockPos
@@ -34,7 +34,7 @@ import java.util.*
 
 class RadGymsState : PersistentState() {
     val playerDataMap: MutableMap<UUID, PlayerData> = mutableMapOf()
-    val gymInstanceMap: MutableMap<UUID, GymInstance> = mutableMapOf()
+    val gymInstanceMap: MutableMap<UUID, Gym> = mutableMapOf()
 
     companion object {
         fun create() = RadGymsState()
@@ -80,7 +80,7 @@ class RadGymsState : PersistentState() {
                     )
                 }!!
 
-                val gymTrainers = mutableMapOf<UUID, GymTrainer>()
+                val gymTrainers = mutableMapOf<UUID, TrainerModel>()
                 gymDataNbt.getCompound("Trainers").keys.forEach { entityUuidString ->
                     val trainerUuid = UUID.fromString(uuidString)
                     val trainerDataNbt = gymDataNbt.getCompound("Trainers").getCompound(entityUuidString)
@@ -100,7 +100,7 @@ class RadGymsState : PersistentState() {
 //                    gymTrainers[trainerUuid] = gymTrainer
                 }
 
-                val gymInstance = GymInstance(
+                val gymInstance = Gym(
                     template = gymTemplate,
                     npcList = mutableMapOf(),
                     coords = gymDataNbt.getBlockPos("Coords"),
@@ -141,11 +141,11 @@ class RadGymsState : PersistentState() {
             return getServerState(player.server).gymInstanceMap.keys.contains(player.uuid)
         }
 
-        fun getGymForPlayer(player: ServerPlayerEntity): GymInstance? {
+        fun getGymForPlayer(player: ServerPlayerEntity): Gym? {
             return getServerState(player.server).gymInstanceMap[player.uuid]
         }
 
-        fun addGymForPlayer(player: ServerPlayerEntity, gymInstance: GymInstance) {
+        fun addGymForPlayer(player: ServerPlayerEntity, gymInstance: Gym) {
             if (hasGymForPlayer(player)) {
                 removeGymForPlayer(player)
             }

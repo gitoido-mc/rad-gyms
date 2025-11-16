@@ -19,11 +19,11 @@ import lol.gito.radgyms.api.event.GymEvents.GENERATE_REWARD
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
-import lol.gito.radgyms.state.RadGymsState
+import lol.gito.radgyms.common.state.RadGymsState
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text.translatable
 
-class TrainerBattleEndHandler(@Suppress("unused") event: GymEvents.TrainerBattleEndEvent) {
+class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
     init {
         debug("Trainer battle end triggered")
 
@@ -44,12 +44,7 @@ class TrainerBattleEndHandler(@Suppress("unused") event: GymEvents.TrainerBattle
                         val gym = RadGymsState.getGymForPlayer(player)!!
                         GymManager.spawnExitBlock(player)
                         GENERATE_REWARD.emit(
-                            GymEvents.GenerateRewardEvent(
-                                player,
-                                gym.template,
-                                gym.level,
-                                gym.type
-                            )
+                            GymEvents.GenerateRewardEvent(player, gym.template, gym.level, gym.type)
                         )
                         player.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
                     }
@@ -59,10 +54,8 @@ class TrainerBattleEndHandler(@Suppress("unused") event: GymEvents.TrainerBattle
     }
 
     private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) {
-        event.battle.players
-            .filter { it.world.registryKey == RADGYMS_LEVEL_KEY }
-            .forEach { player ->
-                GymManager.handleGymLeave(player)
-            }
+        event.battle.players.filter { it.world.registryKey == RADGYMS_LEVEL_KEY }.forEach { player ->
+            GymManager.handleGymLeave(player)
+        }
     }
 }

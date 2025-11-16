@@ -9,69 +9,39 @@
 package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
-import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.pokemon.FormData
-import com.cobblemon.mod.common.pokemon.Species
-import com.cobblemon.mod.common.util.toProperties
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.models.BagItemModel
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
-import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
-import lol.gito.radgyms.RadGyms.CONFIG
 import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.api.dto.Gym
+import lol.gito.radgyms.api.enumeration.GymTeamType
 import lol.gito.radgyms.api.event.GymEvents
 import lol.gito.radgyms.api.event.GymEvents.GENERATE_TEAM
+import lol.gito.radgyms.common.gym.SpeciesManager.fillPokemonModelFromPokemon
+import lol.gito.radgyms.common.gym.SpeciesManager.generatePokemon
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text.translatable
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
-import kotlin.random.Random
-
-data class GymNPC(
-    val name: String,
-    val relativePosition: Vec3d,
-    val yaw: Float,
-)
-
-data class GymTrainer(
-    val id: String,
-    val npc: GymNPC,
-    val trainer: TrainerModel,
-    val battleRules: BattleRules,
-    val format: String = "singles",
-    val leader: Boolean = false,
-    val requires: String? = null
-)
-
-data class GymLootTable(
-    val id: Identifier,
-    val levels: Pair<Int, Int>
-)
+import com.gitlab.srcmc.rctapi.api.models.TrainerModel as RCTTrainerModel
+import lol.gito.radgyms.api.dto.TrainerModel as RGTrainerModel
 
 object GymTemplate {
     lateinit var structure: String
     var relativeExitBlockSpawn: Vec3d = Vec3d.ZERO
     var relativePlayerSpawn: Vec3d = Vec3d.ZERO
     var playerYaw: Float = 0F
-    var trainers: List<GymTrainer> = mutableListOf()
+    var trainers: List<RGTrainerModel> = mutableListOf()
     var type: String? = null
-    var lootTables: List<GymLootTable> = mutableListOf()
+    var lootTables: List<Gym.Json.LootTableInfo> = mutableListOf()
 
-    fun fromGymDto(player: ServerPlayerEntity, dto: GymDTO, level: Int, type: String?): GymTemplate {
+    fun fromGymDto(player: ServerPlayerEntity, dto: Gym.Json, level: Int, type: String?): GymTemplate {
         structure = dto.template
-        lootTables = dto.rewardLootTables.map {
-            GymLootTable(
-                Identifier.of(it.id),
-                Pair(it.minLevel, it.maxLevel),
-            )
-        }
+        lootTables = dto.rewardLootTables
+
         relativeExitBlockSpawn = Vec3d(
             dto.exitBlockPos[0],
             dto.exitBlockPos[1],
@@ -85,83 +55,101 @@ object GymTemplate {
         )
         playerYaw = dto.playerSpawnRelative.yaw.toFloat()
 
-        trainers = dto.trainers.map trainerMap@{ trainer ->
-            var battleConfig = RCTBattleAIConfig.Builder()
-
-            when {
-                trainer.ai.data?.moveBias != null -> battleConfig = battleConfig
-                    .withMoveBias(trainer.ai.data.moveBias)
-
-                trainer.ai.data?.statusMoveBias != null -> battleConfig = battleConfig
-                    .withStatusMoveBias(trainer.ai.data.statusMoveBias)
-
-                trainer.ai.data?.switchBias != null -> battleConfig = battleConfig
-                    .withSwitchBias(trainer.ai.data.switchBias)
-
-                trainer.ai.data?.itemBias != null -> battleConfig = battleConfig
-                    .withItemBias(trainer.ai.data.itemBias)
-
-                trainer.ai.data?.maxSelectMargin != null -> battleConfig = battleConfig
-                    .withMaxSelectMargin(trainer.ai.data.maxSelectMargin)
-            }
-
-            val ai = RCTBattleAI(
-                battleConfig.build()
+        trainers = dto.trainers.map {
+            trainerDtoToModel(
+                it,
+                type,
+                level,
+                player
             )
-            val bag = trainer.bag.map bagMap@{ bagItem ->
-                return@bagMap BagItemModel(bagItem.item, bagItem.quantity)
+        }
+
+        return this
+    }
+
+    private fun trainerDtoToModel(
+        trainer: RGTrainerModel.Json.Trainer,
+        type: String?,
+        level: Int,
+        player: ServerPlayerEntity
+    ): RGTrainerModel {
+        var battleConfig = RCTBattleAIConfig.Builder()
+
+        when {
+            trainer.ai.data?.moveBias != null -> battleConfig = battleConfig
+                .withMoveBias(trainer.ai.data.moveBias)
+
+            trainer.ai.data?.statusMoveBias != null -> battleConfig = battleConfig
+                .withStatusMoveBias(trainer.ai.data.statusMoveBias)
+
+            trainer.ai.data?.switchBias != null -> battleConfig = battleConfig
+                .withSwitchBias(trainer.ai.data.switchBias)
+
+            trainer.ai.data?.itemBias != null -> battleConfig = battleConfig
+                .withItemBias(trainer.ai.data.itemBias)
+
+            trainer.ai.data?.maxSelectMargin != null -> battleConfig = battleConfig
+                .withMaxSelectMargin(trainer.ai.data.maxSelectMargin)
+        }
+
+        val ai = RCTBattleAI(
+            battleConfig.build()
+        )
+        val bag = trainer.bag.map bagMap@{ bagItem ->
+            return@bagMap BagItemModel(bagItem.item, bagItem.quantity)
+        }
+
+        val team = mutableListOf<PokemonModel>()
+        val elementType: String = when (type) {
+            "default" -> ElementalTypes.all().random().name
+            null -> ElementalTypes.all().random().name
+            else -> type
+        }
+
+        if (trainer.teamType == GymTeamType.GENERATED) {
+            var pokemonCount = 1
+
+            for (mapperLevel in trainer.countPerLevelThreshold.sortedBy { it[0] }) {
+                if (level >= mapperLevel[0]) {
+                    pokemonCount = mapperLevel[1]
+                }
             }
 
-            val team = mutableListOf<PokemonModel>()
-            val elementType: String = when (type) {
-                "default" -> ElementalTypes.all().random().name
-                null -> ElementalTypes.all().random().name
-                else -> type
+            debug("Derived pokemon count for level $level is $pokemonCount")
+
+
+            val rawTeam = mutableListOf<PokemonProperties>()
+            val generateTeamEvent = GymEvents.GenerateTeamEvent(
+                player,
+                elementType,
+                level,
+                trainer.id,
+                trainer.leader,
+                rawTeam
+            )
+
+
+            (1..pokemonCount).forEach { i ->
+                rawTeam.add(generatePokemon(level, elementType))
             }
 
-            if (trainer.teamType == GymTeamType.GENERATED) {
-                var pokemonCount = 1
-
-                for (mapperLevel in trainer.countPerLevelThreshold.sortedBy { it[0] }) {
-                    if (level >= mapperLevel[0]) {
-                        pokemonCount = mapperLevel[1]
-                    }
-                }
-
-                debug("Derived pokemon count for level $level is $pokemonCount")
-
-
-                val rawTeam = mutableListOf<PokemonProperties>()
-                val generateTeamEvent = GymEvents.GenerateTeamEvent(
-                    player,
-                    elementType,
-                    level,
-                    trainer.id,
-                    trainer.leader,
-                    rawTeam
-                )
-
-
-                (1..pokemonCount).forEach { i ->
-                    rawTeam.add(generatePokemon(level, elementType))
-                }
-
-                GENERATE_TEAM.post(generateTeamEvent) { event ->
-                    debug("final")
-                    event.team.forEach { props ->
-                        team.add(fillPokemonModelFromPokemon(props))
-                    }
-                }
-            } else {
-                for (pokeParams in trainer.team!!) {
-                    val props = PokemonProperties.parse("level=$level $pokeParams")
-
+            GENERATE_TEAM.post(generateTeamEvent) { event ->
+                debug("final")
+                event.team.forEach { props ->
                     team.add(fillPokemonModelFromPokemon(props))
                 }
             }
+        } else {
+            for (pokeParams in trainer.team!!) {
+                val props = PokemonProperties.parse("level=$level $pokeParams")
 
+                team.add(fillPokemonModelFromPokemon(props))
+            }
+        }
 
-            val npc = GymNPC(
+        return RGTrainerModel(
+            trainer.id,
+            RGTrainerModel.EntityData(
                 name = translatable(trainer.name).string,
                 relativePosition = Vec3d(
                     trainer.spawnRelative.pos[0],
@@ -169,132 +157,17 @@ object GymTemplate {
                     trainer.spawnRelative.pos[2]
                 ),
                 yaw = trainer.spawnRelative.yaw.toFloat(),
-            )
-
-            val rules = BattleRules()
-
-            return@trainerMap GymTrainer(
-                trainer.id,
-                npc,
-                TrainerModel(
-                    translatable(trainer.name).string,
-                    JTO.of { ai },
-                    bag,
-                    team
-                ),
-                rules,
-                trainer.possibleFormats.random(),
-                trainer.leader,
-                trainer.requires
-            )
-        }
-
-        return this
-    }
-
-    private fun generatePokemon(level: Int, type: String?): PokemonProperties {
-        debug("Generating pokemon with level $level and type $type")
-        if (type != null && type != "default") {
-            val species = SpeciesManager.SPECIES_BY_TYPE[type]
-                ?.toList()
-                ?.random()!!
-            debug("Picked ${species.first.showdownId()} form=${species.second.formOnlyShowdownId()} level=${level}")
-
-            return fillPokemonModel(species, level)
-        } else {
-            val species = PokemonSpecies.implemented.asSequence()
-                .filter { species -> species.name !in CONFIG.ignoredSpecies!! }
-                .filter { species ->
-                    species.implemented
-                }
-                .associateWith { species ->
-                    species
-                        .forms
-                        .filter { form -> form.name !in CONFIG.ignoredForms!! }
-                }
-                .flatMap { (species, forms) ->
-                    forms.map { form -> species to form }
-                }
-                .random()
-
-            debug("Picked ${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level} from random pool")
-
-
-            return fillPokemonModel(species, level)
-        }
-    }
-
-    private fun fillPokemonModel(species: Pair<Species, FormData>, level: Int): PokemonProperties {
-        var pokeString =
-            "${species.first.resourceIdentifier.path} form=${species.second.formOnlyShowdownId()} level=${level}"
-
-        if (Random.nextInt(1, 10) == 1) {
-            pokeString = pokeString.plus(" shiny=yes")
-        }
-
-        val pokemonProperties: PokemonProperties = pokeString.toProperties()
-
-        // Thanks Ludichat [Cobbreeding project code]
-        if (pokemonProperties.form != null) {
-            species.first.forms.find { it.formOnlyShowdownId() == pokemonProperties.form }?.run {
-                aspects.forEach {
-                    // alternative form
-                    pokemonProperties.customProperties.add(FlagSpeciesFeature(it, true))
-                    // regional bias
-                    pokemonProperties.customProperties.add(
-                        StringSpeciesFeature(
-                            "region_bias",
-                            it.split("-").last()
-                        )
-                    )
-                    // Basculin wants to be special
-                    // We're handling aspects now but some form handling should be kept to prevent
-                    // legitimate abilities to be flagged as forced
-                    pokemonProperties.customProperties.add(
-                        StringSpeciesFeature(
-                            "fish_stripes",
-                            it.removeSuffix("striped")
-                        )
-                    )
-                }
-            }
-        }
-
-
-        return pokemonProperties
-    }
-
-    private fun fillPokemonModelFromPokemon(pokemonProperties: PokemonProperties): PokemonModel {
-        val poke = pokemonProperties.create()
-        poke.setFriendship(120)
-        poke.forcedAspects = pokemonProperties.aspects
-
-        return PokemonModel(
-            poke.species.resourceIdentifier.path,
-            poke.gender.toString(),
-            poke.level,
-            poke.nature.name.path,
-            poke.ability.name,
-            poke.moveSet.map { it.name }.toSet(),
-            PokemonModel.StatsModel(
-                poke.ivs.getOrDefault(Stats.HP),
-                poke.ivs.getOrDefault(Stats.ATTACK),
-                poke.ivs.getOrDefault(Stats.DEFENCE),
-                poke.ivs.getOrDefault(Stats.SPECIAL_ATTACK),
-                poke.ivs.getOrDefault(Stats.SPECIAL_DEFENCE),
-                poke.ivs.getOrDefault(Stats.SPEED),
             ),
-            PokemonModel.StatsModel(
-                poke.evs.getOrDefault(Stats.HP),
-                poke.evs.getOrDefault(Stats.ATTACK),
-                poke.evs.getOrDefault(Stats.DEFENCE),
-                poke.evs.getOrDefault(Stats.SPECIAL_ATTACK),
-                poke.evs.getOrDefault(Stats.SPECIAL_DEFENCE),
-                poke.evs.getOrDefault(Stats.SPEED),
+            RCTTrainerModel(
+                translatable(trainer.name).string,
+                JTO.of { ai },
+                bag,
+                team
             ),
-            poke.shiny,
-            poke.heldItem().registryEntry.idAsString,
-            poke.aspects
+            BattleRules(),
+            trainer.possibleFormats.random(),
+            trainer.leader,
+            trainer.requires
         )
     }
 }

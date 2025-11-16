@@ -11,8 +11,9 @@ package lol.gito.radgyms.common.event.gyms
 import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
-import lol.gito.radgyms.RadGyms
+import lol.gito.radgyms.RadGyms.RCT
 import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
 import net.minecraft.server.world.ServerWorld
@@ -47,8 +48,8 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
             event.player.sendMessage(Text.translatable(messageKey), true)
             event.cancel()
         } else {
-            val trainerRegistry = RadGyms.RCT.trainerRegistry
-            val rctBattleManager = RadGyms.RCT.battleManager
+            val trainerRegistry = RCT.trainerRegistry
+            val rctBattleManager = RCT.battleManager
             val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
             val npcTrainer: TrainerNPC = trainerRegistry.getById(event.trainer.uuid.toString(), TrainerNPC::class.java)
 
@@ -67,16 +68,14 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
                 }
             }
 
-            val format = when (event.trainer.format) {
-                "singles" -> BattleFormat.GEN_9_SINGLES
-                "doubles" -> BattleFormat.GEN_9_DOUBLES
-                "triples" -> BattleFormat.GEN_9_TRIPLES
-                else -> BattleFormat.GEN_9_SINGLES
-            }
             rctBattleManager.startBattle(
                 listOf(playerTrainer),
                 listOf(npcTrainer),
-                format,
+                when (GymBattleFormat.valueOf(event.trainer.format)) {
+                    GymBattleFormat.SINGLES -> BattleFormat.GEN_9_SINGLES
+                    GymBattleFormat.DOUBLES -> BattleFormat.GEN_9_DOUBLES
+                    GymBattleFormat.TRIPLES -> BattleFormat.GEN_9_TRIPLES
+                },
                 BattleRules()
             )
         }

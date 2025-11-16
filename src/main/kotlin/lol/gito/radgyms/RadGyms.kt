@@ -37,6 +37,7 @@ object RadGyms {
     fun init() {
         LOGGER.info("Initializing the mod")
         loadConfig()
+
         // Data
         EntityRegistry.register()
         GymManager.register()
@@ -59,7 +60,6 @@ object RadGyms {
 
         // Network
         CommonNetworkStack.register()
-
     }
 
     fun modId(name: String): Identifier = Identifier.of(MOD_ID, name)
