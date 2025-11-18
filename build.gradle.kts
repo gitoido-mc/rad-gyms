@@ -12,8 +12,8 @@ import java.net.URI
 plugins {
     id("java")
     id("fabric-loom") version "1.9-SNAPSHOT"
-    kotlin("jvm") version "2.1.10"
-    kotlin("plugin.serialization") version "2.1.10"
+    kotlin("jvm") version "2.2.21"
+    kotlin("plugin.serialization") version "2.2.21"
 }
 
 group = property("maven_group")!!
