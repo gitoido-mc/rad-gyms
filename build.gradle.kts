@@ -89,26 +89,26 @@ loom {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
     implementation("net.benwoodworth.knbt:knbt:0.11.9")
-    minecraft("com.mojang:minecraft:${properties["minecraft_version"]}")
-    mappings("net.fabricmc:yarn:${properties["yarn_mappings"]}:v2")
-    modImplementation("net.fabricmc:fabric-loader:${properties["fabric_loader_version"]}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${properties["fabric_version"]}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:${properties["fabric_kotlin_version"]}")
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
+    modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
     // Helpers
-    modImplementation("dev.architectury:architectury-fabric:${properties["architectury_api_version"]}")
+    modImplementation("dev.architectury:architectury-fabric:${property("architectury_api_version")}")
     include(
         modImplementation(
-            "maven.modrinth:admiral:${properties["admiral_version"]}+fabric"
+            "maven.modrinth:admiral:${property("admiral_version")}+fabric"
         )!!
     )
 
     // Compat
-    modCompileOnly("com.aetherteam.aether:aether:${properties["aether_version"]}-fabric")
+    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-fabric")
 
     // Cobblemon
-    modImplementation("com.cobblemon:fabric:${properties["cobblemon_version"]}")
-    modImplementation("maven.modrinth:rctapi:${properties["rctapi_fabric_version"]}")
+    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}")
+    modImplementation("maven.modrinth:rctapi:${property("rctapi_fabric_version")}")
 }
 
 tasks {

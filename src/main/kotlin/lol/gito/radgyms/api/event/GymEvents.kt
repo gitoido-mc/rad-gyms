@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.api.dto.Gym
 import lol.gito.radgyms.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.api.enumeration.GymBattleEndReason
+import lol.gito.radgyms.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymTemplate
@@ -79,7 +80,8 @@ object GymEvents {
         val level: Int,
         val trainerId: String,
         val isLeader: Boolean,
-        val team: MutableList<PokemonProperties>
+        val team: MutableList<PokemonProperties>,
+        val possibleFormats: MutableList<GymBattleFormat>
     )
 
     data class GymEnterEvent(

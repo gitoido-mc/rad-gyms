@@ -37,7 +37,7 @@ object CacheHandler {
         player: ServerPlayerEntity,
         shinyBoost: Int? = 0
     ): Pokemon {
-        val cache = SPECIES_BY_RARITY[type.name]!!.forRarity(rarity)
+        val cache = SPECIES_BY_RARITY[type.name.lowercase()]!!.forRarity(rarity)
         val pokeProps = PokemonProperties.parse(cache.shuffle().first())
         val poke = pokeProps.create()
 

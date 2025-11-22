@@ -65,7 +65,7 @@ object EventManager {
         PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStart)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
-//        PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
+        PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
 
         // Cobblemon events
         CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.NORMAL, ::onBattleStart)
@@ -167,8 +167,8 @@ object EventManager {
     private fun onSpeciesUpdate() {
         SPECIES_BY_TYPE.clear()
         ElementalTypes.all().forEach {
-            SPECIES_BY_TYPE[it.name] = speciesOfType(it)
-            debug("Added ${SPECIES_BY_TYPE[it.name]?.size} ${it.name} entries to species map")
+            SPECIES_BY_TYPE[it.name.lowercase()] = speciesOfType(it)
+            debug("Added ${SPECIES_BY_TYPE[it.name.lowercase()]?.size} ${it.name.lowercase()} entries to species map")
         }
     }
 

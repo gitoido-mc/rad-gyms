@@ -74,14 +74,14 @@ class RecipeProvider(
                 .group("multi_bench")
                 .withComponentMap(keyComponents.build())
                 .criterion(hasItem(pair.second), conditionsFromItem(pair.first))
-                .offerTo(recipeExporter, "gym_key_${type.name}")
+                .offerTo(recipeExporter, "gym_key_${type.name.lowercase()}")
 
             Rarity.entries.forEach { rarity ->
                 val cache = cacheForRarity(rarity)
                 val attunedCachePair = elementalTypeCacheConfig(cache, type)
                 val cacheComponents = ComponentMap.builder()
                     .add(DataComponentTypes.RARITY, rarity)
-                    .add(DataComponentRegistry.GYM_TYPE_COMPONENT, type.name)
+                    .add(DataComponentRegistry.GYM_TYPE_COMPONENT, type.name.lowercase())
 
                 ShapelessWithComponentRecipeJsonBuilder(
                     RecipeCategory.MISC,
@@ -98,7 +98,7 @@ class RecipeProvider(
                     )
                     .offerTo(
                         recipeExporter,
-                        "cache_${rarity.name.replace("minecraft:", "").lowercase()}_${type.name}"
+                        "cache_${rarity.name.replace("minecraft:", "").lowercase()}_${type.name.lowercase()}"
                     )
             }
         }

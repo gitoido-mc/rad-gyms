@@ -98,7 +98,7 @@ object ItemGroupRegistry {
             ElementalTypes.all().forEach {
                 val components = ComponentMap.builder()
                 components.add(DataComponentTypes.RARITY, Rarity.RARE)
-                components.add(DataComponentRegistry.GYM_TYPE_COMPONENT, it.name)
+                components.add(DataComponentRegistry.GYM_TYPE_COMPONENT, it.name.lowercase())
 
                 val stack = ItemStack(key)
                 stack.applyComponentsFrom(components.build())
@@ -112,7 +112,7 @@ object ItemGroupRegistry {
                 .forEach {
                     val components = ComponentMap.builder()
                     components.add(DataComponentTypes.RARITY, Rarity.EPIC)
-                    components.add(DataComponentRegistry.GYM_TYPE_COMPONENT, it)
+                    components.add(DataComponentRegistry.GYM_TYPE_COMPONENT, it.lowercase())
 
                     val stack = ItemStack(key)
                     stack.applyComponentsFrom(components.build())

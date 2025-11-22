@@ -101,10 +101,11 @@ object GymTemplate {
 
         val team = mutableListOf<PokemonModel>()
         val elementType: String = when (type) {
-            "default" -> ElementalTypes.all().random().name
-            null -> ElementalTypes.all().random().name
+            "default" -> ElementalTypes.all().random().name.lowercase()
+            null -> ElementalTypes.all().random().name.lowercase()
             else -> type
         }
+        val possibleFormats = trainer.possibleFormats.toMutableList()
 
         if (trainer.teamType == GymTeamType.GENERATED) {
             var pokemonCount = 1
@@ -117,7 +118,6 @@ object GymTemplate {
 
             debug("Derived pokemon count for level $level is $pokemonCount")
 
-
             val rawTeam = mutableListOf<PokemonProperties>()
             val generateTeamEvent = GymEvents.GenerateTeamEvent(
                 player,
@@ -125,7 +125,8 @@ object GymTemplate {
                 level,
                 trainer.id,
                 trainer.leader,
-                rawTeam
+                rawTeam,
+                possibleFormats
             )
 
 
@@ -165,7 +166,7 @@ object GymTemplate {
                 team
             ),
             BattleRules(),
-            trainer.possibleFormats.random(),
+            possibleFormats.random(),
             trainer.leader,
             trainer.requires
         )

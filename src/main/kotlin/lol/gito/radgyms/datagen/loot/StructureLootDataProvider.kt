@@ -74,7 +74,7 @@ class StructureLootDataProvider(
                 } else {
                     val componentsFunction = SetComponentsLootFunction.builder(
                         DataComponentRegistry.GYM_TYPE_COMPONENT,
-                        type.name
+                        type.name.lowercase()
                     )
 
                     pool.also { it.with(ItemEntry.builder(item).apply(componentsFunction).weight(weight)) }
