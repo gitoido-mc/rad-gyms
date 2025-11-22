@@ -1,9 +1,8 @@
-name: Build nightly artifacts
+name: Build nightly 1.6.1 artifacts
 on:
   push:
     branches:
       - 1.6.1/main
-      - 1.7.0/main
 
 jobs:
   build:
@@ -42,8 +41,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: nightly
-          name: 'Rad Gyms nightly Release $$'
+          tag_name: 1.6.1/nightly
+          name: 'Rad Gyms [Cobblemon 1.7.0] nightly Release $$'
           prerelease: true
           body: 'TODO: Add nightly release notes'
           files: |
