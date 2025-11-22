@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:shards_to_block_uncommon"
+        "recipe": "rad-gyms:shards_to_block_uncommon"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:shards_to_block_uncommon"
+      "rad-gyms:shards_to_block_uncommon"
     ]
   }
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:shards_to_block_epic"
+        "recipe": "rad-gyms:shards_to_block_epic"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:shards_to_block_epic"
+      "rad-gyms:shards_to_block_epic"
     ]
   }
 }
