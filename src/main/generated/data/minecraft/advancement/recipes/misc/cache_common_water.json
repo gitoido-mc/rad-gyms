@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:cache_common_water"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_water_gem": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rad-gyms:cache_common"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_water_gem"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:cache_common_water"
+    ]
+  }
+}
