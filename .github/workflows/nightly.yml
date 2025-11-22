@@ -2,7 +2,8 @@ name: Build nightly artifacts
 on:
   push:
     branches:
-      - main
+      - 1.6.1/main
+      - 1.7.0/main
 
 jobs:
   build:
