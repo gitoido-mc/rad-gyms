@@ -11,7 +11,7 @@ import java.net.URI
 
 plugins {
     id("java")
-    id("fabric-loom") version "1.9-SNAPSHOT"
+    id("fabric-loom") version "1.11-SNAPSHOT"
     kotlin("jvm") version "2.2.21"
     kotlin("plugin.serialization") version "2.2.21"
 }
@@ -91,7 +91,7 @@ dependencies {
     implementation("net.benwoodworth.knbt:knbt:0.11.9")
     minecraft("com.mojang:minecraft:${properties["minecraft_version"]}")
     mappings("net.fabricmc:yarn:${properties["yarn_mappings"]}:v2")
-    modImplementation("net.fabricmc:fabric-loader:${properties["loader_version"]}")
+    modImplementation("net.fabricmc:fabric-loader:${properties["fabric_loader_version"]}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${properties["fabric_version"]}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${properties["fabric_kotlin_version"]}")
 
@@ -99,7 +99,7 @@ dependencies {
     modImplementation("dev.architectury:architectury-fabric:${properties["architectury_api_version"]}")
     include(
         modImplementation(
-            "maven.modrinth:admiral:${properties["admiral_version"]}+${properties["minecraft_version"]}+fabric"
+            "maven.modrinth:admiral:${properties["admiral_version"]}+fabric"
         )!!
     )
 
@@ -107,41 +107,8 @@ dependencies {
     modCompileOnly("com.aetherteam.aether:aether:${properties["aether_version"]}-fabric")
 
     // Cobblemon
-
-    if (properties["uses_snapshots"].toString().toBooleanStrict()) {
-        modImplementation("com.cobblemon:fabric:${properties["cobblemon_version_snapshot"]}")
-    } else {
-        modImplementation("com.cobblemon:fabric:${properties["cobblemon_version"]}")
-    }
-    // Radical Cobblemon Trainers API
-    if (properties["uses_snapshots"].toString().toBooleanStrict()) {
-        modImplementation("com.gitlab.srcmc:rctapi-fabric-1.21.1:${properties["rctapi_fabric_version_snapshot"]}")
-    } else {
-        modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${properties["rctapi_fabric_version"]}")
-    }
-
-    // Recipes
-    //    modCompileOnlyApi("mezz.jei:jei-${properties["minecraft_version"]}-fabric-api:${properties["jei_version"]}")
-    //    if (project.hasProperty("enable_jei") && properties["enable_jei"] == true) {
-    //        modRuntimeOnly("mezz.jei:jei-${properties["minecraft_version"]}-fabric:${properties["jei_version"]}")
-    //    }
-    //
-    //    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${properties["rei_version"]}")
-    //    modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${properties["rei_version"]}")
-    //    modApi("me.shedaniel.cloth:cloth-config-fabric:${properties["cloth_config_version"]}")
-    //    modApi("dev.architectury:architectury-fabric:${properties["architectury_api_version"]}")
-    //    if (project.hasProperty("enable_rei")) {
-    //        modCompileOnly("me.shedaniel:RoughlyEnoughItems-fabric:${properties["rei_version"]}")
-    //        if (properties["enable_rei"] == true) {
-    //            modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${properties["rei_version"]}")
-    //        }
-    //    }
-    //
-    //    modCompileOnly("dev.emi:emi-fabric:${properties["emi_version"]}+${properties["minecraft_version"]}")
-    //    if (project.hasProperty("enable_emi") && properties["enable_emi"] == true) {
-    //        modLocalRuntime("dev.emi:emi-fabric:${properties["emi_version"]}+${properties["minecraft_version"]}")
-    //    }
-
+    modImplementation("com.cobblemon:fabric:${properties["cobblemon_version"]}")
+    modImplementation("maven.modrinth:rctapi:${properties["rctapi_fabric_version"]}")
 }
 
 tasks {

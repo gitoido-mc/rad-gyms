@@ -93,11 +93,11 @@ object GymEvents {
     data class GymLeaveEvent(
         val reason: GymLeaveReason,
         val player: ServerPlayerEntity,
-        val gym: Gym?,
-        val type: String?,
-        val level: Int?,
         val completed: Boolean?,
-        val usedRope: Boolean?
+        val usedRope: Boolean?,
+        val gym: Gym? = null,
+        val type: String? = null,
+        val level: Int? = null
     )
 
     // Trainer interaction

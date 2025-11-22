@@ -35,20 +35,40 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
 
     private fun handleGymWin(event: GymEvents.TrainerBattleEndEvent) {
         val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
-        val player = winnerBattleActor.entity as ServerPlayerEntity
+        val firstPlayer = winnerBattleActor.entity as ServerPlayerEntity
         event.losers.forEach { loser ->
             if (loser.type == ActorType.NPC && loser is TrainerEntityBattleActor && loser.entity is Trainer) {
-                (loser.entity as Trainer).let { trainer ->
-                    trainer.defeated = true
-                    if (trainer.leader) {
-                        val gym = RadGymsState.getGymForPlayer(player)!!
-                        GymManager.spawnExitBlock(player)
-                        GENERATE_REWARD.emit(
-                            GymEvents.GenerateRewardEvent(player, gym.template, gym.level, gym.type)
-                        )
-                        player.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
-                    }
-                }
+                (loser.entity as Trainer).defeated = true
+            }
+        }
+
+        val defeatedLeader: Trainer? = event.losers
+            .filter { it.type == ActorType.NPC }
+            .filter { it is TrainerEntityBattleActor }
+            .filter { (it as TrainerEntityBattleActor).entity is Trainer }
+            .firstOrNull {
+                val npc = (it as TrainerEntityBattleActor).entity as Trainer
+                npc.defeated && npc.leader
+            }
+            ?.let {
+                (it as TrainerEntityBattleActor).entity as Trainer
+            }
+
+        if (defeatedLeader != null) {
+            val winnerPlayers = event.winners
+                .filter { it.type == ActorType.PLAYER }
+                .map { (it as PlayerBattleActor).entity as ServerPlayerEntity }
+
+            val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
+
+            gym.let { GymManager.spawnExitBlock(it) }
+
+            winnerPlayers.forEach {
+                GENERATE_REWARD.emit(
+                    GymEvents.GenerateRewardEvent(it, gym.template, gym.level, gym.type)
+                )
+
+                it.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
             }
         }
     }

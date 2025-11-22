@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
-import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
+import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
 import lol.gito.radgyms.common.entity.Trainer
@@ -36,5 +36,5 @@ fun hasRadGymsTrainers(event: BattleFaintedEvent): Boolean = event.battle.actors
 fun hasRadGymsTrainers(event: BattleVictoryEvent): Boolean = event.battle.actors
     .any(::RadGymsTrainerCheckerPredicate)
 
-fun hasRadGymsTrainers(event: BattleStartedPreEvent): Boolean = event.battle.actors
+fun hasRadGymsTrainers(event: BattleStartedEvent.Pre): Boolean = event.battle.actors
     .any(::RadGymsTrainerCheckerPredicate)

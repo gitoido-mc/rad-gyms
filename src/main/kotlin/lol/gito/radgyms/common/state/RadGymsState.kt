@@ -9,16 +9,12 @@
 package lol.gito.radgyms.common.state
 
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
-import com.cobblemon.mod.common.util.server
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.RadGyms
 import lol.gito.radgyms.RadGyms.MOD_ID
 import lol.gito.radgyms.RadGyms.debug
 import lol.gito.radgyms.api.dto.Gym
-import lol.gito.radgyms.api.dto.TrainerModel
-import lol.gito.radgyms.common.gym.GymManager.GYM_TEMPLATES
-import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
 import lol.gito.radgyms.mixin.util.RCTBattleAIAccessor
 import lol.gito.radgyms.util.getBlockPos
@@ -68,24 +64,24 @@ class RadGymsState : PersistentState() {
                 state.playerDataMap.put(uuid, playerData)
             }
 
-            nbt.getCompound("Gyms").keys.forEach { uuidString ->
-                val uuid = UUID.fromString(uuidString)
-                val gymDataNbt = nbt.getCompound("Gyms").getCompound(uuidString)
-                val gymTemplate = GYM_TEMPLATES[gymDataNbt.getString("Type")]?.let {
-                    GymTemplate.fromGymDto(
-                        server()!!.playerManager.getPlayer(uuid)!!,
-                        it,
-                        gymDataNbt.getInt("Level"),
-                        gymDataNbt.getString("Type")
-                    )
-                }!!
-
-                val gymTrainers = mutableMapOf<UUID, TrainerModel>()
-                gymDataNbt.getCompound("Trainers").keys.forEach { entityUuidString ->
-                    val trainerUuid = UUID.fromString(uuidString)
-                    val trainerDataNbt = gymDataNbt.getCompound("Trainers").getCompound(entityUuidString)
-                    val trainerTemplateId = trainerDataNbt.getString("TrainerId")
-                    val trainerTemplate = gymTemplate.trainers.first { trainer -> trainer.id == trainerTemplateId }
+//            nbt.getCompound("Gyms").keys.forEach { uuidString ->
+//                val uuid = UUID.fromString(uuidString)
+//                val gymDataNbt = nbt.getCompound("Gyms").getCompound(uuidString)
+//                val gymTemplate = GYM_TEMPLATES[gymDataNbt.getString("Type")]?.let {
+//                    GymTemplate.fromGymDto(
+//                        server()!!.playerManager.getPlayer(uuid)!!,
+//                        it,
+//                        gymDataNbt.getInt("Level"),
+//                        gymDataNbt.getString("Type")
+//                    )
+//                }!!
+//
+//                val gymTrainers = mutableMapOf<UUID, TrainerModel>()
+//                gymDataNbt.getCompound("Trainers").keys.forEach { entityUuidString ->
+//                    val trainerUuid = UUID.fromString(uuidString)
+//                    val trainerDataNbt = gymDataNbt.getCompound("Trainers").getCompound(entityUuidString)
+//                    val trainerTemplateId = trainerDataNbt.getString("TrainerId")
+//                    val trainerTemplate = gymTemplate.trainers.first { trainer -> trainer.id == trainerTemplateId }
 //                    val team = mutableListOf<PokemonModel>()
 //
 //
@@ -98,19 +94,19 @@ class RadGymsState : PersistentState() {
 //                    )
 //
 //                    gymTrainers[trainerUuid] = gymTrainer
-                }
-
-                val gymInstance = Gym(
-                    template = gymTemplate,
-                    npcList = mutableMapOf(),
-                    coords = gymDataNbt.getBlockPos("Coords"),
-                    level = gymDataNbt.getInt("Level"),
-                    type = gymDataNbt.getString("Type"),
-                    label = gymDataNbt.getString("Label")
-                )
-
-                state.gymInstanceMap.put(uuid, gymInstance)
-            }
+//                }
+//
+//                val gymInstance = Gym(
+//                    template = gymTemplate,
+//                    npcList = mutableMapOf(),
+//                    coords = gymDataNbt.getBlockPos("Coords"),
+//                    level = gymDataNbt.getInt("Level"),
+//                    type = gymDataNbt.getString("Type"),
+//                    label = gymDataNbt.getString("Label")
+//                )
+//
+//                state.gymInstanceMap.put(uuid, gymInstance)
+//            }
 
             return state
         }

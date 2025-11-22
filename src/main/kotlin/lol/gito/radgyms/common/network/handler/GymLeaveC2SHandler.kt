@@ -50,6 +50,15 @@ class GymLeaveC2SHandler(payload: GymLeaveC2S, context: ServerPlayNetworking.Con
                     )
                 )
             }
+        } else {
+            GYM_LEAVE.emit(
+                GymEvents.GymLeaveEvent(
+                    reason = GymLeaveReason.USED_ITEM,
+                    player = context.player(),
+                    completed = false,
+                    usedRope = true
+                )
+            )
         }
     }
 }

@@ -32,11 +32,11 @@ public abstract class OnServerPlayerEntityDeath {
             GYM_LEAVE.emit(new GymEvents.GymLeaveEvent(
                 GymLeaveReason.PLAYER_DEATH,
                 player,
+                false,
+                false,
                 gym,
                 gym.getType(),
-                gym.getLevel(),
-                false,
-                false
+                gym.getLevel()
             ));
         }
     }

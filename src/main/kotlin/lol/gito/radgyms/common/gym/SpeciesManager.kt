@@ -94,6 +94,8 @@ object SpeciesManager {
         val poke = pokemonProperties.create()
         poke.setFriendship(100)
         poke.forcedAspects = pokemonProperties.aspects
+        poke.updateAspects()
+        poke.updateForm()
 
         return PokemonModel(
             poke.species.resourceIdentifier.path,

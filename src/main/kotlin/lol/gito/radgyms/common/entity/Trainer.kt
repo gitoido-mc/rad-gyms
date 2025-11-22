@@ -93,7 +93,7 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) :
         super.initDataTracker(
             builder
                 .add(GYM_ID, "default_trainer")
-                .add(FORMAT, "singles")
+                .add(FORMAT, GymBattleFormat.SINGLES.name)
                 .add(TRAINER_ID, Optional<UUID>.ofNullable(null))
                 .add(REQUIRES, Optional<UUID>.ofNullable(null))
                 .add(DEFEATED, false)

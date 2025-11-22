@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
-import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
+import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -63,16 +63,16 @@ object EventManager {
         // Minecraft events
         UseBlockCallback.EVENT.register(::onBlockInteract)
         PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
-        PlatformEvents.SERVER_STARTING.subscribe(Priority.LOW, ::onServerStart)
-        PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.LOW, ::onPlayerJoin)
-        PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
+        PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStart)
+        PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
+//        PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
 
         // Cobblemon events
-        CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.HIGHEST, ::onBattleStart)
-        CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.LOW, ::onBattleWon)
-        CobblemonEvents.BATTLE_FLED.subscribe(Priority.HIGHEST, ::onBattleFled)
-        CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.HIGHEST, ::onBattleFainted)
-        PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
+        CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.NORMAL, ::onBattleStart)
+        CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onBattleWon)
+        CobblemonEvents.BATTLE_FLED.subscribe(Priority.NORMAL, ::onBattleFled)
+        CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.NORMAL, ::onBattleFainted)
+        PokemonSpecies.observable.subscribe(Priority.NORMAL) { _ ->
             debug("Cobblemon species observable triggered, updating elemental gyms species map")
             onSpeciesUpdate()
         }
@@ -159,7 +159,7 @@ object EventManager {
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
         if (event.player.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-            GymManager.spawnExitBlock(event.player)
+            GymManager.spawnExitBlock(RadGymsState.getGymForPlayer(event.player)!!)
             GymManager.destructGym(event.player, removeCoords = false)
         }
     }
@@ -172,7 +172,7 @@ object EventManager {
         }
     }
 
-    private fun onBattleStart(event: BattleStartedPreEvent) {
+    private fun onBattleStart(event: BattleStartedEvent.Pre) {
         // Early bail if not gym related
         if (!hasRadGymsTrainers(event)) return
 

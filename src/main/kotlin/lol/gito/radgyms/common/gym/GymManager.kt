@@ -44,6 +44,14 @@ object GymManager {
     fun register() = Unit
 
     fun initInstance(serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld, level: Int, type: String?): Boolean {
+        RadGymsState.setReturnCoordsForPlayer(
+            serverPlayer,
+            PlayerData.ReturnCoords(
+                serverWorld.registryKey.value,
+                serverPlayer.pos.toBlockPos()
+            )
+        )
+
         val startTime = markNow()
         val gymLevel = level.coerceIn(5..Cobblemon.config.maxPokemonLevel)
 
@@ -72,14 +80,6 @@ object GymManager {
         debug("Trying to place gym structure with ${gym.structure} at ${playerGymCoords.x} ${playerGymCoords.y} ${playerGymCoords.z} ")
 
         StructureManager.placeStructure(gymDimension, playerGymCoords, gym.structure)
-
-        RadGymsState.setReturnCoordsForPlayer(
-            serverPlayer,
-            PlayerData.ReturnCoords(
-                serverWorld.registryKey.value,
-                serverPlayer.pos.toBlockPos()
-            )
-        )
 
         gymDimension.chunkManager.addTicket(
             ChunkTicketType.PORTAL,
@@ -192,11 +192,7 @@ object GymManager {
         return Pair(trainerEntity.uuid, trainer)
     }
 
-    fun spawnExitBlock(serverPlayer: ServerPlayerEntity) {
-        if (!RadGymsState.hasGymForPlayer(serverPlayer)) return
-
-        val gym = RadGymsState.getGymForPlayer(serverPlayer)!!
-
+    fun spawnExitBlock(gym: Gym) {
         val exitPos = BlockPos(
             (gym.coords.x + gym.template.relativeExitBlockSpawn.x).toInt(),
             (gym.coords.y + gym.template.relativeExitBlockSpawn.y).toInt(),
@@ -274,18 +270,20 @@ object GymManager {
     fun destructGym(serverPlayer: ServerPlayerEntity, removeCoords: Boolean? = true) {
         if (!RadGymsState.hasGymForPlayer(serverPlayer)) return
 
-        val gym = RadGymsState.getGymForPlayer(serverPlayer)!!
-        val world = serverPlayer.server.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
-
-        gym.npcList.forEach {
-            debug("Removing trainer ${it.value} from registry and detaching associated entity")
-            RCT.trainerRegistry.unregisterById(it.key.toString())
-            world.getEntity(it.key)?.discard()
-        }
-
         if (removeCoords == true) {
             RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
         }
-        RadGymsState.removeGymForPlayer(serverPlayer)
+
+        val gym = RadGymsState.getGymForPlayer(serverPlayer)!!
+        val world = serverPlayer.server.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
+
+        gym.npcList
+            .forEach {
+                debug("Removing trainer ${it.value} from registry and detaching associated entity")
+                RCT.trainerRegistry.unregisterById(it.key.toString())
+                world.getEntity(it.key)?.discard()
+            }.also {
+                RadGymsState.removeGymForPlayer(serverPlayer)
+            }
     }
 }

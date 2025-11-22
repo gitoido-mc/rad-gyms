@@ -20,64 +20,94 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 
 class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
-    init {
-        var requiredTrainer: Trainer? = null
-        if (event.trainer.requires != null) {
-            debug("Trainer has linked trainer in props, fetching...")
-            requiredTrainer = (event.trainer.world as ServerWorld).getEntity(event.trainer.requires) as Trainer
-        }
+    private val checkTrainerDefeated: Boolean = event.trainer.defeated
 
-        if (requiredTrainer != null && !requiredTrainer.defeated) {
+    init {
+        debug("Checking required: ${event.trainer.requires}")
+        when (event.trainer.requires) {
+            null -> handleNoRequired(event)
+            else -> handleRequired(
+                event,
+                (event.trainer.world as ServerWorld).getEntity(event.trainer.requires) as Trainer
+            )
+        }
+    }
+
+    private fun handleNoRequired(event: GymEvents.TrainerInteractEvent) {
+        if (!checkTrainerDefeated) {
+            startBattle(event)
+            return
+        }
+        notifyPlayer(event)
+        event.cancel()
+    }
+
+    private fun handleRequired(event: GymEvents.TrainerInteractEvent, required: Trainer) {
+        debug("required is: ${required.uuid}, defeated?: ${required.defeated}")
+        if (!required.defeated) {
             debug("Linked trainer is not defeated yet, sending chat message")
             event.player.sendMessage(
                 Text.translatable(
                     "rad-gyms.message.info.trainer_required",
-                    requiredTrainer.name
+                    required.name
                 ),
                 true
             )
             event.cancel()
+            return
         }
 
-        if (event.trainer.defeated) {
-            val messageKey = when (event.trainer.leader) {
-                true -> "rad-gyms.message.info.leader_defeated"
-                false -> "rad-gyms.message.info.trainer_defeated"
-            }
-
-            event.player.sendMessage(Text.translatable(messageKey), true)
+        if (checkTrainerDefeated) {
+            notifyPlayer(event)
             event.cancel()
-        } else {
-            val trainerRegistry = RCT.trainerRegistry
-            val rctBattleManager = RCT.battleManager
-            val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
-            val npcTrainer: TrainerNPC = trainerRegistry.getById(event.trainer.uuid.toString(), TrainerNPC::class.java)
+            return
+        }
 
-            // Check for being in battle just in case
-            // Force all battles for player to end
-            rctBattleManager.apply {
-                this.states.forEach { state ->
-                    state.battle.let { battle ->
-                        val actor = battle.actors.firstOrNull { actor -> actor.isForPlayer(event.player) }
-                        if (actor != null && battle.ended) {
-                            debug("Uh-oh, found stuck battle for player actor, ending it")
-                            battle.end()
-                            rctBattleManager.end(battle.battleId, true)
-                        }
+        startBattle(event)
+    }
+
+    private fun startBattle(event: GymEvents.TrainerInteractEvent) {
+        val trainerRegistry = RCT.trainerRegistry
+        val rctBattleManager = RCT.battleManager
+        val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
+        val npcTrainer: TrainerNPC =
+            trainerRegistry.getById(event.trainer.uuid.toString(), TrainerNPC::class.java)
+
+        npcTrainer.entity = event.trainer
+
+        // Check for being in battle just in case
+        // Force all battles for player to end
+        rctBattleManager.apply {
+            this.states.forEach { state ->
+                state.battle.let { battle ->
+                    val actor = battle.actors.firstOrNull { actor -> actor.isForPlayer(event.player) }
+                    if (actor != null && battle.ended) {
+                        debug("Uh-oh, found stuck battle for player actor, ending it")
+                        battle.end()
+                        rctBattleManager.end(battle.battleId, true)
                     }
                 }
             }
-
-            rctBattleManager.startBattle(
-                listOf(playerTrainer),
-                listOf(npcTrainer),
-                when (GymBattleFormat.valueOf(event.trainer.format)) {
-                    GymBattleFormat.SINGLES -> BattleFormat.GEN_9_SINGLES
-                    GymBattleFormat.DOUBLES -> BattleFormat.GEN_9_DOUBLES
-                    GymBattleFormat.TRIPLES -> BattleFormat.GEN_9_TRIPLES
-                },
-                BattleRules()
-            )
         }
+
+        rctBattleManager.startBattle(
+            listOf(playerTrainer),
+            listOf(npcTrainer),
+            when (GymBattleFormat.valueOf(event.trainer.format)) {
+                GymBattleFormat.SINGLES -> BattleFormat.GEN_9_SINGLES
+                GymBattleFormat.DOUBLES -> BattleFormat.GEN_9_DOUBLES
+                GymBattleFormat.TRIPLES -> BattleFormat.GEN_9_TRIPLES
+            },
+            BattleRules()
+        )
+    }
+
+    private fun notifyPlayer(event: GymEvents.TrainerInteractEvent) {
+        val messageKey = when (event.trainer.leader) {
+            true -> "rad-gyms.message.info.leader_defeated"
+            false -> "rad-gyms.message.info.trainer_defeated"
+        }
+
+        event.player.sendMessage(Text.translatable(messageKey), true)
     }
 }
