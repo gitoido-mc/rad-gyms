@@ -4,8 +4,6 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "server.compat.OnAetherEntityInteract",
-    "server.compat.OnRCTBattleManagerPokeClone",
-    "server.compat.OnRCTTrainerNPCTeamClone",
     "server.event.OnServerPlayerEntityDeath",
     "server.item.BundleItemMixin",
     "util.RCTBattleAIAccessor"
