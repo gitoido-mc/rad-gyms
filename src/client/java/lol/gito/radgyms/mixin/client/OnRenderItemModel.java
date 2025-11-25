@@ -59,7 +59,9 @@ public abstract class OnRenderItemModel {
             && !Objects.equals(stack.get(DataComponentRegistry.INSTANCE.getGYM_TYPE_COMPONENT()), "chaos")
         ) {
             String type = stack.get(DataComponentRegistry.INSTANCE.getGYM_TYPE_COMPONENT());
-            Identifier intermediate = RadGyms.INSTANCE.modId("gym_key_" + type);
+            if (type == null) return;
+
+            Identifier intermediate = RadGyms.INSTANCE.modId("gym_key_" + type.toLowerCase());
             BakedModelManager manager = this.models.getModelManager();
 
             if (!manager
