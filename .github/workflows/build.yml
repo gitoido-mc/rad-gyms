@@ -55,5 +55,5 @@ jobs:
             fabric-api@0.116.6+1.21.1(required){curseforge:306612}{modrinth:P7dR8mSH}
             architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
             cobblemon@1.7.0(required){curseforge:687131}{modrinth:MdwFAVRL}
-            radical-cobblemon-trainers-api@0.14.0-beta(required){curseforge:1152792}{modrinth:CBfM2yw7}
+            radical-cobblemon-trainers-api@0.14.1-beta(required){curseforge:1152792}{modrinth:CBfM2yw7}
             admiral@0.4.10+1.21.1+fabric(embedded)
