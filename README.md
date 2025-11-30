@@ -1,7 +1,10 @@
-[![Rad Gyms on CurseForge](https://cf.way2muchnoise.eu/1196570.svg?badge_style=flat)](https://www.curseforge.com/minecraft/mc-mods/rad-gyms-cobblemon)
-[![Rad Gyms on Modrinth](https://img.shields.io/modrinth/dt/eF8kqlHd?style=flat-square&logo=modrinth&label=%20&labelColor=%23000&color=rgb(27%2C%20217%2C%20106))](https://modrinth.com/mod/rad-gyms)
-
-# Rad Gyms \[Cobblemon\]
+<div align="center">
+  <h1>Rad Gyms [Cobblemon 1.6.1+]</h1>
+</div>
+<div align="center">
+  <a href="https://www.curseforge.com/minecraft/mc-mods/rad-gyms-cobblemon" title="Rad Gyms on Curseforge" target="_blank"><img src="https://img.shields.io/curseforge/dt/1196570?style=for-the-badge&logo=curseforge&logoColor=%23F16436&logoSize=auto&label=&labelColor=%23222222&color=%23F16436"/></a>
+  <a href="https://modrinth.com/mod/rad-gyms" title="Rad Gyms on Modrinth" target="_blank"><img src="https://img.shields.io/modrinth/dt/eF8kqlHd?style=for-the-badge&logo=modrinth&logoColor=%2300AF5C&color=%2300AF5C&logoSize=auto&labelColor=%23222222&label="/></a>
+</div>
 
 ### Lore bit
 
