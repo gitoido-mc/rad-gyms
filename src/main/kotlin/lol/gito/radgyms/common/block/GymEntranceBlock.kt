@@ -11,145 +11,151 @@ package lol.gito.radgyms.common.block
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
-import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.RadGyms.modId
+import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
-import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
-import lol.gito.radgyms.common.registry.BlockRegistry.GYM_ENTRANCE
-import lol.gito.radgyms.util.averagePokePartyLevel
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.block.*
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemPlacementContext
-import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.state.StateManager
-import net.minecraft.state.property.DirectionProperty
-import net.minecraft.state.property.Properties
-import net.minecraft.text.Text
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Formatting
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.util.shape.VoxelShapes
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import lol.gito.radgyms.common.network.server.payload.OpenGymEnterScreenS2C
+import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
+import lol.gito.radgyms.common.util.averagePokePartyLevel
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.minecraft.ChatFormatting
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.context.BlockPlaceContext
+import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
+import net.minecraft.world.level.block.state.properties.DirectionProperty
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 
-private val gymEntranceHorizontalFacing: DirectionProperty = Properties.HORIZONTAL_FACING
+private val gymEntranceHorizontalFacing: DirectionProperty = HORIZONTAL_FACING
 
-class GymEntranceBlock(settings: Settings) : BlockWithEntity(settings) {
-    private val bounds = VoxelShapes.union(
-        createCuboidShape(3.75, 1.75, 3.75, 12.25, 10.25, 12.25),
-        createCuboidShape(6.5, 10.0, 6.5, 9.5, 11.0, 9.5)
+class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
+    private val bounds = Shapes.or(
+        box(3.75, 1.75, 3.75, 12.25, 10.25, 12.25),
+        box(6.5, 10.0, 6.5, 9.5, 11.0, 9.5)
     )
 
     init {
-        defaultState = defaultState.with(gymEntranceHorizontalFacing, Direction.NORTH)
+        registerDefaultState(
+            defaultBlockState().setValue(gymEntranceHorizontalFacing, Direction.NORTH)
+        )
     }
 
-    override fun getRenderType(state: BlockState): BlockRenderType = BlockRenderType.MODEL
+    override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
+    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
 
-    override fun getCodec(): MapCodec<out BlockWithEntity> =
-        createCodec { settings: Settings -> GymEntranceBlock(settings) }
+    override fun codec(): MapCodec<out BaseEntityBlock> =
+        simpleCodec { properties: Properties -> GymEntranceBlock(properties) }
 
-    override fun getOutlineShape(
+    override fun getShape(
         state: BlockState,
-        world: BlockView,
+        blockGetter: BlockGetter,
         pos: BlockPos,
-        context: ShapeContext
+        context: CollisionContext
     ): VoxelShape = bounds
 
     override fun getCollisionShape(
         state: BlockState,
-        world: BlockView,
+        blockGetter: BlockGetter,
         pos: BlockPos,
-        context: ShapeContext
+        context: CollisionContext
     ): VoxelShape = bounds
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-        builder.add(Properties.HORIZONTAL_FACING)
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+        builder.add(HORIZONTAL_FACING)
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = this.defaultState.with(
+    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState = this.defaultBlockState().setValue(
         gymEntranceHorizontalFacing,
-        ctx.horizontalPlayerFacing.opposite
+        ctx.horizontalDirection.opposite
     )
 
-    override fun onUse(
+    override fun useWithoutItem(
         state: BlockState,
-        world: World,
+        level: Level,
         pos: BlockPos,
-        player: PlayerEntity,
+        player: Player,
         hit: BlockHitResult
-    ): ActionResult {
-        if (world.isClient) return ActionResult.PASS
-        if (world.getBlockEntity(pos) !is GymEntranceEntity) return super.onUse(state, world, pos, player, hit)
+    ): InteractionResult {
+        if (level.isClientSide) return InteractionResult.PASS
+        if (level.getBlockEntity(pos) !is GymEntranceEntity) return super.useWithoutItem(state, level, pos, player, hit)
 
-        val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
-        if (party.occupied() < 3) {
-            player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
-            debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
-            return ActionResult.FAIL
+        (player as ServerPlayer).let { player ->
+            val party = Cobblemon.implementation.server()!!.playerList.getPlayer(player.uuid)!!.party()
+            if (party.occupied() < 3) {
+                player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
+                debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
+                return InteractionResult.FAIL
+            }
+
+            if (party.all { it.isFainted() }) {
+                player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey()))
+                debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
+                return InteractionResult.FAIL
+            }
+
+            val gymEntrance: GymEntranceEntity = level.getBlockEntity(pos) as GymEntranceEntity
+
+            if (gymEntrance.usesLeftForPlayer(player) == 0) {
+                player.displayClientMessage(translatable(modId("message.info.gym_entrance_exhausted").toLanguageKey()))
+                debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
+                return InteractionResult.FAIL
+            }
+
+            val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
+                true -> player.averagePokePartyLevel()
+                false -> RadGyms.CONFIG.minLevel!!
+            }
+
+            OpenGymEnterScreenS2C(derivedLevel, false, gymEntrance.gymType, pos).sendToPlayer(player)
         }
 
-        if (party.all { it.isFainted() }) {
-            player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
-            debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
-            return ActionResult.FAIL
-        }
-
-        val gymEntrance: GymEntranceEntity = world.getBlockEntity(pos) as GymEntranceEntity
-
-        if (gymEntrance.usesLeftForPlayer(player) == 0) {
-            player.sendMessage(translatable(modId("message.info.gym_entrance_exhausted").toTranslationKey()))
-            debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
-            return ActionResult.FAIL
-        }
-
-        ServerPlayNetworking.send(
-            player as ServerPlayerEntity,
-            OpenGymEnterScreenS2C(
-                when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
-                    true -> player.averagePokePartyLevel()
-                    false -> RadGyms.CONFIG.minLevel!!
-                },
-                false,
-                gymEntrance.gymType,
-                pos
-            )
-        )
-
-        return ActionResult.SUCCESS
+        return InteractionResult.SUCCESS
     }
 
-    override fun appendTooltip(
+    override fun appendHoverText(
         stack: ItemStack,
         context: Item.TooltipContext,
-        tooltip: MutableList<Text>,
-        options: TooltipType
+        tooltip: MutableList<Component>,
+        options: TooltipFlag
     ) {
-        tooltip.addLast(translatable(GYM_ENTRANCE.translationKey.plus(".tooltip")).formatted(Formatting.GRAY))
-        tooltip.addLast(translatable(GYM_ENTRANCE.translationKey.plus(".tooltip2")).formatted(Formatting.GRAY))
+        tooltip.addLast(translatable(GYM_ENTRANCE.descriptionId.plus(".tooltip")).withStyle(ChatFormatting.GRAY))
+        tooltip.addLast(translatable(GYM_ENTRANCE.descriptionId.plus(".tooltip2")).withStyle(ChatFormatting.GRAY))
     }
 
-    override fun onPlaced(
-        world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack?
+    override fun setPlacedBy(
+        world: Level,
+        pos: BlockPos,
+        state: BlockState,
+        livingEntity: LivingEntity?,
+        itemStack: ItemStack
     ) {
-        super.onPlaced(world, pos, state, placer, itemStack)
+        super.setPlacedBy(world, pos, state, livingEntity, itemStack)
 
-        if (!world.isClient) {
-            (world as ServerWorld).chunkManager.markForUpdate(pos)
+        if (!world.isClientSide) {
+            (world as ServerLevel).chunkSource.blockChanged(pos)
         }
     }
 }

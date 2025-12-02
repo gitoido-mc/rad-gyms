@@ -6,7 +6,7 @@
     "server.compat.OnAetherEntityInteract",
     "server.event.OnServerPlayerEntityDeath",
     "server.item.BundleItemMixin",
-    "util.RCTBattleAIAccessor"
+    "util.accessor.RCTBattleAIAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

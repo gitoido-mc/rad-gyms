@@ -8,30 +8,29 @@
 
 package lol.gito.radgyms.common.world
 
-import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.state.RadGymsState
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Vec3d
-import net.minecraft.world.TeleportTarget
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.portal.DimensionTransition
+import net.minecraft.world.phys.Vec3
 import kotlin.random.Random
 
 object PlayerSpawnHelper {
-    fun getUniquePlayerCoords(serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld): BlockPos {
+    fun getUniquePlayerCoords(serverPlayer: ServerPlayer, serverWorld: ServerLevel): BlockPos {
         val border = serverWorld.worldBorder
-        val seed = Random(serverPlayer.uuid.mostSignificantBits and border.maxRadius.toLong())
-        val playerX: Int = seed.nextInt(
-            border.boundNorth.toInt(),
-            0,
-        ) // get uniq z coord based on player uuid
+        val seed = Random(serverPlayer.uuid.mostSignificantBits and border.absoluteMaxSize.toLong())
+
+        val playerX: Int = seed.nextInt(border.minZ.toInt(),border.maxZ.toInt())
+        // get uniq z coord based on player uuid
         val playerZ: Int = RadGymsState
             .also { it.incrementVisitsForPlayer(serverPlayer) }
             .getPlayerState(serverPlayer)
             .visits * 128
 
         debug("Derived player ${serverPlayer.name} unique X coordinate from UUID: $playerX")
-        debug("Derived player ${serverPlayer.name} unique Z coordinate from UUID: ${border.boundWest.toLong() + playerZ}")
+        debug("Derived player ${serverPlayer.name} unique Z coordinate from UUID: ${border.minX.toLong() + playerZ}")
 
         return BlockPos(
             playerX,
@@ -41,8 +40,8 @@ object PlayerSpawnHelper {
     }
 
     fun teleportPlayer(
-        serverPlayer: ServerPlayerEntity,
-        serverWorld: ServerWorld,
+        serverPlayer: ServerPlayer,
+        serverWorld: ServerLevel,
         pos: BlockPos,
         yaw: Float,
         pitch: Float,
@@ -51,18 +50,18 @@ object PlayerSpawnHelper {
         val xpProgress: Float = serverPlayer.experienceProgress
         val totalExperience: Int = serverPlayer.totalExperience
 
-        val teleportTarget = TeleportTarget(
+        val teleportTarget = DimensionTransition(
             serverWorld,
-            pos.toCenterPos(),
-            Vec3d.ZERO,
+            pos.center,
+            Vec3.ZERO,
             yaw,
             pitch,
-            TeleportTarget.NO_OP
+            DimensionTransition.PLACE_PORTAL_TICKET
         )
 
-        val teleportedPlayer = serverPlayer.teleportTo(teleportTarget) as ServerPlayerEntity
+        val teleportedPlayer = serverPlayer.changeDimension(teleportTarget) as ServerPlayer
         // Fix experience just in case
-        teleportedPlayer.setExperienceLevel(xpLevels)
+        teleportedPlayer.setExperienceLevels(xpLevels)
         teleportedPlayer.experienceProgress = xpProgress
         teleportedPlayer.totalExperience = totalExperience
         debug("Teleported player ${serverPlayer.name}")

@@ -9,25 +9,25 @@
 package lol.gito.radgyms.common.util
 
 import com.cobblemon.mod.common.api.text.text
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+import net.minecraft.ChatFormatting
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 
-fun MutableText.rainbow(): MutableText {
+fun MutableComponent.rainbow(): MutableComponent {
     val intermediate: String? = this.string
-    val colors: List<Formatting> = listOf(
-        Formatting.RED,
-        Formatting.GOLD,
-        Formatting.YELLOW,
-        Formatting.GREEN,
-        Formatting.AQUA,
-        Formatting.BLUE,
-        Formatting.DARK_PURPLE
+    val colors: List<ChatFormatting> = listOf(
+        ChatFormatting.RED,
+        ChatFormatting.GOLD,
+        ChatFormatting.YELLOW,
+        ChatFormatting.GREEN,
+        ChatFormatting.AQUA,
+        ChatFormatting.BLUE,
+        ChatFormatting.DARK_PURPLE
     )
-    val result = Text.empty()
+    val result = Component.empty()
     var colorIndex = 0
     intermediate?.forEach { c ->
-        result.append(c.toString().text().formatted(colors[colorIndex]))
+        result.append(c.toString().text().withStyle(colors[colorIndex]))
         when (colorIndex) {
             colors.count() - 1 -> {
                 colorIndex = 0

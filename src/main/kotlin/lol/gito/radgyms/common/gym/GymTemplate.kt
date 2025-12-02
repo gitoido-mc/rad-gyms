@@ -16,43 +16,34 @@ import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.models.BagItemModel
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.api.dto.Gym
-import lol.gito.radgyms.api.enumeration.GymTeamType
-import lol.gito.radgyms.api.event.GymEvents
-import lol.gito.radgyms.api.event.GymEvents.GENERATE_TEAM
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.enumeration.GymTeamType
+import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import lol.gito.radgyms.common.gym.SpeciesManager.fillPokemonModelFromPokemon
 import lol.gito.radgyms.common.gym.SpeciesManager.generatePokemon
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.math.Vec3d
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.phys.Vec3
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel as RCTTrainerModel
-import lol.gito.radgyms.api.dto.TrainerModel as RGTrainerModel
+import com.gitlab.srcmc.rctapi.api.util.Text.translatable as rctTranslatable
+import lol.gito.radgyms.common.api.dto.TrainerModel as RGTrainerModel
 
 object GymTemplate {
     lateinit var structure: String
-    var relativeExitBlockSpawn: Vec3d = Vec3d.ZERO
-    var relativePlayerSpawn: Vec3d = Vec3d.ZERO
+    var relativeExitBlockSpawn: Vec3 = Vec3.ZERO
+    var relativePlayerSpawn: Vec3 = Vec3.ZERO
     var playerYaw: Float = 0F
     var trainers: List<RGTrainerModel> = mutableListOf()
     var type: String? = null
     var lootTables: List<Gym.Json.LootTableInfo> = mutableListOf()
 
-    fun fromGymDto(player: ServerPlayerEntity, dto: Gym.Json, level: Int, type: String?): GymTemplate {
+    fun fromGymDto(player: ServerPlayer, dto: Gym.Json, level: Int, type: String?): GymTemplate {
         structure = dto.template
         lootTables = dto.rewardLootTables
-
-        relativeExitBlockSpawn = Vec3d(
-            dto.exitBlockPos[0],
-            dto.exitBlockPos[1],
-            dto.exitBlockPos[2],
-        )
-
-        relativePlayerSpawn = Vec3d(
-            dto.playerSpawnRelative.pos[0],
-            dto.playerSpawnRelative.pos[1],
-            dto.playerSpawnRelative.pos[2],
-        )
+        relativeExitBlockSpawn = dto.exitBlockPos.toVec3D()
+        relativePlayerSpawn = dto.playerSpawnRelative.pos.toVec3D()
         playerYaw = dto.playerSpawnRelative.yaw.toFloat()
 
         trainers = dto.trainers.map {
@@ -71,7 +62,7 @@ object GymTemplate {
         trainer: RGTrainerModel.Json.Trainer,
         type: String?,
         level: Int,
-        player: ServerPlayerEntity
+        player: ServerPlayer
     ): RGTrainerModel {
         var battleConfig = RCTBattleAIConfig.Builder()
 
@@ -101,8 +92,7 @@ object GymTemplate {
 
         val team = mutableListOf<PokemonModel>()
         val elementType: String = when (type) {
-            "default" -> ElementalTypes.all().random().name.lowercase()
-            null -> ElementalTypes.all().random().name.lowercase()
+            "default", null -> ElementalTypes.all().random().showdownId
             else -> type
         }
         val possibleFormats = trainer.possibleFormats.toMutableList()
@@ -130,7 +120,7 @@ object GymTemplate {
             )
 
 
-            (1..pokemonCount).forEach { i ->
+            repeat(pokemonCount) {
                 rawTeam.add(generatePokemon(level, elementType))
             }
 
@@ -151,16 +141,12 @@ object GymTemplate {
         return RGTrainerModel(
             trainer.id,
             RGTrainerModel.EntityData(
-                name = translatable(trainer.name).string,
-                relativePosition = Vec3d(
-                    trainer.spawnRelative.pos[0],
-                    trainer.spawnRelative.pos[1],
-                    trainer.spawnRelative.pos[2]
-                ),
+                name = translatable(trainer.name),
+                relativePosition = trainer.spawnRelative.pos.toVec3D(),
                 yaw = trainer.spawnRelative.yaw.toFloat(),
             ),
             RCTTrainerModel(
-                translatable(trainer.name).string,
+                rctTranslatable(trainer.name),
                 JTO.of { ai },
                 bag,
                 team

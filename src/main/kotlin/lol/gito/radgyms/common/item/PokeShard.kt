@@ -8,10 +8,18 @@
 
 package lol.gito.radgyms.common.item
 
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.util.Rarity
+import com.cobblemon.mod.common.item.CobblemonItem
+import net.minecraft.core.component.DataComponents
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Rarity
+
+open class PokeShardBase(private val rarity: Rarity) : CobblemonItem(
+    Properties().rarity(rarity)
+) {
+    override fun getDefaultInstance(): ItemStack = super.defaultInstance.also { stack ->
+        stack.set(DataComponents.RARITY, this.rarity)
+    }
+}
 
 class EpicPokeShard : PokeShardBase(Rarity.EPIC)
 
@@ -20,14 +28,3 @@ class RarePokeShard : PokeShardBase(Rarity.RARE)
 class UncommonPokeShard : PokeShardBase(Rarity.UNCOMMON)
 
 class CommonPokeShard : PokeShardBase(Rarity.COMMON)
-
-open class PokeShardBase(private val rarity: Rarity) : Item(
-    Settings().rarity(rarity)
-) {
-    override fun getDefaultStack(): ItemStack {
-        val stack = super.getDefaultStack()
-        stack.set(DataComponentTypes.RARITY, this.rarity)
-
-        return stack
-    }
-}

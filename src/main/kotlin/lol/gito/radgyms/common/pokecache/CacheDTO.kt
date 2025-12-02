@@ -9,8 +9,8 @@
 package lol.gito.radgyms.common.pokecache
 
 import kotlinx.serialization.Serializable
-import net.minecraft.util.Rarity
-import net.minecraft.util.collection.WeightedList
+import net.minecraft.world.entity.ai.behavior.ShufflingList
+import net.minecraft.world.item.Rarity
 
 
 @Serializable
@@ -20,16 +20,16 @@ class CacheDTO(
     val rare: Map<String, Int>,
     val epic: Map<String, Int>,
 ) {
-    fun forRarity(rarity: Rarity): WeightedList<String> {
+    fun forRarity(rarity: Rarity): ShufflingList<String> {
         val pokeList = when (rarity) {
             Rarity.COMMON -> this.common
             Rarity.UNCOMMON -> this.uncommon + this.common
             Rarity.RARE -> this.rare + this.uncommon + this.common
             Rarity.EPIC -> this.epic + this.rare + this.uncommon
         }
-        val list = WeightedList<String>()
+        val list = ShufflingList<String>()
         for (pokeItem in pokeList) {
-            if (list.none { it -> it == pokeItem.key }) {
+            if (list.none { it == pokeItem.key }) {
                 list.add(pokeItem.key, pokeItem.value)
             }
         }

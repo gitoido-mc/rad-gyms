@@ -11,24 +11,25 @@ package lol.gito.radgyms.common.event.gyms
 import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
-import lol.gito.radgyms.RadGyms.RCT
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.api.enumeration.GymBattleFormat
-import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.common.RadGyms.RCT
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
+import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.Text
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.server.level.ServerLevel
 
 class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
     private val checkTrainerDefeated: Boolean = event.trainer.defeated
 
     init {
         debug("Checking required: ${event.trainer.requires}")
-        when (event.trainer.requires) {
-            null -> handleNoRequired(event)
-            else -> handleRequired(
+        when (event.trainer.requires != null) {
+            false -> handleNoRequired(event)
+            true -> handleRequired(
                 event,
-                (event.trainer.world as ServerWorld).getEntity(event.trainer.requires) as Trainer
+                (event.trainer.level() as ServerLevel).getEntity(event.trainer.requires!!) as Trainer
             )
         }
     }
@@ -46,12 +47,8 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         debug("required is: ${required.uuid}, defeated?: ${required.defeated}")
         if (!required.defeated) {
             debug("Linked trainer is not defeated yet, sending chat message")
-            event.player.sendMessage(
-                Text.translatable(
-                    "rad-gyms.message.info.trainer_required",
-                    required.name
-                ),
-                true
+            event.player.displayClientMessage(
+                translatable("rad-gyms.message.info.trainer_required", required.name)
             )
             event.cancel()
             return
@@ -108,6 +105,6 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
             false -> "rad-gyms.message.info.trainer_defeated"
         }
 
-        event.player.sendMessage(Text.translatable(messageKey), true)
+        event.player.displayClientMessage(translatable(messageKey))
     }
 }

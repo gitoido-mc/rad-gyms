@@ -12,29 +12,31 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.toBlockPos
-import lol.gito.radgyms.RadGyms.RCT
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.dto.Gym
-import lol.gito.radgyms.api.dto.TrainerModel
+import lol.gito.radgyms.common.RadGyms.RCT
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.TrainerModel
 import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.registry.BlockRegistry
-import lol.gito.radgyms.common.registry.DimensionRegistry
-import lol.gito.radgyms.common.registry.EntityRegistry
+import lol.gito.radgyms.common.registry.RadGymsDimensions
+import lol.gito.radgyms.common.registry.RadGymsEntities
+import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.state.PlayerData
 import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.delayExecute
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructureManager
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ChunkTicketType
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.Text
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Vec3d
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceKey
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.level.TicketType
+import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.time.TimeSource.Monotonic.markNow
 
@@ -43,12 +45,12 @@ object GymManager {
 
     fun register() = Unit
 
-    fun initInstance(serverPlayer: ServerPlayerEntity, serverWorld: ServerWorld, level: Int, type: String?): Boolean {
+    fun initInstance(serverPlayer: ServerPlayer, serverWorld: ServerLevel, level: Int, type: String?): Boolean {
         RadGymsState.setReturnCoordsForPlayer(
             serverPlayer,
             PlayerData.ReturnCoords(
-                serverWorld.registryKey.value,
-                serverPlayer.pos.toBlockPos()
+                serverWorld.dimension().location(),
+                serverPlayer.position().toBlockPos()
             )
         )
 
@@ -56,9 +58,9 @@ object GymManager {
         val gymLevel = level.coerceIn(5..Cobblemon.config.maxPokemonLevel)
 
         // Check if we have gym dimension available
-        val gymDimension = serverPlayer.getServer()?.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY) ?: return false
+        val gymDimension = serverPlayer.getServer()?.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY) ?: return false
         // Check if player not in gym dimension
-        if (serverWorld.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) return false
+        if (serverWorld.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) return false
 
         // Get gym template name
         val gymType = when (type in GYM_TEMPLATES.keys) {
@@ -71,7 +73,7 @@ object GymManager {
 
         val gym = GymTemplate.fromGymDto(serverPlayer, GYM_TEMPLATES[gymType]!!, gymLevel, type)
         val playerGymCoords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
-        val dest = BlockPos.ofFloored(
+        val dest = BlockPos.containing(
             playerGymCoords.x + gym.relativePlayerSpawn.x,
             playerGymCoords.y + gym.relativePlayerSpawn.y,
             playerGymCoords.z + gym.relativePlayerSpawn.z
@@ -81,8 +83,8 @@ object GymManager {
 
         StructureManager.placeStructure(gymDimension, playerGymCoords, gym.structure)
 
-        gymDimension.chunkManager.addTicket(
-            ChunkTicketType.PORTAL,
+        gymDimension.chunkSource.addRegionTicket(
+            TicketType.PORTAL,
             gymDimension.getChunk(dest).pos,
             4,
             dest
@@ -99,7 +101,7 @@ object GymManager {
 
         val trainerUUIDs = buildTrainers(gym, gymDimension, playerGymCoords)
         val chaosTranslatable = translatable(
-            modId("item.component.type.chaos").toTranslationKey()
+            modId("item.component.type.chaos").toLanguageKey()
         )
 
         val label = when (gymType) {
@@ -107,12 +109,12 @@ object GymManager {
                 "default" -> chaosTranslatable.string
                 null -> chaosTranslatable.string
                 else -> translatable(
-                    cobblemonResource("type.${type}").toTranslationKey()
+                    cobblemonResource("type.${type}").toLanguageKey()
                 ).string
             }
 
             null -> chaosTranslatable.string
-            else -> translatable(cobblemonResource("type.${type}").toTranslationKey()).string
+            else -> translatable(cobblemonResource("type.${type}").toLanguageKey()).string
         }
 
         val gymInstance = Gym(gym, trainerUUIDs, playerGymCoords, gymLevel, type ?: "default", label)
@@ -136,7 +138,7 @@ object GymManager {
 
     private fun buildTrainers(
         template: GymTemplate,
-        gymDimension: ServerWorld,
+        gymDimension: ServerLevel,
         coords: BlockPos
     ): Map<UUID, TrainerModel> {
         val trainerIds = mutableMapOf<String, Pair<UUID, TrainerModel>>()
@@ -158,12 +160,12 @@ object GymManager {
 
     private fun buildTrainerEntity(
         trainer: TrainerModel,
-        gymDimension: ServerWorld,
+        gymDimension: ServerLevel,
         coords: BlockPos,
         trainerUUID: UUID,
         requiredUUID: UUID?
     ): Pair<UUID, TrainerModel> {
-        val trainerEntity = Trainer(EntityRegistry.GYM_TRAINER, gymDimension)
+        val trainerEntity = Trainer(RadGymsEntities.GYM_TRAINER, gymDimension)
             .apply {
                 uuid = trainerUUID
                 gymId = trainer.id
@@ -171,22 +173,22 @@ object GymManager {
                 format = trainer.format.name
                 trainerId = trainerUUID
                 requires = requiredUUID
-                headYaw = trainer.npc.yaw
-                bodyYaw = trainer.npc.yaw
-                customName = Text.of(trainer.npc.name)
+                yHeadRot = trainer.npc.yaw
+                yBodyRot = trainer.npc.yaw
+                customName = trainer.npc.name
                 isCustomNameVisible = true
-                setPersistent()
-                setPosition(
-                    Vec3d(
+                setPersistenceRequired()
+                setPos(
+                    Vec3(
                         coords.x + trainer.npc.relativePosition.x,
                         coords.y + trainer.npc.relativePosition.y,
                         coords.z + trainer.npc.relativePosition.z
                     )
                 )
             }.also {
-                debug("Spawning trainer ${it.id} at ${it.pos.x} ${it.pos.y} ${it.pos.z} in ${gymDimension.registryKey.value}")
+                debug("Spawning trainer ${it.id} at ${it.x} ${it.y} ${it.z} in ${gymDimension.dimension()}")
                 debug("Selected ${trainer.format} battle format for trainer")
-                gymDimension.spawnEntity(it)
+                gymDimension.addFreshEntity(it)
             }
 
         return Pair(trainerEntity.uuid, trainer)
@@ -199,56 +201,55 @@ object GymManager {
             (gym.coords.z + gym.template.relativeExitBlockSpawn.z).toInt(),
         )
 
-        val world = server()!!.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
+        val world = server()!!.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
 
-        world.setBlockState(
+        world.setBlockAndUpdate(
             exitPos,
-            BlockRegistry.GYM_EXIT.defaultState
+            RadGymsBlocks.GYM_EXIT.defaultBlockState()
         )
-        world.markDirty(exitPos)
     }
 
-    fun handleGymLeave(serverPlayer: ServerPlayerEntity) {
+    fun handleGymLeave(serverPlayer: ServerPlayer) {
         val state = RadGymsState.getPlayerState(serverPlayer)
         var preloadPos: BlockPos
-        var preloadDim: ServerWorld
+        var preloadDim: ServerLevel
         if (state.returnCoords != null) {
             preloadPos = state.returnCoords!!.position
-            preloadDim = server()!!.getWorld(
-                RegistryKey.of(
-                    RegistryKeys.WORLD,
+            preloadDim = server()!!.getLevel(
+                ResourceKey.create(
+                    Registries.DIMENSION,
                     state.returnCoords!!.dimension
                 )
             )!!
         } else {
-            preloadDim = server()!!.getWorld(serverPlayer.spawnPointDimension)!!
-            preloadPos = serverPlayer.spawnPointPosition ?: preloadDim.spawnPos
+            preloadDim = server()!!.getLevel(serverPlayer.respawnDimension)!!
+            preloadPos = serverPlayer.respawnPosition ?: preloadDim.sharedSpawnPos
         }
 
         destructGym(serverPlayer)
 
-        preloadDim.chunkManager.addTicket(
-            ChunkTicketType.PORTAL,
+        preloadDim.chunkSource.addRegionTicket(
+            TicketType.PORTAL,
             preloadDim.getChunk(preloadPos).pos,
             2,
             preloadPos
         )
-        serverPlayer.sendMessage(Text.of("5..."), true)
+        serverPlayer.displayClientMessage(Component.nullToEmpty("5...") as MutableComponent)
 
         delayExecute(1f) {
-            serverPlayer.sendMessage(Text.of("4..."), true)
+            serverPlayer.displayClientMessage(Component.nullToEmpty("4...") as MutableComponent)
         }
 
         delayExecute(2f) {
-            serverPlayer.sendMessage(Text.of("3..."), true)
+            serverPlayer.displayClientMessage(Component.nullToEmpty("3...") as MutableComponent)
         }
 
         delayExecute(3f) {
-            serverPlayer.sendMessage(Text.of("2..."), true)
+            serverPlayer.displayClientMessage(Component.nullToEmpty("2...") as MutableComponent)
         }
 
         delayExecute(4f) {
-            serverPlayer.sendMessage(Text.of("1..."), true)
+            serverPlayer.displayClientMessage(Component.nullToEmpty("1...") as MutableComponent)
         }
 
         delayExecute(5f) {
@@ -256,8 +257,8 @@ object GymManager {
                 serverPlayer,
                 preloadDim,
                 preloadPos,
-                yaw = serverPlayer.yaw,
-                pitch = serverPlayer.pitch,
+                yaw = serverPlayer.yRot,
+                pitch = serverPlayer.xRot,
             ).also {
                 debug("Gym instance removed from memory")
                 RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
@@ -267,7 +268,7 @@ object GymManager {
         return
     }
 
-    fun destructGym(serverPlayer: ServerPlayerEntity, removeCoords: Boolean? = true) {
+    fun destructGym(serverPlayer: ServerPlayer, removeCoords: Boolean? = true) {
         if (!RadGymsState.hasGymForPlayer(serverPlayer)) return
 
         if (removeCoords == true) {
@@ -275,7 +276,7 @@ object GymManager {
         }
 
         val gym = RadGymsState.getGymForPlayer(serverPlayer)!!
-        val world = serverPlayer.server.getWorld(DimensionRegistry.RADGYMS_LEVEL_KEY)!!
+        val world = serverPlayer.server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
 
         gym.npcList
             .forEach {

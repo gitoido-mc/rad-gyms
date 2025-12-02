@@ -8,51 +8,51 @@
 
 package lol.gito.radgyms.common.item
 
-import lol.gito.radgyms.common.network.payload.OpenGymLeaveScreenS2C
-import lol.gito.radgyms.common.registry.DimensionRegistry
-import lol.gito.radgyms.common.registry.ItemRegistry.EXIT_ROPE
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.Formatting
-import net.minecraft.util.Hand
-import net.minecraft.util.Rarity
-import net.minecraft.util.TypedActionResult
-import net.minecraft.world.World
+import com.cobblemon.mod.common.item.CobblemonItem
+import lol.gito.radgyms.common.network.server.payload.OpenGymLeaveScreenS2C
+import lol.gito.radgyms.common.registry.RadGymsDimensions
+import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.minecraft.ChatFormatting
+import net.minecraft.core.component.DataComponents
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Rarity
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
 
-class ExitRope : Item(Settings()) {
-    override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        if (world.isClient) {
-            return TypedActionResult.pass(player.getStackInHand(hand))
+class ExitRope : CobblemonItem(Properties()) {
+    override fun use(
+        level: Level,
+        player: Player,
+        hand: InteractionHand,
+    ): InteractionResultHolder<ItemStack> {
+        if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
+
+        when (level.dimension()) {
+            RadGymsDimensions.RADGYMS_LEVEL_KEY -> OpenGymLeaveScreenS2C().sendToPlayer(player as ServerPlayer)
+
+            else -> player.displayClientMessage(translatable(EXIT_ROPE.descriptionId.plus(".failed")))
         }
 
-        if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-            ServerPlayNetworking.send(
-                player as ServerPlayerEntity, OpenGymLeaveScreenS2C(OpenGymLeaveScreenS2C.PACKET_ID)
-            )
-        } else {
-            player.sendMessage(translatable(EXIT_ROPE.translationKey.plus(".failed")))
-        }
-
-        return super.use(world, player, hand)
+        return super.use(level, player, hand)
     }
 
-    override fun getDefaultStack(): ItemStack {
-        val itemStack = ItemStack(this)
-        itemStack.set(DataComponentTypes.RARITY, Rarity.COMMON)
-
-        return itemStack
-    }
-
-    override fun appendTooltip(
-        stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType
+    override fun appendHoverText(
+        stack: ItemStack,
+        context: TooltipContext,
+        tooltip: MutableList<Component>,
+        tooltipFlag: TooltipFlag
     ) {
-        tooltip.add(translatable(EXIT_ROPE.translationKey.plus(".tooltip")).formatted(Formatting.GRAY))
+        tooltip.add(translatable(EXIT_ROPE.descriptionId.plus(".tooltip")).withStyle(ChatFormatting.GRAY))
+    }
+
+    override fun getDefaultInstance(): ItemStack = ItemStack(this).apply {
+        set(DataComponents.RARITY, Rarity.COMMON)
     }
 }

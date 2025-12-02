@@ -9,20 +9,21 @@
 package lol.gito.radgyms.common.event.cache
 
 import com.cobblemon.mod.common.util.party
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.util.rainbow
-import net.minecraft.text.Text.translatable
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.minecraft.network.chat.Component.translatable
 
 class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
     init {
         event.player.party().add(event.poke)
 
-        event.player.sendMessage(
+        event.player.displayClientMessage(
             translatable(
-                modId("message.info.poke_cache.reward").toTranslationKey(),
-                translatable(modId("label.rarity.${event.rarity.toString().lowercase()}").toTranslationKey()).formatted(
-                    event.rarity.formatting
+                modId("message.info.poke_cache.reward").toLanguageKey(),
+                translatable(modId("label.rarity.${event.rarity.toString().lowercase()}").toLanguageKey()).withStyle(
+                    event.rarity.color()
                 ),
                 when (event.poke.shiny) {
                     true -> event.poke.species.translatedName.rainbow()
@@ -30,6 +31,6 @@ class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
                 }
             )
         )
-        event.player.mainHandStack.decrementUnlessCreative(1, event.player)
+        event.player.mainHandItem.consume(1, event.player)
     }
 }

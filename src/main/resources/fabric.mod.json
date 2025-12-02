@@ -17,19 +17,19 @@
   "entrypoints": {
     "main": [
       {
-        "value": "lol.gito.radgyms.RadGyms::init",
+        "value": "lol.gito.radgyms.fabric.RadGymsFabric::init",
         "adapter": "kotlin"
       }
     ],
     "client": [
       {
-        "value": "lol.gito.radgyms.client.RadGymsClient::init",
+        "value": "lol.gito.radgyms.fabric.client.RadGymsFabricClient::init",
         "adapter": "kotlin"
       }
     ],
     "fabric-datagen": [
       {
-        "value": "lol.gito.radgyms.datagen.RadGymsDataGenerator",
+        "value": "lol.gito.radgyms.fabric.datagen.RadGymsDataGenerator",
         "adapter": "kotlin"
       }
     ]

@@ -17,25 +17,26 @@ import de.maxhenkel.admiral.annotations.Command
 import de.maxhenkel.admiral.annotations.MinMax
 import de.maxhenkel.admiral.annotations.Name
 import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.RadGyms.loadConfig
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.enumeration.GymLeaveReason
-import lol.gito.radgyms.api.event.GymEvents
-import lol.gito.radgyms.api.event.GymEvents.CACHE_ROLL_POKE
-import lol.gito.radgyms.api.event.GymEvents.GENERATE_REWARD
-import lol.gito.radgyms.api.event.GymEvents.GYM_LEAVE
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.loadConfig
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.api.enumeration.GymLeaveReason
+import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
+import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
+import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.pokecache.CacheHandler
-import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
 import lol.gito.radgyms.common.state.RadGymsState
+import lol.gito.radgyms.common.util.displayClientMessage
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
-import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text.literal
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.Rarity
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.network.chat.Component.literal
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.Rarity
 
 @Command("radgyms")
 object CommandRegistry {
@@ -43,21 +44,21 @@ object CommandRegistry {
     @Command("op:kick")
     @RequiresPermissionLevel(4)
     fun kick(
-        context: CommandContext<ServerCommandSource>, @Name("player") player: ServerPlayerEntity
+        context: CommandContext<CommandSourceStack>, @Name("player") player: ServerPlayer
     ): Int {
-        if (player.world.registryKey != RADGYMS_LEVEL_KEY) {
-            if (context.source.isExecutedByPlayer) {
-                context.source.sendError(
+        if (player.level().dimension() != RADGYMS_LEVEL_KEY) {
+            if (context.source.isPlayer) {
+                context.source.sendFailure(
                     translatable(
-                        modId("message.error.command.kick").toTranslationKey(), context.source.player!!.name
+                        modId("message.error.command.kick").toLanguageKey(), context.source.player!!.name
                     )
                 )
             }
             return -1
         }
 
-        player.sendMessage(
-            translatable(modId("message.info.command.op_kick").toTranslationKey())
+        player.displayClientMessage(
+            translatable(modId("message.info.command.op_kick").toLanguageKey())
         )
 
         RadGymsState.getGymForPlayer(player)?.let {
@@ -81,7 +82,7 @@ object CommandRegistry {
     @Command("reload")
     @RequiresPermissionLevel(4)
     fun reloadConfig(
-        context: CommandContext<ServerCommandSource>
+        context: CommandContext<CommandSourceStack>
     ): Int {
         loadConfig()
         return 1
@@ -91,7 +92,7 @@ object CommandRegistry {
     @Command("debug:reward")
     @RequiresPermissionLevel(4)
     fun debugReward(
-        context: CommandContext<ServerCommandSource>,
+        context: CommandContext<CommandSourceStack>,
         @Name("template") template: String,
         @Name("level") @MinMax(min = "1", max = "100") level: Int,
         @Name("type") type: String?
@@ -100,9 +101,9 @@ object CommandRegistry {
             val gymDto = GymManager.GYM_TEMPLATES[template]
 
             if (gymDto == null) {
-                context.source.sendError(
+                context.source.sendFailure(
                     translatable(
-                        modId("message.error.command.debug_reward.no_template").toTranslationKey(), template
+                        modId("message.error.command.debug_reward.no_template").toLanguageKey(), template
                     )
                 )
                 return -1
@@ -113,29 +114,29 @@ object CommandRegistry {
             }
 
             val gymType = when (type) {
-                null -> ElementalTypes.all().random().name
+                null -> ElementalTypes.all().random().showdownId
                 else -> type
             }
 
             GENERATE_REWARD.emit(
                 GymEvents.GenerateRewardEvent(
-                    context.source.playerOrThrow,
-                    GymTemplate.fromGymDto(context.source.playerOrThrow, gymDto, level, type),
+                    context.source.playerOrException,
+                    GymTemplate.fromGymDto(context.source.playerOrException, gymDto, level, type),
                     level,
                     gymType
                 )
             )
 
-            context.source.sendMessage(
+            context.source.sendSystemMessage(
                 translatable(
-                    modId("message.info.command.debug_reward").toTranslationKey(), template, translatable(
-                        cobblemonResource("type.${type}").toTranslationKey()
+                    modId("message.info.command.debug_reward").toLanguageKey(), template, translatable(
+                        cobblemonResource("type.${type}").toLanguageKey()
                     ), level
                 )
             )
         } else {
-            context.source.sendError(
-                translatable(modId("message.error.command.debug_reward.no_player").toTranslationKey())
+            context.source.sendFailure(
+                translatable(modId("message.error.command.debug_reward.no_player").toLanguageKey())
             )
             return -1
         }
@@ -146,7 +147,7 @@ object CommandRegistry {
     @Command("debug:cache")
     @RequiresPermissionLevel(4)
     fun debugCache(
-        context: CommandContext<ServerCommandSource>,
+        context: CommandContext<CommandSourceStack>,
         @Name("type") type: String,
         @Name("rarity") rarity: String,
         @Name("shiny_boost") shinyBoost: Int?
@@ -173,13 +174,13 @@ object CommandRegistry {
                 )
 
             } catch (e: Exception) {
-                context.source.player!!.sendMessage(
+                context.source.player!!.sendSystemMessage(
                     literal("Cannot generate $rarity $type poke, caught error: ${e.message}")
                 )
                 return -1
             }
         } else {
-            context.source.sendError(
+            context.source.sendFailure(
                 literal("Cannot generate reward for ${context.source.displayName}")
             )
             return -1

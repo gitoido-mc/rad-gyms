@@ -9,85 +9,72 @@
 package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.util.party
-import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
-import lol.gito.radgyms.common.registry.DataComponentRegistry
+import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.network.server.payload.OpenGymEnterScreenS2C
+import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
-import lol.gito.radgyms.util.averagePokePartyLevel
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.Hand
-import net.minecraft.util.Rarity
-import net.minecraft.util.TypedActionResult
-import net.minecraft.world.World
+import lol.gito.radgyms.common.util.averagePokePartyLevel
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.minecraft.core.component.DataComponents
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Rarity
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
 
-class GymKey : Item(
-    Settings().also { settings ->
-        settings
-            .rarity(Rarity.UNCOMMON)
-            .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)
-    }
+class GymKey : CobblemonItem(
+    Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
 ) {
-    override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        if (world.isClient) {
-            return TypedActionResult.pass(player.getStackInHand(hand))
-        }
+    override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+        if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
-
-        val party = Cobblemon.implementation.server()!!.playerManager.getPlayer(player.uuid)!!.party()
+        val party = Cobblemon.implementation.server()!!.playerList.getPlayer(player.uuid)!!.party()
         if (party.occupied() < 3) {
-            player.sendMessage(translatable(modId("message.info.gym_entrance_party_empty").toTranslationKey()))
+            player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
             debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
-            return TypedActionResult.fail(player.getStackInHand(hand))
+            return InteractionResultHolder.fail(player.getItemInHand(hand))
         }
-
         if (party.all { it.isFainted() }) {
-            player.sendMessage(translatable(modId("message.info.gym_entrance_party_fainted").toTranslationKey()))
+            player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey()))
             debug("Player ${player.uuid} tried to use gym key with party fainted, denying...")
-            return TypedActionResult.fail(player.getStackInHand(hand))
+            return InteractionResultHolder.fail(player.getItemInHand(hand))
         }
 
-        ServerPlayNetworking.send(
-            player as ServerPlayerEntity, OpenGymEnterScreenS2C(
-                when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
-                    true -> player.averagePokePartyLevel()
-                    false -> RadGyms.CONFIG.minLevel!!
-                },
-                true,
-                player.getStackInHand(hand).getOrDefault(
-                    DataComponentRegistry.GYM_TYPE_COMPONENT,
-                    "chaos"
-                )!!
-            )
+        val serverPlayer = player as ServerPlayer
+        val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
+            true -> serverPlayer.averagePokePartyLevel()
+            false -> RadGyms.CONFIG.minLevel!!
+        }
+        val type = serverPlayer.getItemInHand(hand).getOrDefault(
+            RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,
+            "chaos"
         )
 
-        return TypedActionResult.success(player.getStackInHand(hand), true)
+        OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(serverPlayer)
+
+        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), true)
     }
 
-    override fun appendTooltip(
+    override fun appendHoverText(
         itemStack: ItemStack,
         context: TooltipContext,
-        tooltip: MutableList<Text>,
-        type: TooltipType
+        tooltip: MutableList<Component>,
+        type: TooltipFlag
     ) {
-        val attuned = itemStack.get(DataComponentRegistry.GYM_TYPE_COMPONENT)
-        tooltip.addLast(buildPrefixedSuffixedTypeText(attuned))
+        val attuned = itemStack.get(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT)
+        tooltip.add(buildPrefixedSuffixedTypeText(attuned))
     }
 
-    override fun getDefaultStack(): ItemStack {
-        val itemStack = ItemStack(this)
-        itemStack.set(DataComponentTypes.RARITY, Rarity.UNCOMMON)
-
-        return itemStack
+    override fun getDefaultInstance(): ItemStack = ItemStack(this).apply {
+        set(DataComponents.RARITY, Rarity.UNCOMMON)
     }
 }

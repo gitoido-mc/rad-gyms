@@ -9,54 +9,54 @@
 package lol.gito.radgyms.common.block.entity
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import lol.gito.radgyms.RadGyms.CONFIG
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.common.registry.BlockEntityRegistry
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.listener.ClientPlayPacketListener
-import net.minecraft.network.packet.Packet
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
-import net.minecraft.registry.RegistryWrapper
-import net.minecraft.util.math.BlockPos
+import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.registry.RadGymsBlockEntities
+import net.minecraft.core.BlockPos
+import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
 
 class GymEntranceEntity(
-    pos: BlockPos,
+    val pos: BlockPos,
     state: BlockState
 ) : BlockEntity(
-    BlockEntityRegistry.GYM_ENTRANCE_ENTITY,
+    RadGymsBlockEntities.GYM_ENTRANCE_ENTITY,
     pos,
     state
 ) {
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
     private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
-    var gymType: String = ElementalTypes.all().random().name
+    var gymType: String = ElementalTypes.all().random().showdownId
 
-    fun incrementPlayerUseCount(player: PlayerEntity) {
+    fun incrementPlayerUseCount(player: Player) {
         val useCounter = playerUseCounter.getOrDefault(player.uuid.toString(), 0)
 
         playerUseCounter[player.uuid.toString()] = useCounter + 1
-        markDirty()
+        setChanged()
         debug(
             "Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance"
         )
     }
 
-    fun resetPlayerUseCounter() {
-        playerUseCounter.clear()
-        markDirty()
-        debug("Reset usage count for $pos gym entrance")
-    }
+//    fun resetPlayerUseCounter() {
+//        playerUseCounter.clear()
+//        setChanged()
+//        debug("Reset usage count for $pos gym entrance")
+//    }
 
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener> = BlockEntityUpdateS2CPacket.create(this)
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener> = ClientboundBlockEntityDataPacket.create(this)
 
-    override fun toInitialChunkDataNbt(registryLookup: RegistryWrapper.WrapperLookup): NbtCompound =
-        createNbt(registryLookup)
+    override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag =
+        saveWithoutMetadata(registryLookup)
 
-    override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
         val playerEntries = nbt.getCompound(playerUsageDataKey)
         for ((key, value) in playerUseCounter) {
             playerEntries.putInt(key, value)
@@ -65,23 +65,23 @@ class GymEntranceEntity(
         nbt.put(playerUsageDataKey, playerEntries)
         nbt.putString(gymTypeKey, gymType)
         debug("Writing $gymTypeKey $gymType gym props for $pos gym entrance")
-        super.writeNbt(nbt, registryLookup)
+        super.saveAdditional(nbt, registryLookup)
     }
 
-    override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
-        super.readNbt(nbt, registryLookup)
+    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registryLookup)
 
         gymType = nbt.getString(gymTypeKey)
         debug("Wrote $gymType type for $pos gym entrance block entity")
 
         val playerEntriesNBT = nbt.getCompound(playerUsageDataKey)
-        for (key in playerEntriesNBT.keys) {
+        for (key in playerEntriesNBT.allKeys) {
             playerUseCounter[key] = playerEntriesNBT.getInt(key)
             debug("Wrote player entry data ($key:${playerUseCounter[key]}) for $pos gym entrance block entity")
         }
     }
 
-    fun usesLeftForPlayer(player: PlayerEntity): Int {
+    fun usesLeftForPlayer(player: Player): Int {
         val playerCounter = playerUseCounter
             .getOrDefault(player.uuid.toString(), CONFIG.maxEntranceUses!!)
             .coerceIn(0, CONFIG.maxEntranceUses!!)

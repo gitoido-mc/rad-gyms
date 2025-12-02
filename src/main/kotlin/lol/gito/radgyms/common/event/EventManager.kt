@@ -21,61 +21,52 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
-import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.RadGyms.RCT
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.enumeration.GymBattleEndReason
-import lol.gito.radgyms.api.event.GymEvents
-import lol.gito.radgyms.api.event.GymEvents.CACHE_ROLL_POKE
-import lol.gito.radgyms.api.event.GymEvents.GENERATE_REWARD
-import lol.gito.radgyms.api.event.GymEvents.GYM_ENTER
-import lol.gito.radgyms.api.event.GymEvents.GYM_LEAVE
-import lol.gito.radgyms.api.event.GymEvents.TRAINER_BATTLE_END
-import lol.gito.radgyms.api.event.GymEvents.TRAINER_BATTLE_START
-import lol.gito.radgyms.api.event.GymEvents.TRAINER_INTERACT
+import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.RCT
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
+import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
+import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
+import lol.gito.radgyms.common.api.event.GymEvents.GYM_ENTER
+import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
+import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_BATTLE_END
+import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_BATTLE_START
+import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.common.event.gyms.*
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
+import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_TIMESTAMP
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
-import lol.gito.radgyms.common.registry.BlockRegistry
-import lol.gito.radgyms.common.registry.DimensionRegistry
+import lol.gito.radgyms.common.registry.RadGymsDimensions
+import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.hasRadGymsTrainers
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
-import net.fabricmc.fabric.api.event.player.UseBlockCallback
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import kotlin.time.TimeSource.Monotonic.markNow
 
 object EventManager {
     fun register() {
         debug("Registering event handlers")
         // Minecraft events
-        UseBlockCallback.EVENT.register(::onBlockInteract)
-        PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStart)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
+        PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
 
         // Cobblemon events
+        PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
+            debug("Cobblemon species observable triggered, updating elemental gyms species map")
+            onSpeciesUpdate()
+        }
+
+        // Cobblemon battle events
         CobblemonEvents.BATTLE_STARTED_PRE.subscribe(Priority.NORMAL, ::onBattleStart)
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onBattleWon)
         CobblemonEvents.BATTLE_FLED.subscribe(Priority.NORMAL, ::onBattleFled)
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.NORMAL, ::onBattleFainted)
-        PokemonSpecies.observable.subscribe(Priority.NORMAL) { _ ->
-            debug("Cobblemon species observable triggered, updating elemental gyms species map")
-            onSpeciesUpdate()
-        }
 
         // Mod events
         GYM_ENTER.subscribe(Priority.LOWEST, ::GymEnterHandler)
@@ -92,53 +83,12 @@ object EventManager {
 
 
     @Suppress("UNUSED_PARAMETER")
-    private fun onBlockInteract(
-        playerEntity: PlayerEntity,
-        world: World,
-        hand: Hand,
-        result: BlockHitResult,
-    ): ActionResult {
-        if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-            if (RadGyms.CONFIG.debug == true) {
-                return ActionResult.PASS
-            }
-
-            if (world.isClient) return ActionResult.PASS
-            return when (world.getBlockState(result.blockPos).block == BlockRegistry.GYM_EXIT) {
-                true -> ActionResult.PASS
-                false -> ActionResult.FAIL
-            }
+    private fun onBlockInteract(event: ServerPlayerEvent.RightClickBlock) {
+        if (event.player.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+            if (RadGyms.CONFIG.debug == true) return
+            if (event.player.level().getBlockState(event.pos).block == RadGymsBlocks.GYM_EXIT) return
+            event.cancel()
         }
-        return ActionResult.PASS
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    private fun onBeforeBlockBreak(
-        world: World,
-        player: PlayerEntity,
-        pos: BlockPos,
-        state: BlockState,
-        entity: BlockEntity?
-    ): Boolean {
-        var allowBreak = true
-
-        if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-            if (RadGyms.CONFIG.debug == true) return true
-
-            allowBreak = false
-        }
-
-        if (state.block == BlockRegistry.GYM_ENTRANCE) {
-            if (!player.isSneaking) {
-                player.sendMessage(translatable(modId("message.info.gym_entrance_breaking").toTranslationKey()))
-                player.sendMessage(translatable(modId("message.error.gym_entrance.not-sneaking").toTranslationKey()))
-                allowBreak = false
-            } else {
-                allowBreak = true
-            }
-        }
-
-        return allowBreak
     }
 
     private fun onServerStart(event: ServerEvent.Starting) {
@@ -158,18 +108,25 @@ object EventManager {
         debug("Removing player ${event.player.name} from RCT trainer mod registry")
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
-        if (event.player.world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
+        if (event.player.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
             GymManager.spawnExitBlock(RadGymsState.getGymForPlayer(event.player)!!)
             GymManager.destructGym(event.player, removeCoords = false)
         }
     }
 
     private fun onSpeciesUpdate() {
+        val now = markNow()
+        if (SPECIES_TIMESTAMP > now) return
         SPECIES_BY_TYPE.clear()
-        ElementalTypes.all().forEach {
-            SPECIES_BY_TYPE[it.name.lowercase()] = speciesOfType(it)
-            debug("Added ${SPECIES_BY_TYPE[it.name.lowercase()]?.size} ${it.name.lowercase()} entries to species map")
+        PokemonSpecies.species.asSequence().forEach { species ->
+            if (!species.implemented) return@forEach
+            debug(species.resourceIdentifier.path)
         }
+        ElementalTypes.all().forEach {
+            SPECIES_BY_TYPE[it.showdownId] = speciesOfType(it)
+            debug("Added ${SPECIES_BY_TYPE[it.showdownId]?.size} ${it.showdownId} entries to species map")
+        }
+        SPECIES_TIMESTAMP = markNow()
     }
 
     private fun onBattleStart(event: BattleStartedEvent.Pre) {
@@ -178,7 +135,7 @@ object EventManager {
 
         val players = event.battle.players
         val trainers = event.battle.actors
-            .filter { it -> it.type == ActorType.NPC && it is AIBattleActor }
+            .filter { it.type == ActorType.NPC && it is AIBattleActor }
             .map { it as AIBattleActor }
             .mapNotNull { RCT.trainerRegistry.getById(it.uuid.toString())?.entity }
             .filter { it is Trainer }
@@ -186,7 +143,7 @@ object EventManager {
         TRAINER_BATTLE_START.postThen(
             GymEvents.TrainerBattleStartEvent(players, trainers.map { it as Trainer }, event.battle),
             { subEvent -> if (subEvent.isCanceled) event.cancel() },
-            { subEvent -> debug("Gym trainer battle started for players: ${players.joinToString(" ") { it.name.string }}") },
+            { _ -> debug("Gym trainer battle started for players: ${players.joinToString(" ") { it.name.string }}") },
         )
     }
 
@@ -232,8 +189,7 @@ object EventManager {
         val owner = entity.owner ?: return
         if (killed.actor.type != ActorType.PLAYER) return
         if (!killed.actor.pokemonList.all { it.health == 0 }) return
-        if (owner.isDead) return
-
+        if (owner.isDeadOrDying) return
 
         TRAINER_BATTLE_END.emit(
             GymEvents.TrainerBattleEndEvent(

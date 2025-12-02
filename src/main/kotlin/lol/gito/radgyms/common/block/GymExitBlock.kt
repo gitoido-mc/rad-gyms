@@ -9,53 +9,53 @@
 package lol.gito.radgyms.common.block
 
 import com.mojang.serialization.MapCodec
-import lol.gito.radgyms.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.block.entity.GymExitEntity
-import lol.gito.radgyms.common.network.payload.OpenGymLeaveScreenS2C
-import lol.gito.radgyms.common.registry.DimensionRegistry
-import lol.gito.radgyms.common.registry.ItemRegistry.EXIT_ROPE
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.block.BlockRenderType
-import net.minecraft.block.BlockState
-import net.minecraft.block.BlockWithEntity
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.ActionResult
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import lol.gito.radgyms.common.network.server.payload.OpenGymLeaveScreenS2C
+import lol.gito.radgyms.common.registry.RadGymsDimensions
+import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.BlockHitResult
 
-class GymExitBlock(settings: Settings) : BlockWithEntity(settings) {
-    override fun getRenderType(state: BlockState): BlockRenderType = BlockRenderType.MODEL
+class GymExitBlock(properties: Properties) : BaseEntityBlock(properties) {
+    override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 
-    override fun getCodec(): MapCodec<out BlockWithEntity> =
-        createCodec { settings: Settings -> GymExitBlock(settings) }
+    override fun codec(): MapCodec<out BaseEntityBlock> =
+        simpleCodec { properties: Properties -> GymExitBlock(properties) }
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymExitEntity(pos, state)
+    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymExitEntity(pos, state)
 
-    override fun onUse(
+    override fun useWithoutItem(
         state: BlockState,
-        world: World,
+        world: Level,
         pos: BlockPos,
-        player: PlayerEntity,
+        player: Player,
         hit: BlockHitResult
-    ): ActionResult {
-        if (world.getBlockEntity(pos) !is GymExitEntity) return super.onUse(state, world, pos, player, hit)
-        if (world.isClient) return ActionResult.PASS
+    ): InteractionResult {
+        if (world.getBlockEntity(pos) !is GymExitEntity) return super.useWithoutItem(state, world, pos, player, hit)
+        if (world.isClientSide) return InteractionResult.PASS
 
-        debug("Gym exit block used by player ${player.uuid} at $pos in ${world.registryKey}")
+        (player as ServerPlayer).also {
+            debug("Gym exit block used by player ${it.uuid} at $pos in ${world.dimension()}")
 
-        if (world.registryKey == DimensionRegistry.RADGYMS_LEVEL_KEY) {
-            debug("Client: Opening gym exit screen for ${player.uuid} at $pos in ${world.registryKey}")
-            ServerPlayNetworking.send(
-                player as ServerPlayerEntity, OpenGymLeaveScreenS2C(OpenGymLeaveScreenS2C.PACKET_ID)
-            )
-        } else {
-            player.sendMessage(translatable(EXIT_ROPE.translationKey.plus(".failed")))
+            if (world.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+                debug("Client: Opening gym exit screen for ${it.uuid} at $pos in ${world.dimension()}")
+                OpenGymLeaveScreenS2C().sendToPlayer(it)
+            } else {
+                it.displayClientMessage(translatable(EXIT_ROPE.descriptionId.plus(".failed")))
+            }
         }
 
-        return ActionResult.SUCCESS
+        return InteractionResult.SUCCESS
     }
 }

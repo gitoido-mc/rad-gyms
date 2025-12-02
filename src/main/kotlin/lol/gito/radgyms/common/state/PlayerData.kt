@@ -8,11 +8,11 @@
 
 package lol.gito.radgyms.common.state
 
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
+import net.minecraft.core.BlockPos
+import net.minecraft.resources.ResourceLocation
 
 class PlayerData(var visits: Int = 0, var returnCoords: ReturnCoords? = null) {
-    data class ReturnCoords(val dimension: Identifier, val position: BlockPos)
+    data class ReturnCoords(val dimension: ResourceLocation, val position: BlockPos)
 
     fun incrementVisits() {
         visits++

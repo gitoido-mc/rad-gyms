@@ -8,14 +8,13 @@
 
 package lol.gito.radgyms.common.block.entity
 
-import lol.gito.radgyms.common.registry.BlockEntityRegistry
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.util.math.BlockPos
+import lol.gito.radgyms.common.registry.RadGymsBlockEntities
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
 
-class GymExitEntity(pos: BlockPos, state: BlockState) :
-    BlockEntity(
-        BlockEntityRegistry.GYM_EXIT_ENTITY,
-        pos,
-        state
-    )
+class GymExitEntity(pos: BlockPos, state: BlockState) : BlockEntity(
+    RadGymsBlockEntities.GYM_EXIT_ENTITY,
+    pos,
+    state
+)

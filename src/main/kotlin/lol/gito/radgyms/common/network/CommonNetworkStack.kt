@@ -8,35 +8,69 @@
 
 package lol.gito.radgyms.common.network
 
-import lol.gito.radgyms.common.network.handler.GymEnterC2SHandler
-import lol.gito.radgyms.common.network.handler.GymLeaveC2SHandler
-import lol.gito.radgyms.common.network.payload.GymEnterC2S
-import lol.gito.radgyms.common.network.payload.GymLeaveC2S
-import lol.gito.radgyms.common.network.payload.OpenGymEnterScreenS2C
-import lol.gito.radgyms.common.network.payload.OpenGymLeaveScreenS2C
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import com.cobblemon.mod.common.net.PacketRegisterInfo
+import com.cobblemon.mod.fabric.net.FabricPacketInfo
+import lol.gito.radgyms.common.network.client.handler.OpenGymEnterScreenHandler
+import lol.gito.radgyms.common.network.client.handler.OpenGymLeaveScreenHandler
+import lol.gito.radgyms.common.network.client.payload.GymEnterC2S
+import lol.gito.radgyms.common.network.client.payload.GymLeaveC2S
+import lol.gito.radgyms.common.network.server.handler.GymEnterC2SHandler
+import lol.gito.radgyms.common.network.server.handler.GymLeaveC2SHandler
+import lol.gito.radgyms.common.network.server.payload.OpenGymEnterScreenS2C
+import lol.gito.radgyms.common.network.server.payload.OpenGymLeaveScreenS2C
 
 object CommonNetworkStack {
-    fun register() {
-        PayloadTypeRegistry.playC2S().register(
+    val GYM_ENTER_C2S = FabricPacketInfo(
+        PacketRegisterInfo(
             GymEnterC2S.ID,
-            GymEnterC2S.PACKET_CODEC
+            GymEnterC2S::decode,
+            GymEnterC2SHandler
         )
-        PayloadTypeRegistry.playC2S().register(
-            GymLeaveC2S.ID,
-            GymLeaveC2S.PACKET_CODEC
-        )
-        PayloadTypeRegistry.playS2C().register(
-            OpenGymEnterScreenS2C.ID,
-            OpenGymEnterScreenS2C.PACKET_CODEC
-        )
-        PayloadTypeRegistry.playS2C().register(
-            OpenGymLeaveScreenS2C.ID,
-            OpenGymLeaveScreenS2C.PACKET_CODEC
-        )
+    )
 
-        ServerPlayNetworking.registerGlobalReceiver(GymEnterC2S.ID, ::GymEnterC2SHandler)
-        ServerPlayNetworking.registerGlobalReceiver(GymLeaveC2S.ID, ::GymLeaveC2SHandler)
+    val GYM_LEAVE_C2S = FabricPacketInfo(
+        PacketRegisterInfo(
+            GymLeaveC2S.ID,
+            GymLeaveC2S::decode,
+            GymLeaveC2SHandler
+        )
+    )
+
+    val GYM_OPEN_ENTER_SCREEN_S2C = FabricPacketInfo(
+        PacketRegisterInfo(
+            OpenGymEnterScreenS2C.ID,
+            OpenGymEnterScreenS2C::decode,
+            OpenGymEnterScreenHandler
+        )
+    )
+
+    val GYM_OPEN_LEAVE_SCREEN_S2C = FabricPacketInfo(
+        PacketRegisterInfo(
+            OpenGymLeaveScreenS2C.ID,
+            OpenGymLeaveScreenS2C::decode,
+            OpenGymLeaveScreenHandler
+        )
+    )
+
+    fun register() {
+        GYM_ENTER_C2S.apply {
+            registerPacket(client = false)
+            registerServerHandler()
+        }
+
+        GYM_LEAVE_C2S.apply {
+            registerPacket(client = false)
+            registerServerHandler()
+        }
+
+        GYM_OPEN_ENTER_SCREEN_S2C.apply {
+            registerPacket(client = true)
+            registerClientHandler()
+        }
+
+        GYM_OPEN_LEAVE_SCREEN_S2C.apply {
+            registerPacket(client = true)
+            registerClientHandler()
+        }
     }
 }

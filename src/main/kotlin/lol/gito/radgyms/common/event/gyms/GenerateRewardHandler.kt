@@ -9,35 +9,34 @@
 package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.util.cobblemonResource
-import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.RadGyms.LOGGER
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.event.GymEvents
+import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.LOGGER
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.item.PokeShardBase
-import lol.gito.radgyms.common.registry.DataComponentRegistry
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.component.type.BundleContentsComponent
-import net.minecraft.entity.ItemEntity
-import net.minecraft.item.BundleItem
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.loot.context.LootContextParameterSet
-import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.loot.context.LootContextTypes
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.MutableText
-import net.minecraft.text.Style
-import net.minecraft.text.Text
-import net.minecraft.text.Text.translatable
-import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
+import lol.gito.radgyms.common.registry.RadGymsDataComponents
+import net.minecraft.ChatFormatting
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.network.chat.Style
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.BundleItem
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.component.BundleContents
+import net.minecraft.world.level.storage.loot.LootParams
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 
 class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
     init {
         val bundle = ItemStack(Items.BUNDLE)
-        val bundleContents = BundleContentsComponent.Builder(BundleContentsComponent.DEFAULT)
+        val bundleContents = BundleContents.Mutable(BundleContents.EMPTY)
         event.template
             .lootTables
             .filter {
@@ -48,22 +47,22 @@ class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
                     "Settling level %d %s type rewards for player %s after beating leader".format(
                         event.level,
                         event.type,
-                        event.player.name.literalString
+                        event.player.name.tryCollapseToString()
                     )
                 )
                 val registryLootTable = event.player
                     .server
-                    .reloadableRegistries
-                    .registryManager
-                    .get(RegistryKeys.LOOT_TABLE)
-                    .get(Identifier.of(table.id)) ?: return@forEach
+                    .reloadableRegistries()
+                    .get()
+                    .registryOrThrow(Registries.LOOT_TABLE)
+                    .get(ResourceLocation.parse(table.id)) ?: return@forEach
 
-                val lootContextParameterSet = LootContextParameterSet.Builder(event.player.world as ServerWorld)
-                    .add(LootContextParameters.THIS_ENTITY, event.player)
-                    .add(LootContextParameters.ORIGIN, event.player.pos)
-                    .build(LootContextTypes.GIFT)
+                val lootContextParameterSet = LootParams.Builder(event.player.level() as ServerLevel)
+                    .withParameter(LootContextParams.THIS_ENTITY, event.player)
+                    .withParameter(LootContextParams.ORIGIN, event.player.position())
+                    .create(LootContextParamSets.GIFT)
 
-                registryLootTable.generateLoot(lootContextParameterSet).let { loot ->
+                registryLootTable.getRandomItems(lootContextParameterSet).let { loot ->
                     if (RadGyms.CONFIG.shardRewards == true) {
                         event.rewards.addAll(loot)
                     } else {
@@ -73,15 +72,15 @@ class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
             }
 
 
-        if (event.rewards.count() > BundleItem.DEFAULT_MAX_COUNT) {
+        if (event.rewards.count() > BundleItem.DEFAULT_MAX_STACK_SIZE) {
             LOGGER.warn(
                 "Reward bundle default stack size (%d) overflow (passed %d stacks of items), splitting...".format(
-                    BundleItem.DEFAULT_MAX_COUNT,
+                    BundleItem.DEFAULT_MAX_STACK_SIZE,
                     event.rewards.count()
                 ),
             )
 
-            event.rewards.chunked(BundleItem.DEFAULT_MAX_COUNT).forEach {
+            event.rewards.chunked(BundleItem.DEFAULT_MAX_STACK_SIZE).forEach {
                 createBundle(event, bundle, bundleContents, it)
             }
         } else {
@@ -93,35 +92,35 @@ class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
     private fun createBundle(
         event: GymEvents.GenerateRewardEvent,
         bundle: ItemStack,
-        bundleContents: BundleContentsComponent.Builder,
+        bundleContents: BundleContents.Mutable,
         rewards: List<ItemStack>
     ) {
-        rewards.forEach { bundleContents.add(it) }
+        rewards.forEach { bundleContents.tryInsert(it) }
 
-        val styledLevel = MutableText.of(Text.literal(event.level.toString()).content).formatted(Formatting.GOLD)
-        val styledType = translatable(cobblemonResource("type.${event.type.lowercase()}").toTranslationKey())
+        val styledLevel = Component.literal(event.level.toString()).withStyle(ChatFormatting.GOLD)
+        val styledType = translatable(cobblemonResource("type.${event.type.lowercase()}").toLanguageKey())
             .setStyle(
-                Style.EMPTY.withColor(Formatting.GREEN).withItalic(true)
+                Style.EMPTY.withColor(ChatFormatting.GREEN).withItalic(true)
             )
 
         bundle.set(
-            DataComponentTypes.CUSTOM_NAME,
+            DataComponents.CUSTOM_NAME,
             translatable(
-                modId("gym_reward").toTranslationKey("item"),
+                modId("gym_reward").toLanguageKey("item"),
                 styledLevel, styledType
             )
         )
-        bundle.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContents.build())
-        bundle.set(DataComponentRegistry.RAD_GYM_BUNDLE_COMPONENT, true)
-        if (!event.player.giveItemStack(bundle)) {
+        bundle.set(DataComponents.BUNDLE_CONTENTS, bundleContents.toImmutable())
+        bundle.set(RadGymsDataComponents.RG_GYM_BUNDLE_COMPONENT, true)
+        if (!event.player.addItem(bundle)) {
             ItemEntity(
-                event.player.world,
-                event.player.pos.x,
-                event.player.pos.y,
-                event.player.pos.z,
+                event.player.level(),
+                event.player.x,
+                event.player.y,
+                event.player.z,
                 bundle,
-            ).let {
-                event.player.world.spawnEntity(it)
+            ).also {
+                event.player.level().addFreshEntity(it)
             }
 
         }
