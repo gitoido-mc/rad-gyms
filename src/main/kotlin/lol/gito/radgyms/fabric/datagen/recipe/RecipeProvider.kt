@@ -103,7 +103,7 @@ class RecipeProvider(
                     )
                     .save(
                         recipeExporter,
-                        "cache_${rarity.name.lowercase()}_${type.showdownId}"
+                        "cache_${rarity.name.replace("minecraft:", "").lowercase()}_${type.showdownId}"
                     )
             }
         }
@@ -129,7 +129,7 @@ class RecipeProvider(
             val cachePair = cacheConfig(rarity)
             val cacheParts = cachePair.first
 
-            if (cacheParts.d == null) {
+            if (cacheParts.d == Items.AIR) {
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cachePair.second, 1)
                     .pattern("sss")
                     .pattern("s s")
