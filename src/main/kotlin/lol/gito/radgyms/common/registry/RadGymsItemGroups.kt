@@ -37,7 +37,7 @@ object RadGymsItemGroups {
     }
 
     @JvmStatic
-    val CACHES_GROUP_KEY = this.create(modId("caches"), this::generalEntries) {
+    val CACHES_GROUP_KEY = this.create(modId("caches"), this::cacheEntries) {
         ItemStack(RadGymsItems.CACHE_EPIC)
     }
 
@@ -54,7 +54,10 @@ object RadGymsItemGroups {
         ALL.forEach(consumer::invoke)
     }
 
-    private fun generalEntries(displayContext: CreativeModeTab.ItemDisplayParameters, entries: CreativeModeTab.Output) {
+    private fun generalEntries(
+        @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
+        entries: CreativeModeTab.Output
+    ) {
         entries.accept(RadGymsItems.EXIT_ROPE)
         entries.accept(RadGymsItems.SHARD_COMMON)
         entries.accept(RadGymsItems.SHARD_UNCOMMON)
@@ -68,7 +71,10 @@ object RadGymsItemGroups {
         entries.accept(RadGymsItems.SHARD_BLOCK_RARE)
     }
 
-    private fun keyEntries(displayContext: CreativeModeTab.ItemDisplayParameters, entries: CreativeModeTab.Output) {
+    private fun keyEntries(
+        @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
+        entries: CreativeModeTab.Output
+    ) {
         entries.accept(RadGymsItems.GYM_KEY)
         ElementalTypes.all().forEach { type ->
             val stack = RadGymsItems.GYM_KEY.defaultInstance.also {
@@ -81,7 +87,7 @@ object RadGymsItemGroups {
         GymManager.GYM_TEMPLATES
             .filterNot { it.key == "default" }
             .filterNot { template -> template.key in ElementalTypes.all().map { it.showdownId } }
-            .forEach {template ->
+            .forEach { template ->
                 val stack = RadGymsItems.GYM_KEY.defaultInstance.also {
                     it.set(DataComponents.RARITY, Rarity.EPIC)
                     it.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, template.key.lowercase())
@@ -91,7 +97,10 @@ object RadGymsItemGroups {
             }
     }
 
-    private fun cacheEntries(displayContext: CreativeModeTab.ItemDisplayParameters, entries: CreativeModeTab.Output) {
+    private fun cacheEntries(
+        @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
+        entries: CreativeModeTab.Output
+    ) {
         val caches = listOf(
             RadGymsItems.CACHE_COMMON,
             RadGymsItems.CACHE_UNCOMMON,
@@ -102,7 +111,7 @@ object RadGymsItemGroups {
         caches.forEach { cache ->
             val stack = ItemStack(cache)
             entries.accept(stack)
-            ElementalTypes.all().forEach {type ->
+            ElementalTypes.all().forEach { type ->
                 val stack = cache.defaultInstance.also {
                     it.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
                 }
