@@ -30,7 +30,8 @@ object OpenGymEnterScreenHandler : ClientNetworkPacketHandler<OpenGymEnterScreen
                 packet.type,
                 RadGyms.CONFIG.minLevel!!,
                 RadGyms.CONFIG.maxLevel!!,
-                packet.derivedLevel
+                packet.derivedLevel,
+                packet.usesLeft
             )
         )
     }

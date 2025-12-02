@@ -45,7 +45,8 @@ object GymEvents {
         var type: String,
         var minLevel: Int,
         var maxLevel: Int,
-        var selectedLevel: Int
+        var selectedLevel: Int,
+        var usesLeft: Int?
     )
 
     // Caches

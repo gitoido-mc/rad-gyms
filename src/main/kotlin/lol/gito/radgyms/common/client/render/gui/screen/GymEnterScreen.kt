@@ -18,11 +18,9 @@ import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.ENTER_SCREEN_CLOSE
 import lol.gito.radgyms.common.client.render.gui.widget.LevelSliderWidget
-import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.util.TranslationUtil.buildTypeText
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
@@ -41,7 +39,8 @@ class GymEnterScreen(
     val minLevel: Int = RadGyms.CONFIG.minLevel!!,
     val maxLevel: Int = RadGyms.CONFIG.maxLevel!!,
     val type: String? = null,
-    val pos: BlockPos? = null
+    val pos: BlockPos? = null,
+    val usesLeft: Int? = null,
 
 ) : CobblemonRenderable,
     Screen(
@@ -75,15 +74,6 @@ class GymEnterScreen(
         get() = middleY - BASE_HEIGHT / 2
 
     var level: Int = this.selectedLevel.coerceIn(this.minLevel, this.maxLevel)
-
-    val usesLeft: Int? = when (pos) {
-        null -> null
-        else -> {
-            val player = Minecraft.getInstance().player
-            val gymEntrance: GymEntranceEntity = player!!.level().getBlockEntity(pos) as GymEntranceEntity
-            gymEntrance.usesLeftForPlayer(player)
-        }
-    }
 
     private var closeReason: GuiScreenCloseChoice = GuiScreenCloseChoice.CANCEL
 

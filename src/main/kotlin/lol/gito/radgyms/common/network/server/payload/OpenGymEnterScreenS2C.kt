@@ -24,7 +24,8 @@ class OpenGymEnterScreenS2C(
     val derivedLevel: Int,
     val key: Boolean,
     val type: String,
-    val pos: BlockPos? = null
+    val pos: BlockPos? = null,
+    val usesLeft: Int? = null
 ) : NetworkPacket<OpenGymEnterScreenS2C> {
     override val id: ResourceLocation = ID
 
@@ -35,7 +36,8 @@ class OpenGymEnterScreenS2C(
             ByteBufCodecs.INT.decode(buffer),
             ByteBufCodecs.BOOL.decode(buffer),
             ByteBufCodecs.STRING_UTF8.decode(buffer),
-            ByteBufCodecs.optional(BlockPos.STREAM_CODEC).decode(buffer).getOrNull()
+            ByteBufCodecs.optional(BlockPos.STREAM_CODEC).decode(buffer).getOrNull(),
+            ByteBufCodecs.optional(ByteBufCodecs.INT).decode(buffer).getOrNull()
         )
     }
 
@@ -44,5 +46,6 @@ class OpenGymEnterScreenS2C(
         ByteBufCodecs.BOOL.encode(buffer, key)
         ByteBufCodecs.STRING_UTF8.encode(buffer, type)
         ByteBufCodecs.optional(BlockPos.STREAM_CODEC).encode(buffer, Optional.ofNullable(pos))
+        ByteBufCodecs.optional(ByteBufCodecs.INT).encode(buffer, Optional.ofNullable(usesLeft))
     }
 }

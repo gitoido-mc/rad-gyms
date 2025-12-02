@@ -129,7 +129,13 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                 false -> RadGyms.CONFIG.minLevel!!
             }
 
-            OpenGymEnterScreenS2C(derivedLevel, false, gymEntrance.gymType, pos).sendToPlayer(player)
+            OpenGymEnterScreenS2C(
+                derivedLevel,
+                false,
+                gymEntrance.gymType,
+                pos,
+                gymEntrance.usesLeftForPlayer(player)
+            ).sendToPlayer(player)
         }
 
         return InteractionResult.SUCCESS
