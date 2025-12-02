@@ -56,9 +56,10 @@ repositories {
 }
 
 fabricApi {
-//    configureDataGeneration {
-//        client = true
-//    }
+    configureDataGeneration {
+        client = true
+
+    }
 }
 
 loom {
@@ -74,9 +75,9 @@ loom {
         getByName("server") {
             runDir = "run-server"
         }
-//        getByName("datagen") {
-//            runDir = "run-datagen"
-//        }
+        getByName("datagen") {
+            runDir = "run-datagen"
+        }
     }
 }
 

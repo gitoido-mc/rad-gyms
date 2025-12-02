@@ -8,7 +8,12 @@
 
 package lol.gito.radgyms.fabric.datagen
 
-import lol.gito.radgyms.fabric.datagen.loot.BlockLootDataProvider
+import lol.gito.radgyms.fabric.datagen.i18n.EnUSLocaleProvider
+import lol.gito.radgyms.fabric.datagen.loot.BlockLootTableProvider
+import lol.gito.radgyms.fabric.datagen.loot.GymLootDataProvider
+import lol.gito.radgyms.fabric.datagen.loot.StructureLootDataProvider
+import lol.gito.radgyms.fabric.datagen.recipe.RecipeProvider
+import lol.gito.radgyms.fabric.datagen.tag.BlockTagDataProvider
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator.Pack
@@ -22,6 +27,6 @@ object RadGymsDataGenerator : DataGeneratorEntrypoint {
         pack.addProvider(::BlockTagDataProvider)
         pack.addProvider(::GymLootDataProvider)
         pack.addProvider(::StructureLootDataProvider)
-        pack.addProvider(::BlockLootDataProvider)
+        pack.addProvider(::BlockLootTableProvider)
     }
 }

@@ -9,13 +9,13 @@
 package lol.gito.radgyms.fabric.datagen.loot
 
 import lol.gito.radgyms.common.registry.RadGymsBlocks
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
 import net.minecraft.core.HolderLookup
-import net.minecraft.data.loot.BlockLootSubProvider
-import net.minecraft.world.flag.FeatureFlags
-import net.minecraft.world.item.Item
+import java.util.concurrent.CompletableFuture
 
-class BlockLootDataProvider(lookup: HolderLookup.Provider) :
-    BlockLootSubProvider(mutableSetOf<Item>(), FeatureFlags.DEFAULT_FLAGS, lookup) {
+class BlockLootTableProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>) :
+    FabricBlockLootTableProvider(output, lookup) {
     override fun generate() {
         dropSelf(RadGymsBlocks.SHARD_BLOCK_COMMON)
         dropSelf(RadGymsBlocks.SHARD_BLOCK_UNCOMMON)
