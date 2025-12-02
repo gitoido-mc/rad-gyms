@@ -37,7 +37,7 @@ public abstract class OnLoadModels {
     @Shadow
     protected abstract void loadSpecialItemModelAndDependencies(ModelResourceLocation id);
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;push(Ljava/lang/String;)V", ordinal = 0, shift = At.Shift.AFTER))
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 0, shift = At.Shift.AFTER))
     public void init(
         BlockColors blockColors,
         ProfilerFiller profiler,
