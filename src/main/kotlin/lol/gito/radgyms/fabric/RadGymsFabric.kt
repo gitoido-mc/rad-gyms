@@ -14,13 +14,29 @@ import com.cobblemon.mod.common.NetworkManager
 import com.cobblemon.mod.fabric.CobblemonFabric
 import com.cobblemon.mod.fabric.net.CobblemonFabricNetworkManager
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.RadGymsDataLoader
 import lol.gito.radgyms.common.RadGymsImplementation
-import lol.gito.radgyms.common.registry.RadGymsDataComponents
+import lol.gito.radgyms.common.registry.*
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
+import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.minecraft.client.Minecraft
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
 
 object RadGymsFabric : RadGymsImplementation {
     override val modAPI: ModAPI = ModAPI.FABRIC
@@ -29,32 +45,50 @@ object RadGymsFabric : RadGymsImplementation {
 
     override val networkManager: NetworkManager = CobblemonFabricNetworkManager
 
-    override fun initialize() {
-        RadGyms.initialize()
-    }
-
     override fun environment(): Environment = CobblemonFabric.environment()
 
     override fun isModInstalled(id: String): Boolean = CobblemonFabric.isModInstalled(id)
+
+
+    override fun initialize() {
+        RadGyms.preInitialize(this)
+
+        PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
+    }
 
     override fun registerDataComponents() = RadGymsDataComponents.register { identifier, component ->
         Registry.register(RadGymsDataComponents.registry, identifier, component)
     }
 
     override fun registerItems() {
-
+        RadGymsItems.register { identifier, item -> Registry.register(RadGymsItems.registry, identifier, item) }
+        RadGymsItemGroups.register { provider ->
+            Registry.register(
+                BuiltInRegistries.CREATIVE_MODE_TAB, provider.key, FabricItemGroup.builder()
+                    .title(provider.displayName)
+                    .icon(provider.displayIconProvider)
+                    .displayItems(provider.entryCollector)
+                    .build()
+            )
+        }
     }
 
-    override fun registerBlocks() {
-        TODO("Not yet implemented")
+    override fun registerBlocks() = RadGymsBlocks.register { identifier, entry ->
+        Registry.register(RadGymsBlocks.registry, identifier, entry)
     }
 
-    override fun registerEntityTypes() {
-        TODO("Not yet implemented")
+    override fun registerEntityTypes() = RadGymsEntities.register { identifier, entry ->
+        Registry.register(RadGymsEntities.registry, identifier, entry)
+    }
+
+    override fun registerEntityAttributes() = RadGymsEntities.registerAttributes { entityType, builder ->
+        FabricDefaultAttributeRegistry.register(entityType, builder)
     }
 
     override fun registerBlockEntityTypes() {
-        TODO("Not yet implemented")
+        RadGymsBlockEntities.register { identifier, entry ->
+            Registry.register(RadGymsBlockEntities.registry, identifier, entry)
+        }
     }
 
     override fun registerResourceReloader(
@@ -63,10 +97,40 @@ object RadGymsFabric : RadGymsImplementation {
         type: PackType,
         dependencies: Collection<ResourceLocation>
     ) {
-        TODO("Not yet implemented")
+        ResourceManagerHelper.get(type).registerReloadListener(RadGymsDataLoader)
     }
 
-    override fun server(): MinecraftServer? {
-        TODO("Not yet implemented")
+    override fun server(): MinecraftServer? = when (this.environment()) {
+        Environment.CLIENT -> Minecraft.getInstance().singleplayerServer
+        Environment.SERVER -> this.server
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onBeforeBlockBreak(
+        world: Level,
+        player: Player,
+        pos: BlockPos,
+        state: BlockState,
+        entity: BlockEntity?
+    ): Boolean {
+        var allowBreak = true
+
+        if (world.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+            if (CONFIG.debug == true) return true
+
+            allowBreak = false
+        }
+
+        if (state.block == RadGymsBlocks.GYM_ENTRANCE) {
+            if (!player.isShiftKeyDown) {
+                player.displayClientMessage(Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey()))
+                player.displayClientMessage(Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey()))
+                allowBreak = false
+            } else {
+                allowBreak = true
+            }
+        }
+
+        return allowBreak
     }
 }

@@ -50,6 +50,7 @@ object RadGymsFabricClient {
                     it.maxLevel,
                     it.type,
                     it.pos,
+                    it.usesLeft
                 )
             )
         }

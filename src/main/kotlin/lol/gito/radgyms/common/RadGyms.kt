@@ -19,20 +19,7 @@ import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager
 import lol.gito.radgyms.common.network.CommonNetworkStack
-import lol.gito.radgyms.common.registry.*
-import lol.gito.radgyms.common.util.displayClientMessage
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
-import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.state.BlockState
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -48,12 +35,17 @@ object RadGyms {
     lateinit var implementation: RadGymsImplementation
 
     fun preInitialize(implementation: RadGymsImplementation) {
-
+        this.implementation = implementation
+        implementation.registerDataComponents()
+        implementation.registerBlocks()
+        implementation.registerItems()
+        implementation.registerEntityTypes()
+        implementation.registerEntityAttributes()
+        loadConfig()
     }
 
     fun initialize() {
         LOGGER.info("Initializing the mod")
-        loadConfig()
 
         // Data
         GymManager.register()
@@ -63,37 +55,12 @@ object RadGyms {
         EventManager.register()
 
         // TODO: neoforge block break
-        PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
 
         // Species
         SpeciesManager.register()
 
         // Registries
-        RadGymsEntities.register { identifier, entry ->
-            Registry.register(RadGymsEntities.registry, identifier, entry)
-        }
-        RadGymsEntities.registerAttributes { entityType, builder ->
-            FabricDefaultAttributeRegistry.register(entityType, builder)
-        }
-        RadGymsDataComponents.register { identifier, entry ->
-            Registry.register(RadGymsDataComponents.registry, identifier, entry)
-        }
-        RadGymsBlocks.register { identifier, entry ->
-            Registry.register(RadGymsBlocks.registry, identifier, entry)
-        }
-        RadGymsBlockEntities.register { identifier, entry ->
-            Registry.register(RadGymsBlockEntities.registry, identifier, entry)
-        }
-        RadGymsItems.register { identifier, item -> Registry.register(RadGymsItems.registry, identifier, item) }
-        RadGymsItemGroups.register { provider ->
-            Registry.register(
-                BuiltInRegistries.CREATIVE_MODE_TAB, provider.key, FabricItemGroup.builder()
-                    .title(provider.displayName)
-                    .icon(provider.displayIconProvider)
-                    .displayItems(provider.entryCollector)
-                    .build()
-            )
-        }
+
 
         CommandRegistry.register()
 
@@ -161,35 +128,5 @@ object RadGyms {
             prettify.encodeToStream(CONFIG, it)
             debug("Saving config")
         }
-    }
-
-
-    @Suppress("UNUSED_PARAMETER")
-    fun onBeforeBlockBreak(
-        world: Level,
-        player: Player,
-        pos: BlockPos,
-        state: BlockState,
-        entity: BlockEntity?
-    ): Boolean {
-        var allowBreak = true
-
-        if (world.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
-            if (CONFIG.debug == true) return true
-
-            allowBreak = false
-        }
-
-        if (state.block == RadGymsBlocks.GYM_ENTRANCE) {
-            if (!player.isShiftKeyDown) {
-                player.displayClientMessage(Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey()))
-                player.displayClientMessage(Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey()))
-                allowBreak = false
-            } else {
-                allowBreak = true
-            }
-        }
-
-        return allowBreak
     }
 }

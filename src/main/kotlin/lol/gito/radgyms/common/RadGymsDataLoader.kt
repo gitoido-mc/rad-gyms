@@ -40,7 +40,7 @@ class RadGymsDataLoader {
                     try {
                         val templateName = File(id.path).nameWithoutExtension
                         GymManager.GYM_TEMPLATES[templateName] =
-                            Json.Default.decodeFromStream<Gym.Json>(res.open())
+                            Json.decodeFromStream<Gym.Json>(res.open())
                         RadGyms.debug("Loaded $templateName template from ${File(id.path).name} gym config")
                     } catch (e: Exception) {
                         RadGyms.LOGGER.warn("Could not parse ${File(id.path).name} gym data", e)
@@ -52,7 +52,7 @@ class RadGymsDataLoader {
                     try {
                         val cacheConfig = File(id.path).nameWithoutExtension
                         SpeciesManager.SPECIES_BY_RARITY[cacheConfig] =
-                            Json.Default.decodeFromStream<CacheDTO>(res.open())
+                            Json.decodeFromStream<CacheDTO>(res.open())
                     } catch (e: Exception) {
                         RadGyms.LOGGER.warn("Could not parse ${File(id.path).name} cache data", e)
                     }
