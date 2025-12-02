@@ -33,7 +33,7 @@ import net.minecraft.resources.ResourceLocation
 object RadGymsFabricClient {
     fun modModelId(id: ResourceLocation, variant: String): ModelResourceLocation = ModelResourceLocation(id, variant)
 
-    fun init() {
+    fun initialize() {
         RadGyms.debug("Initializing client")
         BlockRenderLayerMap.INSTANCE.putBlock(RadGymsBlocks.GYM_ENTRANCE, RenderType.cutout())
 
