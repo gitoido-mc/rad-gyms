@@ -2,7 +2,6 @@
 
 .gradle/
 build/
-datagen/
 out/
 classes/
 
@@ -33,6 +32,7 @@ bin/
 src/main/generated/.cache
 run/
 run-server/
+run-datagen/
 
 # java
 
