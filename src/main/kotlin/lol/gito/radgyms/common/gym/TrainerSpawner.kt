@@ -54,7 +54,7 @@ class TrainerSpawner(
         }
 
         debugLogger("Spawning trainer ${trainerEntity.id} at ${trainerEntity.x} ${trainerEntity.y} ${trainerEntity.z}")
-        gymDimension.addFreshEntity(trainerEntity)
+        gymDimension.tryAddFreshEntityWithPassengers(trainerEntity)
 
         return Pair(trainerEntity.uuid, trainer)
     }
