@@ -16,9 +16,8 @@ import kotlinx.serialization.json.encodeToStream
 import lol.gito.radgyms.common.command.CommandRegistry
 import lol.gito.radgyms.common.config.RadGymsConfig
 import lol.gito.radgyms.common.event.EventManager
-import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager
-import lol.gito.radgyms.common.network.CommonNetworkStack
+import lol.gito.radgyms.common.registry.RadGymsTemplates
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -30,6 +29,7 @@ object RadGyms {
     private val GYM_LOADER: RadGymsDataLoader = RadGymsDataLoader()
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
     val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
+    val gymTemplateRegistry: RadGymsTemplates = RadGymsTemplates
 
     lateinit var CONFIG: RadGymsConfig
     lateinit var implementation: RadGymsImplementation
@@ -41,6 +41,7 @@ object RadGyms {
         implementation.registerItems()
         implementation.registerEntityTypes()
         implementation.registerEntityAttributes()
+        implementation.registerBlockEntityTypes()
         loadConfig()
     }
 
@@ -48,7 +49,6 @@ object RadGyms {
         LOGGER.info("Initializing the mod")
 
         // Data
-        GymManager.register()
         GYM_LOADER.register()
 
         // Events
@@ -60,12 +60,7 @@ object RadGyms {
         SpeciesManager.register()
 
         // Registries
-
-
         CommandRegistry.register()
-
-        // Network
-        CommonNetworkStack.register()
     }
 
     fun modId(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, name)
@@ -78,7 +73,8 @@ object RadGyms {
 
     @Suppress("unused")
     fun debug(message: String) {
-        if (CONFIG.debug == true) LOGGER.info(message)
+//        if (CONFIG.debug == true)
+        LOGGER.info(message)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -108,7 +104,7 @@ object RadGyms {
         if (configFile.exists()) {
             LOGGER.info("Loading config")
             val fileConfig = configFile.inputStream().let {
-                Json.Default.decodeFromStream<RadGymsConfig>(it)
+                Json.decodeFromStream<RadGymsConfig>(it)
             }
 
             CONFIG = CONFIG.combine(fileConfig)

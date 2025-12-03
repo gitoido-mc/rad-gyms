@@ -13,9 +13,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import lol.gito.radgyms.common.api.dto.Gym
-import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.SpeciesManager
 import lol.gito.radgyms.common.pokecache.CacheDTO
+import lol.gito.radgyms.common.registry.RadGymsTemplates
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.resources.ResourceLocation
@@ -32,15 +32,17 @@ class RadGymsDataLoader {
 
         @OptIn(ExperimentalSerializationApi::class)
         override fun onResourceManagerReload(manager: ResourceManager) {
-            GymManager.GYM_TEMPLATES.clear()
+            RadGymsTemplates.clearTemplates()
             SpeciesManager.SPECIES_BY_RARITY = mutableMapOf()
 
             manager.listResources("gyms") { path -> path.endsWith(".json") }
                 .forEach { (id: ResourceLocation, res: Resource) ->
                     try {
                         val templateName = File(id.path).nameWithoutExtension
-                        GymManager.GYM_TEMPLATES[templateName] =
+                        RadGymsTemplates.registerTemplate(
+                            templateName,
                             Json.decodeFromStream<Gym.Json>(res.open())
+                        )
                         RadGyms.debug("Loaded $templateName template from ${File(id.path).name} gym config")
                     } catch (e: Exception) {
                         RadGyms.LOGGER.warn("Could not parse ${File(id.path).name} gym data", e)

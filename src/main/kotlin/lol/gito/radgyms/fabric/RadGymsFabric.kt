@@ -10,9 +10,7 @@ package lol.gito.radgyms.fabric
 
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
-import com.cobblemon.mod.common.NetworkManager
 import com.cobblemon.mod.fabric.CobblemonFabric
-import com.cobblemon.mod.fabric.net.CobblemonFabricNetworkManager
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
@@ -20,6 +18,7 @@ import lol.gito.radgyms.common.RadGymsDataLoader
 import lol.gito.radgyms.common.RadGymsImplementation
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
@@ -43,7 +42,7 @@ object RadGymsFabric : RadGymsImplementation {
 
     private var server: MinecraftServer? = null
 
-    override val networkManager: NetworkManager = CobblemonFabricNetworkManager
+    override val networkManager = RadGymsFabricNetworkManager
 
     override fun environment(): Environment = CobblemonFabric.environment()
 
@@ -52,7 +51,9 @@ object RadGymsFabric : RadGymsImplementation {
 
     override fun initialize() {
         RadGyms.preInitialize(this)
-
+        RadGyms.initialize()
+        networkManager.registerMessages()
+        networkManager.registerServerHandlers()
         PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
     }
 
