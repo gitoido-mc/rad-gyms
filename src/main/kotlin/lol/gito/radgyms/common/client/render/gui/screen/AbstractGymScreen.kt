@@ -51,7 +51,7 @@ abstract class AbstractGymScreen(heading: Component): CobblemonRenderable, Scree
         .pos(pos.x, pos.y)
         .build()
 
-    fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float, panelResource: ResourceLocation) {
+    fun preRender(context: GuiGraphics, panelResource: ResourceLocation) {
         val matrices = context.pose()
         super.renderTransparentBackground(context)
 
@@ -62,7 +62,5 @@ abstract class AbstractGymScreen(heading: Component): CobblemonRenderable, Scree
             width = BASE_WIDTH,
             height = BASE_HEIGHT
         )
-
-        super.render(context, mouseX, mouseY, delta)
     }
 }

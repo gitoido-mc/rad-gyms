@@ -77,6 +77,7 @@ class GymLeaveScreen : AbstractGymScreen(translatable(modId("gui.common.leave").
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        super.preRender(context, panelResource)
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
 
@@ -106,6 +107,7 @@ class GymLeaveScreen : AbstractGymScreen(translatable(modId("gui.common.leave").
             colour = CommonColors.BLACK
         )
 
-        super.render(context, mouseX, mouseY, delta, panelResource)
+
+        super.render(context, mouseX, mouseY, delta)
     }
 }
