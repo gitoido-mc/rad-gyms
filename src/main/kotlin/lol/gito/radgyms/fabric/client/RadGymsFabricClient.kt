@@ -8,68 +8,50 @@
 
 package lol.gito.radgyms.fabric.client
 
-import com.cobblemon.mod.common.api.Priority
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
-import lol.gito.radgyms.common.api.event.GymEvents
-import lol.gito.radgyms.common.client.render.entity.TrainerEntityRenderer
-import lol.gito.radgyms.common.client.render.gui.screen.GymEnterScreen
-import lol.gito.radgyms.common.client.render.gui.screen.GymLeaveScreen
-import lol.gito.radgyms.common.network.client.payload.GymEnterC2S
-import lol.gito.radgyms.common.network.client.payload.GymLeaveC2S
-import lol.gito.radgyms.common.registry.RadGymsBlocks
-import lol.gito.radgyms.common.registry.RadGymsEntities
+import lol.gito.radgyms.common.client.RadGymsClient
+import lol.gito.radgyms.common.client.RadGymsClientImplementation
+import lol.gito.radgyms.fabric.RadGymsFabric
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
-import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
+import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
 
 @Environment(EnvType.CLIENT)
-object RadGymsFabricClient {
+object RadGymsFabricClient : RadGymsClientImplementation {
     fun modModelId(id: ResourceLocation, variant: String): ModelResourceLocation = ModelResourceLocation(id, variant)
 
     fun initialize() {
         RadGyms.debug("Initializing client")
-        BlockRenderLayerMap.INSTANCE.putBlock(RadGymsBlocks.GYM_ENTRANCE, RenderType.cutout())
-
-        EntityRendererRegistry.register(RadGymsEntities.GYM_TRAINER) { context ->
-            TrainerEntityRenderer(context)
-        }
-
-        GymEvents.ENTER_SCREEN_OPEN.subscribe(Priority.LOWEST) {
-            Minecraft.getInstance().setScreen(
-                GymEnterScreen(
-                    it.key,
-                    it.selectedLevel,
-                    it.minLevel,
-                    it.maxLevel,
-                    it.type,
-                    it.pos,
-                    it.usesLeft
-                )
-            )
-        }
-        GymEvents.ENTER_SCREEN_CLOSE.subscribe(Priority.LOWEST) {
-            if (it.choice == GuiScreenCloseChoice.PROCEED) {
-                GymEnterC2S(it.key, it.level, it.type, it.pos).sendToServer()
-            }
-            Minecraft.getInstance().setScreen(null)
-        }
-
-        GymEvents.LEAVE_SCREEN_OPEN.subscribe(Priority.LOWEST) {
-            Minecraft.getInstance().setScreen(GymLeaveScreen())
-        }
-
-        GymEvents.LEAVE_SCREEN_CLOSE.subscribe(Priority.LOWEST) {
-            if (it.choice == GuiScreenCloseChoice.PROCEED) {
-                ClientPlayNetworking.send(GymLeaveC2S(true))
-            }
-            Minecraft.getInstance().setScreen(null)
-        }
+        RadGymsClient.initialize(this)
+        RadGymsFabric.networkManager.registerClientHandlers()
     }
+
+    override fun registerBlockRenderType(
+        layer: RenderType,
+        vararg blocks: Block
+    ) = blocks.forEach {
+        BlockRenderLayerMap.INSTANCE.putBlock(it, layer)
+    }
+
+    override fun <T : BlockEntity> registerBlockEntityRenderer(
+        type: BlockEntityType<out T>,
+        factory: BlockEntityRendererProvider<T>
+    ) = BlockEntityRenderers.register(type, factory)
+
+    override fun <T : Entity> registerEntityRenderer(
+        type: EntityType<out T>,
+        factory: EntityRendererProvider<T>
+    ) = EntityRendererRegistry.register(type, factory)
 }
