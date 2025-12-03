@@ -85,7 +85,7 @@ class GymEntranceEntity(
 
     fun usesLeftForPlayer(player: Player): Int {
         val playerCounter = playerUseCounter
-            .getOrDefault(player.uuid.toString(), CONFIG.maxEntranceUses!!)
+            .getOrDefault(player.uuid.toString(), 0)
             .coerceIn(0, CONFIG.maxEntranceUses!!)
 
         debug("Uses left for $player for $pos gym entrance: ${CONFIG.maxEntranceUses!! - playerCounter} (config max: ${CONFIG.maxEntranceUses!!})")
