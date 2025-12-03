@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.common.client.util
+package lol.gito.radgyms.common.util
 
 import lol.gito.radgyms.common.RadGyms.MOD_ID
 import net.minecraft.client.resources.model.ModelResourceLocation
