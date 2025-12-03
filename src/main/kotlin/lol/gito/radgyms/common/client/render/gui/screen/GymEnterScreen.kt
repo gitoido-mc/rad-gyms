@@ -169,6 +169,7 @@ class GymEnterScreen(
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         super.preRender(context, panelResource)
+
         val message = when (pos) {
             null -> translatable("rad-gyms.gui.common.set-gym-level", buildTypeText(type))
             else -> {

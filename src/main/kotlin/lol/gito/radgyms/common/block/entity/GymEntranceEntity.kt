@@ -89,6 +89,6 @@ class GymEntranceEntity(
             .coerceIn(0, CONFIG.maxEntranceUses!!)
 
         debug("Uses left for $player for $pos gym entrance: ${CONFIG.maxEntranceUses!! - playerCounter} (config max: ${CONFIG.maxEntranceUses!!})")
-        return playerCounter
+        return CONFIG.maxEntranceUses!! - playerCounter
     }
 }
