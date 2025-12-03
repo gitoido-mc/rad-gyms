@@ -36,9 +36,11 @@ class GymEntranceEntity(
     var gymType: String = ElementalTypes.all().random().showdownId
 
     fun incrementPlayerUseCount(player: Player) {
-        val useCounter = playerUseCounter.getOrDefault(player.uuid.toString(), 0)
+        playerUseCounter[player.uuid.toString()] = playerUseCounter
+            .getOrDefault(player.uuid.toString(), 0)
+            .inc()
+            .coerceIn(0, CONFIG.maxEntranceUses!!)
 
-        playerUseCounter[player.uuid.toString()] = useCounter + 1
         setChanged()
         debug(
             "Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance"
