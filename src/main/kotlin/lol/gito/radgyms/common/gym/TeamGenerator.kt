@@ -3,6 +3,8 @@ package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
+import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.TrainerModel
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -35,6 +37,8 @@ class TeamGenerator {
             possibleFormats
         )
 
+        debug("Ignored species: ${CONFIG.ignoredSpecies}")
+        debug("Ignored species: ${CONFIG.ignoredForms}")
         (1..pokemonCount).forEach { _ ->
             rawTeam.add(generatePokemon(level, elementType))
         }
