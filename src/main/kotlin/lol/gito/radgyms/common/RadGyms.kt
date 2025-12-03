@@ -18,6 +18,7 @@ import lol.gito.radgyms.common.config.RadGymsConfig
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.SpeciesManager
 import lol.gito.radgyms.common.registry.RadGymsTemplates
+import lol.gito.radgyms.fabric.RadGymsDataLoader
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

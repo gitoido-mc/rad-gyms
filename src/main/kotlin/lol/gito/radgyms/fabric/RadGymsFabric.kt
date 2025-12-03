@@ -14,7 +14,6 @@ import com.cobblemon.mod.fabric.CobblemonFabric
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.RadGymsDataLoader
 import lol.gito.radgyms.common.RadGymsImplementation
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.util.displayClientMessage
