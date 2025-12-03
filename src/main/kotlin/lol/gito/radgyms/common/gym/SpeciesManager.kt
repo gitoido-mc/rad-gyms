@@ -138,35 +138,35 @@ object SpeciesManager {
     }
 
     fun generatePokemon(level: Int, type: String?): PokemonProperties {
-        debug("Generating pokemon with level $level and type $type")
-        if (type != null && type != "default") {
-            val derived = SPECIES_BY_TYPE[type]
-                ?.toList()
-                ?.random()!!
-            debug("Picked ${derived.species.showdownId()} form=${derived.form.formOnlyShowdownId()} level=${level}")
+        debug("Rolling for pokemon with level $level and type $type")
 
-            return fillPokemonModel(derived, level)
-        } else {
-            val derived = PokemonSpecies.implemented.asSequence()
-                .filter { species -> species.name !in CONFIG.ignoredSpecies!! }
-                .filter { species ->
-                    species.implemented
-                }
-                .associateWith { species ->
-                    species
-                        .forms
-                        .filter { form -> form.name !in CONFIG.ignoredForms!! }
-                }
-                .flatMap { (species, forms) ->
-                    forms.map {GymSpecies.Container.SpeciesWithForm(species, it) }
-                }
-                .random()
+        val derived = when {
+            (type != null && type != "default") -> {
+                SPECIES_BY_TYPE[type]!!
+                    .toList()
+                    .filterNot { it.species.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
+                    .filterNot { it.form.formOnlyShowdownId() in CONFIG.ignoredForms!! }
+                    .random()
+            }
 
-            debug("Picked ${derived.species.resourceIdentifier.path} form=${derived.form.formOnlyShowdownId()} level=${level} from random pool")
-
-
-            return fillPokemonModel(derived, level)
+            else -> {
+                PokemonSpecies.implemented.asSequence()
+                    .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
+                    .filter { it.implemented }
+                    .associateWith { species ->
+                        species
+                            .forms
+                            .filterNot { it.formOnlyShowdownId() in CONFIG.ignoredForms!! }
+                    }
+                    .flatMap { (species, forms) ->
+                        forms.map { GymSpecies.Container.SpeciesWithForm(species, it) }
+                    }
+                    .random()
+            }
         }
+        debug("Picked ${derived.species.showdownId()} form=${derived.form.formOnlyShowdownId()} level=${level}")
+
+        return fillPokemonModel(derived, level)
     }
 
 
