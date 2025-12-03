@@ -38,8 +38,11 @@ object CacheHandler {
         shinyBoost: Int? = 0
     ): Pokemon {
         val cache = SPECIES_BY_RARITY[type.showdownId]!!.forRarity(rarity)
-        val pokeProps = PokemonProperties.parse(cache.shuffle().first())
-        val poke = pokeProps.create()
+        var poke: Pokemon?
+        do {
+            val pokeProps = PokemonProperties.parse(cache.shuffle().first())
+            poke = pokeProps.create()
+        } while (!poke.species.implemented)
 
         poke.shiny = shinyRoll(poke, player, shinyBoost).isShiny()
         poke.updateAspects()
