@@ -21,7 +21,6 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
-import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
@@ -54,6 +53,7 @@ object EventManager {
         debug("Registering event handlers")
         // Minecraft events
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStart)
+        PlatformEvents.SERVER_STOPPING.subscribe(Priority.HIGHEST, ::onServerStop)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
@@ -97,6 +97,17 @@ object EventManager {
         val trainerRegistry = RCT.trainerRegistry
         debug("initializing RCT trainer mod registry")
         trainerRegistry.init(event.server)
+    }
+
+    private fun onServerStop(event: ServerEvent.Stopping) {
+        debug("cleaning up all gyms")
+        RadGymsState.getServerState(event.server).gymInstanceMap.let {
+            it.forEach { (playerUuid, gym) ->
+                GymTeardownService.spawnExitBlock(gym)
+                GymTeardownService.destructOfflineGym(playerUuid, gym)
+            }
+            it.clear()
+        }
     }
 
     private fun onPlayerJoin(event: ServerPlayerEvent) {

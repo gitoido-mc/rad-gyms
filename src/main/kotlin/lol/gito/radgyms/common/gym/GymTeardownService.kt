@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
+import java.util.*
 
 object GymTeardownService {
     private var teleportScheduler: GymTeleportScheduler? = null
@@ -34,6 +35,23 @@ object GymTeardownService {
         }
 
         RadGymsState.removeGymForPlayer(serverPlayer)
+    }
+
+    fun destructOfflineGym(uuid: UUID, gym: Gym?) {
+        val server = RadGyms.implementation.server()!!
+        val world = server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
+
+        var derived = gym
+        if (derived == null) {
+            derived = RadGymsState.getServerState(server).gymInstanceMap[uuid]!!
+        }
+
+        derived.npcList.forEach {
+            RadGyms.RCT.trainerRegistry.unregisterById(it.key.toString())
+            world.getEntity(it.key)?.discard()
+        }
+
+        RadGymsState.removeGymForPlayerByUuid(uuid)
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayer) {
