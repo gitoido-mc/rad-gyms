@@ -19,7 +19,7 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource
 import net.minecraft.world.level.levelgen.WorldgenRandom
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 
-object StructureManager {
+object StructurePlacer {
     fun placeStructure(world: WorldGenLevel, pos: BlockPos, structureId: String) {
         val structureResource = ResourceLocation.parse(structureId)
         val structTemplateManager = world.server?.structureManager
