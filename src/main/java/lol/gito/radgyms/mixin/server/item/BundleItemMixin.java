@@ -36,7 +36,7 @@ public abstract class BundleItemMixin {
         }
 
         if (bundleComponent != null && player instanceof ServerPlayer) {
-            itemStack.consume(1, player);
+            itemStack.shrink(1);
             cir.setReturnValue(true);
         }
     }
