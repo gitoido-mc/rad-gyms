@@ -13,12 +13,14 @@ import com.cobblemon.mod.common.net.PacketRegisterInfo
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.net.client.handler.OpenGymEnterScreenHandler
 import lol.gito.radgyms.common.net.client.handler.OpenGymLeaveScreenHandler
+import lol.gito.radgyms.common.net.client.handler.ServerSettingsHandler
 import lol.gito.radgyms.common.net.client.payload.GymEnterC2S
 import lol.gito.radgyms.common.net.client.payload.GymLeaveC2S
 import lol.gito.radgyms.common.net.server.handler.GymEnterC2SHandler
 import lol.gito.radgyms.common.net.server.handler.GymLeaveC2SHandler
 import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.net.server.payload.OpenGymLeaveScreenS2C
+import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import net.minecraft.server.level.ServerPlayer
 
 object RadGymsNetwork {
@@ -57,6 +59,11 @@ object RadGymsNetwork {
             OpenGymLeaveScreenS2C.ID,
             OpenGymLeaveScreenS2C::decode,
             OpenGymLeaveScreenHandler
+        ),
+        PacketRegisterInfo(
+            ServerSettingsS2C.ID,
+            ServerSettingsS2C::decode,
+            ServerSettingsHandler
         )
     )
 

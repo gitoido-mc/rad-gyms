@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
@@ -41,6 +42,7 @@ import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_TIMESTAMP
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
+import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.state.RadGymsState
@@ -85,7 +87,7 @@ object EventManager {
     @Suppress("UNUSED_PARAMETER")
     private fun onBlockInteract(event: ServerPlayerEvent.RightClickBlock) {
         if (event.player.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
-            if (RadGyms.CONFIG.debug == true) return
+            if (CONFIG.debug == true) return
             if (event.player.level().getBlockState(event.pos).block == RadGymsBlocks.GYM_EXIT) return
             event.cancel()
         }
@@ -98,6 +100,17 @@ object EventManager {
     }
 
     private fun onPlayerJoin(event: ServerPlayerEvent) {
+        debug("Sending server settings to player ${event.player.name}")
+        ServerSettingsS2C(
+            CONFIG.maxEntranceUses!!,
+            CONFIG.shardRewards!!,
+            CONFIG.lapisBoostAmount!!,
+            CONFIG.ignoredSpecies!!,
+            CONFIG.ignoredForms!!,
+            CONFIG.minLevel!!,
+            CONFIG.maxLevel!!
+        ).sendToPlayer(event.player)
+
         debug("Adding player ${event.player.name} in RadGyms trainer registry")
         RCT.trainerRegistry.registerPlayer(event.player.uuid.toString(), event.player)
         val playerData = RadGymsState.getPlayerState(event.player)
