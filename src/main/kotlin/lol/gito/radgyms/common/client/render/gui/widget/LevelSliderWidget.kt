@@ -9,13 +9,13 @@
 package lol.gito.radgyms.common.client.render.gui.widget
 
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.util.math.floor
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractSliderButton
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
-import kotlin.math.floor
 
 @Environment(EnvType.CLIENT)
 class LevelSliderWidget(
@@ -35,6 +35,12 @@ class LevelSliderWidget(
 ) {
     var level: Int = this.initialLevel
 
+    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        updateLevel(this.level)
+        updateMessage()
+        super.renderWidget(context, mouseX, mouseY, delta)
+    }
+
     override fun updateMessage() {
         this.message = Component.literal(level.toString())
     }
@@ -44,18 +50,18 @@ class LevelSliderWidget(
         onChange(level)
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        updateLevel(this.level)
-        updateMessage()
-        super.renderWidget(context, mouseX, mouseY, delta)
-    }
-
     fun updateLevel(level: Int) {
         this.level = level
-        this.value = level.toDouble().minus(this.minLevel).div(maxLevel.minus(minLevel))
+        this.value = level
+            .toDouble()
+            .minus(this.minLevel)
+            .div(maxLevel.minus(minLevel))
     }
 
-    private fun fromSliderValue(): Int = floor(
-        (value - 0.0).times(maxLevel - minLevel).div(1.0 - 0.0).plus(minLevel)
-    ).toInt()
+    private fun fromSliderValue(): Int = (value - 0.0)
+        .times(maxLevel - minLevel)
+        .div(1.0 - 0.0)
+        .plus(minLevel)
+        .floor()
+        .toInt()
 }

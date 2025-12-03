@@ -8,28 +8,23 @@
 
 package lol.gito.radgyms.common.client.render.gui.screen
 
-import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.LEAVE_SCREEN_CLOSE
-import lol.gito.radgyms.common.client.util.radGymsResource
+import lol.gito.radgyms.common.util.math.Vec2i
+import lol.gito.radgyms.common.util.radGymsResource
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Button
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.util.CommonColors
 import org.lwjgl.glfw.GLFW
 
-
 @Environment(EnvType.CLIENT)
-class GymLeaveScreen : CobblemonRenderable,
-    Screen(translatable(modId("gui.common.leave").toLanguageKey())) {
+class GymLeaveScreen : AbstractGymScreen(translatable(modId("gui.common.leave").toLanguageKey())) {
     companion object {
         const val BASE_WIDTH = 300
         const val BASE_HEIGHT = 80
@@ -37,31 +32,40 @@ class GymLeaveScreen : CobblemonRenderable,
         private val panelResource = radGymsResource("textures/gui/gym_leave.png")
     }
 
-    val middleX: Int
-        get() = this.minecraft!!.window.guiScaledWidth / 2
-    val middleY: Int
-        get() = this.minecraft!!.window.guiScaledHeight / 2
-
     val leftX: Int
         get() = middleX - BASE_WIDTH / 2
     val topY: Int
         get() = middleY - BASE_HEIGHT / 2
 
-    private var closeReason: GuiScreenCloseChoice = GuiScreenCloseChoice.CANCEL
+    @Suppress("DuplicatedCode")
+    override fun init() {
+        createButton(
+            CommonComponents.GUI_PROCEED,
+            Vec2i(50, 20),
+            Vec2i(leftX + 10, topY + (BASE_HEIGHT - 30))
+        ) {
+            onClose(GuiScreenCloseChoice.PROCEED)
+        }.also {
+            this.addRenderableWidget(it)
+        }
 
-    override fun renderBlurredBackground(delta: Float) {}
+        createButton(
+            CommonComponents.GUI_CANCEL,
+            Vec2i(50, 20),
+            Vec2i(leftX + (BASE_WIDTH - 60), topY + (BASE_HEIGHT - 30))
+        ) {
+            onClose(GuiScreenCloseChoice.CANCEL)
+        }.also {
+            this.addRenderableWidget(it)
+        }
 
-    override fun renderMenuBackground(context: GuiGraphics) {}
+        super.init()
+    }
 
     override fun onClose() {
         LEAVE_SCREEN_CLOSE.emit(
             GymEvents.GymLeaveScreenCloseEvent(this.closeReason)
         )
-    }
-
-    fun onClose(reason: GuiScreenCloseChoice) {
-        this.closeReason = reason
-        this.onClose()
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
@@ -72,43 +76,9 @@ class GymLeaveScreen : CobblemonRenderable,
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun init() {
-        val proceedButton = Button
-            .builder(CommonComponents.GUI_PROCEED) {
-                onClose(GuiScreenCloseChoice.PROCEED)
-            }
-            .size(50, 20)
-            .pos(leftX + 10, topY + (BASE_HEIGHT - 30))
-            .build()
-
-        val cancelButton = Button
-            .builder(CommonComponents.GUI_CANCEL) {
-                onClose(GuiScreenCloseChoice.CANCEL)
-            }
-            .size(50, 20)
-            .pos(leftX + (BASE_WIDTH - 60), topY + (BASE_HEIGHT - 30))
-            .build()
-
-        this.addRenderableWidget(proceedButton)
-        this.addRenderableWidget(cancelButton)
-
-        super.init()
-    }
-
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        val matrices = context.pose()
-        super.renderTransparentBackground(context)
-
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
-
-        blitk(
-            matrixStack = matrices,
-            texture = panelResource,
-            x = x, y = y,
-            width = BASE_WIDTH,
-            height = BASE_HEIGHT
-        )
 
         // Box Label
         drawScaledText(
@@ -136,6 +106,6 @@ class GymLeaveScreen : CobblemonRenderable,
             colour = CommonColors.BLACK
         )
 
-        super.render(context, mouseX, mouseY, delta)
+        super.render(context, mouseX, mouseY, delta, panelResource)
     }
 }
