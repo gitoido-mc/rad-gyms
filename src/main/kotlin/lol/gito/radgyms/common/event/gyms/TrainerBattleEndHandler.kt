@@ -17,7 +17,8 @@ import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
 import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.gym.GymManager
+import lol.gito.radgyms.common.gym.GymTeardownService
+import lol.gito.radgyms.common.gym.GymTeleportScheduler
 import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
 import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.displayClientMessage
@@ -62,7 +63,7 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
 
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
 
-            gym.let { GymManager.spawnExitBlock(it) }
+            gym.let { GymTeardownService.spawnExitBlock(it) }
 
             winnerPlayers.forEach {
                 GENERATE_REWARD.emit(
@@ -78,5 +79,8 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
         .battle
         .players
         .filter { it.level().dimension() == RADGYMS_LEVEL_KEY }
-        .forEach { GymManager.handleGymLeave(it) }
+        .forEach { GymTeardownService
+            .withTeleportScheduler(GymTeleportScheduler())
+            .handleGymLeave(it)
+        }
 }

@@ -11,7 +11,6 @@ package lol.gito.radgyms.common.registry
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.group.CobblemonItemGroups
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.gym.GymManager
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -84,13 +83,14 @@ object RadGymsItemGroups {
             entries.accept(stack)
         }
 
-        GymManager.GYM_TEMPLATES
-            .filterNot { it.key == "default" }
-            .filterNot { template -> template.key in ElementalTypes.all().map { it.showdownId } }
+        RadGymsTemplates
+            .getTemplateIdentifiers()
+            .filterNot { it == "default" }
+            .filterNot { template -> template in ElementalTypes.all().map { it.showdownId } }
             .forEach { template ->
                 val stack = RadGymsItems.GYM_KEY.defaultInstance.also {
                     it.set(DataComponents.RARITY, Rarity.EPIC)
-                    it.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, template.key.lowercase())
+                    it.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, template)
                 }
 
                 entries.accept(stack)

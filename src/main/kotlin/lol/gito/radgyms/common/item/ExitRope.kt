@@ -9,7 +9,7 @@
 package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.item.CobblemonItem
-import lol.gito.radgyms.common.network.server.payload.OpenGymLeaveScreenS2C
+import lol.gito.radgyms.common.net.server.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
 import lol.gito.radgyms.common.util.displayClientMessage

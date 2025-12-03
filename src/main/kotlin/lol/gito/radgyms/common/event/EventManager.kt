@@ -37,12 +37,12 @@ import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.common.event.gyms.*
-import lol.gito.radgyms.common.gym.GymManager
+import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_TIMESTAMP
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
-import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsBlocks
+import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.hasRadGymsTrainers
 import kotlin.time.TimeSource.Monotonic.markNow
@@ -109,8 +109,8 @@ object EventManager {
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
         if (event.player.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
-            GymManager.spawnExitBlock(RadGymsState.getGymForPlayer(event.player)!!)
-            GymManager.destructGym(event.player, removeCoords = false)
+            GymTeardownService.spawnExitBlock(RadGymsState.getGymForPlayer(event.player)!!)
+            GymTeardownService.destructGym(event.player, removeCoords = false)
         }
     }
 

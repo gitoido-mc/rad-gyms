@@ -17,6 +17,7 @@ import de.maxhenkel.admiral.annotations.Command
 import de.maxhenkel.admiral.annotations.MinMax
 import de.maxhenkel.admiral.annotations.Name
 import de.maxhenkel.admiral.annotations.RequiresPermissionLevel
+import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.loadConfig
 import lol.gito.radgyms.common.RadGyms.modId
@@ -25,7 +26,6 @@ import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
-import lol.gito.radgyms.common.gym.GymManager
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.pokecache.CacheHandler
 import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
@@ -98,7 +98,7 @@ object CommandRegistry {
         @Name("type") type: String?
     ): Int {
         if (context.source.player != null) {
-            val gymDto = GymManager.GYM_TEMPLATES[template]
+            val gymDto = RadGyms.gymTemplateRegistry.getTemplateOrDefault(template)
 
             if (gymDto == null) {
                 context.source.sendFailure(
@@ -121,7 +121,7 @@ object CommandRegistry {
             GENERATE_REWARD.emit(
                 GymEvents.GenerateRewardEvent(
                     context.source.playerOrException,
-                    GymTemplate.fromGymDto(context.source.playerOrException, gymDto, level, type),
+                    GymTemplate.fromDto(context.source.playerOrException, gymDto, level, type),
                     level,
                     gymType
                 )
