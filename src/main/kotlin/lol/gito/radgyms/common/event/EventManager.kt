@@ -111,10 +111,14 @@ object EventManager {
             CONFIG.maxLevel!!
         ).sendToPlayer(event.player)
 
-        debug("Adding player ${event.player.name} in RadGyms trainer registry")
-        RCT.trainerRegistry.registerPlayer(event.player.uuid.toString(), event.player)
-        val playerData = RadGymsState.getPlayerState(event.player)
-        debug("player gym visits: ${playerData.visits}, has return coords? ${playerData.returnCoords != null}")
+        try {
+            debug("Adding player ${event.player.name} to gyms trainer registry")
+            RCT.trainerRegistry.registerPlayer(event.player.uuid.toString(), event.player)
+            val playerData = RadGymsState.getPlayerState(event.player)
+            debug("player gym visits: ${playerData.visits}, has return coords? ${playerData.returnCoords != null}")
+        } catch (_: IllegalArgumentException) {
+            debug("Player ${event.player.name} is already present in gyms trainer registry, skipping")
+        }
     }
 
     private fun onPlayerDisconnect(event: ServerPlayerEvent) {
