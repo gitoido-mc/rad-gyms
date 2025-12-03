@@ -6,11 +6,11 @@
  *
  */
 
-package lol.gito.radgyms.common.network.client.handler
+package lol.gito.radgyms.common.net.client.handler
 
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import lol.gito.radgyms.common.client.render.gui.screen.GymLeaveScreen
-import lol.gito.radgyms.common.network.server.payload.OpenGymLeaveScreenS2C
+import lol.gito.radgyms.common.net.server.payload.OpenGymLeaveScreenS2C
 import net.minecraft.client.Minecraft
 
 /**

@@ -6,7 +6,7 @@
  *
  */
 
-package lol.gito.radgyms.common.network.client.payload
+package lol.gito.radgyms.common.net.client.payload
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import lol.gito.radgyms.common.RadGyms

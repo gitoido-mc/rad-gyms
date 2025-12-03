@@ -6,12 +6,12 @@
  *
  */
 
-package lol.gito.radgyms.common.network.client.handler
+package lol.gito.radgyms.common.net.client.handler
 
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.event.GymEvents
-import lol.gito.radgyms.common.network.server.payload.OpenGymEnterScreenS2C
+import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
 import net.minecraft.client.Minecraft
 
 /**

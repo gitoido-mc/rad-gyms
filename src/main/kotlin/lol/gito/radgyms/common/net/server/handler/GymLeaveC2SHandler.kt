@@ -6,13 +6,13 @@
  *
  */
 
-package lol.gito.radgyms.common.network.server.handler
+package lol.gito.radgyms.common.net.server.handler
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import lol.gito.radgyms.common.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
-import lol.gito.radgyms.common.network.client.payload.GymLeaveC2S
+import lol.gito.radgyms.common.net.client.payload.GymLeaveC2S
 import lol.gito.radgyms.common.registry.RadGymsItems
 import lol.gito.radgyms.common.state.RadGymsState
 import net.minecraft.server.MinecraftServer

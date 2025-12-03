@@ -6,18 +6,22 @@
  *
  */
 
-package lol.gito.radgyms.common.network.server.handler
+package lol.gito.radgyms.common.net.server.handler
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
-import lol.gito.radgyms.common.gym.GymManager
-import lol.gito.radgyms.common.network.client.payload.GymEnterC2S
+import lol.gito.radgyms.common.gym.GymInitializer
+import lol.gito.radgyms.common.gym.TeamGenerator
+import lol.gito.radgyms.common.gym.TrainerFactory
+import lol.gito.radgyms.common.gym.TrainerSpawner
+import lol.gito.radgyms.common.net.client.payload.GymEnterC2S
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsItems
 import lol.gito.radgyms.common.util.TranslationUtil
 import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.world.StructurePlacer
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -73,6 +77,12 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
         }
 
         player.displayClientMessage(message)
-        GymManager.initInstance(player, player.serverLevel(), packet.level, type)
+        GymInitializer(
+            templateRegistry = RadGyms.gymTemplateRegistry,
+            trainerSpawner = TrainerSpawner(),
+            structureManager = StructurePlacer,
+            trainerFactory = TrainerFactory(),
+            teamGenerator = TeamGenerator()
+        ).initInstance(player, player.serverLevel(), packet.level, type)
     }
 }
