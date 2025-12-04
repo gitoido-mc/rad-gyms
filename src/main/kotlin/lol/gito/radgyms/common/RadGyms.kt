@@ -81,6 +81,14 @@ object RadGyms {
         val configFile = File(CONFIG_PATH)
         configFile.parentFile.mkdirs()
 
+        val defaultRules = listOf(
+            RadGymsConfig.IvRule(chance = 5.0, minPerfectIVs = 6),   // 5% chance for 6x31
+            RadGymsConfig.IvRule(chance = 10.0, minPerfectIVs = 5),  // 10% chance (cumulative)
+            RadGymsConfig.IvRule(chance = 30.0, minPerfectIVs = 4),
+            RadGymsConfig.IvRule(chance = 85.0, minPerfectIVs = 3),
+            RadGymsConfig.IvRule(chance = 100.0, minPerfectIVs = 1)  // Fallback
+        )
+
         CONFIG = RadGymsConfig(
             debug = false,
             // Should average team level be derived automatically
@@ -98,6 +106,29 @@ object RadGyms {
             ignoredSpecies = emptyList(),
             // Ignored forms - by default ignore all battle forms
             ignoredForms = mutableListOf("gmax", "mega", "mega-x", "mega-y", "stellar", "terastal"),
+
+            cacheSettings = mapOf(
+                "common" to RadGymsConfig.CacheTierConfig(
+                    level = 20,
+                    poolSources = listOf("common"),
+                    ivRules = defaultRules
+                ),
+                "uncommon" to RadGymsConfig.CacheTierConfig(
+                    level = 30,
+                    poolSources = listOf("uncommon"),
+                    ivRules = defaultRules
+                ),
+                "rare" to RadGymsConfig.CacheTierConfig(
+                    level = 50,
+                    poolSources = listOf("rare"),
+                    ivRules = defaultRules
+                ),
+                "epic" to RadGymsConfig.CacheTierConfig(
+                    level = 80,
+                    poolSources = listOf("epic"),
+                    ivRules = defaultRules
+                )
+            )
         )
 
         if (configFile.exists()) {

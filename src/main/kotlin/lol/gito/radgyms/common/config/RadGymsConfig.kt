@@ -17,10 +17,27 @@ data class RadGymsConfig(
     val lapisBoostAmount: Int? = null,
     val ignoredSpecies: List<String>? = null,
     val ignoredForms: List<String>? = null,
+    val deriveAverageGymLevel: Boolean? = null,
     val minLevel: Int? = null,
     val maxLevel: Int? = null,
-    val deriveAverageGymLevel: Boolean? = null
+
+    val cacheSettings: Map<String, CacheTierConfig>? = null
 ) {
+    @Serializable
+    data class CacheTierConfig(
+        val level: Int,
+        // Which pools to pull from? e.g. ["common", "uncommon"]
+        val poolSources: List<String>,
+        // Percentage chances for IVs (Must range 0-100)
+        val ivRules: List<IvRule>
+    )
+
+    @Serializable
+    data class IvRule(
+        val chance: Double, // e.g., 5.0 for 5%
+        val minPerfectIVs: Int // e.g., 6
+    )
+
     fun combine(other: RadGymsConfig): RadGymsConfig {
         return this.copy(
             debug = other.debug ?: debug,
@@ -31,7 +48,8 @@ data class RadGymsConfig(
             ignoredForms = other.ignoredForms ?: ignoredForms,
             minLevel = other.minLevel ?: minLevel,
             maxLevel = other.maxLevel ?: maxLevel,
-            deriveAverageGymLevel = other.deriveAverageGymLevel ?: deriveAverageGymLevel
+            deriveAverageGymLevel = other.deriveAverageGymLevel ?: deriveAverageGymLevel,
+            cacheSettings = other.cacheSettings ?: cacheSettings
         )
     }
 }
