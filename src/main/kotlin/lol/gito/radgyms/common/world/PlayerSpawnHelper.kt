@@ -7,7 +7,9 @@
 
 package lol.gito.radgyms.common.world
 
+import com.cobblemon.mod.common.util.squeezeWithinBounds
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.state.RadGymsState
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -21,7 +23,7 @@ object PlayerSpawnHelper {
         val border = serverWorld.worldBorder
         val seed = Random(serverPlayer.uuid.mostSignificantBits and border.absoluteMaxSize.toLong())
 
-        val playerX: Int = seed.nextInt(border.minZ.toInt(),border.maxZ.toInt())
+        val playerX: Int = seed.nextInt(border.minZ.toInt(), border.maxZ.toInt())
         // get uniq z coord based on player uuid
         val playerZ: Int = RadGymsState
             .also { it.incrementVisitsForPlayer(serverPlayer) }
@@ -45,13 +47,18 @@ object PlayerSpawnHelper {
         yaw: Float,
         pitch: Float,
     ) {
+        // Fix experience just in case
         val xpLevels: Int = serverPlayer.experienceLevel
         val xpProgress: Float = serverPlayer.experienceProgress
         val totalExperience: Int = serverPlayer.totalExperience
 
+        val finalPos = when (serverWorld.dimension()) {
+            RadGymsDimensions.RADGYMS_LEVEL_KEY -> pos.center.add(0.0, 1.0, 0.0)
+            else -> serverWorld.squeezeWithinBounds(pos).center.add(0.0, 1.0, 0.0)
+        }
         val teleportTarget = DimensionTransition(
             serverWorld,
-            pos.center.add(0.0, 1.0, 0.0),
+            finalPos,
             Vec3.ZERO,
             yaw,
             pitch,
