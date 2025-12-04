@@ -1,9 +1,8 @@
 /*
  * Copyright (c) 2025. gitoido-mc
- * This Source Code Form is subject to the terms of the MIT License.
- * If a copy of the MIT License was not distributed with this file,
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
- *
  */
 
 package lol.gito.radgyms.mixin.client.render;
@@ -37,7 +36,15 @@ public abstract class OnLoadModels {
     @Shadow
     protected abstract void loadSpecialItemModelAndDependencies(ModelResourceLocation id);
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 0, shift = At.Shift.AFTER))
+    @Inject(
+        method = "<init>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V",
+            ordinal = 0,
+            shift = At.Shift.AFTER
+        )
+    )
     public void init(
         BlockColors blockColors,
         ProfilerFiller profiler,
@@ -50,7 +57,7 @@ public abstract class OnLoadModels {
                 String path = id.getPath();
                 boolean check = path.startsWith("models/item/gym_key") && path.endsWith(".json");
                 if (check) {
-                    RadGyms.INSTANCE.getLOGGER().info(path);
+                    RadGyms.LOGGER.info(path);
                 }
                 return check;
             })

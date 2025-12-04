@@ -1,9 +1,8 @@
 /*
  * Copyright (c) 2025. gitoido-mc
- * This Source Code Form is subject to the terms of the MIT License.
- * If a copy of the MIT License was not distributed with this file,
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
- *
  */
 
 package lol.gito.radgyms.common.event
@@ -52,8 +51,8 @@ object EventManager {
     fun register() {
         debug("Registering event handlers")
         // Minecraft events
-        PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStart)
-        PlatformEvents.SERVER_STOPPING.subscribe(Priority.HIGHEST, ::onServerStop)
+        PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStarting)
+        PlatformEvents.SERVER_STOPPING.subscribe(Priority.HIGHEST, ::onServerStopping)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
@@ -93,13 +92,13 @@ object EventManager {
         }
     }
 
-    private fun onServerStart(event: ServerEvent.Starting) {
+    private fun onServerStarting(event: ServerEvent.Starting) {
         val trainerRegistry = RCT.trainerRegistry
         debug("initializing RCT trainer mod registry")
         trainerRegistry.init(event.server)
     }
 
-    private fun onServerStop(event: ServerEvent.Stopping) {
+    private fun onServerStopping(event: ServerEvent.Stopping) {
         debug("cleaning up all gyms")
         RadGymsState.getServerState(event.server).gymInstanceMap.let {
             it.forEach { (playerUuid, gym) ->
