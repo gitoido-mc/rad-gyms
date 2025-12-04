@@ -67,7 +67,9 @@ class RadGymsState : SavedData() {
 
         fun getServerState(server: MinecraftServer): RadGymsState {
             val stateManager = server.getLevel(RADGYMS_LEVEL_KEY)!!.dataStorage
-            return stateManager.computeIfAbsent(type, MOD_ID)
+            return stateManager.computeIfAbsent(type, MOD_ID).also {
+                it.setDirty()
+            }
         }
 
         fun getPlayerState(player: Player): PlayerData {
