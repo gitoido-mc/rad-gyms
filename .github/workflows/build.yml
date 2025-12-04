@@ -2,7 +2,7 @@ name: Build and publish project artifacts on platforms
 on:
   push:
     tags:
-      - "([0-9]+.[0-9]+.[0-9]+)_([0-9]+.[0-9]+.[0-9]+)-([a-z]+)"
+      - "*"
 
 jobs:
   build:
@@ -50,7 +50,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           name: Rad Gyms 0.3.0-stable for Cobblemon 1.7.0+
-          version: 1.7.x+0.3.0-stable
+          version: 1.7.0_0.3.0-stable
           version-type: release
 
           loaders: fabric
