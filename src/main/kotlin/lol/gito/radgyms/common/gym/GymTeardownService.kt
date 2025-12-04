@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.gym
 
-import com.cobblemon.mod.common.util.server
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.dto.Gym
 import lol.gito.radgyms.common.registry.RadGymsBlocks
@@ -16,6 +15,7 @@ import lol.gito.radgyms.common.state.RadGymsState
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
@@ -44,8 +44,7 @@ object GymTeardownService {
         RadGymsState.removeGymForPlayer(serverPlayer)
     }
 
-    fun destructOfflineGym(uuid: UUID, gym: Gym?) {
-        val server = RadGyms.implementation.server()!!
+    fun destructOfflineGym(server: MinecraftServer, uuid: UUID, gym: Gym?) {
         val world = server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
 
         var derived = gym
@@ -74,14 +73,14 @@ object GymTeardownService {
         var preloadDim: ServerLevel
         if (state.returnCoords != null) {
             preloadPos = state.returnCoords!!.position
-            preloadDim = server()!!.getLevel(
+            preloadDim = serverPlayer.server.getLevel(
                 ResourceKey.create(
                     Registries.DIMENSION,
                     state.returnCoords!!.dimension
                 )
             )!!
         } else {
-            preloadDim = server()!!.getLevel(serverPlayer.respawnDimension)!!
+            preloadDim = serverPlayer.server.getLevel(serverPlayer.respawnDimension)!!
             preloadPos = serverPlayer.respawnPosition ?: preloadDim.sharedSpawnPos
         }
 
@@ -97,14 +96,14 @@ object GymTeardownService {
         teleportScheduler!!.scheduleReturnWithCountdown(serverPlayer, preloadDim, preloadPos)
     }
 
-    fun spawnExitBlock(gym: Gym) {
+    fun spawnExitBlock(server: MinecraftServer, gym: Gym) {
         val exitPos = BlockPos(
             (gym.coords.x + gym.template.relativeExitBlockSpawn.x).toInt(),
             (gym.coords.y + gym.template.relativeExitBlockSpawn.y).toInt(),
             (gym.coords.z + gym.template.relativeExitBlockSpawn.z).toInt(),
         )
 
-        val world = server()!!.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
+        val world = server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
 
         world.setBlockAndUpdate(
             exitPos,

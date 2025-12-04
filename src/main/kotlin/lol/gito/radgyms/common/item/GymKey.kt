@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.item
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.RadGyms
@@ -36,7 +35,7 @@ class GymKey : CobblemonItem(
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
-        val party = Cobblemon.implementation.server()!!.playerList.getPlayer(player.uuid)!!.party()
+        val party = (player as ServerPlayer).server.playerList.getPlayer(player.uuid)!!.party()
         if (party.occupied() < 3) {
             player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
             debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
@@ -48,17 +47,16 @@ class GymKey : CobblemonItem(
             return InteractionResultHolder.fail(player.getItemInHand(hand))
         }
 
-        val serverPlayer = player as ServerPlayer
         val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
-            true -> serverPlayer.averagePokePartyLevel()
+            true -> player.averagePokePartyLevel()
             false -> RadGyms.CONFIG.minLevel!!
         }
-        val type = serverPlayer.getItemInHand(hand).getOrDefault(
+        val type = player.getItemInHand(hand).getOrDefault(
             RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,
             "chaos"
         )
 
-        OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(serverPlayer)
+        OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(player)
 
         return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), true)
     }

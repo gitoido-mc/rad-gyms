@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.block
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.common.RadGyms
@@ -102,14 +101,13 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         if (level.getBlockEntity(pos) !is GymEntranceEntity) return super.useWithoutItem(state, level, pos, player, hit)
 
         (player as ServerPlayer).let { player ->
-            val party = Cobblemon.implementation.server()!!.playerList.getPlayer(player.uuid)!!.party()
-            if (party.occupied() < 3) {
+            if (player.party().occupied() < 3) {
                 player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
                 debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
                 return InteractionResult.FAIL
             }
 
-            if (party.all { it.isFainted() }) {
+            if (player.party().all { it.isFainted() }) {
                 player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey()))
                 debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
                 return InteractionResult.FAIL

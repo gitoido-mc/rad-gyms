@@ -102,8 +102,8 @@ object EventManager {
         debug("cleaning up all gyms")
         RadGymsState.getServerState(event.server).gymInstanceMap.let {
             it.forEach { (playerUuid, gym) ->
-                GymTeardownService.spawnExitBlock(gym)
-                GymTeardownService.destructOfflineGym(playerUuid, gym)
+                GymTeardownService.spawnExitBlock(event.server, gym)
+                GymTeardownService.destructOfflineGym(event.server, playerUuid, gym)
             }
             it.clear()
         }
@@ -136,7 +136,7 @@ object EventManager {
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
         if (event.player.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
-            GymTeardownService.spawnExitBlock(RadGymsState.getGymForPlayer(event.player)!!)
+            GymTeardownService.spawnExitBlock(event.player.server, RadGymsState.getGymForPlayer(event.player)!!)
             GymTeardownService.destructGym(event.player, removeCoords = false)
         }
     }
@@ -145,10 +145,7 @@ object EventManager {
         val now = markNow()
         if (SPECIES_TIMESTAMP > now) return
         SPECIES_BY_TYPE.clear()
-        PokemonSpecies.species.asSequence().forEach { species ->
-            if (!species.implemented) return@forEach
-            debug(species.resourceIdentifier.path)
-        }
+
         ElementalTypes.all().forEach {
             SPECIES_BY_TYPE[it.showdownId] = speciesOfType(it)
             debug("Added ${SPECIES_BY_TYPE[it.showdownId]?.size} ${it.showdownId} entries to species map")

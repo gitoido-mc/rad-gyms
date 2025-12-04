@@ -62,7 +62,7 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
 
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
 
-            gym.let { GymTeardownService.spawnExitBlock(it) }
+            gym.let { GymTeardownService.spawnExitBlock(firstPlayer.server, it) }
 
             winnerPlayers.forEach {
                 GENERATE_REWARD.emit(
