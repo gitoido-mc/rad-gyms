@@ -1,20 +1,22 @@
 /*
  * Copyright (c) 2025. gitoido-mc
- * This Source Code Form is subject to the terms of the MIT License.
- * If a copy of the MIT License was not distributed with this file,
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
- *
  */
 
 package lol.gito.radgyms.common.event.gyms
 
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.api.event.GymEvents
-import lol.gito.radgyms.common.gym.GymManager.handleGymLeave
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.gym.GymTeardownService
+import lol.gito.radgyms.common.gym.GymTeleportScheduler
 
 class GymLeaveHandler(event: GymEvents.GymLeaveEvent) {
     init {
         debug("gym leave triggered")
-        handleGymLeave(event.player)
+        GymTeardownService
+            .withTeleportScheduler(GymTeleportScheduler())
+            .handleGymLeave(event.player)
     }
 }

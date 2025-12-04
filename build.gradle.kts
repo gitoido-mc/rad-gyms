@@ -40,10 +40,6 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
-    maven {
-        url = URI("https://maven.terraformersmc.com/")
-        name = "TerraformersMC" // EMI
-    }
     maven("https://maven.architectury.dev/")
     maven("https://maven.wispforest.io/releases/")
     maven("https://maven.impactdev.net/repository/development/")
@@ -62,35 +58,36 @@ repositories {
 fabricApi {
     configureDataGeneration {
         client = true
+
     }
 }
 
 loom {
     accessWidenerPath = file("src/main/resources/rad-gyms.accesswidener")
-    splitEnvironmentSourceSets()
 
     runs {
         getByName("client") {
             programArgs(
-                "--username", "Gito",
-                "--uuid", "23131d78-9edb-48a4-902a-e22e572e9f2b"
+                "--username=Gitoido",
+                "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b"
             )
         }
-    }
-
-    mods {
-        create("rad-gyms") {
-            sourceSet(sourceSets.main.get())
-            sourceSet(sourceSets.getByName("client"))
+        getByName("server") {
+            runDir = "run-server"
+        }
+        getByName("datagen") {
+            runDir = "run-datagen"
         }
     }
 }
+
+// -XX:+AllowEnhancedClassRedefinition
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
     implementation("net.benwoodworth.knbt:knbt:0.11.9")
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
+    mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
@@ -133,7 +130,10 @@ tasks {
     }
 
     compileKotlin {
-        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
+            freeCompilerArgs.set(listOf("-Xnested-type-aliases"))
+        }
     }
 
     java {

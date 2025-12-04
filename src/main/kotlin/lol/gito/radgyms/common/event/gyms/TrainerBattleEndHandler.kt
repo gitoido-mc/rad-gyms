@@ -1,9 +1,8 @@
 /*
  * Copyright (c) 2025. gitoido-mc
- * This Source Code Form is subject to the terms of the MIT License.
- * If a copy of the MIT License was not distributed with this file,
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
- *
  */
 
 package lol.gito.radgyms.common.event.gyms
@@ -11,17 +10,19 @@ package lol.gito.radgyms.common.event.gyms
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.RadGyms.modId
-import lol.gito.radgyms.api.enumeration.GymBattleEndReason
-import lol.gito.radgyms.api.event.GymEvents
-import lol.gito.radgyms.api.event.GymEvents.GENERATE_REWARD
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
+import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
 import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.gym.GymManager
-import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.gym.GymTeardownService
+import lol.gito.radgyms.common.gym.GymTeleportScheduler
+import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
 import lol.gito.radgyms.common.state.RadGymsState
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text.translatable
+import lol.gito.radgyms.common.util.displayClientMessage
+import net.minecraft.network.chat.Component.translatable
+import net.minecraft.server.level.ServerPlayer
 
 class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
     init {
@@ -35,7 +36,7 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
 
     private fun handleGymWin(event: GymEvents.TrainerBattleEndEvent) {
         val winnerBattleActor = (event.winners.first { it.type == ActorType.PLAYER } as PlayerBattleActor)
-        val firstPlayer = winnerBattleActor.entity as ServerPlayerEntity
+        val firstPlayer = winnerBattleActor.entity as ServerPlayer
         event.losers.forEach { loser ->
             if (loser.type == ActorType.NPC && loser is TrainerEntityBattleActor && loser.entity is Trainer) {
                 (loser.entity as Trainer).defeated = true
@@ -57,25 +58,28 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
         if (defeatedLeader != null) {
             val winnerPlayers = event.winners
                 .filter { it.type == ActorType.PLAYER }
-                .map { (it as PlayerBattleActor).entity as ServerPlayerEntity }
+                .map { (it as PlayerBattleActor).entity as ServerPlayer }
 
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
 
-            gym.let { GymManager.spawnExitBlock(it) }
+            gym.let { GymTeardownService.spawnExitBlock(firstPlayer.server, it) }
 
             winnerPlayers.forEach {
                 GENERATE_REWARD.emit(
                     GymEvents.GenerateRewardEvent(it, gym.template, gym.level, gym.type)
                 )
 
-                it.sendMessage(translatable(modId("message.info.gym_complete").toTranslationKey()))
+                it.displayClientMessage(translatable(modId("message.info.gym_complete").toLanguageKey()))
             }
         }
     }
 
-    private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) {
-        event.battle.players.filter { it.world.registryKey == RADGYMS_LEVEL_KEY }.forEach { player ->
-            GymManager.handleGymLeave(player)
+    private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) = event
+        .battle
+        .players
+        .filter { it.level().dimension() == RADGYMS_LEVEL_KEY }
+        .forEach { GymTeardownService
+            .withTeleportScheduler(GymTeleportScheduler())
+            .handleGymLeave(it)
         }
-    }
 }

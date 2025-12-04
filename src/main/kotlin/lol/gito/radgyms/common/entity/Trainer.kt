@@ -1,50 +1,49 @@
 /*
  * Copyright (c) 2025. gitoido-mc
- * This Source Code Form is subject to the terms of the MIT License.
- * If a copy of the MIT License was not distributed with this file,
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
- *
  */
 
 package lol.gito.radgyms.common.entity
 
-import lol.gito.radgyms.api.enumeration.GymBattleFormat
-import lol.gito.radgyms.api.event.GymEvents
-import lol.gito.radgyms.api.event.GymEvents.TRAINER_INTERACT
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.attribute.DefaultAttributeContainer
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.data.DataTracker
-import net.minecraft.entity.data.TrackedData
-import net.minecraft.entity.data.TrackedDataHandlerRegistry
-import net.minecraft.entity.passive.VillagerEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.math.Vec3d
-import net.minecraft.world.World
+import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
+import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
+import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
-class Trainer(entityType: EntityType<out Trainer>, world: World) :
-    VillagerEntity(entityType, world) {
+class Trainer(entityType: EntityType<out Trainer>, level: Level) :
+    Villager(entityType, level) {
 
     companion object {
-        fun createAttributes(): DefaultAttributeContainer.Builder = createVillagerAttributes()
-        val GYM_ID: TrackedData<String> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.STRING)
-        val FORMAT: TrackedData<String> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.STRING)
-        val TRAINER_ID: TrackedData<Optional<UUID>> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.OPTIONAL_UUID)
-        val REQUIRES: TrackedData<Optional<UUID>> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.OPTIONAL_UUID)
-        val DEFEATED: TrackedData<Boolean> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.BOOLEAN)
-        val LEADER: TrackedData<Boolean> =
-            DataTracker.registerData(Trainer::class.java, TrackedDataHandlerRegistry.BOOLEAN)
+        fun createAttributes(): AttributeSupplier.Builder = Villager.createAttributes()
+        val GYM_ID: EntityDataAccessor<String> =
+            SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.STRING)
+        val FORMAT: EntityDataAccessor<String> =
+            SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.STRING)
+        val TRAINER_ID: EntityDataAccessor<Optional<UUID>> =
+            SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.OPTIONAL_UUID)
+        val REQUIRES: EntityDataAccessor<Optional<UUID>> =
+            SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.OPTIONAL_UUID)
+        val DEFEATED: EntityDataAccessor<Boolean> =
+            SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.BOOLEAN)
+        val LEADER: EntityDataAccessor<Boolean> =
+            SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.BOOLEAN)
     }
 
     private val gymTrainerIdKey = "gymTrainerId"
@@ -55,100 +54,98 @@ class Trainer(entityType: EntityType<out Trainer>, world: World) :
     private val leaderKey = "isLeader"
 
     var gymId: String
-        get() = dataTracker.get(GYM_ID) ?: "default_trainer"
-        set(value) = dataTracker.set(GYM_ID, value)
+        get() = entityData.get(GYM_ID) ?: "default_trainer"
+        set(value) = entityData.set(GYM_ID, value)
 
     var format: String
-        get() = dataTracker.get(FORMAT) ?: GymBattleFormat.SINGLES.name.lowercase()
-        set(value) = dataTracker.set(FORMAT, value)
+        get() = entityData.get(FORMAT) ?: GymBattleFormat.SINGLES.name.lowercase()
+        set(value) = entityData.set(FORMAT, value)
 
     var trainerId: UUID?
-        get() = dataTracker.get(TRAINER_ID)?.getOrNull()
-        set(value) = dataTracker.set(TRAINER_ID, Optional<UUID>.ofNullable(value))
+        get() = entityData.get(TRAINER_ID)?.getOrNull()
+        set(value) = entityData.set(TRAINER_ID, Optional<UUID>.ofNullable(value))
 
     var requires: UUID?
-        get() = dataTracker.get(REQUIRES)?.getOrNull()
-        set(value) = dataTracker.set(REQUIRES, Optional<UUID>.ofNullable(value))
+        get() = entityData.get(REQUIRES)?.getOrNull()
+        set(value) = entityData.set(REQUIRES, Optional<UUID>.ofNullable(value))
 
 
     var defeated: Boolean
-        get() = dataTracker.get(DEFEATED) ?: false
-        set(value) = dataTracker.set(DEFEATED, value)
+        get() = entityData.get(DEFEATED) ?: false
+        set(value) = entityData.set(DEFEATED, value)
 
     var leader: Boolean
-        get() = dataTracker.get(LEADER) ?: false
-        set(value) = dataTracker.set(LEADER, value)
+        get() = entityData.get(LEADER) ?: false
+        set(value) = entityData.set(LEADER, value)
 
     init {
-        this.world = world
-        this.setPersistent()
+        this.setLevel(level)
+        this.setPersistenceRequired()
     }
 
-    override fun getMaxLookYawChange(): Int = 360
+    override fun getHeadRotSpeed(): Int = 360
     override fun isSilent(): Boolean = true
     override fun isPushable(): Boolean = false
-    override fun damage(source: DamageSource, amount: Float): Boolean = false
+    override fun hurt(source: DamageSource, amount: Float): Boolean = false
 
-    override fun initDataTracker(builder: DataTracker.Builder) {
-        super.initDataTracker(
+    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
+        super.defineSynchedData(
             builder
-                .add(GYM_ID, "default_trainer")
-                .add(FORMAT, GymBattleFormat.SINGLES.name)
-                .add(TRAINER_ID, Optional<UUID>.ofNullable(null))
-                .add(REQUIRES, Optional<UUID>.ofNullable(null))
-                .add(DEFEATED, false)
-                .add(LEADER, false)
+                .define(GYM_ID, "default_trainer")
+                .define(FORMAT, GymBattleFormat.SINGLES.name)
+                .define(TRAINER_ID, Optional<UUID>.ofNullable(null))
+                .define(REQUIRES, Optional<UUID>.ofNullable(null))
+                .define(DEFEATED, false)
+                .define(LEADER, false)
         )
     }
 
-    override fun onTrackedDataSet(data: TrackedData<*>) {
-        super.onTrackedDataSet(data)
+    override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
+        super.onSyncedDataUpdated(data)
     }
 
-    override fun tickMovement() {
-        super.tickMovement()
-        velocity = Vec3d.ZERO
+    override fun aiStep() {
+        super.aiStep()
+        deltaMovement = Vec3.ZERO
     }
 
-    override fun interactMob(player: PlayerEntity, hand: Hand): ActionResult {
-        if (!world.isClient) {
+    override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
+        if (!level().isClientSide) {
             TRAINER_INTERACT.postThen(
-                GymEvents.TrainerInteractEvent(player as ServerPlayerEntity, this),
-                { event -> return ActionResult.FAIL },
-                { event -> return ActionResult.success(world.isClient) },
+                GymEvents.TrainerInteractEvent(player as ServerPlayer, this),
+                { _ -> return InteractionResult.FAIL },
+                { _ -> return InteractionResult.sidedSuccess(level().isClientSide) },
             )
         }
 
-        return ActionResult.success(world.isClient)
+        return InteractionResult.sidedSuccess(level().isClientSide)
     }
 
-    override fun writeNbt(nbt: NbtCompound): NbtCompound {
-        super.writeNbt(nbt)
+    override fun addAdditionalSaveData(nbt: CompoundTag) {
+        super.addAdditionalSaveData(nbt)
         nbt.putString(gymTrainerIdKey, gymId)
         nbt.putString(battleFormat, format)
         nbt.putBoolean(leaderKey, leader)
         nbt.putBoolean(defeatedKey, defeated)
 
         if (trainerId != null) {
-            nbt.putUuid(trainerIdKey, trainerId)
+            nbt.putUUID(trainerIdKey, trainerId!!)
         }
         if (requires != null) {
-            nbt.putUuid(requiresKey, requires)
+            nbt.putUUID(requiresKey, requires!!)
         }
-
-        return nbt
     }
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun readAdditionalSaveData(nbt: CompoundTag) {
+        super.readAdditionalSaveData(nbt)
         if (nbt.contains(gymTrainerIdKey)) {
             gymId = nbt.getString(gymTrainerIdKey)
         }
         if (nbt.contains(trainerIdKey)) {
-            trainerId = nbt.getUuid(trainerIdKey)
+            trainerId = nbt.getUUID(trainerIdKey)
         }
         if (nbt.contains(requiresKey)) {
-            requires = nbt.getUuid(requiresKey)
+            requires = nbt.getUUID(requiresKey)
         }
         if (nbt.contains(defeatedKey)) {
             defeated = nbt.getBoolean(defeatedKey)

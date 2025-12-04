@@ -1,54 +1,52 @@
 /*
  * Copyright (c) 2025. gitoido-mc
- * This Source Code Form is subject to the terms of the MIT License.
- * If a copy of the MIT License was not distributed with this file,
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
- *
  */
 
 package lol.gito.radgyms.common.state
 
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
-import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
-import lol.gito.radgyms.RadGyms
-import lol.gito.radgyms.RadGyms.MOD_ID
-import lol.gito.radgyms.RadGyms.debug
-import lol.gito.radgyms.api.dto.Gym
-import lol.gito.radgyms.common.registry.DimensionRegistry.RADGYMS_LEVEL_KEY
-import lol.gito.radgyms.mixin.util.RCTBattleAIAccessor
-import lol.gito.radgyms.util.getBlockPos
-import lol.gito.radgyms.util.putBlockPos
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.registry.RegistryWrapper
+import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.MOD_ID
+import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.util.getBlockPos
+import lol.gito.radgyms.common.util.putBlockPos
+import lol.gito.radgyms.mixin.util.accessor.RCTBattleAIAccessor
+import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.Identifier
-import net.minecraft.world.PersistentState
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
 
-class RadGymsState : PersistentState() {
+class RadGymsState : SavedData() {
     val playerDataMap: MutableMap<UUID, PlayerData> = mutableMapOf()
     val gymInstanceMap: MutableMap<UUID, Gym> = mutableMapOf()
 
     companion object {
         fun create() = RadGymsState()
 
-        private val type: Type<RadGymsState> = Type(
+        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+        private val type: Factory<RadGymsState> = Factory(
             ::create,
-            ::readNbt,
+            ::save,
             null
         )
 
         @Suppress("unused")
-        fun readNbt(
-            nbt: NbtCompound,
-            registryLookup: RegistryWrapper.WrapperLookup
+        fun save(
+            nbt: CompoundTag,
+            registryLookup: HolderLookup.Provider
         ): RadGymsState {
             val state = RadGymsState()
 
-            nbt.getCompound("Players").keys.forEach { uuidString ->
+            nbt.getCompound("Players").allKeys.forEach { uuidString ->
                 val uuid = UUID.fromString(uuidString)
                 val playerDataNbt = nbt.getCompound("Players").getCompound(uuidString)
                 val playerData = PlayerData(playerDataNbt.getInt("Visits"))
@@ -56,114 +54,73 @@ class RadGymsState : PersistentState() {
                 if (playerDataNbt.contains("ReturnCoords")) {
                     val returnCoords = playerDataNbt.getCompound("ReturnCoords")
                     playerData.returnCoords = PlayerData.ReturnCoords(
-                        Identifier.of(returnCoords.getString("Dimension")),
+                        ResourceLocation.parse(returnCoords.getString("Dimension")),
                         returnCoords.getBlockPos("Position")
                     )
                 }
 
-                state.playerDataMap.put(uuid, playerData)
+                state.playerDataMap[uuid] = playerData
             }
-
-//            nbt.getCompound("Gyms").keys.forEach { uuidString ->
-//                val uuid = UUID.fromString(uuidString)
-//                val gymDataNbt = nbt.getCompound("Gyms").getCompound(uuidString)
-//                val gymTemplate = GYM_TEMPLATES[gymDataNbt.getString("Type")]?.let {
-//                    GymTemplate.fromGymDto(
-//                        server()!!.playerManager.getPlayer(uuid)!!,
-//                        it,
-//                        gymDataNbt.getInt("Level"),
-//                        gymDataNbt.getString("Type")
-//                    )
-//                }!!
-//
-//                val gymTrainers = mutableMapOf<UUID, TrainerModel>()
-//                gymDataNbt.getCompound("Trainers").keys.forEach { entityUuidString ->
-//                    val trainerUuid = UUID.fromString(uuidString)
-//                    val trainerDataNbt = gymDataNbt.getCompound("Trainers").getCompound(entityUuidString)
-//                    val trainerTemplateId = trainerDataNbt.getString("TrainerId")
-//                    val trainerTemplate = gymTemplate.trainers.first { trainer -> trainer.id == trainerTemplateId }
-//                    val team = mutableListOf<PokemonModel>()
-//
-//
-//                    val gymTrainer = GymTrainer(
-//                        trainerTemplateId,
-//                        trainerTemplate.npc,
-//                        battleRules = TODO(),
-//                        leader = TODO(),
-//                        requires = TODO()
-//                    )
-//
-//                    gymTrainers[trainerUuid] = gymTrainer
-//                }
-//
-//                val gymInstance = Gym(
-//                    template = gymTemplate,
-//                    npcList = mutableMapOf(),
-//                    coords = gymDataNbt.getBlockPos("Coords"),
-//                    level = gymDataNbt.getInt("Level"),
-//                    type = gymDataNbt.getString("Type"),
-//                    label = gymDataNbt.getString("Label")
-//                )
-//
-//                state.gymInstanceMap.put(uuid, gymInstance)
-//            }
 
             return state
         }
 
         fun getServerState(server: MinecraftServer): RadGymsState {
-            val stateManager = server.getWorld(RADGYMS_LEVEL_KEY)!!.persistentStateManager
-            return stateManager.getOrCreate(type, MOD_ID).also {
-                debug("marking server state as dirty")
-                it.markDirty()
+            val stateManager = server.getLevel(RADGYMS_LEVEL_KEY)!!.dataStorage
+            return stateManager.computeIfAbsent(type, MOD_ID).also {
+                it.setDirty()
             }
         }
 
-        fun getPlayerState(player: PlayerEntity): PlayerData {
-            val serverState = getServerState(player.world.server!!)
+        fun getPlayerState(player: Player): PlayerData {
+            val serverState = getServerState(player.server!!)
 
             return serverState.playerDataMap.computeIfAbsent(player.uuid) { PlayerData() }
         }
 
-        fun incrementVisitsForPlayer(player: ServerPlayerEntity) {
+        fun incrementVisitsForPlayer(player: ServerPlayer) {
             getPlayerState(player).incrementVisits()
         }
 
-        fun setReturnCoordsForPlayer(player: ServerPlayerEntity, coords: PlayerData.ReturnCoords?) {
+        fun setReturnCoordsForPlayer(player: ServerPlayer, coords: PlayerData.ReturnCoords?) {
             getPlayerState(player).returnCoords = coords
         }
 
-        fun hasGymForPlayer(player: ServerPlayerEntity): Boolean {
+        fun hasGymForPlayer(player: ServerPlayer): Boolean {
             return getServerState(player.server).gymInstanceMap.keys.contains(player.uuid)
         }
 
-        fun getGymForPlayer(player: ServerPlayerEntity): Gym? {
+        fun getGymForPlayer(player: ServerPlayer): Gym? {
             return getServerState(player.server).gymInstanceMap[player.uuid]
         }
 
-        fun addGymForPlayer(player: ServerPlayerEntity, gymInstance: Gym) {
+        fun addGymForPlayer(player: ServerPlayer, gymInstance: Gym) {
             if (hasGymForPlayer(player)) {
                 removeGymForPlayer(player)
             }
 
-            getServerState(player.server).gymInstanceMap.put(player.uuid, gymInstance)
+            getServerState(player.server).gymInstanceMap[player.uuid] = gymInstance
         }
 
-        fun removeGymForPlayer(player: ServerPlayerEntity) {
+        fun removeGymForPlayer(player: ServerPlayer) {
             getServerState(player.server).gymInstanceMap.remove(player.uuid)
+        }
+
+        fun removeGymForPlayerByUuid(uuid: UUID) {
+            getServerState(RadGyms.implementation.server()!!).gymInstanceMap.remove(uuid)
         }
     }
 
-    override fun writeNbt(
-        nbt: NbtCompound,
-        registryLookup: RegistryWrapper.WrapperLookup
-    ): NbtCompound {
-        val playerDataNbt = NbtCompound()
+    override fun save(
+        nbt: CompoundTag,
+        registryLookup: HolderLookup.Provider
+    ): CompoundTag {
+        val playerDataNbt = CompoundTag()
         playerDataMap.forEach { (uuid, data) ->
-            val playerData = NbtCompound()
+            val playerData = CompoundTag()
             playerData.putInt("Visits", data.visits)
             if (data.returnCoords != null) {
-                val returnCoordsNbt = NbtCompound()
+                val returnCoordsNbt = CompoundTag()
                 returnCoordsNbt.putString("Dimension", data.returnCoords!!.dimension.toString())
                 returnCoordsNbt.putBlockPos("Position", data.returnCoords!!.position)
                 playerData.put("ReturnCoords", returnCoordsNbt)
@@ -171,35 +128,37 @@ class RadGymsState : PersistentState() {
 
             playerDataNbt.put(uuid.toString(), playerData)
         }
-        val gymDataNbt = gymNbtCompound()
 
         nbt.put("Players", playerDataNbt)
-        nbt.put("Gyms", gymDataNbt)
+
         return nbt
     }
 
-    private fun gymNbtCompound(): NbtCompound {
+    /**
+     * TODO: Persistence between restarts
+     */
+    @Suppress("unused")
+    private fun gymCompoundTag(): CompoundTag {
         val trainerRegistry = RadGyms.RCT.trainerRegistry
-        val gymNbtCompound = NbtCompound()
+        val gymCompoundTag = CompoundTag()
 
         gymInstanceMap.forEach { (gymUuid, instance) ->
-            val gymData = NbtCompound()
+            val gymData = CompoundTag()
             gymData.putInt("Level", instance.level)
             gymData.putString("Type", instance.type)
             gymData.putString("Label", instance.label)
             gymData.putBlockPos("Coords", instance.coords)
 
-            val gymTrainers = NbtCompound()
+            val gymTrainers = CompoundTag()
 
             instance.npcList.forEach { (uuid, npc) ->
-                val trainerNbt = NbtCompound()
+                val trainerNbt = CompoundTag()
                 val trainer = trainerRegistry.getById(uuid.toString(), TrainerNPC::class.java)
-                val trainerBagNbt = NbtCompound()
-                val trainerTeamNbt = NbtCompound()
-                val trainerAiNbt = NbtCompound()
+                val trainerBagNbt = CompoundTag()
+                val trainerTeamNbt = CompoundTag()
+                val trainerAiNbt = CompoundTag()
 
-                // frick my chungus life
-                ((trainer.battleAI as RCTBattleAI) as RCTBattleAIAccessor).let {
+                (trainer.battleAI as RCTBattleAIAccessor).let {
                     trainerAiNbt.putDouble("moveBias", it.moveBias)
                     trainerAiNbt.putDouble("statusMoveBias", it.statusMoveBias)
                     trainerAiNbt.putDouble("switchBias", it.switchBias)
@@ -226,9 +185,9 @@ class RadGymsState : PersistentState() {
                 gymTrainers.put(uuid.toString(), trainerNbt)
             }
             gymData.put("Trainers", gymTrainers)
-            gymNbtCompound.put(gymUuid.toString(), gymData)
+            gymCompoundTag.put(gymUuid.toString(), gymData)
         }
 
-        return gymNbtCompound
+        return gymCompoundTag
     }
 }
