@@ -6,6 +6,12 @@
     "server.compat.OnAetherEntityInteract",
     "server.event.OnServerPlayerEntityDeath",
     "server.item.BundleItemMixin",
+    "server.worldBorder.CollisionGetterMixin",
+    "server.worldBorder.EntityMixin",
+    "server.worldBorder.LivingEntityMixin",
+    "server.worldBorder.PlayerManagerMixin",
+    "server.worldBorder.ServerGamePacketListenerMixin",
+    "server.worldBorder.ServerLevelMixin",
     "util.accessor.RCTBattleAIAccessor"
   ],
   "injectors": {

@@ -19,6 +19,7 @@ import lol.gito.radgyms.common.gym.SpeciesManager
 import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.fabric.RadGymsDataLoader
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.border.WorldBorder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -33,7 +34,8 @@ object RadGyms {
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
     @JvmField
     val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
-    val gymTemplateRegistry: RadGymsTemplates = RadGymsTemplates
+    @JvmField
+    val dimensionWorldBorder: WorldBorder = WorldBorder()
 
     lateinit var CONFIG: RadGymsConfig
     lateinit var implementation: RadGymsImplementation
