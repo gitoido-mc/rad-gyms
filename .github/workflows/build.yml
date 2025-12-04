@@ -48,13 +48,9 @@ jobs:
         with:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          github-generate-changelog: true
-          github-draft: true
-          github-commitish: dev
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-          name: Rad Gyms 0.3.2 for Cobblemon 1.7.0+
-          version: mc1.17.1-0.3.2
+          name: Rad Gyms 0.3.0-stable for Cobblemon 1.7.0+
+          version: 1.7.x+0.3.0-stable
           version-type: release
 
           loaders: fabric
