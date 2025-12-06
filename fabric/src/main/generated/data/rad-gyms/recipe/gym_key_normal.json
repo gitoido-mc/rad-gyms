@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "multi_bench",
+  "ingredients": [
+    {
+      "item": "rad-gyms:gym_key"
+    },
+    {
+      "item": "cobblemon:normal_gem"
+    }
+  ],
+  "result": {
+    "components": {
+      "minecraft:rarity": "rare",
+      "rad-gyms:gym_type_component": "normal"
+    },
+    "count": 1,
+    "id": "rad-gyms:gym_key"
+  }
+}

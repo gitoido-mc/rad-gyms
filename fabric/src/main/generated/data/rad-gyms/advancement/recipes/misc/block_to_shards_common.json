@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_shard_block_common": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rad-gyms:shard_common"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rad-gyms:block_to_shards_common"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_shard_block_common"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rad-gyms:block_to_shards_common"
+    ]
+  }
+}

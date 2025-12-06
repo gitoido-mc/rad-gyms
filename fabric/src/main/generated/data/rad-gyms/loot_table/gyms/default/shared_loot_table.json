@@ -1,0 +1,63 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.25,
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:held/is_held_item"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:evolution_items"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 0.0
+      }
+    },
+    {
+      "bonus_rolls": 0.5,
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:tumblestones"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:restores"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:vitamins"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 0.0
+      }
+    },
+    {
+      "bonus_rolls": 0.5,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lapis_lazuli"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 5.0,
+        "min": 1.0
+      }
+    }
+  ]
+}

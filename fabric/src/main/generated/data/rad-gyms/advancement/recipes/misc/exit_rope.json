@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_binding_band": {
+      "conditions": {
+        "items": [
+          {
+            "items": "cobblemon:binding_band"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rad-gyms:exit_rope"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_binding_band"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rad-gyms:exit_rope"
+    ]
+  }
+}

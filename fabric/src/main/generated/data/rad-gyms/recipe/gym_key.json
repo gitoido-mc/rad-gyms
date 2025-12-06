@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "multi_bench",
+  "key": {
+    "b": {
+      "item": "cobblemon:poke_ball"
+    },
+    "g": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "pattern": [
+    " g",
+    "b "
+  ],
+  "result": {
+    "count": 1,
+    "id": "rad-gyms:gym_key"
+  }
+}

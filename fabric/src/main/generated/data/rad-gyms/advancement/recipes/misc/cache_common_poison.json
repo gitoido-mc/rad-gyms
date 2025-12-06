@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_poison_gem": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rad-gyms:cache_common"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rad-gyms:cache_common_poison"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_poison_gem"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rad-gyms:cache_common_poison"
+    ]
+  }
+}
