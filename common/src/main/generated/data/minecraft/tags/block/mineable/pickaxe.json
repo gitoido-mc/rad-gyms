@@ -1,9 +1,0 @@
-{
-  "values": [
-    "rad-gyms:gym_entrance",
-    "rad-gyms:shard_block_common",
-    "rad-gyms:shard_block_uncommon",
-    "rad-gyms:shard_block_rare",
-    "rad-gyms:shard_block_epic"
-  ]
-}

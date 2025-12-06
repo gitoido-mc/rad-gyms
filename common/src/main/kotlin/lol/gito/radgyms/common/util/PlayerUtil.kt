@@ -9,7 +9,7 @@ package lol.gito.radgyms.common.util
 
 import com.cobblemon.mod.common.Cobblemon
 import lol.gito.radgyms.common.RadGyms
-import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import kotlin.math.roundToInt
@@ -24,5 +24,5 @@ fun ServerPlayer.averagePokePartyLevel(): Int {
 }
 
 
-fun Player.displayClientMessage(component: MutableComponent, maybeOverlay: Boolean = true) =
+fun Player.displayClientMessage(component: Component, maybeOverlay: Boolean = true) =
     this.displayClientMessage(component, maybeOverlay)

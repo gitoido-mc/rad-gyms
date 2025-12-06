@@ -12,24 +12,23 @@ import lol.gito.radgyms.common.util.displayClientMessage
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
 class GymTeleportScheduler {
     fun scheduleReturnWithCountdown(player: ServerPlayer, dim: ServerLevel, pos: BlockPos) {
-        player.displayClientMessage(Component.nullToEmpty("5...") as MutableComponent)
+        player.displayClientMessage(Component.nullToEmpty("5..."))
         delayExecute(1f) {
-            player.displayClientMessage(Component.nullToEmpty("4...") as MutableComponent)
+            player.displayClientMessage(Component.nullToEmpty("4..."))
         }
         delayExecute(2f) {
-            player.displayClientMessage(Component.nullToEmpty("3...") as MutableComponent)
+            player.displayClientMessage(Component.nullToEmpty("3..."))
         }
         delayExecute(3f) {
-            player.displayClientMessage(Component.nullToEmpty("2...") as MutableComponent)
+            player.displayClientMessage(Component.nullToEmpty("2..."))
         }
         delayExecute(4f) {
-            player.displayClientMessage(Component.nullToEmpty("1...") as MutableComponent)
+            player.displayClientMessage(Component.nullToEmpty("1..."))
         }
         delayExecute(5f) {
             PlayerSpawnHelper.teleportPlayer(player, dim, pos, yaw = player.yRot, pitch = player.xRot)

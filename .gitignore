@@ -58,3 +58,4 @@ common/.fabric
 run
 run-datagen
 run-server
+/*/src/main/generated/
