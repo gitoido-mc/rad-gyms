@@ -9,7 +9,6 @@ package lol.gito.radgyms.fabric
 
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
-import com.cobblemon.mod.fabric.CobblemonFabric
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
@@ -17,10 +16,13 @@ import lol.gito.radgyms.common.RadGymsImplementation
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.util.displayClientMessage
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
+import net.fabricmc.api.EnvType
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
@@ -42,9 +44,13 @@ object RadGymsFabric : RadGymsImplementation {
 
     override val networkManager = RadGymsFabricNetworkManager
 
-    override fun environment(): Environment = CobblemonFabric.environment()
+    override fun environment(): Environment = when(FabricLoader.getInstance().environmentType) {
+        EnvType.CLIENT -> Environment.CLIENT
+        EnvType.SERVER -> Environment.SERVER
+        else -> throw IllegalStateException("Fabric implementation cannot resolve environment yet")
+    }
 
-    override fun isModInstalled(id: String): Boolean = CobblemonFabric.isModInstalled(id)
+    override fun isModInstalled(id: String): Boolean = FabricLoader.getInstance().isModLoaded(id)
 
 
     override fun initialize() {
@@ -53,6 +59,9 @@ object RadGymsFabric : RadGymsImplementation {
         networkManager.registerMessages()
         networkManager.registerServerHandlers()
         PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
+        ServerLifecycleEvents.SERVER_STARTING.register {
+            this.server = it
+        }
     }
 
     override fun registerDataComponents() = RadGymsDataComponents.register { identifier, component ->

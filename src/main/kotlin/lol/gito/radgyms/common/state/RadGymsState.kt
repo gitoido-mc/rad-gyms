@@ -11,17 +11,18 @@ import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.MOD_ID
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.Gym
 import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
 import lol.gito.radgyms.common.util.getBlockPos
 import lol.gito.radgyms.common.util.putBlockPos
+import lol.gito.radgyms.fabric.RadGymsFabric.server
 import lol.gito.radgyms.mixin.util.accessor.RCTBattleAIAccessor
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
 
@@ -72,8 +73,8 @@ class RadGymsState : SavedData() {
             }
         }
 
-        fun getPlayerState(player: Player): PlayerData {
-            val serverState = getServerState(player.server!!)
+        fun getPlayerState(player: ServerPlayer): PlayerData {
+            val serverState = getServerState(player.server)
 
             return serverState.playerDataMap.computeIfAbsent(player.uuid) { PlayerData() }
         }
@@ -107,7 +108,10 @@ class RadGymsState : SavedData() {
         }
 
         fun removeGymForPlayerByUuid(uuid: UUID) {
-            getServerState(RadGyms.implementation.server()!!).gymInstanceMap.remove(uuid)
+            server()?.let {
+                debug("Removing gyms for player {}", uuid)
+                getServerState(it).gymInstanceMap.remove(uuid)
+            }
         }
     }
 

@@ -44,15 +44,10 @@ object GymTeardownService {
         RadGymsState.removeGymForPlayer(serverPlayer)
     }
 
-    fun destructOfflineGym(server: MinecraftServer, uuid: UUID, gym: Gym?) {
+    fun destructOfflineGym(server: MinecraftServer, uuid: UUID, gym: Gym) {
         val world = server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
 
-        var derived = gym
-        if (derived == null) {
-            derived = RadGymsState.getServerState(server).gymInstanceMap[uuid]!!
-        }
-
-        derived.npcList.forEach {
+        gym.npcList.forEach {
             RadGyms.RCT.trainerRegistry.unregisterById(it.key.toString())
             world.getEntity(it.key)?.discard()
         }

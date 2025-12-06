@@ -66,14 +66,14 @@ object RadGyms {
     fun modId(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, name)
 
     @Suppress("unused")
-    fun log(message: String): Unit = LOGGER.info(message)
+    fun log(message: String, vararg params: Any): Unit = LOGGER.info(message, *params)
 
     @Suppress("unused")
-    fun warn(message: String): Unit = LOGGER.warn(message)
+    fun warn(message: String, vararg params: Any): Unit = LOGGER.warn(message, *params)
 
     @Suppress("unused")
-    fun debug(message: String) {
-        if (CONFIG.debug == true) LOGGER.info(message)
+    fun debug(message: String, vararg params: Any) {
+        if (CONFIG.debug == true) LOGGER.info(message, *params)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
