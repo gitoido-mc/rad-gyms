@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.CobblemonItem
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.item.GymKey
 import lol.gito.radgyms.common.item.PokeCache
 import lol.gito.radgyms.common.item.PokeShardBase
@@ -78,7 +79,7 @@ class RecipeProvider(
                     getHasName(pair.second),
                     has(pair.first)
                 )
-                .save(recipeExporter, "gym_key_${type.showdownId}")
+                .save(recipeExporter, modId("gym_key_${type.showdownId}"))
 
             Rarity.entries.forEach { rarity ->
                 val cache = cacheForRarity(rarity)
@@ -102,7 +103,7 @@ class RecipeProvider(
                     )
                     .save(
                         recipeExporter,
-                        "cache_${rarity.name.replace("minecraft:", "").lowercase()}_${type.showdownId}"
+                        modId("cache_${rarity.serializedName}_${type.showdownId}")
                     )
             }
         }
@@ -116,13 +117,13 @@ class RecipeProvider(
                 .define('s', shardPair.first)
                 .group("multi_bench")
                 .unlockedBy(getHasName(shardPair.first), has(Items.CRAFTING_TABLE))
-                .save(recipeExporter, "shards_to_block_${rarity.name.replace("minecraft:", "").lowercase()}")
+                .save(recipeExporter, modId("shards_to_block_${rarity.serializedName}"))
 
             ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, shardPair.first, 9)
                 .define(shardPair.second.asItem())
                 .group("multi_bench")
                 .unlockedBy(getHasName(shardPair.second), has(shardPair.first))
-                .save(recipeExporter, "block_to_shards_${rarity.name.replace("minecraft:", "").lowercase()}")
+                .save(recipeExporter, modId("block_to_shards_${rarity.serializedName}"))
 
 
             val cachePair = cacheConfig(rarity)
@@ -138,7 +139,7 @@ class RecipeProvider(
                     .define('c', cacheParts.c)
                     .group("multi_bench")
                     .unlockedBy(getHasName(cacheParts.a), has(Items.CRAFTING_TABLE))
-                    .save(recipeExporter, "cache_${rarity.name.replace("minecraft:", "").lowercase()}")
+                    .save(recipeExporter, modId("cache_${rarity.serializedName}"))
             } else {
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cachePair.second, 1)
                     .pattern("sss")
@@ -150,7 +151,7 @@ class RecipeProvider(
                     .define('x', cacheParts.d)
                     .group("multi_bench")
                     .unlockedBy(getHasName(cacheParts.a), has(Items.CRAFTING_TABLE))
-                    .save(recipeExporter, "cache_${rarity.name.replace("minecraft:", "").lowercase()}")
+                    .save(recipeExporter, modId("cache_${rarity.serializedName}"))
             }
 
         }

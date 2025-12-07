@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_electric_gem": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rad-gyms:cache_epic"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rad-gyms:cache_epic_electric"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_electric_gem"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rad-gyms:cache_epic_electric"
+    ]
+  }
+}
