@@ -1,8 +1,9 @@
+#file: noinspection SpellCheckingInspection
 name: Build and publish project artifacts on platforms
 on:
   push:
     tags:
-      - "1.7.0+0.3.[0-9]+-stable"
+      - '1.7.0\+0.3.[0-9]+-[a-z]+'
 
 jobs:
   build:
