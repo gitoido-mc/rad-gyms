@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_shard_block_epic": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rad-gyms:shard_epic"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rad-gyms:block_to_shards_epic"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_shard_block_epic"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rad-gyms:block_to_shards_epic"
+    ]
+  }
+}
