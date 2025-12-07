@@ -32,7 +32,7 @@ class GymTeleportScheduler {
             player.displayClientMessage(Component.nullToEmpty("1...") as MutableComponent)
         }
         delayExecute(5f) {
-            PlayerSpawnHelper.teleportPlayer(player, dim, pos, yaw = player.yRot, pitch = player.xRot)
+            PlayerSpawnHelper.teleportPlayer(player.uuid, dim, pos, yaw = player.yRot, pitch = player.xRot)
         }
     }
 }

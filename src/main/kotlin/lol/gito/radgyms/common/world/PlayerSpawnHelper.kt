@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.world
 
 import com.cobblemon.mod.common.util.squeezeWithinBounds
+import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.state.RadGymsState
@@ -16,6 +17,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.portal.DimensionTransition
 import net.minecraft.world.phys.Vec3
+import java.util.UUID
 import kotlin.random.Random
 
 object PlayerSpawnHelper {
@@ -38,6 +40,20 @@ object PlayerSpawnHelper {
             0,
             0 + playerZ, // world border
         )
+    }
+
+    fun teleportPlayer(
+        serverPlayerUuid: UUID,
+        serverWorld: ServerLevel,
+        pos: BlockPos,
+        yaw: Float,
+        pitch: Float,
+    ) {
+        RadGyms.implementation.server()?.let { server ->
+            server.playerList.getPlayer(serverPlayerUuid)?.let {
+                teleportPlayer(it, serverWorld, pos, yaw, pitch)
+            }
+        }
     }
 
     fun teleportPlayer(
