@@ -8,7 +8,6 @@
 package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.item.group.CobblemonItemGroups
 import lol.gito.radgyms.common.RadGyms.modId
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
@@ -19,6 +18,7 @@ import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.DisplayItemsGenerator
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
+import net.minecraft.world.level.ItemLike
 
 object RadGymsItemGroups {
     private val ALL = arrayListOf<ItemGroupHolder>()
@@ -120,6 +120,13 @@ object RadGymsItemGroups {
         }
     }
 
+    fun inject(tabKey: ResourceKey<CreativeModeTab>, injector: Injector) {
+        INJECTORS[tabKey]?.invoke(injector)
+    }
+
+    fun injectorKeys(): Collection<ResourceKey<CreativeModeTab>> = this.INJECTORS.keys
+
+
     data class ItemGroupHolder(
         val key: ResourceKey<CreativeModeTab>,
         val displayIconProvider: () -> ItemStack,
@@ -139,11 +146,43 @@ object RadGymsItemGroups {
 
     private fun inject(
         key: ResourceKey<CreativeModeTab>,
-        consumer: (injector: CobblemonItemGroups.Injector) -> Unit
-    ): (injector: CobblemonItemGroups.Injector) -> Unit {
+        consumer: (injector: Injector) -> Unit
+    ): (injector: Injector) -> Unit {
         this.INJECTORS[key] = consumer
         return consumer
     }
 
-    interface Injector : CobblemonItemGroups.Injector
+    interface Injector {
+        /**
+         * Places the given [item] at the start of a creative tab.
+         *
+         * @param item The [ItemLike] being added at the start of a tab.
+         */
+        fun putFirst(item: ItemLike)
+
+        /**
+         * Places the given [item] before the [target].
+         * If the [target] is not present behaves as [putLast].
+         *
+         * @param item The [ItemLike] being added before [target].
+         * @param target The [ItemLike] being targeted.
+         */
+        fun putBefore(item: ItemLike, target: ItemLike)
+
+        /**
+         * Places the given [item] after the [target].
+         * If the [target] is not present behaves as [putLast].
+         *
+         * @param item The [ItemLike] being added after [target].
+         * @param target The [ItemLike] being targeted.
+         */
+        fun putAfter(item: ItemLike, target: ItemLike)
+
+        /**
+         * Places the given [item] at the end of a creative tab.
+         *
+         * @param item The [ItemLike] being added at the end of a tab.
+         */
+        fun putLast(item: ItemLike)
+    }
 }

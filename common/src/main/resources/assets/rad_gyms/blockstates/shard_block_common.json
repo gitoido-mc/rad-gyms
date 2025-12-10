@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "rad_gyms:block/shard_block_common"
+    }
+  }
+}

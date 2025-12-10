@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "rad-gyms",
+  "id": "rad_gyms",
   "version": "${version}",
   "name": "Rad Gyms",
   "description": "Adds roguelike gyms in Cobblemon. RCT Api based mod.",
@@ -11,8 +11,8 @@
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/gitoido-mc/rad-gyms"
   },
-  "license": "MIT",
-  "icon": "assets/rad-gyms/icon.png",
+  "license": "GPL-3.0-only",
+  "icon": "assets/rad_gyms/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [

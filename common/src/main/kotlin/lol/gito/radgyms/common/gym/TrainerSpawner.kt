@@ -7,6 +7,7 @@
 
 package lol.gito.radgyms.common.gym
 
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.TrainerModel
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.RadGymsEntities
@@ -15,10 +16,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
-class TrainerSpawner(
-    private val radGymsEntities: RadGymsEntities = RadGymsEntities,
-    private val debugLogger: (String) -> Unit = { /* default */ }
-) {
+object TrainerSpawner {
     fun spawnAll(template: GymTemplate, gymDimension: ServerLevel, coords: BlockPos): Map<UUID, TrainerModel> {
         val trainerIds = mutableMapOf<String, Pair<UUID, TrainerModel>>()
 
@@ -39,7 +37,7 @@ class TrainerSpawner(
         trainerUUID: UUID,
         requiredUUID: UUID?
     ): Pair<UUID, TrainerModel> {
-        val trainerEntity = Trainer(radGymsEntities.GYM_TRAINER, gymDimension).apply {
+        val trainerEntity = Trainer(RadGymsEntities.GYM_TRAINER, gymDimension).apply {
             uuid = trainerUUID
             gymId = trainer.id
             leader = trainer.leader
@@ -60,7 +58,7 @@ class TrainerSpawner(
             )
         }
 
-        debugLogger("Spawning trainer ${trainerEntity.id} at ${trainerEntity.x} ${trainerEntity.y} ${trainerEntity.z}")
+        debug("Spawning trainer ${trainerEntity.id} at ${trainerEntity.x} ${trainerEntity.y} ${trainerEntity.z}")
         gymDimension.tryAddFreshEntityWithPassengers(trainerEntity)
 
         return Pair(trainerEntity.uuid, trainer)

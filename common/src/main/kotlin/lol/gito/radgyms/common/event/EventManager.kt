@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
+import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.platform.events.PlatformEvents
@@ -53,6 +54,10 @@ import kotlin.time.TimeSource.Monotonic.markNow
 
 object EventManager {
     fun register() {
+        PokeBalls.SLATE_BALL.let {
+            // do stuff
+        }
+
         debug("Registering event handlers")
         // Minecraft events
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStarting)
@@ -77,7 +82,7 @@ object EventManager {
         RadGymsTemplates.observable.subscribe(Priority.NORMAL) { registry ->
             RadGyms.gymInitializer = GymInitializer(
                 templateRegistry = registry,
-                trainerSpawner = TrainerSpawner(),
+                trainerSpawner = TrainerSpawner,
                 structureManager = StructurePlacer,
                 trainerFactory = TrainerFactory(),
                 teamGenerator = TeamGenerator()
@@ -89,6 +94,9 @@ object EventManager {
                 debug("cache key ${key.path}")
                 key.path
             }
+        }
+
+        CobblemonEvents.SPAWN_BUCKET_CHOSEN.subscribe {
         }
 
         GYM_ENTER.subscribe(Priority.LOWEST, ::GymEnterHandler)

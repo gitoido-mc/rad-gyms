@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 object RadGyms {
-    const val MOD_ID: String = "rad-gyms"
+    const val MOD_ID: String = "rad_gyms"
 
     private const val CONFIG_PATH: String = "config/${MOD_ID}_server.json"
 
@@ -66,14 +66,13 @@ object RadGyms {
 
     fun modId(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, name)
 
-    fun info(message: String, vararg params: Any?): Unit = LOGGER.info(message, params)
+    fun info(message: String, vararg params: Any): Unit = LOGGER.info(message, *params)
 
     @Suppress("unused")
-    fun warn(message: String, vararg params: Any?): Unit = LOGGER.warn(message, params)
+    fun warn(message: String, vararg params: Any): Unit = LOGGER.warn(message, *params)
 
-    @Suppress("unused")
-    fun debug(message: String, vararg params: Any?) {
-        if (CONFIG.debug == true) LOGGER.info(message, params)
+    fun debug(message: String, vararg params: Any) {
+        if (CONFIG.debug == true) LOGGER.info(message, *params)
     }
 
     @OptIn(ExperimentalSerializationApi::class)

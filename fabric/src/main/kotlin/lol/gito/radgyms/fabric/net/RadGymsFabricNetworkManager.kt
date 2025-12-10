@@ -9,6 +9,7 @@ package lol.gito.radgyms.fabric.net
 
 import com.cobblemon.mod.common.NetworkManager
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.fabric.net.FabricPacketInfo
 import lol.gito.radgyms.common.net.RadGymsNetwork
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking

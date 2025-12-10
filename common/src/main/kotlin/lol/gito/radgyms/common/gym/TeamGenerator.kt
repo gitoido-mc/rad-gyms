@@ -10,8 +10,6 @@ package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
-import lol.gito.radgyms.common.RadGyms.CONFIG
-import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.TrainerModel
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -34,6 +32,11 @@ class TeamGenerator {
         }
 
         val rawTeam = mutableListOf<PokemonProperties>()
+
+        (1..pokemonCount).forEach { _ ->
+            rawTeam.add(generatePokemon(level, elementType, trainer.countPerLevelThreshold.count()))
+        }
+
         val event = GymEvents.GenerateTeamEvent(
             player,
             elementType,
@@ -44,15 +47,10 @@ class TeamGenerator {
             possibleFormats
         )
 
-        debug("Ignored species: ${CONFIG.ignoredSpecies}")
-        debug("Ignored species: ${CONFIG.ignoredForms}")
-        (1..pokemonCount).forEach { _ ->
-            rawTeam.add(generatePokemon(level, elementType))
-        }
-
         val team = mutableListOf<PokemonModel>()
-        GENERATE_TEAM.post(event) { ev ->
-            ev.team.forEach { props ->
+
+        GENERATE_TEAM.post(event) { generated ->
+            generated.team.forEach { props ->
                 team.add(fillPokemonModelFromPokemon(props))
             }
         }

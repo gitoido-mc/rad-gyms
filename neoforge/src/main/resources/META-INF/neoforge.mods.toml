@@ -1,0 +1,44 @@
+# Make sure this is set to "kotlinforforge"
+modLoader="kotlinforforge"
+# Make sure this is set to the appropriate version range
+loaderVersion="[5.10,)"
+license='''GPL-3.0-only'''
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="Rad Gyms"
+credits="Thanks to thedarkcolour and all the contributors for making Kotlin for Forge"
+authors="Gitoido <corpa@gito.lol>"
+description='''Adds roguelike gyms in Cobblemon. RCT Api based mod.'''
+[[dependencies.${mod_id}]]
+modId="minecraft"
+type="required"
+versionRange="[${minecraft_version}]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.${mod_id}]]
+modId="neoforge"
+type="required"
+versionRange="[${neoforge_version},)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.${mod_id}]]
+modId = "cobblemon"
+mandatory = true
+versionRange = "[${cobblemon_version},)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.${mod_id}]]
+modId="rctapi"
+mandatory=true
+versionRange="[${rctapi_min_version},)"
+ordering="NONE"
+side="BOTH"
+
+
+# Features are specific properties of the game environment, that you may want to declare you require. This example declares
+# that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
+# stop your mod loading on the server for example.
+#[features.${mod_id}]
+#openGLVersion="[3.2,)"

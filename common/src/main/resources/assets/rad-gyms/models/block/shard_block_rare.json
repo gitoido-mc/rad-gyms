@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "rad-gyms:block/shard_block_rare"
-  }
-}

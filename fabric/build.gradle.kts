@@ -15,7 +15,7 @@ repositories {
     maven("https://maven.fabricmc.net/")
 }
 
-val shadowCommon = configurations.create("shadowCommon")
+val shadowCommon: Configuration = configurations.maybeCreate("shadowCommon")
 
 architectury {
     platformSetupLoomIde()
@@ -24,6 +24,7 @@ architectury {
 
 loom {
     enableTransitiveAccessWideners.set(true)
+//    accessWidenerPath = projectDir.resolve("src/main/resources/rad-gyms.accesswidener")
     silentMojangMappingsLicense()
 
     @Suppress("UnstableApiUsage")
@@ -71,17 +72,19 @@ dependencies {
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
 
     // Platform specific
+    modImplementation("dev.architectury:architectury-fabric:$rootProject.architectury_api_version")
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${rootProject.property("rctapi_fabric_version")}")
 }
 
 tasks {
     val copyAccessWidener by registering(Copy::class) {
         from(project(":common").loom.accessWidenerPath)
-        into(file("src/main/generated").absolutePath)
+        into(file("src/main/resources").absolutePath)
     }
 
     processResources {
         dependsOn(copyAccessWidener)
+
         inputs.property("version", project.version)
 
         filesMatching("fabric.mod.json") {

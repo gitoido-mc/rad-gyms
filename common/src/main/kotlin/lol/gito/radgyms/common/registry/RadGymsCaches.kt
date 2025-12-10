@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.data.JsonDataRegistry
 import lol.gito.radgyms.common.pokecache.CacheDTO
@@ -45,6 +46,7 @@ object RadGymsCaches : JsonDataRegistry<CacheDTO> {
     override fun reload(data: Map<ResourceLocation, CacheDTO>) {
         caches.clear()
         caches.putAll(data)
+        info("Loaded ${caches.count()} cache configurations")
         observable.emit(this)
     }
 

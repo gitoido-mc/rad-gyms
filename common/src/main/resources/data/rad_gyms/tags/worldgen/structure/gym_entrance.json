@@ -1,0 +1,22 @@
+{
+  "values": [
+    "rad_gyms:gym_entrance_bug",
+    "rad_gyms:gym_entrance_dark",
+    "rad_gyms:gym_entrance_dragon",
+    "rad_gyms:gym_entrance_electric",
+    "rad_gyms:gym_entrance_fairy",
+    "rad_gyms:gym_entrance_fighting",
+    "rad_gyms:gym_entrance_fire",
+    "rad_gyms:gym_entrance_flying",
+    "rad_gyms:gym_entrance_ghost",
+    "rad_gyms:gym_entrance_grass",
+    "rad_gyms:gym_entrance_ground",
+    "rad_gyms:gym_entrance_ice",
+    "rad_gyms:gym_entrance_normal",
+    "rad_gyms:gym_entrance_poison",
+    "rad_gyms:gym_entrance_psychic",
+    "rad_gyms:gym_entrance_rock",
+    "rad_gyms:gym_entrance_steel",
+    "rad_gyms:gym_entrance_water"
+  ]
+}

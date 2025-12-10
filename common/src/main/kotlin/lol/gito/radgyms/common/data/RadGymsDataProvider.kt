@@ -49,7 +49,7 @@ object RadGymsDataProvider : DataProvider {
     override fun <T : DataRegistry> register(registry: T): T {
         this.registries.add(registry)
         info("Registered the {} registry", registry.id.toString())
-        debug("Registered the {} registry of class {}", registry.id.toString(), registry::class.qualifiedName)
+        debug("Registered the {} registry of class {}", registry.id.toString(), registry::class.qualifiedName.toString())
 
         return registry
     }

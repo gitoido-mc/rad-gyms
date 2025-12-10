@@ -11,7 +11,7 @@ import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.data.JsonDataRegistry
 import lol.gito.radgyms.common.api.dto.Gym
@@ -37,7 +37,6 @@ object RadGymsTemplates: JsonDataRegistry<Gym.Json> {
         identifier: ResourceLocation
     ): Gym.Json {
         return try {
-            debug("Parsing $identifier...")
             Json.decodeFromStream<Gym.Json>(stream)
         } catch (exception: Exception) {
             throw ExecutionException("Error parsing JSON from resource $identifier", exception)
@@ -47,9 +46,9 @@ object RadGymsTemplates: JsonDataRegistry<Gym.Json> {
     override fun reload(data: Map<ResourceLocation, Gym.Json>) {
         templates.clear()
         data.forEach { (key, value) ->
-            debug("adding $key template")
             templates[key.path] = value
         }
+        info("Loaded ${templates.count()} gym templates")
         observable.emit(this)
     }
 

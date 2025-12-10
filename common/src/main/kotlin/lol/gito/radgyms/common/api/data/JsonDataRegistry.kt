@@ -8,7 +8,6 @@
 package lol.gito.radgyms.common.api.data
 
 import com.cobblemon.mod.common.util.endsWith
-import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import java.io.File
@@ -47,7 +46,6 @@ interface JsonDataRegistry<T> : DataRegistry {
         reload(data)
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     fun parse(stream: InputStream, identifier: ResourceLocation): T
 
     fun reload(data: Map<ResourceLocation, T>)

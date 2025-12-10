@@ -50,7 +50,7 @@ object RadGymsFabric : RadGymsImplementation {
 
     override val networkManager = RadGymsFabricNetworkManager
 
-    override fun environment(): Environment = when (FabricLoader.getInstance().environmentType) {
+    override fun environment(): Environment = when(FabricLoader.getInstance().environmentType) {
         EnvType.CLIENT -> Environment.CLIENT
         EnvType.SERVER -> Environment.SERVER
         else -> throw IllegalStateException("Fabric implementation cannot resolve environment yet")
@@ -69,6 +69,10 @@ object RadGymsFabric : RadGymsImplementation {
 
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register { player, isLogin ->
             if (isLogin) RadGyms.dataProvider.sync(player)
+        }
+
+        ServerLifecycleEvents.SERVER_STARTING.register {
+            this.server = it
         }
     }
 
