@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "package": "lol.gito.radgyms.common.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "server.event.OnServerPlayerEntityDeath",
+    "server.item.BundleItemMixin",
+    "server.worldBorder.CollisionGetterMixin",
+    "server.worldBorder.EntityMixin",
+    "server.worldBorder.LivingEntityMixin",
+    "server.worldBorder.PlayerManagerMixin",
+    "server.worldBorder.ServerGamePacketListenerMixin",
+    "server.worldBorder.ServerLevelMixin",
+    "util.accessor.RCTBattleAIAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

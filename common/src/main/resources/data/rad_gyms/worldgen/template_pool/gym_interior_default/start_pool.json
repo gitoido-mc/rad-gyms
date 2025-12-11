@@ -1,0 +1,15 @@
+{
+  "name": "rad_gyms:gym_interior_default/start_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:gym_interior_default",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

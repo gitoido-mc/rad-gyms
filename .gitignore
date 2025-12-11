@@ -48,3 +48,13 @@ replay_*.log
 docs/_site/
 docs/.cache/
 docs/node_modules/
+
+/fabric/src/generated/resources/cobblemon-common.accesswidener
+/.ignored/
+common/.fabric
+/.architectury-transformer/
+
+run
+run-datagen
+run-server
+/*/src/generated/

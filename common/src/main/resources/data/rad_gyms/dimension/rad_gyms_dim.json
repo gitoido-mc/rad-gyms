@@ -1,0 +1,18 @@
+{
+  "type": "rad_gyms:rad_gyms_dim",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "rad_gyms:gym_biome",
+      "lakes": false,
+      "features": false,
+      "layers": [
+        {
+          "height": 256,
+          "block": "minecraft:air"
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

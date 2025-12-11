@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: "nightly-1.7.0"
     permissions: write-all
     strategy:
       matrix:
