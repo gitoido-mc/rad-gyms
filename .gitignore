@@ -49,7 +49,6 @@ docs/_site/
 docs/.cache/
 docs/node_modules/
 
-*/generated/resources/*
 /fabric/src/generated/resources/cobblemon-common.accesswidener
 /.ignored/
 common/.fabric
@@ -58,4 +57,4 @@ common/.fabric
 run
 run-datagen
 run-server
-/*/src/main/generated/
+/*/src/generated/

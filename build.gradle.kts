@@ -106,28 +106,30 @@ modProjects.forEach {
             }
 
         }
+    }
+}
 
-        tasks {
-            jar {
-                from("LICENSE")
-            }
+subprojects {
+    tasks {
+        jar {
+            from("LICENSE")
+        }
 
-            compileJava {
-                options.release = 21
-            }
+        java {
+            withSourcesJar()
 
-            compileKotlin {
-                compilerOptions {
-                    jvmTarget.set(JvmTarget.JVM_21)
-                    freeCompilerArgs.set(listOf("-Xnested-type-aliases"))
-                }
-            }
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
+        }
 
-            java {
-                withSourcesJar()
+        compileJava {
+            options.release = 21
+        }
 
-                sourceCompatibility = JavaVersion.VERSION_21
-                targetCompatibility = JavaVersion.VERSION_21
+        compileKotlin {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_21)
+                freeCompilerArgs.set(listOf("-Xnested-type-aliases"))
             }
         }
     }

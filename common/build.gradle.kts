@@ -14,9 +14,25 @@ architectury {
     common("neoforge", "fabric")
 }
 
+
+val generatedResources = file("src/generated")
+
+sourceSets {
+    main {
+        resources.srcDir(generatedResources)
+    }
+}
+
+
 loom {
     silentMojangMappingsLicense()
     accessWidenerPath = file("src/main/resources/rad-gyms.accesswidener")
+
+    @Suppress("UnstableApiUsage")
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = "mixins.${rootProject.property("mod_id")}.refmap.json"
+    }
 }
 
 dependencies {
@@ -41,4 +57,17 @@ dependencies {
 
     // Project deps
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
+}
+
+tasks {
+    jar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.property("mod_version")}")
+    }
+
+    sourcesJar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.property("mod_version")}")
+        archiveClassifier.set("sources")
+    }
 }

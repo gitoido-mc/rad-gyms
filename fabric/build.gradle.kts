@@ -16,20 +16,31 @@ repositories {
 }
 
 val shadowCommon: Configuration = configurations.maybeCreate("shadowCommon")
+val generatedResources: File = project(":common").file("src/generated").absoluteFile
 
 architectury {
     platformSetupLoomIde()
-    fabric()
+    fabric {
+        fabricApi {
+            configureDataGeneration {
+                client = true
+                modId = rootProject.property("mod_id") as String
+                outputDirectory = generatedResources
+
+                println(generatedResources.absolutePath)
+            }
+        }
+    }
 }
 
 loom {
     enableTransitiveAccessWideners.set(true)
-//    accessWidenerPath = projectDir.resolve("src/main/resources/rad-gyms.accesswidener")
     silentMojangMappingsLicense()
 
     @Suppress("UnstableApiUsage")
     mixin {
-        defaultRefmapName = "mixins.${project.name}.refmap.json"
+        useLegacyMixinAp = true
+        defaultRefmapName = "mixins.${rootProject.property("mod_id")}.refmap.json"
     }
 
     runs {
@@ -42,12 +53,10 @@ loom {
         getByName("server") {
             runDir = "run-server"
         }
-    }
-}
 
-fabricApi {
-    configureDataGeneration {
-        client = true
+        getByName("datagen") {
+            runDir = "run-datagen"
+        }
     }
 }
 
@@ -82,8 +91,16 @@ tasks {
         into(file("src/main/resources").absolutePath)
     }
 
+    val copyResources by registering(Copy::class) {
+        from(project(":common").file("src/generated")) {
+            exclude(".cache/")
+        }
+        into(file("src/generated"))
+    }
+
     processResources {
         dependsOn(copyAccessWidener)
+        dependsOn(copyResources)
 
         inputs.property("version", project.version)
 
@@ -91,26 +108,35 @@ tasks {
             expand(project.properties)
         }
     }
+
     jar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.property("mod_version")}")
         archiveClassifier.set("dev-slim")
     }
 
-    shadowJar {
+    sourcesJar {
+        dependsOn(copyAccessWidener)
+
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.property("mod_version")}")
+        archiveClassifier.set("sources")
+    }
+
+    shadowJar {
+        configurations = listOf(shadowCommon)
+
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.property("mod_version")}")
         archiveClassifier.set("dev-shadow")
 
-        configurations = listOf(shadowCommon)
     }
 
     remapJar {
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        archiveVersion.set("${rootProject.version}")
-    }
 
-    sourcesJar {
-        dependsOn(copyAccessWidener)
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.property("mod_version")}")
     }
 }
