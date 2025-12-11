@@ -167,10 +167,10 @@ class GymEnterScreen(
         super.preRender(context, panelResource)
 
         val message = when (pos) {
-            null -> translatable("rad-gyms.gui.common.set-gym-level", buildTypeText(type))
+            null -> translatable(modId("gui.common.set-gym-level").toLanguageKey(), buildTypeText(type))
             else -> {
                 translatable(
-                    "rad-gyms.gui.common.set-gym-level-entry",
+                    modId("gui.common.set-gym-level-entry").toLanguageKey(),
                     buildTypeText(type),
                     usesLeft
                 )
