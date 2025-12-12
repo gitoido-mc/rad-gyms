@@ -8,7 +8,12 @@
 package lol.gito.radgyms.common.api.enumeration
 
 enum class GymBattleEndReason {
+    @JvmField
     BATTLE_WON,
+
+    @JvmField
     BATTLE_FLED,
+
+    @JvmField
     BATTLE_LOST
 }

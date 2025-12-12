@@ -7,9 +7,20 @@
 
 package lol.gito.radgyms.common.api.enumeration
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 enum class GymTeamType {
-    GENERATED, FIXED
+    @JvmField
+    @SerialName("generated")
+    GENERATED,
+
+    @JvmField
+    @SerialName("fixed")
+    FIXED,
+
+    @JvmField
+    @SerialName("pool")
+    POOL
 }

@@ -49,7 +49,9 @@ data class Gym(
         @Serializable
         data class LootTableInfo(
             val id: String,
+            @SerialName("min_level")
             val minLevel: Int = 1,
+            @SerialName("max_level")
             val maxLevel: Int = 100
         )
     }

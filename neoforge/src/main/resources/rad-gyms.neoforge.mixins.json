@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "lol.gito.radgyms.neoforge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "compat.OnAetherEntityInteract"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

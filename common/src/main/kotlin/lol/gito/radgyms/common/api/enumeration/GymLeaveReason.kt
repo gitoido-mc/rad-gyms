@@ -8,5 +8,15 @@
 package lol.gito.radgyms.common.api.enumeration
 
 enum class GymLeaveReason {
-    USED_BLOCK, USED_ITEM, KICK_COMMAND, PLAYER_DEATH
+    @JvmField
+    USED_BLOCK,
+
+    @JvmField
+    USED_ITEM,
+
+    @JvmField
+    KICK_COMMAND,
+
+    @JvmField
+    PLAYER_DEATH
 }

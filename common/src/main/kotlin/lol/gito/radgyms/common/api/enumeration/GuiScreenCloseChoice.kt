@@ -8,5 +8,9 @@
 package lol.gito.radgyms.common.api.enumeration
 
 enum class GuiScreenCloseChoice {
-    PROCEED, CANCEL
+    @JvmField
+    PROCEED,
+
+    @JvmField
+    CANCEL
 }

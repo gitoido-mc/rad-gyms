@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.gym
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.toBlockPos
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.dto.Gym
@@ -27,8 +26,7 @@ class GymInitializer(
     private val templateRegistry: RadGymsTemplates,
     private val trainerSpawner: TrainerSpawner,
     private val structureManager: StructurePlacer,
-    private val trainerFactory: TrainerFactory,
-    private val teamGenerator: TeamGenerator
+    private val trainerFactory: TrainerFactory
 ) {
     fun initInstance(serverPlayer: ServerPlayer, serverWorld: ServerLevel, level: Int, type: String?): Boolean {
         val dto = templateRegistry.templates[type] ?: return false
@@ -41,10 +39,10 @@ class GymInitializer(
             )
         )
 
-        val gymLevel = level.coerceIn(5..Cobblemon.config.maxPokemonLevel)
+        val gymLevel = level.coerceIn(RadGyms.CONFIG.minLevel!!..RadGyms.CONFIG.maxLevel!!)
         val gymType = if (type in templateRegistry.templates.keys) type else "default"
 
-        val gymTemplate = GymTemplate.fromDto(serverPlayer, dto, gymLevel, gymType, trainerFactory, teamGenerator)
+        val gymTemplate = GymTemplate.fromDto(serverPlayer, dto, gymLevel, gymType, trainerFactory)
 
         val gymDimension = serverPlayer.server!!.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY) ?: return false
         val playerGymCoords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)

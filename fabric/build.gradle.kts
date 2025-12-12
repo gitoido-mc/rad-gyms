@@ -26,8 +26,6 @@ architectury {
                 client = true
                 modId = rootProject.property("mod_id") as String
                 outputDirectory = generatedResources
-
-                println(generatedResources.absolutePath)
             }
         }
     }
@@ -83,6 +81,9 @@ dependencies {
     // Platform specific
     modImplementation("dev.architectury:architectury-fabric:$rootProject.architectury_api_version")
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${rootProject.property("rctapi_fabric_version")}")
+
+    // Compat
+    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-fabric")
 }
 
 tasks {

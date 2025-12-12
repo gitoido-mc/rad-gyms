@@ -69,6 +69,9 @@ dependencies {
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.property("architectury_api_version")}")
     modImplementation("com.cobblemon:neoforge:${rootProject.property("cobblemon_version")}") { isTransitive = false }
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${rootProject.property("rctapi_neoforge_version")}")
+
+    // Compat
+    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-neoforge")
 }
 
 

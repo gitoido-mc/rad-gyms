@@ -5,24 +5,39 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.gym
-
+package lol.gito.radgyms.common.gym.team
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
+import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
+import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.util.toProperties
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
+import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.api.dto.GymSpecies
 import lol.gito.radgyms.common.api.dto.TrainerModel
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
+import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.fillPokemonModelFromPokemon
-import lol.gito.radgyms.common.gym.SpeciesManager.generatePokemon
 import net.minecraft.server.level.ServerPlayer
+import kotlin.collections.chunked
+import kotlin.collections.count
+import kotlin.collections.forEach
+import kotlin.collections.random
+import kotlin.random.Random
+import kotlin.text.removeSuffix
+import kotlin.text.split
 
-class TeamGenerator {
+abstract class AbstractTeamGenerator {
     fun generate(
         trainer: TrainerModel.Json.Trainer,
         level: Int,
-        elementType: String,
+        elementTypes: List<ElementalType>,
         player: ServerPlayer,
         possibleFormats: MutableList<GymBattleFormat>
     ): MutableList<PokemonModel> {
@@ -34,12 +49,12 @@ class TeamGenerator {
         val rawTeam = mutableListOf<PokemonProperties>()
 
         (1..pokemonCount).forEach { _ ->
-            rawTeam.add(generatePokemon(level, elementType, trainer.countPerLevelThreshold.count()))
+            rawTeam.add(generatePokemon(level, elementTypes.random(), trainer.countPerLevelThreshold.count()))
         }
 
         val event = GymEvents.GenerateTeamEvent(
             player,
-            elementType,
+            elementTypes,
             level,
             trainer.id,
             trainer.leader,
@@ -56,4 +71,6 @@ class TeamGenerator {
         }
         return team
     }
+
+    abstract fun generatePokemon(level: Int, type: ElementalType, thresholdAmount: Int): PokemonProperties
 }

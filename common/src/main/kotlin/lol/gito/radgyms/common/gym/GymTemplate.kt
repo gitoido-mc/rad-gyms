@@ -30,11 +30,10 @@ data class GymTemplate(
             dto: Gym.Json,
             level: Int,
             type: String?,
-            trainerFactory: TrainerFactory = TrainerFactory(),
-            teamGenerator: TeamGenerator = TeamGenerator()
+            trainerFactory: TrainerFactory = TrainerFactory()
         ): GymTemplate {
             val trainers = dto.trainers.map {
-                trainerFactory.create(it, type, level, player, teamGenerator)
+                trainerFactory.create(it, level, player)
             }
 
             return GymTemplate(

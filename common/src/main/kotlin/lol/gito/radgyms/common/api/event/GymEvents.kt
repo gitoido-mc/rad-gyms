@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
+import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.api.dto.Gym
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
@@ -76,7 +78,7 @@ object GymEvents {
 
     data class GenerateTeamEvent(
         val player: ServerPlayer,
-        val type: String,
+        val type: List<ElementalType>,
         val level: Int,
         val trainerId: String,
         val isLeader: Boolean,

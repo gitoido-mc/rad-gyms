@@ -35,6 +35,7 @@
     ]
   },
   "mixins": [
+    "rad-gyms.fabric.mixins.json",
     "rad-gyms.mixins.json",
     {
       "config": "rad-gyms.client.mixins.json",

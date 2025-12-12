@@ -11,8 +11,6 @@ import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.client.RadGymsClient
 import lol.gito.radgyms.common.client.RadGymsClientImplementation
 import lol.gito.radgyms.fabric.RadGymsFabric
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
 import net.minecraft.client.renderer.RenderType
@@ -25,7 +23,6 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 
-@Environment(EnvType.CLIENT)
 object RadGymsFabricClient : RadGymsClientImplementation {
     fun initialize() {
         RadGyms.debug("Initializing client")

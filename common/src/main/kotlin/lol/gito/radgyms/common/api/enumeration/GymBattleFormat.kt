@@ -7,9 +7,29 @@
 
 package lol.gito.radgyms.common.api.enumeration
 
+import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 enum class GymBattleFormat {
-    SINGLES, DOUBLES, TRIPLES
+    @JvmField
+    @SerialName("singles")
+    SINGLES {
+        override val format: BattleFormat = BattleFormat.GEN_9_SINGLES
+    },
+
+    @JvmField
+    @SerialName("doubles")
+    DOUBLES {
+        override val format: BattleFormat = BattleFormat.GEN_9_DOUBLES
+    },
+
+    @JvmField
+    @SerialName("triples")
+    TRIPLES {
+        override val format: BattleFormat = BattleFormat.GEN_9_TRIPLES
+    };
+
+    abstract val format: BattleFormat
 }

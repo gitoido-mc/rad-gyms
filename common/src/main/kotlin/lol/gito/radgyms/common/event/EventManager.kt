@@ -84,8 +84,7 @@ object EventManager {
                 templateRegistry = registry,
                 trainerSpawner = TrainerSpawner,
                 structureManager = StructurePlacer,
-                trainerFactory = TrainerFactory(),
-                teamGenerator = TeamGenerator()
+                trainerFactory = TrainerFactory()
             )
         }
 
@@ -172,7 +171,7 @@ object EventManager {
 
     private fun onSpeciesUpdate() {
         val now = markNow()
-        if (SPECIES_TIMESTAMP > now) return
+//        if (SPECIES_TIMESTAMP > now) return
         SPECIES_BY_TYPE.clear()
 
         ElementalTypes.all().forEach {

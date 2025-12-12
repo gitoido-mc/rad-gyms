@@ -7,12 +7,16 @@
 
 package lol.gito.radgyms.common.api.dto
 
+import com.cobblemon.mod.common.api.types.ElementalType
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
+import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
+import lol.gito.radgyms.common.api.serialization.ElementalTypeSerializer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.Vec3
 
@@ -40,30 +44,45 @@ data class TrainerModel(
             val spawnRelative: Gym.Json.EntityCoordsAndYaw,
             @SerialName("team_type")
             val teamType: GymTeamType,
+            @SerialName("team_generator")
+            val teamGenerator: GymTeamGeneratorType? = GymTeamGeneratorType.BST,
+            @Contextual
+            @SerialName("possible_elemental_types")
+            val possibleElementalTypes: List<@Serializable(ElementalTypeSerializer::class) ElementalType>? = null,
+            @SerialName("possible_formats")
+            val possibleFormats: List<GymBattleFormat> = listOf(GymBattleFormat.SINGLES),
             val ai: AI,
             val bag: List<Bag> = emptyList(),
-            @SerialName("count_per_level_threshold")
+            @SerialName("level_thresholds")
             val countPerLevelThreshold: List<List<Int>> = listOf(
                 listOf(20, 3),
                 listOf(40, 4),
                 listOf(60, 5),
                 listOf(80, 6),
             ),
+            @SerialName("battle_rules")
             val battleRules: BattleRules? = null,
             val team: List<String>? = null,
-            val possibleFormats: List<GymBattleFormat> = listOf(GymBattleFormat.SINGLES),
             val leader: Boolean = false,
             val requires: String? = null,
         ) {
             init {
-                if (teamType == GymTeamType.FIXED) {
-                    requireNotNull(team)
+                when (teamType) {
+                    GymTeamType.GENERATED -> {
+                        requireNotNull(possibleElementalTypes)
+                        requireNotNull(teamGenerator)
+                    }
+
+                    GymTeamType.POOL, GymTeamType.FIXED -> {
+                        requireNotNull(team)
+                    }
                 }
             }
         }
 
         @Serializable
         data class BattleRules(
+            @SerialName("max_item_uses")
             val maxItemUses: Int
         )
 
@@ -74,10 +93,15 @@ data class TrainerModel(
         ) {
             @Serializable
             data class Config(
+                @SerialName("move_bias")
                 val moveBias: Double? = null,
+                @SerialName("status_move_bias")
                 val statusMoveBias: Double? = null,
+                @SerialName("switch_bias")
                 val switchBias: Double? = null,
+                @SerialName("item_bias")
                 val itemBias: Double? = null,
+                @SerialName("max_select_margin")
                 val maxSelectMargin: Double? = null,
             )
         }

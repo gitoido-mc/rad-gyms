@@ -15,6 +15,8 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
+import lol.gito.radgyms.common.gym.TrainerFactory
+import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.displayClientMessage
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerLevel
@@ -68,6 +70,7 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
         val npcTrainer: TrainerNPC =
             trainerRegistry.getById(event.trainer.uuid.toString(), TrainerNPC::class.java)
+
 
         npcTrainer.entity = event.trainer
 

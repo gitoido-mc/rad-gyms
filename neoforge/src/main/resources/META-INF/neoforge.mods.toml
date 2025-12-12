@@ -11,6 +11,15 @@ displayName="Rad Gyms"
 credits="Thanks to thedarkcolour and all the contributors for making Kotlin for Forge"
 authors="Gitoido <corpa@gito.lol>"
 description='''Adds roguelike gyms in Cobblemon. RCT Api based mod.'''
+
+[[mixins]]
+config = "rad-gyms.mixins.json"
+[[mixins]]
+config = "rad-gyms.client.mixins.json"
+[[mixins]]
+config = "rad-gyms.neoforge.mixins.json"
+
+
 [[dependencies.${mod_id}]]
 modId="minecraft"
 type="required"

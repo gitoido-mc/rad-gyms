@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.toProperties
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
+import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.GymSpecies
@@ -35,13 +36,13 @@ object SpeciesManager {
         val species = allSpecies
             .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
             .associateWith { associateSpecies ->
-                associateSpecies.forms.filterNot { it.formOnlyShowdownId() !in CONFIG.ignoredForms!! }
+                associateSpecies.forms.filterNot { it.formOnlyShowdownId() in CONFIG.ignoredForms!! }
             }
-            .flatMap { (flatMapSpecies, forms) ->
+            .flatMap { (species, forms) ->
                 forms
                     .filter { form -> form.types.contains(elementalType) }
-                    .map {
-                        GymSpecies.Container.SpeciesWithForm(flatMapSpecies, it)
+                    .map { form ->
+                        GymSpecies.Container.SpeciesWithForm(species, form)
                     }
             }
             .toList()
@@ -52,9 +53,9 @@ object SpeciesManager {
         if (species.isNotEmpty()) return species
 
         return allSpecies
-            .filter { filterSpecies -> filterSpecies.resourceIdentifier.path !in CONFIG.ignoredSpecies!! }
+            .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
             .associateWith { associateSpecies ->
-                associateSpecies.forms.filter { form -> form.formOnlyShowdownId() !in CONFIG.ignoredForms!! }
+                associateSpecies.forms.filterNot { it.formOnlyShowdownId() in CONFIG.ignoredForms!! }
             }
             .flatMap { (flatMapSpecies, forms) ->
                 forms.map {
@@ -142,55 +143,6 @@ object SpeciesManager {
             poke.heldItem().itemHolder.registeredName,
             poke.aspects
         )
-    }
-
-    fun generatePokemon(level: Int, type: String, thresholdAmount: Int): PokemonProperties {
-        debug("Rolling for pokemon with level $level and type $type")
-        val speciesList = when (type) {
-            "default" -> PokemonSpecies.implemented.asSequence()
-                .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
-                .filter { it.implemented }
-                .associateWith { species ->
-                    species
-                        .forms
-                        .filterNot { it.formOnlyShowdownId() in CONFIG.ignoredForms!! }
-                }
-                .flatMap { (species, forms) ->
-                    forms.map { GymSpecies.Container.SpeciesWithForm(species, it) }
-                }
-
-            else -> SPECIES_BY_TYPE[type]!!
-        }
-
-        val chunkSize = (CONFIG.maxLevel!!)
-                .minus(CONFIG.minLevel!!)
-                .toDouble()
-                .div(thresholdAmount)
-                .let { ceil(it).toInt() }
-
-        val levelChunkedRange = (CONFIG.minLevel!!..CONFIG.maxLevel!!)
-            .chunked(chunkSize)
-        val selectedLevelChunkIndex = levelChunkedRange.indexOfFirst { it.contains(level) }
-        val chunked = speciesList
-            .chunked(ceil(speciesList.count().toDouble() / chunkSize).toInt())
-
-        val derived = chunked[selectedLevelChunkIndex].random()
-
-        debug("BST chunks: $levelChunkedRange")
-        chunked.forEachIndexed { index, forms ->
-            debug("Species in chunk {}: {}", index, forms.count())
-        }
-        debug("Selected chunk index: $selectedLevelChunkIndex")
-        debug("Species in BST chunk: ${chunked[selectedLevelChunkIndex].count()}")
-        chunked[selectedLevelChunkIndex].forEach { debug(
-            "Species: {}; Form: {}; BST: {}",
-            it.species.resourceIdentifier.path,
-            it.form.formOnlyShowdownId(),
-            it.species.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
-        ) }
-        debug("Picked ${derived.species.showdownId()} form=${derived.form.formOnlyShowdownId()} level=${level}")
-
-        return fillPokemonModel(derived, level)
     }
 
 

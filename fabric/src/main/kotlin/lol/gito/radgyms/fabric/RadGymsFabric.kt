@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.fabric
 
-//import lol.gito.radgyms.fabric.command.CommandRegistry
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
 import lol.gito.radgyms.common.RadGyms
