@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -10,14 +10,19 @@ package lol.gito.radgyms.neoforge
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.info
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.RadGymsImplementation
 import lol.gito.radgyms.common.registry.*
+import lol.gito.radgyms.common.util.displayClientMessage
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
 import lol.gito.radgyms.neoforge.net.RadGymsNeoForgeNetworkManager
 import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.world.item.CreativeModeTab
@@ -35,6 +40,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.OnDatapackSyncEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
+import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
@@ -61,6 +67,7 @@ class RadGymsNeoForge : RadGymsImplementation {
             addListener(::onLogin)
             addListener(::onLogout)
             addListener(::onReload)
+            addListener(::onBlockBreak)
         }
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -221,4 +228,24 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
+    private fun onBlockBreak(e: BlockEvent.BreakEvent) {
+        if (e.level !is ServerLevel) return
+        if ((e.level as ServerLevel).dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+            if (CONFIG.debug == true) {
+                return
+            }
+            e.isCanceled = true
+            return
+        }
+
+        if (e.state.block == RadGymsBlocks.GYM_ENTRANCE) {
+            if (!e.player.isShiftKeyDown) {
+                e.player.displayClientMessage(Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey()))
+                e.player.displayClientMessage(Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey()))
+                e.isCanceled = false
+            } else {
+                e.isCanceled = true
+            }
+        }
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -99,7 +99,7 @@ object EventManager {
         }
 
         GYM_ENTER.subscribe(Priority.LOWEST, ::GymEnterHandler)
-        GYM_LEAVE.subscribe(Priority.LOWEST, ::GymLeaveHandler)
+        GYM_LEAVE.subscribe(Priority.LOWEST, GymLeaveHandler::execute)
 
         TRAINER_INTERACT.subscribe(Priority.LOWEST, ::TrainerInteractHandler)
         TRAINER_BATTLE_END.subscribe(Priority.LOWEST, ::TrainerBattleEndHandler)
@@ -170,7 +170,7 @@ object EventManager {
     }
 
     private fun onSpeciesUpdate() {
-        val now = markNow()
+        markNow()
 //        if (SPECIES_TIMESTAMP > now) return
         SPECIES_BY_TYPE.clear()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_RARITY
-import lol.gito.radgyms.common.util.isShiny
 import lol.gito.radgyms.common.util.shinyRoll
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Rarity
@@ -36,6 +35,11 @@ object CacheHandler {
         player: ServerPlayer,
         shinyBoost: Int? = 0
     ): Pokemon {
+        /**
+         * [SPECIES_BY_RARITY] holds all species in map-like object
+         * where the key corresponds to [ElementalType.showdownId] property of passed [type]
+         * [CacheDTO.forRarity] is a function that returns shuffleable list of species
+         */
         val cache = SPECIES_BY_RARITY[type.showdownId]!!.forRarity(rarity)
         var poke: Pokemon?
         do {
@@ -43,7 +47,7 @@ object CacheHandler {
             poke = pokeProps.create()
         } while (!poke.species.implemented)
 
-        poke.shiny = shinyRoll(poke, player, shinyBoost).isShiny()
+        shinyRoll(poke, player, shinyBoost)
         poke.updateAspects()
         poke.updateForm()
 

@@ -45,7 +45,7 @@ replay_*.log
 .kotlin
 
 # project
-docs/_site/
+docs/dist/
 docs/.cache/
 docs/node_modules/
 

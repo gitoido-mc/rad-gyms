@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -47,13 +47,14 @@ loom {
                 "--username=Gitoido",
                 "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b"
             )
+            runDir = file("${rootProject.projectDir}/run/fabric/client").absolutePath
         }
         getByName("server") {
-            runDir = "run-server"
+            runDir = file("${rootProject.projectDir}/run/fabric/server").absolutePath
         }
 
         getByName("datagen") {
-            runDir = "run-datagen"
+            runDir = file("${rootProject.projectDir}/run/datagen").absolutePath
         }
     }
 }
