@@ -163,6 +163,7 @@ object EventManager {
         debug("Removing player ${event.player.name} from RCT trainer mod registry")
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
+        if (RadGymsState.getGymForPlayer(event.player) == null) return
         if (event.player.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
             GymTeardownService.spawnExitBlock(event.player.server, RadGymsState.getGymForPlayer(event.player)!!)
             GymTeardownService.destructGym(event.player, removeCoords = false)
