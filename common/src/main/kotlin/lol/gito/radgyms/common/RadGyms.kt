@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -26,18 +26,18 @@ import java.io.File
 
 object RadGyms {
     const val MOD_ID: String = "rad_gyms"
-
     private const val CONFIG_PATH: String = "config/${MOD_ID}_server.json"
 
     @JvmField
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
+
     @JvmField
     val RCT: RCTApi = RCTApi.initInstance(MOD_ID)
+
     @JvmField
-
     val dimensionWorldBorder: WorldBorder = WorldBorder()
-    val dataProvider: DataProvider = RadGymsDataProvider
 
+    val dataProvider: DataProvider = RadGymsDataProvider
 
     lateinit var CONFIG: RadGymsConfig
     lateinit var implementation: RadGymsImplementation
@@ -80,46 +80,31 @@ object RadGyms {
         val configFile = File(CONFIG_PATH)
         configFile.parentFile.mkdirs()
 
-        CONFIG = RadGymsConfig(
-            debug = false,
-            // Should average team level be derived automatically
-            deriveAverageGymLevel = true,
-            // Gym level bounds
-            minLevel = 10,
-            maxLevel = 100,
-            // Gym entrance max uses per player
-            maxEntranceUses = 3,
-            // Cache shiny boost amount per unit of lapis
-            lapisBoostAmount = 1,
-            // Add shard rewards
-            shardRewards = true,
-            // Ignored species
-            ignoredSpecies = emptyList(),
-            // Ignored forms - by default ignore all battle forms
-            ignoredForms = mutableListOf("gmax", "mega", "mega-x", "mega-y", "stellar", "terastal"),
-        )
-
         if (configFile.exists()) {
             LOGGER.info("Loading config")
-            val fileConfig = configFile.inputStream().let {
+            CONFIG = configFile.inputStream().let {
                 Json.decodeFromStream<RadGymsConfig>(it)
             }
-
-            CONFIG = CONFIG.combine(fileConfig)
         } else {
             LOGGER.info("No config found, creating new")
+            CONFIG = RadGymsConfig.DEFAULT
+            saveConfig(new = true)
         }
-        saveConfig()
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun saveConfig() {
-        val configFile = File(CONFIG_PATH)
+    fun saveConfig(new: Boolean = false) {
         val prettify = Json {
             prettyPrint = true
         }
+        val configFile = File(CONFIG_PATH)
+        val config = when (new) {
+            true -> RadGymsConfig.DEFAULT
+            false -> CONFIG
+        }
+
         configFile.outputStream().let {
-            prettify.encodeToStream(CONFIG, it)
+            prettify.encodeToStream(config, it)
             debug("Saving config")
         }
     }

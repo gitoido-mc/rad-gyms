@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -7,10 +7,15 @@
 
 package lol.gito.radgyms.common.config
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import net.minecraft.world.item.Rarity
 
 @Serializable
 data class RadGymsConfig(
+    @SerialName("__version")
+    val version: String = "0.4.0",
     val debug: Boolean? = null,
     val maxEntranceUses: Int? = null,
     val shardRewards: Boolean? = null,
@@ -19,8 +24,44 @@ data class RadGymsConfig(
     val ignoredForms: List<String>? = null,
     val minLevel: Int? = null,
     val maxLevel: Int? = null,
-    val deriveAverageGymLevel: Boolean? = null
+    val deriveAverageGymLevel: Boolean? = null,
+    val pokeCachePools: Map<String, Set<String>>? = null
 ) {
+    companion object {
+        @Transient
+        @JvmField
+        val DEFAULT = RadGymsConfig(
+            debug = false,
+            // Should average team level be derived automatically
+            deriveAverageGymLevel = true,
+            // Gym level bounds
+            minLevel = 10,
+            maxLevel = 100,
+            // Gym entrance max uses per player
+            maxEntranceUses = 3,
+            // Cache shiny boost amount per unit of lapis
+            lapisBoostAmount = 1,
+            // Add shard rewards
+            shardRewards = true,
+            // Ignored species
+            ignoredSpecies = emptyList(),
+            pokeCachePools = mutableMapOf(
+                Rarity.COMMON.serializedName to mutableSetOf(
+                    Rarity.COMMON.serializedName
+                ),
+                Rarity.UNCOMMON.serializedName to mutableSetOf(
+                    Rarity.UNCOMMON.serializedName, Rarity.COMMON.serializedName
+                ),
+                Rarity.RARE.serializedName to mutableSetOf(
+                    Rarity.RARE.serializedName, Rarity.UNCOMMON.serializedName
+                ),
+                Rarity.EPIC.serializedName to mutableSetOf(
+                    Rarity.EPIC.serializedName, Rarity.RARE.serializedName
+                ),
+            )
+        )
+    }
+
     fun combine(other: RadGymsConfig): RadGymsConfig {
         return this.copy(
             debug = other.debug ?: debug,
@@ -28,10 +69,10 @@ data class RadGymsConfig(
             shardRewards = other.shardRewards ?: shardRewards,
             lapisBoostAmount = other.lapisBoostAmount ?: lapisBoostAmount,
             ignoredSpecies = other.ignoredSpecies ?: ignoredSpecies,
-            ignoredForms = other.ignoredForms ?: ignoredForms,
             minLevel = other.minLevel ?: minLevel,
             maxLevel = other.maxLevel ?: maxLevel,
-            deriveAverageGymLevel = other.deriveAverageGymLevel ?: deriveAverageGymLevel
+            deriveAverageGymLevel = other.deriveAverageGymLevel ?: deriveAverageGymLevel,
+            pokeCachePools = other.pokeCachePools ?: pokeCachePools
         )
     }
 }
