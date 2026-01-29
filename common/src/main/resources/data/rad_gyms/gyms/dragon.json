@@ -46,10 +46,7 @@
         "yaw": 42.5
       },
       "ai": {
-        "type": "rct",
-        "data": {
-          "max_select_margin": 0.15
-        }
+        "type": "rct"
       },
       "battle_rules": {
         "max_item_uses": 5
@@ -82,10 +79,7 @@
         "yaw": -42.5
       },
       "ai": {
-        "type": "rct",
-        "data": {
-          "max_select_margin": 0.15
-        }
+        "type": "rct"
       },
       "battle_rules": {
         "max_item_uses": 5
@@ -120,10 +114,7 @@
         "yaw": 0.01
       },
       "ai": {
-        "type": "rct",
-        "data": {
-          "max_select_margin": 0.15
-        }
+        "type": "rct"
       },
       "battle_rules": {
         "max_item_uses": 5
