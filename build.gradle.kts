@@ -9,11 +9,11 @@ import java.net.URI
 
 plugins {
     id("java")
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.serialization") version "2.2.21"
+    kotlin("jvm") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.0"
 
-    id("dev.architectury.loom") version "1.11-SNAPSHOT" apply false
-    id("com.gradleup.shadow") version "9.2.2" apply false
+    id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
+    id("com.gradleup.shadow") version "9.3.1" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
 }
 
@@ -104,7 +104,6 @@ modProjects.forEach {
                     includeGroup("com.aetherteam.nitrogen")
                 }
             }
-
         }
 
         tasks {
@@ -126,7 +125,7 @@ modProjects.forEach {
             compileKotlin {
                 compilerOptions {
                     jvmTarget.set(JvmTarget.JVM_21)
-                    freeCompilerArgs.set(listOf("-Xnested-type-aliases"))
+                    freeCompilerArgs.add("-Xreturn-value-checker=check")
                 }
             }
         }

@@ -126,6 +126,16 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
+    override fun registerBlockEntityTypes() {
+        MOD_BUS.addListener<RegisterEvent> { event ->
+            event.register(RadGymsBlockEntities.resourceKey) { helper ->
+                RadGymsBlockEntities.register { identifier, block ->
+                    helper.register(identifier, block)
+                }
+            }
+        }
+    }
+
     override fun registerEntityTypes() {
         MOD_BUS.addListener<RegisterEvent> { event ->
             event.register(RadGymsEntities.resourceKey) { helper ->
@@ -140,16 +150,6 @@ class RadGymsNeoForge : RadGymsImplementation {
         MOD_BUS.addListener<EntityAttributeCreationEvent> { event ->
             RadGymsEntities.registerAttributes { type, builder ->
                 event.put(type, builder.build())
-            }
-        }
-    }
-
-    override fun registerBlockEntityTypes() {
-        MOD_BUS.addListener<RegisterEvent> { event ->
-            event.register(RadGymsBlockEntities.resourceKey) { helper ->
-                RadGymsBlockEntities.register { identifier, block ->
-                    helper.register(identifier, block)
-                }
             }
         }
     }

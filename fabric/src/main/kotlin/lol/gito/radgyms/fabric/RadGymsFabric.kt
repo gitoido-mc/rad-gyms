@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -49,14 +49,13 @@ object RadGymsFabric : RadGymsImplementation {
 
     override val networkManager = RadGymsFabricNetworkManager
 
-    override fun environment(): Environment = when(FabricLoader.getInstance().environmentType) {
+    override fun environment(): Environment = when (FabricLoader.getInstance().environmentType) {
         EnvType.CLIENT -> Environment.CLIENT
         EnvType.SERVER -> Environment.SERVER
         else -> throw IllegalStateException("Fabric implementation cannot resolve environment yet")
     }
 
     override fun isModInstalled(id: String): Boolean = FabricLoader.getInstance().isModLoaded(id)
-
 
     override fun initialize() {
         RadGyms.preInitialize(this)
@@ -96,18 +95,18 @@ object RadGymsFabric : RadGymsImplementation {
         Registry.register(RadGymsBlocks.registry, identifier, entry)
     }
 
+    override fun registerBlockEntityTypes() {
+        RadGymsBlockEntities.register { identifier, entry ->
+            Registry.register(RadGymsBlockEntities.registry, identifier, entry)
+        }
+    }
+
     override fun registerEntityTypes() = RadGymsEntities.register { identifier, entry ->
         Registry.register(RadGymsEntities.registry, identifier, entry)
     }
 
     override fun registerEntityAttributes() = RadGymsEntities.registerAttributes { entityType, builder ->
         FabricDefaultAttributeRegistry.register(entityType, builder)
-    }
-
-    override fun registerBlockEntityTypes() {
-        RadGymsBlockEntities.register { identifier, entry ->
-            Registry.register(RadGymsBlockEntities.registry, identifier, entry)
-        }
     }
 
     override fun registerResourceReloader(
@@ -153,7 +152,6 @@ object RadGymsFabric : RadGymsImplementation {
         return allowBreak
     }
 
-
     private class RadGymsReloadListener(
         private val identifier: ResourceLocation,
         private val reloader: PreparableReloadListener,
@@ -181,5 +179,4 @@ object RadGymsFabric : RadGymsImplementation {
 
         override fun getFabricDependencies(): MutableCollection<ResourceLocation> = this.dependencies.toMutableList()
     }
-
 }

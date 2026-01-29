@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.event.gyms
 
-import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.common.RadGyms.RCT
@@ -15,8 +14,6 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.gym.TrainerFactory
-import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.displayClientMessage
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerLevel
@@ -96,13 +93,9 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         )
 
         rctBattleManager.startBattle(
-            listOf(playerTrainer),
             listOf(npcTrainer),
-            when (GymBattleFormat.valueOf(event.trainer.format)) {
-                GymBattleFormat.SINGLES -> BattleFormat.GEN_9_SINGLES
-                GymBattleFormat.DOUBLES -> BattleFormat.GEN_9_DOUBLES
-                GymBattleFormat.TRIPLES -> BattleFormat.GEN_9_TRIPLES
-            },
+            listOf(playerTrainer),
+            GymBattleFormat.valueOf(event.trainer.format),
             BattleRules()
         )
     }

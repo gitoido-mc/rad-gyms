@@ -8,15 +8,15 @@
 plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
-    id("com.gradleup.shadow") version ("9.2.2")
+    id("com.gradleup.shadow")
 }
 
 repositories {
     maven("https://maven.fabricmc.net/")
 }
 
-val shadowCommon: Configuration = configurations.maybeCreate("shadowCommon")
-val generatedResources: File = project(":common").file("src/generated").absoluteFile
+val shadowCommon = configurations.maybeCreate("shadowCommon")!!
+val generatedResources = project(":common").file("src/generated")!!
 
 architectury {
     platformSetupLoomIde()
@@ -47,14 +47,6 @@ loom {
                 "--username=Gitoido",
                 "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b"
             )
-            runDir = file("${rootProject.projectDir}/run/fabric/client").absolutePath
-        }
-        getByName("server") {
-            runDir = file("${rootProject.projectDir}/run/fabric/server").absolutePath
-        }
-
-        getByName("datagen") {
-            runDir = file("${rootProject.projectDir}/run/datagen").absolutePath
         }
     }
 }
@@ -98,6 +90,10 @@ tasks {
             exclude(".cache/")
         }
         into(file("src/generated"))
+    }
+
+    runClient.configure {
+
     }
 
     processResources {

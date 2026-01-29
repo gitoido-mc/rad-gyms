@@ -26,7 +26,7 @@ sourceSets {
 
 loom {
     silentMojangMappingsLicense()
-    accessWidenerPath = file("src/main/resources/rad-gyms.accesswidener")
+    accessWidenerPath = file("src/main/resources/${rootProject.property("mod_id")}.accesswidener")
 
     @Suppress("UnstableApiUsage")
     mixin {
@@ -57,7 +57,6 @@ dependencies {
 
     // Project deps
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
-    implementation("io.github.ayfri.kore:kore:${property("kore_lib")}")
 }
 
 kotlin {

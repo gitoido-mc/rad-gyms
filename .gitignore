@@ -48,6 +48,8 @@ replay_*.log
 docs/dist/
 docs/.cache/
 docs/node_modules/
+docs/src/pages/.obsidian
+docs/src/pages/.vault-nickname
 
 /fabric/src/generated/resources/cobblemon-common.accesswidener
 /.ignored/

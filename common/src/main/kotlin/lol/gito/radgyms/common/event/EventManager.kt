@@ -40,7 +40,6 @@ import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.common.event.gyms.*
 import lol.gito.radgyms.common.gym.*
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
-import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_TIMESTAMP
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import lol.gito.radgyms.common.registry.RadGymsBlocks
@@ -50,7 +49,6 @@ import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.hasRadGymsTrainers
 import lol.gito.radgyms.common.world.StructurePlacer
-import kotlin.time.TimeSource.Monotonic.markNow
 
 object EventManager {
     fun register() {
@@ -171,15 +169,12 @@ object EventManager {
     }
 
     private fun onSpeciesUpdate() {
-        markNow()
-//        if (SPECIES_TIMESTAMP > now) return
         SPECIES_BY_TYPE.clear()
 
         ElementalTypes.all().forEach {
             SPECIES_BY_TYPE[it.showdownId] = speciesOfType(it)
             debug("Added ${SPECIES_BY_TYPE[it.showdownId]?.size} ${it.showdownId} entries to species map")
         }
-        SPECIES_TIMESTAMP = markNow()
     }
 
     private fun onBattleStart(event: BattleStartedEvent.Pre) {
@@ -191,10 +186,10 @@ object EventManager {
             .filter { it.type == ActorType.NPC && it is AIBattleActor }
             .map { it as AIBattleActor }
             .mapNotNull { RCT.trainerRegistry.getById(it.uuid.toString())?.entity }
-            .filter { it is Trainer }
+            .filterIsInstance<Trainer>()
 
         TRAINER_BATTLE_START.postThen(
-            GymEvents.TrainerBattleStartEvent(players, trainers.map { it as Trainer }, event.battle),
+            GymEvents.TrainerBattleStartEvent(players, trainers.map { it }, event.battle),
             { subEvent -> if (subEvent.isCanceled) event.cancel() },
             { _ -> debug("Gym trainer battle started for players: ${players.joinToString(" ") { it.name.string }}") },
         )

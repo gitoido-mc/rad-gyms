@@ -8,7 +8,7 @@
 plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
-    id("com.gradleup.shadow") version ("9.2.2")
+    id("com.gradleup.shadow")
 }
 
 val shadowCommon: Configuration = configurations.maybeCreate("shadowCommon").apply {
@@ -36,11 +36,6 @@ loom {
                 "--username=Gitoido",
                 "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b"
             )
-            runDir = file("./run/neoforge/client").path
-        }
-
-        getByName("server") {
-            runDir = file("./run/neoforge/server").path
         }
     }
 }

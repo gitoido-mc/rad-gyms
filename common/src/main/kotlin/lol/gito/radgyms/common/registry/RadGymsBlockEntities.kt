@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 private typealias BETRegistry = Registry<BlockEntityType<*>>
 private typealias BETRegistryKey = ResourceKey<Registry<BlockEntityType<*>>>
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 object RadGymsBlockEntities : PlatformRegistry<BETRegistry, BETRegistryKey, BlockEntityType<*>>() {
     override val registry: BETRegistry = BuiltInRegistries.BLOCK_ENTITY_TYPE
     override val resourceKey: BETRegistryKey = Registries.BLOCK_ENTITY_TYPE
