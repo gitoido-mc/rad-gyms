@@ -30,6 +30,8 @@ data class TrainerModel(
     val leader: Boolean = false,
     val requires: String? = null
 ) {
+    private typealias ElementalListType = List<@Serializable(ElementalTypeSerializer::class) ElementalType>
+
     data class EntityData(
         val name: Component,
         val relativePosition: Vec3,
@@ -49,7 +51,7 @@ data class TrainerModel(
             val teamGenerator: GymTeamGeneratorType = GymTeamGeneratorType.CHAOTIC,
             @Contextual
             @SerialName("possible_elemental_types")
-            val possibleElementalTypes: List<@Serializable(ElementalTypeSerializer::class) ElementalType>? = listOf(
+            val possibleElementalTypes: ElementalListType? = listOf(
                 ElementalTypes.getRandomType()
             ),
             @SerialName("possible_formats")
@@ -59,11 +61,11 @@ data class TrainerModel(
                 Bag("cobblemon:hyper_potion", 2)
             ),
             @SerialName("level_thresholds")
-            val countPerLevelThreshold: List<List<Int>> = listOf(
-                listOf(20, 3),
-                listOf(40, 4),
-                listOf(60, 5),
-                listOf(80, 6),
+            val countPerLevelThreshold: List<Threshold> = listOf(
+                Threshold(3, 20),
+                Threshold(4, 40),
+                Threshold(5, 60),
+                Threshold(6, 80),
             ),
             @SerialName("battle_rules")
             val battleRules: BattleRules = BattleRules(),
@@ -121,5 +123,11 @@ data class TrainerModel(
             val quantity: Int
         )
 
+        @Serializable
+        data class Threshold(
+            val amount: Int,
+            @SerialName("until_level")
+            val untilLevel: Int
+        )
     }
 }
