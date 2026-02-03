@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-rootProject.name = "cobblemon-rad-gyms"
+rootProject.name = "rad-gyms"
 
 pluginManagement {
     repositories {

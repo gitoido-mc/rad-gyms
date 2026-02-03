@@ -62,22 +62,15 @@ dependencies {
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
 }
 
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.add("-Xcontext-receivers")
-    }
-}
-
 tasks {
     remapJar {
-        archiveBaseName.set("${rootProject.name}")
-        archiveVersion.set("${rootProject.version}")
-        archiveClassifier.set("common")
+        archiveBaseName.set("${rootProject.name}-${project.name}")
+        archiveVersion.set("${project.version}")
     }
 
     remapSourcesJar {
-        archiveBaseName.set("${rootProject.name}")
-        archiveVersion.set("${rootProject.version}")
+        archiveBaseName.set("${rootProject.name}-${project.name}")
+        archiveVersion.set("${project.version}")
         archiveClassifier.set("sources")
     }
 }

@@ -113,6 +113,10 @@ tasks {
 
     shadowJar {
         configurations = listOf(shadowCommon)
+
+        archiveBaseName.set("${rootProject.name}-${project.name}")
+        archiveVersion.set("${project.version}")
+        archiveClassifier.set("shadow")
     }
 
     remapJar {
@@ -120,12 +124,12 @@ tasks {
         inputFile.set(shadowJar.flatMap { it.archiveFile })
 
         archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${rootProject.version}")
+        archiveVersion.set("${project.version}")
     }
 
     remapSourcesJar {
         archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${rootProject.version}")
+        archiveVersion.set("${project.version}")
         archiveClassifier.set("sources")
     }
 }

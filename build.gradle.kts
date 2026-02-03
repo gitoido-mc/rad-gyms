@@ -18,39 +18,6 @@ plugins {
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
 }
 
-scmVersion {
-    sanitizeVersion = false
-    tag {
-        prefix = "1.7.0+"
-        fallbackPrefixes = listOf(
-            "1.6.1+", "1.7.x",
-        )
-        deserializer { properties, position, string ->
-            println("deserializer")
-            println(properties)
-            println(position)
-            println(string)
-            position.branch.split("-").first()
-        }
-        serializer { properties, string ->
-            println("serializer")
-            println(properties)
-            "tag"
-        }
-    }
-    versionCreator { string, position ->
-        println("version")
-        println(position)
-        println(string)
-        string
-    }
-    snapshotCreator { version, position ->
-//        println(version)
-//        println(position)
-        return@snapshotCreator position.branch.split("/").last()
-    }
-}
-
 architectury {
     minecraft = project.property("minecraft_version") as String
 }
@@ -101,9 +68,17 @@ modProjects.forEach {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
+        apply(plugin = "pl.allegro.tech.build.axion-release")
+
+        scmVersion {
+            tag {
+                prefix = "1.7.0+"
+                fallbackPrefixes = listOf("1.6.1+")
+            }
+        }
 
         group = property("maven_group")!!
-        version = property("version")!!
+        version = scmVersion.version
 
         repositories {
             mavenCentral()
@@ -147,7 +122,6 @@ modProjects.forEach {
 
             java {
                 withSourcesJar()
-
                 sourceCompatibility = JavaVersion.VERSION_21
                 targetCompatibility = JavaVersion.VERSION_21
             }
@@ -160,7 +134,31 @@ modProjects.forEach {
                 compilerOptions {
                     jvmTarget.set(JvmTarget.JVM_21)
                     freeCompilerArgs.add("-Xreturn-value-checker=check")
+                    freeCompilerArgs.add("-Xcontext-parameters")
                 }
+            }
+        }
+    }
+}
+
+project.tasks.register("buildMod") {
+    dependsOn(":common:build")
+    dependsOn(":fabric:build")
+    dependsOn(":neoforge:build")
+
+    logger.info("Preparing $version jars")
+
+    doLast {
+        layout.buildDirectory.file("libs").get().asFile.delete()
+        listOf(":common", ":fabric", ":neoforge").forEach { mod ->
+            val modProject = project(mod)
+            val jars = listOf(
+                "${project.name}-${modProject.name}-${modProject.version}.jar",
+                "${project.name}-${modProject.name}-${modProject.version}-sources.jar"
+            )
+            jars.forEach {
+                val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
+                modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
             }
         }
     }

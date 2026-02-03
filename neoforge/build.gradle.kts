@@ -11,7 +11,7 @@ plugins {
     id("com.gradleup.shadow")
 }
 
-val shadowCommon: Configuration = configurations.maybeCreate("shadowCommon").apply {
+val shadowCommon: Configuration by configurations.creating {
     isCanBeResolved = true
     isCanBeConsumed = false
 }
@@ -63,7 +63,9 @@ dependencies {
 
     // Mod deps
     modImplementation("dev.architectury:architectury-neoforge:${property("architectury_api_version")}")
-    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") { isTransitive = false }
+    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
+        isTransitive = false
+    }
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_neoforge_version")}")
 
     // Compat
@@ -101,17 +103,13 @@ tasks {
     }
 
     jar {
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveBaseName.set("${rootProject.name}-${project.name}")
         archiveVersion.set("${rootProject.version}")
         archiveClassifier.set("dev-slim")
     }
 
     sourcesJar {
         dependsOn(copyAccessWidener)
-
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        archiveVersion.set("${rootProject.version}")
-        archiveClassifier.set("sources")
     }
 
     shadowJar {
@@ -121,16 +119,22 @@ tasks {
 
         configurations = listOf(shadowCommon)
 
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        archiveVersion.set("${rootProject.version}")
-        archiveClassifier.set("dev-shadow")
+        archiveBaseName.set("${rootProject.name}-${project.name}")
+        archiveVersion.set("${project.version}")
+        archiveClassifier.set("shadow")
     }
 
     remapJar {
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
 
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        archiveVersion.set("${rootProject.version}")
+        archiveBaseName.set("${rootProject.name}-${project.name}")
+        archiveVersion.set("${project.version}")
+    }
+
+    remapSourcesJar {
+        archiveBaseName.set("${rootProject.name}-${project.name}")
+        archiveVersion.set("${project.version}")
+        archiveClassifier.set("sources")
     }
 }
