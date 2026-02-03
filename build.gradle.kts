@@ -15,6 +15,40 @@ plugins {
     id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
     id("com.gradleup.shadow") version "9.3.1" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("pl.allegro.tech.build.axion-release") version "1.20.1"
+}
+
+scmVersion {
+    sanitizeVersion = false
+    tag {
+        prefix = "1.7.0+"
+        fallbackPrefixes = listOf(
+            "1.6.1+", "1.7.x",
+        )
+        deserializer { properties, position, string ->
+            println("deserializer")
+            println(properties)
+            println(position)
+            println(string)
+            position.branch.split("-").first()
+        }
+        serializer { properties, string ->
+            println("serializer")
+            println(properties)
+            "tag"
+        }
+    }
+    versionCreator { string, position ->
+        println("version")
+        println(position)
+        println(string)
+        string
+    }
+    snapshotCreator { version, position ->
+//        println(version)
+//        println(position)
+        return@snapshotCreator position.branch.split("/").last()
+    }
 }
 
 architectury {
@@ -69,7 +103,7 @@ modProjects.forEach {
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
         group = property("maven_group")!!
-        version = property("mod_version")!!
+        version = property("version")!!
 
         repositories {
             mavenCentral()

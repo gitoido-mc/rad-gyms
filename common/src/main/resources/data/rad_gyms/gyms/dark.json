@@ -5,31 +5,6 @@
     "pos": {"x": 16.5, "y": 2, "z": 27},
     "yaw": -180.0
   },
-  "reward_loot_tables": [
-    {
-      "id": "rad_gyms:gyms/default/shared_loot_table",
-      "min_level": 1,
-      "max_level": 100
-    },
-    {
-      "id": "rad_gyms:gyms/default/common_loot_table",
-      "max_level": 25
-    },
-    {
-      "id": "rad_gyms:gyms/default/uncommon_loot_table",
-      "min_level": 26,
-      "max_level": 50
-    },
-    {
-      "id": "rad_gyms:gyms/default/rare_loot_table",
-      "min_level": 51,
-      "max_level": 75
-    },
-    {
-      "id": "rad_gyms:gyms/default/epic_loot_table",
-      "min_level": 76
-    }
-  ],
   "trainers": [
     {
       "id": "default_trainer_junior",

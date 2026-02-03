@@ -12,7 +12,7 @@ plugins {
 }
 
 group = rootProject.property("maven_group")!!
-version = rootProject.property("mod_version")!!
+version = rootProject.version
 
 tasks {
     // Convenience tasks to have it all in one gradle buildscript of root project

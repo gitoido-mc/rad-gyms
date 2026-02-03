@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -18,7 +18,6 @@ class ServerSettingsS2C(
     val shardRewards: Boolean,
     val lapisBoostAmount: Int,
     val ignoredSpecies: List<String>,
-    val ignoredForms: List<String>,
     val minLevel: Int,
     val maxLevel: Int
 ) :
@@ -33,7 +32,6 @@ class ServerSettingsS2C(
             ByteBufCodecs.BOOL.decode(buffer),
             ByteBufCodecs.INT.decode(buffer),
             ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).decode(buffer),
-            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).decode(buffer),
             ByteBufCodecs.INT.decode(buffer),
             ByteBufCodecs.INT.decode(buffer),
         )
@@ -44,7 +42,6 @@ class ServerSettingsS2C(
         ByteBufCodecs.BOOL.encode(buffer, shardRewards)
         ByteBufCodecs.INT.encode(buffer, lapisBoostAmount)
         ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).encode(buffer, ignoredSpecies)
-        ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).encode(buffer, ignoredForms)
         ByteBufCodecs.INT.encode(buffer, minLevel)
         ByteBufCodecs.INT.encode(buffer, maxLevel)
     }

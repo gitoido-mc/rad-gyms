@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Rad Gyms [Cobblemon 1.6.1+]</h1>
+  <h1>Rad Gyms</h1>
 </div>
 <div align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/rad-gyms-cobblemon" title="Rad Gyms on Curseforge" target="_blank"><img src="https://img.shields.io/curseforge/dt/1196570?style=for-the-badge&logo=curseforge&logoColor=%23F16436&logoSize=auto&label=&labelColor=%23222222&color=%23F16436"/></a>

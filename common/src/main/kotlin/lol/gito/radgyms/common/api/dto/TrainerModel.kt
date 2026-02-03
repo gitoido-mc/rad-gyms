@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.api.dto
 
 import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import kotlinx.serialization.Contextual
@@ -39,20 +40,24 @@ data class TrainerModel(
         @Serializable
         data class Trainer(
             val id: String,
-            val name: String,
+            var name: String = "rad_gyms.npc.default_trainer",
             @SerialName("spawn_relative")
             val spawnRelative: Gym.Json.EntityCoordsAndYaw,
             @SerialName("team_type")
-            val teamType: GymTeamType,
+            val teamType: GymTeamType = GymTeamType.GENERATED,
             @SerialName("team_generator")
-            val teamGenerator: GymTeamGeneratorType? = GymTeamGeneratorType.BST,
+            val teamGenerator: GymTeamGeneratorType = GymTeamGeneratorType.CHAOTIC,
             @Contextual
             @SerialName("possible_elemental_types")
-            val possibleElementalTypes: List<@Serializable(ElementalTypeSerializer::class) ElementalType>? = null,
+            val possibleElementalTypes: List<@Serializable(ElementalTypeSerializer::class) ElementalType>? = listOf(
+                ElementalTypes.getRandomType()
+            ),
             @SerialName("possible_formats")
             val possibleFormats: List<GymBattleFormat> = listOf(GymBattleFormat.SINGLES),
-            val ai: AI,
-            val bag: List<Bag> = emptyList(),
+            val ai: AI = AI("rct"),
+            val bag: List<Bag> = listOf(
+                Bag("cobblemon:hyper_potion", 2)
+            ),
             @SerialName("level_thresholds")
             val countPerLevelThreshold: List<List<Int>> = listOf(
                 listOf(20, 3),
@@ -61,20 +66,21 @@ data class TrainerModel(
                 listOf(80, 6),
             ),
             @SerialName("battle_rules")
-            val battleRules: BattleRules? = null,
-            val team: List<String>? = null,
+            val battleRules: BattleRules = BattleRules(),
+            val team: List<String> = emptyList(),
             val leader: Boolean = false,
             val requires: String? = null,
         ) {
             init {
-                when (teamType) {
-                    GymTeamType.GENERATED -> {
-                        requireNotNull(possibleElementalTypes)
-                        requireNotNull(teamGenerator)
-                    }
-
-                    GymTeamType.POOL, GymTeamType.FIXED -> {
-                        requireNotNull(team)
+                teamType.let {
+                    when (teamType) {
+                        GymTeamType.GENERATED -> {}
+                        GymTeamType.FIXED -> {
+                            require(team.count() in 1..6)
+                        }
+                        GymTeamType.POOL -> {
+                            require(team.count() > 0)
+                        }
                     }
                 }
             }
@@ -83,7 +89,7 @@ data class TrainerModel(
         @Serializable
         data class BattleRules(
             @SerialName("max_item_uses")
-            val maxItemUses: Int
+            val maxItemUses: Int = 5
         )
 
         @Serializable
@@ -93,6 +99,7 @@ data class TrainerModel(
         ) {
             @Serializable
             data class Config(
+                // RCTBattleAI params
                 @SerialName("move_bias")
                 val moveBias: Double? = null,
                 @SerialName("status_move_bias")
@@ -103,6 +110,8 @@ data class TrainerModel(
                 val itemBias: Double? = null,
                 @SerialName("max_select_margin")
                 val maxSelectMargin: Double? = null,
+                // StrongBattleAI
+                val skillLevel: Int? = null
             )
         }
 

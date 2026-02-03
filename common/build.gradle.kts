@@ -41,6 +41,9 @@ dependencies {
     implementation("net.benwoodworth.knbt:knbt:0.11.9")
     minecraft("com.mojang:minecraft:${rootProject.property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
+    // for Architectury EnvType annotations
+    modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
+
 
     // Mixin additions
     "net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7".let {
@@ -53,7 +56,7 @@ dependencies {
     }
 
     // Cobblemon
-    modImplementation("com.cobblemon:mod:${property("cobblemon_version")}") { isTransitive = false }
+    modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") { isTransitive = false }
 
     // Project deps
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
@@ -66,14 +69,15 @@ kotlin {
 }
 
 tasks {
-    jar {
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        archiveVersion.set("${rootProject.property("mod_version")}")
+    remapJar {
+        archiveBaseName.set("${rootProject.name}")
+        archiveVersion.set("${rootProject.version}")
+        archiveClassifier.set("common")
     }
 
-    sourcesJar {
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        archiveVersion.set("${rootProject.property("mod_version")}")
+    remapSourcesJar {
+        archiveBaseName.set("${rootProject.name}")
+        archiveVersion.set("${rootProject.version}")
         archiveClassifier.set("sources")
     }
 }

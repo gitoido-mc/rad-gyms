@@ -27,5 +27,5 @@ object RaritySerializer : KSerializer<Rarity> {
     ) = encoder.encodeString(value.serializedName)
 
     override fun deserialize(decoder: Decoder): Rarity =
-        Rarity.valueOf(decoder.decodeString())
+        Rarity.valueOf(decoder.decodeString().uppercase())
 }

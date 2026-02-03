@@ -1,6 +1,5 @@
 {
   "pools": {
-
     "common": {
       "ekans": 400,
       "koffing aspect=region-bias-galar": 400,

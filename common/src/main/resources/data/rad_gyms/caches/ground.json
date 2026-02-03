@@ -1,6 +1,5 @@
 {
   "pools": {
-
     "common": {
       "cubone aspect=region-bias-alola": 400,
       "diglett": 400,
