@@ -93,8 +93,8 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         )
 
         rctBattleManager.startBattle(
-            listOf(npcTrainer),
             listOf(playerTrainer),
+            listOf(npcTrainer),
             GymBattleFormat.valueOf(event.trainer.format),
             BattleRules()
         )

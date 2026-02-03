@@ -15,6 +15,7 @@ plugins {
     id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
     id("com.gradleup.shadow") version "9.3.1" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("pl.allegro.tech.build.axion-release") version "1.20.1"
 }
 
 architectury {
@@ -67,9 +68,17 @@ modProjects.forEach {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
+        apply(plugin = "pl.allegro.tech.build.axion-release")
+
+        scmVersion {
+            tag {
+                prefix = "1.7.0+"
+                fallbackPrefixes = listOf("1.6.1+")
+            }
+        }
 
         group = property("maven_group")!!
-        version = property("mod_version")!!
+        version = scmVersion.version
 
         repositories {
             mavenCentral()
@@ -113,7 +122,6 @@ modProjects.forEach {
 
             java {
                 withSourcesJar()
-
                 sourceCompatibility = JavaVersion.VERSION_21
                 targetCompatibility = JavaVersion.VERSION_21
             }
@@ -126,7 +134,31 @@ modProjects.forEach {
                 compilerOptions {
                     jvmTarget.set(JvmTarget.JVM_21)
                     freeCompilerArgs.add("-Xreturn-value-checker=check")
+                    freeCompilerArgs.add("-Xcontext-parameters")
                 }
+            }
+        }
+    }
+}
+
+project.tasks.register("buildMod") {
+    dependsOn(":common:build")
+    dependsOn(":fabric:build")
+    dependsOn(":neoforge:build")
+
+    logger.info("Preparing $version jars")
+
+    doLast {
+        layout.buildDirectory.file("libs").get().asFile.delete()
+        listOf(":common", ":fabric", ":neoforge").forEach { mod ->
+            val modProject = project(mod)
+            val jars = listOf(
+                "${project.name}-${modProject.name}-${modProject.version}.jar",
+                "${project.name}-${modProject.name}-${modProject.version}-sources.jar"
+            )
+            jars.forEach {
+                val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
+                modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
             }
         }
     }

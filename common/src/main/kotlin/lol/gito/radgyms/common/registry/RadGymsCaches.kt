@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -35,13 +35,7 @@ object RadGymsCaches : JsonDataRegistry<CacheDTO> {
     override fun parse(
         stream: InputStream,
         identifier: ResourceLocation
-    ): CacheDTO {
-        return try {
-            Json.decodeFromStream<CacheDTO>(stream)
-        } catch (exception: Exception) {
-            throw ExecutionException("Error parsing JSON from resource $identifier", exception)
-        }
-    }
+    ): CacheDTO = Json.decodeFromStream<CacheDTO>(stream)
 
     override fun reload(data: Map<ResourceLocation, CacheDTO>) {
         caches.clear()

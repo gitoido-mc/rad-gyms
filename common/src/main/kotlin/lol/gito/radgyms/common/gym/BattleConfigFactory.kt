@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -14,6 +14,7 @@ import lol.gito.radgyms.common.api.dto.TrainerModel
 class BattleConfigFactory {
     fun createFromDto(dto: TrainerModel.Json.AI): RCTBattleAIConfig {
         var builder = RCTBattleAIConfig.Builder()
+
         dto.data?.let { data ->
             if (data.moveBias != null) builder = builder.withMoveBias(data.moveBias)
             if (data.statusMoveBias != null) builder = builder.withStatusMoveBias(data.statusMoveBias)

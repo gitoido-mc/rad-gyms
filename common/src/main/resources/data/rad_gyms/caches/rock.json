@@ -1,6 +1,5 @@
 {
-  "pool": {
-
+  "pools": {
     "common": {
       "arcanine aspect=hisuian": 400,
       "growlithe aspect=hisuian": 400,

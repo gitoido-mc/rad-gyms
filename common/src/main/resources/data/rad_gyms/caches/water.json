@@ -1,6 +1,5 @@
 {
-  "pool": {
-
+  "pools": {
     "common": {
       "horsea": 400,
       "magikarp": 400,

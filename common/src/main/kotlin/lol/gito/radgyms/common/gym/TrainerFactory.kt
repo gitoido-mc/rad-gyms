@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -8,7 +8,11 @@
 package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.battles.ai.StrongBattleAI
 import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
+import com.gitlab.srcmc.rctapi.api.ai.config.StrongBattleAIConfig
+import com.gitlab.srcmc.rctapi.api.ai.experimental.SelfdotGen5AI
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.models.BagItemModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
@@ -16,7 +20,6 @@ import lol.gito.radgyms.common.api.enumeration.GymTeamType
 import lol.gito.radgyms.common.gym.SpeciesManager.fillPokemonModelFromPokemon
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerPlayer
-import kotlin.collections.toMutableList
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel as RCTTrainerModel
 import lol.gito.radgyms.common.api.dto.TrainerModel as RGTrainerModel
 
@@ -26,16 +29,24 @@ class TrainerFactory(
     fun create(
         trainer: RGTrainerModel.Json.Trainer, level: Int, player: ServerPlayer
     ): RGTrainerModel {
-        val ai = RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))
+        val ai = when (trainer.ai.type) {
+            "rct" -> RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))
+            "cbl" -> StrongBattleAI(trainer.ai.data?.skillLevel?:run { StrongBattleAIConfig().skill() })
+            "sd5" -> SelfdotGen5AI()
+            else -> throw RuntimeException(
+                "Unknown battle AI type for trainer ${trainer.id}, passed ${trainer.ai.type}, supports only 'rct', 'cbl', 'sd5'"
+            )
+        }
+
         val bag = trainer.bag.map { BagItemModel(it.item, it.quantity) }
         val possibleFormats = trainer.possibleFormats.toMutableList()
         val team = when (trainer.teamType) {
-            GymTeamType.GENERATED -> trainer.teamGenerator!!.instance.generate(
+            GymTeamType.GENERATED -> trainer.teamGenerator.instance.generateTeam(
                 trainer,
                 level,
-                trainer.possibleElementalTypes!!,
                 player,
-                possibleFormats
+                possibleFormats,
+                trainer.possibleElementalTypes?:run { ElementalTypes.all().shuffled().take(1) },
             )
 
             GymTeamType.POOL -> {
@@ -45,17 +56,18 @@ class TrainerFactory(
                     if (level >= mapperLevel[0]) pokemonCount = mapperLevel[1]
                 }
                 // now that we know amount of pokes we want to take - we fill the data
-                trainer.team!!
+                trainer.team
                     .shuffled()
                     .take(pokemonCount)
                     .map { params ->
-                        val props = PokemonProperties.parse("level=$level $params")
+                        val props = PokemonProperties.parse(params)
+
                         fillPokemonModelFromPokemon(props)
                     }
                     .toMutableList()
             }
 
-            GymTeamType.FIXED -> trainer.team!!
+            GymTeamType.FIXED -> trainer.team
                 .map { params ->
                     val props = PokemonProperties.parse("level=$level $params")
                     fillPokemonModelFromPokemon(props)

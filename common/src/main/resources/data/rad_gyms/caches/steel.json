@@ -1,5 +1,5 @@
 {
-  "pool": {
+  "pools": {
     "common": {
       "diglett aspect=alolan": 400,
       "dugtrio aspect=alolan": 400,

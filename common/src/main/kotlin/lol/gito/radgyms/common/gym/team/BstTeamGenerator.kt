@@ -12,14 +12,9 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
-import lol.gito.radgyms.common.gym.SpeciesManager.fillPokemonModel
 
-class BstTeamGenerator : AbstractTeamGenerator() {
-    override fun generatePokemon(
-        level: Int,
-        type: ElementalType,
-        thresholdAmount: Int
-    ): PokemonProperties {
+class BstTeamGenerator : GenericTeamGenerator() {
+    override fun generatePokemon(level: Int, thresholdAmount: Int, type: ElementalType): PokemonProperties {
         debug("Rolling for pokemon with level $level and type ${type.showdownId}")
         val speciesList = SPECIES_BY_TYPE[type.showdownId]!!
 
@@ -42,6 +37,6 @@ class BstTeamGenerator : AbstractTeamGenerator() {
                 it[derivedChunkIndex].random()
             }
 
-        return fillPokemonModel(derivedSpecies, level)
+        return getPokemonProperties(derivedSpecies, level)
     }
 }

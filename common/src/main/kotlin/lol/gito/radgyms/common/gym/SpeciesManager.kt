@@ -9,19 +9,15 @@ package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
-import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.util.toProperties
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.GymSpecies
 import lol.gito.radgyms.common.pokecache.CacheDTO
-import kotlin.random.Random
 
 object SpeciesManager {
     var SPECIES_BY_TYPE: HashMap<String, List<GymSpecies.Container.SpeciesWithForm>> = HashMap(ElementalTypes.count())
@@ -31,9 +27,7 @@ object SpeciesManager {
         val allSpecies = PokemonSpecies.implemented.asSequence()
         val species = allSpecies
             .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
-            .associateWith { associateSpecies ->
-                associateSpecies.forms.filterNot { it.formOnlyShowdownId() in CONFIG.ignoredForms!! }
-            }
+            .associateWith { associateSpecies -> associateSpecies.forms }
             .flatMap { (species, forms) ->
                 forms
                     .filter { form -> form.types.contains(elementalType) }
@@ -62,47 +56,6 @@ object SpeciesManager {
             .sortedBy {
                 it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
             }
-    }
-
-    fun fillPokemonModel(derived: GymSpecies.Container.SpeciesWithForm, level: Int): PokemonProperties {
-        var pokeString =
-            "${derived.species.resourceIdentifier.path} form=${derived.form.name} level=${level}"
-
-        if (Random.nextInt(1, 10) == 1) {
-            pokeString = pokeString.plus(" shiny=yes")
-        }
-
-        val pokemonProperties: PokemonProperties = pokeString.toProperties()
-
-        // Thanks Ludichat [Cobbreeding project code]
-        if (pokemonProperties.form != null) {
-            derived.species.standardForm
-            derived.species.forms.find { it.formOnlyShowdownId() == pokemonProperties.form }?.run {
-                aspects.forEach {
-                    // alternative form
-                    pokemonProperties.customProperties.add(FlagSpeciesFeature(it, true))
-                    // regional bias
-                    pokemonProperties.customProperties.add(
-                        StringSpeciesFeature(
-                            "region_bias",
-                            it.split("-").last()
-                        )
-                    )
-                    // Basculin wants to be special
-                    // We're handling aspects now but some form handling should be kept to prevent
-                    // legitimate abilities to be flagged as forced
-                    pokemonProperties.customProperties.add(
-                        StringSpeciesFeature(
-                            "fish_stripes",
-                            it.removeSuffix("striped")
-                        )
-                    )
-                }
-            }
-        }
-
-
-        return pokemonProperties
     }
 
     fun fillPokemonModelFromPokemon(pokemonProperties: PokemonProperties): PokemonModel {

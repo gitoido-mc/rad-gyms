@@ -5,7 +5,7 @@ license='''GPL-3.0-only'''
 
 [[mods]]
 modId="${mod_id}"
-version="${mod_version}"
+version="${version}"
 displayName="Rad Gyms"
 credits="Thanks to thedarkcolour and all the contributors for making Kotlin for Forge"
 authors="Gitoido <corpa@gito.lol>"

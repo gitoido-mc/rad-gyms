@@ -142,7 +142,6 @@ object EventManager {
             CONFIG.shardRewards!!,
             CONFIG.lapisBoostAmount!!,
             CONFIG.ignoredSpecies!!,
-            CONFIG.ignoredForms!!,
             CONFIG.minLevel!!,
             CONFIG.maxLevel!!
         ).sendToPlayer(event.player)
