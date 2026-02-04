@@ -5,6 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
 import java.net.URI
 
 plugins {
@@ -17,6 +18,27 @@ plugins {
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
 }
+
+scmVersion {
+    versionCreator("versionWithCommitHash")
+
+    tag {
+        prefix = "1.7.0+"
+        fallbackPrefixes = listOf("1.6.1+")
+    }
+
+    branchVersionIncrementer.putAll(
+        mapOf(
+            "main" to "incrementMinor",
+            "develop" to "incrementPrerelease",
+            "feature/*" to "incrementPatch",
+            "hotfix/*" to "incrementPatch",
+            "refactor/*" to "incrementPatch",
+        )
+    )
+}
+
+version = scmVersion.version
 
 architectury {
     minecraft = project.property("minecraft_version") as String
@@ -68,17 +90,8 @@ modProjects.forEach {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
-        apply(plugin = "pl.allegro.tech.build.axion-release")
-
-        scmVersion {
-            tag {
-                prefix = "1.7.0+"
-                fallbackPrefixes = listOf("1.6.1+")
-            }
-        }
-
         group = property("maven_group")!!
-        version = scmVersion.version
+        version = rootProject.version
 
         repositories {
             mavenCentral()
@@ -141,14 +154,19 @@ modProjects.forEach {
     }
 }
 
-project.tasks.register("buildMod") {
+val buildMod by project.tasks.registering {
     dependsOn(":common:build")
     dependsOn(":fabric:build")
     dependsOn(":neoforge:build")
-
-    logger.info("Preparing $version jars")
+    dependsOn(":docs:build")
+    mustRunAfter(
+        ":fabric:build",
+        ":neoforge:build",
+        "build"
+    )
 
     doLast {
+        logger.info("Preparing $version jars")
         layout.buildDirectory.file("libs").get().asFile.delete()
         listOf(":common", ":fabric", ":neoforge").forEach { mod ->
             val modProject = project(mod)
@@ -158,6 +176,7 @@ project.tasks.register("buildMod") {
             )
             jars.forEach {
                 val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
+                dest.ensureParentDirsCreated()
                 modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
             }
         }
