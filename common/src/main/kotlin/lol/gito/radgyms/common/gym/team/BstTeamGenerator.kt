@@ -7,14 +7,14 @@
 
 package lol.gito.radgyms.common.gym.team
 
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 
 class BstTeamGenerator : GenericTeamGenerator() {
-    override fun generatePokemon(level: Int, thresholdAmount: Int, type: ElementalType): PokemonProperties {
+    override fun generatePokemon(level: Int, thresholdAmount: Int, type: ElementalType): Pokemon {
         debug("Rolling for pokemon with level $level and type ${type.showdownId}")
         val speciesList = SPECIES_BY_TYPE[type.showdownId]!!
 
@@ -37,6 +37,6 @@ class BstTeamGenerator : GenericTeamGenerator() {
                 it[derivedChunkIndex].random()
             }
 
-        return getPokemonProperties(derivedSpecies, level)
+        return getPokemon(derivedSpecies, level)
     }
 }

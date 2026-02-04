@@ -47,17 +47,17 @@ data class Gym(
             ),
             LootTableInfo(
                 id = "rad_gyms:gyms/default/uncommon_loot_table",
-                minLevel =  26,
+                minLevel = 26,
                 maxLevel = 50
             ),
             LootTableInfo(
                 id = "rad_gyms:gyms/default/rare_loot_table",
-                minLevel =  51,
+                minLevel = 51,
                 maxLevel = 75
             ),
             LootTableInfo(
                 id = "rad_gyms:gyms/default/epic_loot_table",
-                minLevel =  76
+                minLevel = 76
             ),
         )
     ) {

@@ -12,9 +12,10 @@ import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.gym.team.BstTeamGenerator
 import lol.gito.radgyms.common.gym.team.ChaoticTeamGenerator
 import lol.gito.radgyms.common.gym.team.GenericTeamGenerator
+import net.minecraft.util.StringRepresentable
 
 @Serializable
-enum class GymTeamGeneratorType {
+enum class GymTeamGeneratorType : StringRepresentable {
     @JvmField
     @SerialName("bst")
     BST {
@@ -27,5 +28,13 @@ enum class GymTeamGeneratorType {
         override val instance: GenericTeamGenerator = ChaoticTeamGenerator()
     };
 
+    override fun getSerializedName(): String = this.name
+
     abstract val instance: GenericTeamGenerator
+
+    companion object {
+        @JvmField
+        @Transient
+        val CODEC = StringRepresentable.fromEnum { entries.toTypedArray() }
+    }
 }

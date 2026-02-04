@@ -7,9 +7,9 @@
 
 package lol.gito.radgyms.common.api.team
 
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import lol.gito.radgyms.common.api.dto.TrainerModel
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
@@ -20,15 +20,13 @@ interface TeamGeneratorInterface {
         trainer: TrainerModel.Json.Trainer,
         level: Int,
         player: ServerPlayer,
-        possibleFormats: MutableList<GymBattleFormat>,
-        types: List<ElementalType> = listOf(
-            ElementalTypes.getRandomType()
-        )
+        possibleFormats: MutableList<GymBattleFormat>? = mutableListOf(GymBattleFormat.SINGLES),
+        types: List<ElementalType>? = listOf(ElementalTypes.getRandomType())
     ): MutableList<PokemonModel>
 
     fun generatePokemon(
         level: Int,
         thresholdAmount: Int,
         type: ElementalType = ElementalTypes.getRandomType(),
-    ): PokemonProperties
+    ): Pokemon
 }
