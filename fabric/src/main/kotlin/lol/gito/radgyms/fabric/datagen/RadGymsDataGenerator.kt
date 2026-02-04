@@ -22,6 +22,7 @@ object RadGymsDataGenerator : DataGeneratorEntrypoint {
         pack.addProvider(::GymLootDataProvider)
         pack.addProvider(::StructureLootDataProvider)
         pack.addProvider(::BlockLootTableProvider)
+        pack.addProvider(::GymDataProvider)
         pack.addProvider(::CacheDataProvider)
     }
 }
