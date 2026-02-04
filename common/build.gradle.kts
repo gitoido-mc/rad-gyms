@@ -63,6 +63,10 @@ dependencies {
 }
 
 tasks {
+    processResources {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+
     remapJar {
         archiveBaseName.set("${rootProject.name}-${project.name}")
         archiveVersion.set("${project.version}")
