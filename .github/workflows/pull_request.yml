@@ -40,6 +40,7 @@ jobs:
         with:
           commit: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts-branch: artifacts
           artifacts: |
             build/libs/rad-gyms-common-${{ steps.version.outputs.MOD_VERSION }}.jar
             build/libs/rad-gyms-common-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
