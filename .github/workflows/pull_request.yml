@@ -24,19 +24,16 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'temurin'
-          cache: 'gradle'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
-        with:
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
       - name: Build
         uses: burrunan/gradle-cache-action@v3
         with:
-          read-only: ${{ github.ref != 'refs/heads/main' }}
+          read-only: false
           arguments: buildMod
       - name: Save version output
         id: version
-        run: echo "MOD_VERSION=$(./gradlew currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
+        run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
       - name: Attach artifacts to PR
         uses: gavv/pull-request-artifacts@v2
         with:
