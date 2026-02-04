@@ -41,22 +41,24 @@ dependencies {
     implementation("net.benwoodworth.knbt:knbt:0.11.9")
     minecraft("com.mojang:minecraft:${rootProject.property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
+
     // for Architectury EnvType annotations
     modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
 
-
     // Mixin additions
-    "net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7".let {
+    "net.fabricmc:sponge-mixin:0.17.0+mixin.0.8.7".let {
         annotationProcessor(it)
         compileOnly(it)
     }
-    "io.github.llamalad7:mixinextras-common:0.5.0".let {
+    "io.github.llamalad7:mixinextras-common:0.5.3".let {
         annotationProcessor(it)
         compileOnly(it)
     }
 
     // Cobblemon
-    modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") { isTransitive = false }
+    modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") {
+        isTransitive = false
+    }
 
     // Project deps
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
