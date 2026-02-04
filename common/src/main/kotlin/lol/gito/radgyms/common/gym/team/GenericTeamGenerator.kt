@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.gym.team
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -50,7 +51,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
                     level,
                     trainer.countPerLevelThreshold.count(),
                     types?.random() ?: ElementalTypes.getRandomType()
-                ).createPokemonProperties()
+                ).createPokemonProperties(PokemonPropertyExtractor.ALL)
             )
         }
 
@@ -88,11 +89,9 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         speciesWithForm: GymSpecies.Container.SpeciesWithForm,
         level: Int
     ): Pokemon {
-        val poke = Pokemon()
-        poke.species = speciesWithForm.species
+        val poke = speciesWithForm.species.create(level)
         poke.form = speciesWithForm.form
         poke.forcedAspects = speciesWithForm.form.aspects.toSet()
-        poke.level = level
         poke.shiny = (Random.nextInt(1, 10) == 1)
         poke.updateAspects()
 
