@@ -21,6 +21,7 @@ import lol.gito.radgyms.common.api.dto.TrainerModel.Json.Trainer
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
+import net.minecraft.world.item.Rarity
 
 object RadGymsCodec {
     @JvmStatic
@@ -113,6 +114,7 @@ object RadGymsCodec {
         ).apply(it, ::Trainer)
     }
 
+    @JvmStatic
     val GYM: Codec<Json> = RecordCodecBuilder.create {
         it.group(
             Codec.STRING.fieldOf("interior_template").forGetter(Json::template),
@@ -122,4 +124,12 @@ object RadGymsCodec {
             Codec.list(LOOT_TABLE_INFO).fieldOf("reward_loot_tables").forGetter(Json::rewardLootTables)
         ).apply(it, ::Json)
     }
+
+    @JvmStatic
+    val CACHE: Codec<Map<String, Map<Rarity, Map<String, Int>>>> = Codec.unboundedMap(
+        Codec.STRING, Codec.unboundedMap(
+            Rarity.CODEC,
+            Codec.unboundedMap(Codec.STRING, Codec.INT)
+        )
+    )
 }
