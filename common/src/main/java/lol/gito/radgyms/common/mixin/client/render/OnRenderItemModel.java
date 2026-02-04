@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -10,7 +10,6 @@ package lol.gito.radgyms.common.mixin.client.render;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
-import lol.gito.radgyms.common.RadGyms;
 import lol.gito.radgyms.common.client.RadGymsClient;
 import lol.gito.radgyms.common.registry.RadGymsDataComponents;
 import lol.gito.radgyms.common.registry.RadGymsItems;
@@ -31,6 +30,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static lol.gito.radgyms.common.RadGyms.modId;
 
 @Mixin(ItemRenderer.class)
 public abstract class OnRenderItemModel {
@@ -66,7 +67,7 @@ public abstract class OnRenderItemModel {
             String type = stack.get(RadGyms$typeComponent);
             if (type == null) return;
 
-            ResourceLocation intermediate = RadGyms.INSTANCE.modId("gym_key_" + type);
+            ResourceLocation intermediate = modId("gym_key_" + type);
             ModelManager manager = this.itemModelShaper.getModelManager();
             ModelResourceLocation id = RadGymsClient.modModelId(intermediate, renderMode.getSerializedName());
 

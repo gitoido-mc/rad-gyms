@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.mixin.client.render;
 
-import lol.gito.radgyms.common.RadGyms;
 import lol.gito.radgyms.common.client.RadGymsClient;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.block.model.BlockModel;
@@ -26,6 +25,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static lol.gito.radgyms.common.RadGyms.debug;
 
 @Mixin(ModelBakery.class)
 public abstract class OnLoadModels {
@@ -57,7 +58,7 @@ public abstract class OnLoadModels {
                 String path = id.getPath();
                 boolean check = path.startsWith("models/item/gym_key") && path.endsWith(".json");
                 if (check) {
-                    RadGyms.LOGGER.info(path);
+                    debug("Loaded custom model {} for gym key", path);
                 }
                 return check;
             })

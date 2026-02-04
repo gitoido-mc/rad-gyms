@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -30,9 +30,11 @@ class RadGymsState : SavedData() {
     val gymInstanceMap: MutableMap<UUID, Gym> = mutableMapOf()
 
     companion object {
+        @JvmStatic
         fun create() = RadGymsState()
 
         @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+        @JvmStatic
         private val type: Factory<RadGymsState> = Factory(
             ::create,
             ::save,
@@ -40,6 +42,7 @@ class RadGymsState : SavedData() {
         )
 
         @Suppress("unused")
+        @JvmStatic
         fun save(
             nbt: CompoundTag,
             registryLookup: HolderLookup.Provider
@@ -65,6 +68,7 @@ class RadGymsState : SavedData() {
             return state
         }
 
+        @JvmStatic
         fun getServerState(server: MinecraftServer): RadGymsState {
             val stateManager = server.getLevel(RADGYMS_LEVEL_KEY)!!.dataStorage
             return stateManager.computeIfAbsent(type, MOD_ID).also {
@@ -72,28 +76,34 @@ class RadGymsState : SavedData() {
             }
         }
 
+        @JvmStatic
         fun getPlayerState(player: ServerPlayer): PlayerData {
             val serverState = getServerState(player.server)
 
             return serverState.playerDataMap.computeIfAbsent(player.uuid) { PlayerData() }
         }
 
+        @JvmStatic
         fun incrementVisitsForPlayer(player: ServerPlayer) {
             getPlayerState(player).incrementVisits()
         }
 
+        @JvmStatic
         fun setReturnCoordsForPlayer(player: ServerPlayer, coords: PlayerData.ReturnCoords?) {
             getPlayerState(player).returnCoords = coords
         }
 
+        @JvmStatic
         fun hasGymForPlayer(player: ServerPlayer): Boolean {
             return getServerState(player.server).gymInstanceMap.keys.contains(player.uuid)
         }
 
+        @JvmStatic
         fun getGymForPlayer(player: ServerPlayer): Gym? {
             return getServerState(player.server).gymInstanceMap[player.uuid]
         }
 
+        @JvmStatic
         fun addGymForPlayer(player: ServerPlayer, gymInstance: Gym) {
             if (hasGymForPlayer(player)) {
                 removeGymForPlayer(player)
@@ -102,10 +112,12 @@ class RadGymsState : SavedData() {
             getServerState(player.server).gymInstanceMap[player.uuid] = gymInstance
         }
 
+        @JvmStatic
         fun removeGymForPlayer(player: ServerPlayer) {
             getServerState(player.server).gymInstanceMap.remove(player.uuid)
         }
 
+        @JvmStatic
         fun removeGymForPlayerByUuid(uuid: UUID) {
             RadGyms.implementation.server()?.let {
                 debug("Removing gyms for player {}", uuid)

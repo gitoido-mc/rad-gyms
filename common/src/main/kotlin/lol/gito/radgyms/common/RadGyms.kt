@@ -64,13 +64,16 @@ object RadGyms {
         EventManager.register()
     }
 
+    @JvmStatic
     fun modId(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, name)
 
+    @JvmStatic
     fun info(message: String, vararg params: Any): Unit = LOGGER.info(message, *params)
 
-    @Suppress("unused")
+    @JvmStatic
     fun warn(message: String, vararg params: Any): Unit = LOGGER.warn(message, *params)
 
+    @JvmStatic
     fun debug(message: String, vararg params: Any) {
         if (CONFIG.debug == true) LOGGER.info(message, *params)
     }
