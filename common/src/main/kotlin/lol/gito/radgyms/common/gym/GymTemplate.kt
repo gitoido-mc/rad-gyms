@@ -8,9 +8,6 @@
 package lol.gito.radgyms.common.gym
 
 import lol.gito.radgyms.common.api.dto.Gym
-import lol.gito.radgyms.common.util.getVec3d
-import lol.gito.radgyms.common.util.putVec3d
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 import lol.gito.radgyms.common.api.dto.TrainerModel as RGTrainerModel
@@ -46,33 +43,5 @@ data class GymTemplate(
                 lootTables = dto.rewardLootTables!!
             )
         }
-
-        fun fromNbt(tag: CompoundTag): GymTemplate {
-            // Basic primitive/vector decoding
-            val structure = tag.getString("structure")
-            val exit = tag.getVec3d("exit")
-            val player = tag.getVec3d("player")
-            val yaw = tag.getFloat("playerYaw")
-
-            // TODO: deserialize trainers & lootTables using knbt or JSON fallback
-            val trainers = emptyList<RGTrainerModel>()
-            val lootTables = emptyList<Gym.Json.LootTableInfo>()
-
-            return GymTemplate(structure, exit, player, yaw, trainers, tag.getString("type").ifBlank { null }, lootTables)
-        }
-    }
-
-    fun toNbt(): CompoundTag {
-        val tag = CompoundTag()
-        tag.putString("structure", structure)
-        tag.putVec3d("exit", relativeExitBlockSpawn)
-        tag.putVec3d("player", relativePlayerSpawn)
-        tag.putFloat("playerYaw", playerYaw)
-        tag.putString("type", type ?: "")
-
-        // TODO: serialize `trainers` and `lootTables` using knbt serialization helpers.
-        // Fallback approach: convert complex objects to JSON strings and store in NBT string list.
-
-        return tag
     }
 }

@@ -7,93 +7,60 @@
 
 package lol.gito.radgyms.common.gym
 
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.gitlab.srcmc.rctapi.api.models.PokemonModel
+import com.cobblemon.mod.common.pokemon.Species
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.GymSpecies
 import lol.gito.radgyms.common.pokecache.CacheDTO
 
+private typealias SpeciesWithForms = List<GymSpecies.Container.SpeciesWithForm>
+
+private fun Sequence<Species>.mapToSpeciesWithForms(elementalType: ElementalType? = null): SpeciesWithForms = this
+    .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
+    .associateWith { associateSpecies ->
+        associateSpecies.forms.apply {
+            this.add(associateSpecies.standardForm)
+        }
+    }
+    .flatMap { (flatMapSpecies, forms) ->
+        forms
+            .toMutableSet()
+            .map {
+                GymSpecies.Container.SpeciesWithForm(flatMapSpecies, it)
+            }
+    }
+    .toList()
+    .filter {
+        when (elementalType) {
+            null -> true
+            else -> {
+                it.form.types.contains(elementalType)
+            }
+        }
+    }
+    .sortedBy {
+        it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
+    }
+
+
 object SpeciesManager {
-    var SPECIES_BY_TYPE: HashMap<String, List<GymSpecies.Container.SpeciesWithForm>> = HashMap(ElementalTypes.count())
+    var SPECIES_BY_TYPE: HashMap<String, SpeciesWithForms> = HashMap(ElementalTypes.count())
     var SPECIES_BY_RARITY: Map<String, CacheDTO> = mutableMapOf()
 
-    fun speciesOfType(elementalType: ElementalType): List<GymSpecies.Container.SpeciesWithForm> {
+
+    fun speciesOfType(elementalType: ElementalType): SpeciesWithForms {
         val allSpecies = PokemonSpecies.implemented.asSequence()
-        val species = allSpecies
-            .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
-            .associateWith { associateSpecies -> associateSpecies.forms }
-            .flatMap { (species, forms) ->
-                forms
-                    .filter { form -> form.types.contains(elementalType) }
-                    .map { form ->
-                        GymSpecies.Container.SpeciesWithForm(species, form)
-                    }
-            }
-            .toList()
-            .sortedBy {
-                it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
-            }
+        val species = allSpecies.mapToSpeciesWithForms(elementalType)
 
-        if (species.isNotEmpty()) return species
-
-        return allSpecies
-            .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
-            .associateWith { associateSpecies ->
-                associateSpecies.forms.filterNot { it.formOnlyShowdownId() in CONFIG.ignoredForms!! }
-            }
-            .flatMap { (flatMapSpecies, forms) ->
-                forms.map {
-                    GymSpecies.Container.SpeciesWithForm(flatMapSpecies, it)
-                }
-            }
-            .toList()
-            .sortedBy {
-                it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
-            }
+        when (species.isNotEmpty()) {
+            true -> return species
+            false -> throw RuntimeException("Cannot get species")
+        }
     }
-
-    fun fillPokemonModelFromPokemon(pokemonProperties: PokemonProperties): PokemonModel {
-        val poke = pokemonProperties.create()
-        poke.setFriendship(100)
-        poke.forcedAspects = pokemonProperties.aspects
-        poke.updateAspects()
-        poke.updateForm()
-
-        return PokemonModel(
-            poke.species.resourceIdentifier.path,
-            poke.gender.toString(),
-            poke.level,
-            poke.nature.name.path,
-            poke.ability.name,
-            poke.moveSet.map { it.name }.toSet(),
-            PokemonModel.StatsModel(
-                poke.ivs.getOrDefault(Stats.HP),
-                poke.ivs.getOrDefault(Stats.ATTACK),
-                poke.ivs.getOrDefault(Stats.DEFENCE),
-                poke.ivs.getOrDefault(Stats.SPECIAL_ATTACK),
-                poke.ivs.getOrDefault(Stats.SPECIAL_DEFENCE),
-                poke.ivs.getOrDefault(Stats.SPEED),
-            ),
-            PokemonModel.StatsModel(
-                poke.evs.getOrDefault(Stats.HP),
-                poke.evs.getOrDefault(Stats.ATTACK),
-                poke.evs.getOrDefault(Stats.DEFENCE),
-                poke.evs.getOrDefault(Stats.SPECIAL_ATTACK),
-                poke.evs.getOrDefault(Stats.SPECIAL_DEFENCE),
-                poke.evs.getOrDefault(Stats.SPEED),
-            ),
-            poke.shiny,
-            poke.heldItem().itemHolder.registeredName,
-            poke.aspects
-        )
-    }
-
 
     fun register() {
         debug("Initializing SpeciesManager instance")

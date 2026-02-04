@@ -51,12 +51,12 @@ data class TrainerModel(
             val teamGenerator: GymTeamGeneratorType = GymTeamGeneratorType.CHAOTIC,
             @Contextual
             @SerialName("possible_elemental_types")
-            val possibleElementalTypes: ElementalListType? = listOf(
+            val possibleElementalTypes: ElementalListType = listOf(
                 ElementalTypes.getRandomType()
             ),
             @SerialName("possible_formats")
             val possibleFormats: List<GymBattleFormat> = listOf(GymBattleFormat.SINGLES),
-            val ai: AI = AI("rct"),
+            val ai: AI = AI(),
             val bag: List<Bag> = listOf(
                 Bag("cobblemon:hyper_potion", 2)
             ),
@@ -71,7 +71,7 @@ data class TrainerModel(
             val battleRules: BattleRules = BattleRules(),
             val team: List<String> = emptyList(),
             val leader: Boolean = false,
-            val requires: String? = null,
+            val requires: String? = null
         ) {
             init {
                 teamType.let {
@@ -96,7 +96,7 @@ data class TrainerModel(
 
         @Serializable
         data class AI(
-            val type: String,
+            val type: String = "rct",
             val data: Config? = null,
         ) {
             @Serializable

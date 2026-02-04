@@ -8,10 +8,10 @@
 package lol.gito.radgyms.common.gym.team
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
-import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalType
-import com.cobblemon.mod.common.util.toProperties
+import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import lol.gito.radgyms.common.api.dto.GymSpecies
 import lol.gito.radgyms.common.api.dto.TrainerModel
@@ -20,44 +20,55 @@ import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import lol.gito.radgyms.common.api.team.TeamGeneratorInterface
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
-import lol.gito.radgyms.common.gym.SpeciesManager.fillPokemonModelFromPokemon
 import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
 
 abstract class GenericTeamGenerator : TeamGeneratorInterface {
+    protected fun assembleProperties(level: Int, params: String): PokemonProperties = when (params.contains("level=")) {
+        true -> PokemonProperties.parse(params)
+        false -> PokemonProperties.parse("level=$level $params")
+    }
+
     override fun generateTeam(
         trainer: TrainerModel.Json.Trainer,
         level: Int,
         player: ServerPlayer,
-        possibleFormats: MutableList<GymBattleFormat>,
-        types: List<ElementalType>
+        possibleFormats: MutableList<GymBattleFormat>?,
+        types: List<ElementalType>?
     ): MutableList<PokemonModel> {
-        var pokemonCount = 1
-        for (mapperLevel in trainer.countPerLevelThreshold.sortedBy { it[0] }) {
-            if (level >= mapperLevel[0]) pokemonCount = mapperLevel[1]
-        }
+        val pokemonCount = trainer
+            .countPerLevelThreshold
+            .filter { it.untilLevel >= level }
+            .minByOrNull { it.untilLevel }
+            ?.amount ?: 1
 
         val rawTeam = mutableListOf<PokemonProperties>()
 
         (1..pokemonCount).forEach { _ ->
-            rawTeam.add(generatePokemon(level, trainer.countPerLevelThreshold.count(), types.random()))
+            rawTeam.add(
+                generatePokemon(
+                    level,
+                    trainer.countPerLevelThreshold.count(),
+                    types?.random() ?: ElementalTypes.getRandomType()
+                ).createPokemonProperties()
+            )
         }
 
         val event = GymEvents.GenerateTeamEvent(
             player,
-            types,
+            types ?: ElementalTypes.all().shuffled().take(1),
             level,
             trainer.id,
             trainer.leader,
             rawTeam,
-            possibleFormats
+            possibleFormats = mutableListOf(GymBattleFormat.SINGLES)
         )
 
         val team = mutableListOf<PokemonModel>()
 
         GENERATE_TEAM.post(event) { generated ->
             generated.team.forEach { props ->
-                team.add(fillPokemonModelFromPokemon(props))
+                team.add(createPokemonModel(props))
             }
         }
         return team
@@ -67,50 +78,54 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         level: Int,
         thresholdAmount: Int,
         type: ElementalType
-    ): PokemonProperties {
+    ): Pokemon {
         val derived = SPECIES_BY_TYPE[type.showdownId]!!.random()
 
-        return getPokemonProperties(derived, level)
+        return getPokemon(derived, level)
     }
 
-    protected fun getPokemonProperties(speciesWithForm: GymSpecies.Container.SpeciesWithForm, level: Int): PokemonProperties {
+    protected fun getPokemon(
+        speciesWithForm: GymSpecies.Container.SpeciesWithForm,
+        level: Int
+    ): Pokemon {
+        val poke = Pokemon()
+        poke.species = speciesWithForm.species
+        poke.form = speciesWithForm.form
+        poke.forcedAspects = speciesWithForm.form.aspects.toSet()
+        poke.level = level
+        poke.shiny = (Random.nextInt(1, 10) == 1)
+        poke.updateAspects()
 
-        var pokeString =
-            "${speciesWithForm.species.resourceIdentifier.path} form=${speciesWithForm.form.name} level=${level}"
-
-        if (Random.nextInt(1, 10) == 1) {
-            pokeString = pokeString.plus(" shiny=yes")
-        }
-
-        val pokemonProperties: PokemonProperties = pokeString.toProperties()
-
-        // Thanks Ludichat [Cobbreeding project code]
-        if (pokemonProperties.form != null) {
-            speciesWithForm.species.standardForm
-            speciesWithForm.species.forms.find { it.formOnlyShowdownId() == pokemonProperties.form }?.run {
-                aspects.forEach {
-                    // alternative form
-                    pokemonProperties.customProperties.add(FlagSpeciesFeature(it, true))
-                    // regional bias
-                    pokemonProperties.customProperties.add(
-                        StringSpeciesFeature(
-                            "region_bias",
-                            it.split("-").last()
-                        )
-                    )
-                    // Basculin wants to be special
-                    // We're handling aspects now but some form handling should be kept to prevent
-                    // legitimate abilities to be flagged as forced
-                    pokemonProperties.customProperties.add(
-                        StringSpeciesFeature(
-                            "fish_stripes",
-                            it.removeSuffix("striped")
-                        )
-                    )
-                }
-            }
-        }
-
-        return pokemonProperties
+        return poke
     }
+
+    protected fun createPokemonModel(properties: PokemonProperties) = createPokemonModel(properties.create())
+
+    protected fun createPokemonModel(poke: Pokemon): PokemonModel = PokemonModel(
+        poke.species.resourceIdentifier.path,
+        poke.gender.toString(),
+        poke.level,
+        poke.nature.name.path,
+        poke.ability.name,
+        poke.moveSet.map { it.name }.toSet(),
+        PokemonModel.StatsModel(
+            poke.ivs.getOrDefault(Stats.HP),
+            poke.ivs.getOrDefault(Stats.ATTACK),
+            poke.ivs.getOrDefault(Stats.DEFENCE),
+            poke.ivs.getOrDefault(Stats.SPECIAL_ATTACK),
+            poke.ivs.getOrDefault(Stats.SPECIAL_DEFENCE),
+            poke.ivs.getOrDefault(Stats.SPEED),
+        ),
+        PokemonModel.StatsModel(
+            poke.evs.getOrDefault(Stats.HP),
+            poke.evs.getOrDefault(Stats.ATTACK),
+            poke.evs.getOrDefault(Stats.DEFENCE),
+            poke.evs.getOrDefault(Stats.SPECIAL_ATTACK),
+            poke.evs.getOrDefault(Stats.SPECIAL_DEFENCE),
+            poke.evs.getOrDefault(Stats.SPEED),
+        ),
+        poke.shiny,
+        poke.heldItem().itemHolder.registeredName,
+        poke.aspects
+    )
 }

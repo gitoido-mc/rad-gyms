@@ -11,10 +11,11 @@ import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
 import com.gitlab.srcmc.rctapi.api.battle.BattleFormatProvider
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import net.minecraft.util.StringRepresentable
 import com.cobblemon.mod.common.battles.BattleFormat as CBattleFormat
 
 @Serializable
-enum class GymBattleFormat: BattleFormatProvider {
+enum class GymBattleFormat : BattleFormatProvider, StringRepresentable {
     @JvmField
     @SerialName("singles")
     SINGLES {
@@ -33,7 +34,15 @@ enum class GymBattleFormat: BattleFormatProvider {
         override val format: BattleFormat = BattleFormat.GEN_9_TRIPLES
     };
 
+    override fun getSerializedName(): String = this.name
+
     abstract val format: BattleFormat
 
     override fun getCobblemonBattleFormat(): CBattleFormat = this.format.cobblemonBattleFormat
+
+    companion object {
+        @JvmField
+        @Transient
+        val CODEC = StringRepresentable.fromEnum { entries.toTypedArray() }
+    }
 }
