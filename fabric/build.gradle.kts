@@ -15,8 +15,7 @@ repositories {
     maven("https://maven.fabricmc.net/")
 }
 
-val shadowCommon = configurations.maybeCreate("shadowCommon")!!
-val generatedResources = project(":common").file("src/generated")!!
+val generatedResources: File = project(":common").file("src/generated")!!
 
 architectury {
     platformSetupLoomIde()
@@ -31,14 +30,21 @@ architectury {
     }
 }
 
+val shadowCommon: Configuration by configurations.creating {
+    isCanBeResolved = true
+    isCanBeConsumed = false
+}
+
+
 loom {
-    enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
+
+    enableTransitiveAccessWideners.set(true)
 
     @Suppress("UnstableApiUsage")
     mixin {
         useLegacyMixinAp = true
-        defaultRefmapName = "mixins.${rootProject.property("mod_id")}.refmap.json"
+        defaultRefmapName = "${rootProject.property("mod_id")}-refmap.json"
     }
 
     runs {
@@ -64,7 +70,9 @@ dependencies {
     modImplementation("dev.architectury:architectury-fabric:${property("architectury_api_version")}")
 
     // Cobblemon
-    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") { isTransitive = false }
+    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") {
+        isTransitive = false
+    }
 
     // Common code
     implementation(project(":common", configuration = "namedElements"))
@@ -80,7 +88,7 @@ dependencies {
 
 tasks {
     val copyAccessWidener by registering(Copy::class) {
-        from(project(":common").loom.accessWidenerPath)
+        from(project(":common").file("src/main/resources/rad_gyms.accesswidener"))
         into(file("src/main/resources").absolutePath)
     }
 

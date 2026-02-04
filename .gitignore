@@ -1,23 +1,19 @@
 # gradle
-
 .gradle/
 build/
 out/
 classes/
 
 # eclipse
-
 *.launch
 
 # idea
-
 .idea/
 *.iml
 *.ipr
 *.iws
 
 # vscode
-
 .settings/
 .vscode/
 bin/
@@ -25,7 +21,6 @@ bin/
 .project
 
 # macos
-
 *.DS_Store
 
 # fabric
@@ -35,7 +30,6 @@ run-server/
 run-datagen/
 
 # java
-
 hs_err_*.log
 replay_*.log
 *.hprof
@@ -44,19 +38,22 @@ replay_*.log
 # kotlin
 .kotlin
 
-# project
-docs/dist/
+# docs
 docs/.cache/
+docs/.wrangler/
+docs/dist/
 docs/node_modules/
 docs/src/pages/.obsidian
 docs/src/pages/.vault-nickname
 
-/fabric/src/generated/resources/cobblemon-common.accesswidener
+# project specific
 /.ignored/
-common/.fabric
 /.architectury-transformer/
 
-run
-run-datagen
-run-server
-/*/src/generated/
+/common/src/generated/.cache/
+
+/fabric/src/generated/
+/fabric/src/main/resources/rad_gyms.accesswidener
+
+/neoforge/src/generated/
+/neoforge/src/main/resources/rad_gyms.accesswidener

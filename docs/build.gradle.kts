@@ -14,24 +14,22 @@ plugins {
 group = rootProject.property("maven_group")!!
 version = rootProject.version
 
-tasks {
-    // Convenience tasks to have it all in one gradle buildscript of root project
+tasks.register<NpxTask>("watch") {
+    command = "@11ty/eleventy"
+    args = listOf("--serve")
+    inputs.files(
+        "${project.layout.projectDirectory}/package.json",
+        "${project.layout.projectDirectory}/package-lock.json"
+    )
+    inputs.dir("${project.layout.projectDirectory}/src")
+    inputs.dir(fileTree("${project.layout.projectDirectory}/node_modules").exclude(".cache"))
+}
 
-    // Watch (local development with livereload)
-    maybeCreate("watch", NpxTask::class).apply {
-        command = "@11ty/eleventy"
-        args = listOf("--serve")
-        inputs.files(listOf("package.json", "package-lock.json"))
-        inputs.dir("src")
-        inputs.dir(fileTree("node_modules").exclude(".cache"))
-    }
+// Build (for CI)
+tasks.register<NpxTask>("build") {
+    command = "@11ty/eleventy"
+}
 
-    // Build (for CI)
-    maybeCreate("build", NpxTask::class).apply {
-        command = "@11ty/eleventy"
-        inputs.files(listOf("package.json", "package-lock.json"))
-        inputs.dir("src")
-        inputs.dir(fileTree("node_modules").exclude(".cache"))
-        outputs.dir("dist")
-    }
+tasks.register<Delete>("clean") {
+    delete("${project.layout.projectDirectory}/dist")
 }

@@ -3,6 +3,8 @@
   "package": "lol.gito.radgyms.common.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+  ],
+  "server": [
     "server.event.OnServerPlayerEntityDeath",
     "server.item.BundleItemMixin",
     "server.worldBorder.CollisionGetterMixin",

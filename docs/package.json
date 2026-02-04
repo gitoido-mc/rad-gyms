@@ -4,7 +4,10 @@
   "description": "Documentation for Rad Gyms",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx @11ty/eleventy",
+    "deploy": "npx @11ty/eleventy && wrangler deploy",
+    "preview": "npx @11ty/eleventy && wrangler dev"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +16,8 @@
   "dependencies": {
     "@11ty/eleventy": "^3.1.2",
     "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "wrangler": "^4.62.0"
   }
 }

@@ -1,0 +1,52 @@
+name: Assemble PR artifacts
+on:
+  pull_request:
+    types:
+      - ready_for_review
+      - synchronize
+
+jobs:
+  build:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    strategy:
+      matrix:
+        # Use these Java versions
+        java: [
+          21,    # Current Java LTS
+        ]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup jdk ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+      - name: Build
+        uses: burrunan/gradle-cache-action@v3
+        with:
+          read-only: false
+          arguments: buildMod
+      - name: Save version output
+        id: version
+        run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
+      - name: Attach artifacts to PR
+        uses: gavv/pull-request-artifacts@v2
+        with:
+          commit: ${{ github.event.pull_request.head.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts-branch: artifacts
+          artifacts-prefix: "${{ github.event.number }}/"
+          preserve-path: true
+          artifacts: |
+            build/libs/rad-gyms-common-${{ steps.version.outputs.MOD_VERSION }}.jar
+            build/libs/rad-gyms-common-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+            build/libs/rad-gyms-fabric-${{ steps.version.outputs.MOD_VERSION }}.jar
+            build/libs/rad-gyms-fabric-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+            build/libs/rad-gyms-neoforge-${{ steps.version.outputs.MOD_VERSION }}.jar
+            build/libs/rad-gyms-neoforge-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
