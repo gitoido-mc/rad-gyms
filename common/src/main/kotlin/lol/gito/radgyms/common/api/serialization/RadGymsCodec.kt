@@ -88,7 +88,7 @@ object RadGymsCodec {
     @JvmStatic
     val BATTLE_RULES: Codec<BattleRules> = RecordCodecBuilder.create {
         it.group(
-            Codec.INT.fieldOf("type").forGetter(BattleRules::maxItemUses)
+            Codec.INT.fieldOf("max_item_uses").forGetter(BattleRules::maxItemUses)
         ).apply(it, ::BattleRules)
     }
 
