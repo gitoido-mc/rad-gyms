@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -10,7 +10,6 @@ package lol.gito.radgyms.common.gym
 import com.cobblemon.mod.common.util.toBlockPos
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.dto.Gym
-import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.state.PlayerData
@@ -75,13 +74,6 @@ class GymInitializer(
         )
 
         RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
-
-        // register to RCT registry (keep same behavior)
-        val trainerRegistry = RadGyms.RCT.trainerRegistry
-        gymInstance.npcList.forEach { (uuid, npc) ->
-            val trainer = trainerRegistry.registerNPC(uuid.toString(), npc.trainer)
-            trainer.entity = gymDimension.getEntity(uuid) as Trainer
-        }
 
         return true
     }
