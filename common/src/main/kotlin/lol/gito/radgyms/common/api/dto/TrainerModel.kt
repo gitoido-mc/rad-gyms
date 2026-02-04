@@ -69,7 +69,7 @@ data class TrainerModel(
             ),
             @SerialName("battle_rules")
             val battleRules: BattleRules = BattleRules(),
-            val team: List<String> = emptyList(),
+            val team: List<String>? = null,
             val leader: Boolean = false,
             val requires: String? = null
         ) {
@@ -78,10 +78,12 @@ data class TrainerModel(
                     when (teamType) {
                         GymTeamType.GENERATED -> {}
                         GymTeamType.FIXED -> {
+                            requireNotNull(team)
                             require(team.count() in 1..6)
                         }
                         GymTeamType.POOL -> {
-                            require(team.count() > 0)
+                            requireNotNull(team)
+                            require(team.isNotEmpty() && team.count() > 0)
                         }
                     }
                 }

@@ -107,7 +107,7 @@ object RadGymsCodec {
             Codec.list(BAG).fieldOf("bag").forGetter(Trainer::bag),
             Codec.list(THRESHOLD).fieldOf("level_thresholds").forGetter(Trainer::countPerLevelThreshold),
             BATTLE_RULES.fieldOf("battle_rules").forGetter(Trainer::battleRules),
-            Codec.list(Codec.STRING).fieldOf("team").forGetter(Trainer::team),
+            Codec.list(Codec.STRING).lenientOptionalFieldOf("team", null).forGetter(Trainer::team),
             Codec.BOOL.fieldOf("leader").forGetter(Trainer::leader),
             Codec.STRING.lenientOptionalFieldOf("requires", null).forGetter(Trainer::requires)
         ).apply(it, ::Trainer)

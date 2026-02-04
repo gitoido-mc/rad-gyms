@@ -16,8 +16,7 @@ import net.minecraft.server.level.ServerPlayer
 
 class FixedTeamGenerator : GenericTeamGenerator() {
     fun generateTeam(player: ServerPlayer, trainer: TrainerModel.Json.Trainer, level: Int): MutableList<PokemonModel> {
-        val rawTeam = trainer
-            .team
+        val rawTeam = trainer.team!!
             .map { assembleProperties(level, it) }
             .apply { this.forEach { it.updateAspects() } }
             .toMutableList()
