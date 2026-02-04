@@ -93,9 +93,6 @@ object EventManager {
             }
         }
 
-        CobblemonEvents.SPAWN_BUCKET_CHOSEN.subscribe {
-        }
-
         GYM_ENTER.subscribe(Priority.LOWEST, ::GymEnterHandler)
         GYM_LEAVE.subscribe(Priority.LOWEST, GymLeaveHandler::execute)
 
