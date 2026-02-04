@@ -7,16 +7,21 @@
 
 package lol.gito.radgyms.common.event.gyms
 
+import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.warn
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
+import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
+import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.displayClientMessage
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 
 class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
     private val checkTrainerDefeated: Boolean = event.trainer.defeated
@@ -62,12 +67,39 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
     }
 
     private fun startBattle(event: GymEvents.TrainerInteractEvent) {
+        val gym = RadGymsState.getGymForPlayer(event.player) ?: run {
+            warn("Player {} tried to initialize battle without proper gym instance", event.player.uuid)
+            handleBattleStartError("rad-gyms.message.error.player_gym_state_empty", event.player)
+            return
+        }
+
+        if (event.trainer.trainerId == null) {
+            warn(
+                "Player {} tried to initialize battle with trainer entity {} without trainerId",
+                event.player.uuid,
+                event.trainer.uuid
+            )
+            handleBattleStartError("rad-gyms.message.error.battle_start_invalid_entity", event.player)
+            return
+        }
+
+        if (event.trainer.trainerId !in gym.npcList.keys) {
+            warn(
+                "Gym instance for player {} does not contain information about trainer {}",
+                event.player.uuid,
+                event.trainer.uuid
+            )
+            handleBattleStartError("rad-gyms.message.error.missing_trainer_id_gym_state", event.player)
+            return
+        }
+
         val trainerRegistry = RCT.trainerRegistry
         val rctBattleManager = RCT.battleManager
         val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
-        val npcTrainer: TrainerNPC =
-            trainerRegistry.getById(event.trainer.uuid.toString(), TrainerNPC::class.java)
-
+        val npcTrainer: TrainerNPC = trainerRegistry.registerNPC(
+            event.trainer.trainerId.toString(),
+            gym.npcList[event.trainer.trainerId]!!.trainer,
+        )
 
         npcTrainer.entity = event.trainer
 
@@ -86,7 +118,8 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
             }
         }
 
-        debug("Starting {} battle between player {} and trainer {}",
+        debug(
+            "Starting {} battle between player {} and trainer {}",
             event.trainer.format,
             event.trainer.displayName?.string as Any,
             event.player.displayName?.string as Any
@@ -107,5 +140,10 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         }
 
         event.player.displayClientMessage(translatable(messageKey))
+    }
+
+    private fun handleBattleStartError(message: String, player: ServerPlayer) {
+        player.displayClientMessage(translatable(message))
+        player.giveOrDropItemStack(EXIT_ROPE.defaultInstance, true)
     }
 }

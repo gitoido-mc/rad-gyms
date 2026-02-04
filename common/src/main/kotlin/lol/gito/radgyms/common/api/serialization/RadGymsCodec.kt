@@ -21,6 +21,7 @@ import lol.gito.radgyms.common.api.dto.TrainerModel.Json.Trainer
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
+import net.minecraft.world.item.Rarity
 
 object RadGymsCodec {
     @JvmStatic
@@ -88,7 +89,7 @@ object RadGymsCodec {
     @JvmStatic
     val BATTLE_RULES: Codec<BattleRules> = RecordCodecBuilder.create {
         it.group(
-            Codec.INT.fieldOf("type").forGetter(BattleRules::maxItemUses)
+            Codec.INT.fieldOf("max_item_uses").forGetter(BattleRules::maxItemUses)
         ).apply(it, ::BattleRules)
     }
 
@@ -107,12 +108,13 @@ object RadGymsCodec {
             Codec.list(BAG).fieldOf("bag").forGetter(Trainer::bag),
             Codec.list(THRESHOLD).fieldOf("level_thresholds").forGetter(Trainer::countPerLevelThreshold),
             BATTLE_RULES.fieldOf("battle_rules").forGetter(Trainer::battleRules),
-            Codec.list(Codec.STRING).fieldOf("team").forGetter(Trainer::team),
+            Codec.list(Codec.STRING).lenientOptionalFieldOf("team", null).forGetter(Trainer::team),
             Codec.BOOL.fieldOf("leader").forGetter(Trainer::leader),
             Codec.STRING.lenientOptionalFieldOf("requires", null).forGetter(Trainer::requires)
         ).apply(it, ::Trainer)
     }
 
+    @JvmStatic
     val GYM: Codec<Json> = RecordCodecBuilder.create {
         it.group(
             Codec.STRING.fieldOf("interior_template").forGetter(Json::template),
@@ -122,4 +124,12 @@ object RadGymsCodec {
             Codec.list(LOOT_TABLE_INFO).fieldOf("reward_loot_tables").forGetter(Json::rewardLootTables)
         ).apply(it, ::Json)
     }
+
+    @JvmStatic
+    val CACHE: Codec<Map<String, Map<Rarity, Map<String, Int>>>> = Codec.unboundedMap(
+        Codec.STRING, Codec.unboundedMap(
+            Rarity.CODEC,
+            Codec.unboundedMap(Codec.STRING, Codec.INT)
+        )
+    )
 }

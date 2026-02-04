@@ -22,7 +22,7 @@ class PoolTeamGenerator : GenericTeamGenerator() {
             .minByOrNull { it.untilLevel }
             ?.amount ?: 1
 
-        val rawTeam = trainer.team
+        val rawTeam = trainer.team!!
             .shuffled()
             .take(pokemonCount)
             .map { assembleProperties(level, it) }

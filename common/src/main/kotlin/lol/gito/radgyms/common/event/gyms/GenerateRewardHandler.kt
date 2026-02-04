@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.giveOrDropItemStack
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.debug
@@ -23,7 +24,6 @@ import net.minecraft.network.chat.Component.translatable
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.BundleItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -111,17 +111,6 @@ class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
         )
         bundle.set(DataComponents.BUNDLE_CONTENTS, bundleContents.toImmutable())
         bundle.set(RadGymsDataComponents.RG_GYM_BUNDLE_COMPONENT, true)
-        if (!event.player.addItem(bundle)) {
-            ItemEntity(
-                event.player.level(),
-                event.player.x,
-                event.player.y,
-                event.player.z,
-                bundle,
-            ).also {
-                event.player.level().addFreshEntity(it)
-            }
-
-        }
+        event.player.giveOrDropItemStack(bundle, true)
     }
 }

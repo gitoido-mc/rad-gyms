@@ -1,16 +1,32 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.fabric.datagen.i18n
+package lol.gito.radgyms.fabric.datagen.provider
 
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.registry.RadGymsBlocks
-import lol.gito.radgyms.common.registry.RadGymsItemGroups
-import lol.gito.radgyms.common.registry.RadGymsItems
+import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
+import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_EXIT
+import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_COMMON
+import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_EPIC
+import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_RARE
+import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_UNCOMMON
+import lol.gito.radgyms.common.registry.RadGymsItemGroups.CACHES_GROUP
+import lol.gito.radgyms.common.registry.RadGymsItemGroups.GENERAL_GROUP
+import lol.gito.radgyms.common.registry.RadGymsItemGroups.KEYS_GROUP
+import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_COMMON
+import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_EPIC
+import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_RARE
+import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_UNCOMMON
+import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
+import lol.gito.radgyms.common.registry.RadGymsItems.GYM_KEY
+import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_COMMON
+import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_EPIC
+import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_RARE
+import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_UNCOMMON
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.core.HolderLookup
@@ -27,53 +43,53 @@ class EnUSLocaleProvider(
 ) {
     private fun provideTranslations(): MutableMap<String, String> {
         return mutableMapOf(
-            RadGymsItemGroups.GENERAL_GROUP!!.displayName.string to
+            GENERAL_GROUP!!.displayName.string to
                     "Rad Gyms: General",
-            RadGymsItemGroups.KEYS_GROUP!!.displayName.string to
+            KEYS_GROUP!!.displayName.string to
                     "Rad Gyms: Keys",
-            RadGymsItemGroups.CACHES_GROUP!!.displayName.string to
+            CACHES_GROUP!!.displayName.string to
                     "Rad Gyms: Pokémon caches",
-            RadGymsItems.EXIT_ROPE.descriptionId to
+            EXIT_ROPE.descriptionId to
                     "Exit rope",
-            RadGymsItems.EXIT_ROPE.descriptionId.plus(".tooltip") to
+            EXIT_ROPE.descriptionId.plus(".tooltip") to
                     "Single-use rope to escape the gym trial",
-            RadGymsItems.EXIT_ROPE.descriptionId.plus(".failed") to
+            EXIT_ROPE.descriptionId.plus(".failed") to
                     "It cannot be used here",
-            RadGymsItems.GYM_KEY.descriptionId to
+            GYM_KEY.descriptionId to
                     "Gym key",
-            RadGymsItems.GYM_KEY.descriptionId.plus(".attuned") to
+            GYM_KEY.descriptionId.plus(".attuned") to
                     "Attuned to %s",
-            RadGymsItems.CACHE_COMMON.descriptionId to
+            CACHE_COMMON.descriptionId to
                     "Common Pokemon cache",
-            RadGymsItems.CACHE_UNCOMMON.descriptionId to
+            CACHE_UNCOMMON.descriptionId to
                     "Uncommon Pokemon cache",
-            RadGymsItems.CACHE_RARE.descriptionId to
+            CACHE_RARE.descriptionId to
                     "Rare Pokemon cache",
-            RadGymsItems.CACHE_EPIC.descriptionId to
+            CACHE_EPIC.descriptionId to
                     "Epic Pokemon cache",
-            RadGymsItems.SHARD_COMMON.descriptionId to
+            SHARD_COMMON.descriptionId to
                     "Common cache shard",
-            RadGymsItems.SHARD_UNCOMMON.descriptionId to
+            SHARD_UNCOMMON.descriptionId to
                     "Uncommon cache shard",
-            RadGymsItems.SHARD_RARE.descriptionId to
+            SHARD_RARE.descriptionId to
                     "Rare cache shard",
-            RadGymsItems.SHARD_EPIC.descriptionId to
+            SHARD_EPIC.descriptionId to
                     "Epic cache shard",
-            RadGymsBlocks.GYM_ENTRANCE.descriptionId to
+            GYM_ENTRANCE.descriptionId to
                     "Gym Entrance",
-            RadGymsBlocks.GYM_ENTRANCE.descriptionId.plus(".tooltip") to
+            GYM_ENTRANCE.descriptionId.plus(".tooltip") to
                     "Type can be changed by using Debug Stick on the block.",
-            RadGymsBlocks.GYM_ENTRANCE.descriptionId.plus(".tooltip2") to
+            GYM_ENTRANCE.descriptionId.plus(".tooltip2") to
                     "All players entry count can be reset by using Debug Stick on it while crouching.",
-            RadGymsBlocks.GYM_EXIT.descriptionId to
+            GYM_EXIT.descriptionId to
                     "Gym Exit",
-            RadGymsBlocks.SHARD_BLOCK_COMMON.descriptionId to
+            SHARD_BLOCK_COMMON.descriptionId to
                     "Common shard block",
-            RadGymsBlocks.SHARD_BLOCK_UNCOMMON.descriptionId to
+            SHARD_BLOCK_UNCOMMON.descriptionId to
                     "Uncommon shard block",
-            RadGymsBlocks.SHARD_BLOCK_RARE.descriptionId to
+            SHARD_BLOCK_RARE.descriptionId to
                     "Rare shard block",
-            RadGymsBlocks.SHARD_BLOCK_EPIC.descriptionId to
+            SHARD_BLOCK_EPIC.descriptionId to
                     "Epic shard block",
             modId("item.component.type.chaos").toLanguageKey() to
                     "Chaos",

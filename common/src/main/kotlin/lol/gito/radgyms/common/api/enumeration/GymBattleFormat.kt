@@ -34,7 +34,7 @@ enum class GymBattleFormat : BattleFormatProvider, StringRepresentable {
         override val format: BattleFormat = BattleFormat.GEN_9_TRIPLES
     };
 
-    override fun getSerializedName(): String = this.name
+    override fun getSerializedName(): String = this.format.cobblemonBattleFormat.battleType.name
 
     abstract val format: BattleFormat
 
@@ -43,6 +43,7 @@ enum class GymBattleFormat : BattleFormatProvider, StringRepresentable {
     companion object {
         @JvmField
         @Transient
-        val CODEC = StringRepresentable.fromEnum { entries.toTypedArray() }
+        val CODEC: StringRepresentable.StringRepresentableCodec<GymBattleFormat> =
+            StringRepresentable.fromEnum { entries.toTypedArray() }
     }
 }
