@@ -28,13 +28,14 @@ enum class GymTeamGeneratorType : StringRepresentable {
         override val instance: GenericTeamGenerator = ChaoticTeamGenerator()
     };
 
-    override fun getSerializedName(): String = this.name
+    override fun getSerializedName(): String = this.name.lowercase()
 
     abstract val instance: GenericTeamGenerator
 
     companion object {
         @JvmField
         @Transient
-        val CODEC = StringRepresentable.fromEnum { entries.toTypedArray() }
+        val CODEC: StringRepresentable.StringRepresentableCodec<GymTeamGeneratorType> =
+            StringRepresentable.fromEnum { entries.toTypedArray() }
     }
 }

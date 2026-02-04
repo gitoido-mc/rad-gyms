@@ -24,11 +24,13 @@ enum class GymTeamType : StringRepresentable {
     @JvmField
     @SerialName("pool")
     POOL;
-    override fun getSerializedName(): String = this.name
+
+    override fun getSerializedName(): String = this.name.lowercase()
 
     companion object {
         @JvmField
         @Transient
-        val CODEC = StringRepresentable.fromEnum { entries.toTypedArray() }
+        val CODEC: StringRepresentable.StringRepresentableCodec<GymTeamType> =
+            StringRepresentable.fromEnum { entries.toTypedArray() }
     }
 }
