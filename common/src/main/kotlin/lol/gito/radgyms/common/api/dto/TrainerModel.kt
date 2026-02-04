@@ -62,10 +62,10 @@ data class TrainerModel(
             ),
             @SerialName("level_thresholds")
             val countPerLevelThreshold: List<Threshold> = listOf(
-                Threshold(3, 20),
-                Threshold(4, 40),
-                Threshold(5, 60),
-                Threshold(6, 80),
+                Threshold(3, 25),
+                Threshold(4, 50),
+                Threshold(5, 75),
+                Threshold(6, 100),
             ),
             @SerialName("battle_rules")
             val battleRules: BattleRules = BattleRules(),
