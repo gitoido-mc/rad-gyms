@@ -13,14 +13,16 @@ plugins {
     kotlin("jvm") version "2.3.0"
     kotlin("plugin.serialization") version "2.3.0"
 
-    id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
     id("com.gradleup.shadow") version "9.3.1" apply false
+    id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
 }
 
 scmVersion {
-    versionCreator("versionWithCommitHash")
+    releaseOnlyOnReleaseBranches = true
+    releaseBranchNames = listOf("main")
+    versionCreator("simple")
 
     tag {
         prefix = "1.7.0+"

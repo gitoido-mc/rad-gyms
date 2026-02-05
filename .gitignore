@@ -23,12 +23,6 @@ bin/
 # macos
 *.DS_Store
 
-# fabric
-src/main/generated/.cache
-run/
-run-server/
-run-datagen/
-
 # java
 hs_err_*.log
 replay_*.log
@@ -49,6 +43,7 @@ docs/src/pages/.vault-nickname
 # project specific
 /.ignored/
 /.architectury-transformer/
+/*/run/
 
 /common/src/generated/.cache/
 
