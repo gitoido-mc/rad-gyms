@@ -1,0 +1,191 @@
+{
+  "exit_block_pos": {
+    "x": 16.0,
+    "y": 2.0,
+    "z": 16.0
+  },
+  "interior_template": "rad_gyms:gym_interior_default",
+  "player_spawn_relative": {
+    "pos": {
+      "x": 16.5,
+      "y": 2.0,
+      "z": 27.0
+    },
+    "yaw": -180.0
+  },
+  "reward_loot_tables": [
+    {
+      "id": "rad_gyms:gyms/default/shared_loot_table",
+      "max_level": 100,
+      "min_level": 1
+    },
+    {
+      "id": "rad_gyms:gyms/default/common_loot_table",
+      "max_level": 25,
+      "min_level": 1
+    },
+    {
+      "id": "rad_gyms:gyms/default/uncommon_loot_table",
+      "max_level": 50,
+      "min_level": 26
+    },
+    {
+      "id": "rad_gyms:gyms/default/rare_loot_table",
+      "max_level": 75,
+      "min_level": 51
+    },
+    {
+      "id": "rad_gyms:gyms/default/epic_loot_table",
+      "max_level": 100,
+      "min_level": 76
+    }
+  ],
+  "trainers": [
+    {
+      "ai": {
+        "type": "rct"
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "battle_rules": {
+        "max_item_uses": 5
+      },
+      "id": "default_trainer_junior",
+      "leader": false,
+      "level_thresholds": [
+        {
+          "amount": 2,
+          "until_level": 25
+        },
+        {
+          "amount": 3,
+          "until_level": 50
+        },
+        {
+          "amount": 4,
+          "until_level": 100
+        }
+      ],
+      "name": "rad_gyms.npc.trainer_junior",
+      "possible_elemental_types": [
+        "flying"
+      ],
+      "possible_formats": [
+        "singles"
+      ],
+      "spawn_relative": {
+        "pos": {
+          "x": 26.5,
+          "y": 2.0,
+          "z": 15.5
+        },
+        "yaw": 42.5
+      },
+      "team_generator": "bst",
+      "team_type": "generated"
+    },
+    {
+      "ai": {
+        "type": "rct"
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "battle_rules": {
+        "max_item_uses": 5
+      },
+      "id": "default_trainer_senior",
+      "leader": false,
+      "level_thresholds": [
+        {
+          "amount": 3,
+          "until_level": 25
+        },
+        {
+          "amount": 4,
+          "until_level": 50
+        },
+        {
+          "amount": 5,
+          "until_level": 100
+        }
+      ],
+      "name": "rad_gyms.npc.trainer_senior",
+      "possible_elemental_types": [
+        "flying"
+      ],
+      "possible_formats": [
+        "singles",
+        "doubles"
+      ],
+      "requires": "default_trainer_junior",
+      "spawn_relative": {
+        "pos": {
+          "x": 5.5,
+          "y": 2.0,
+          "z": 15.5
+        },
+        "yaw": -42.5
+      },
+      "team_generator": "bst",
+      "team_type": "generated"
+    },
+    {
+      "ai": {
+        "type": "rct"
+      },
+      "bag": [
+        {
+          "item": "cobblemon:hyper_potion",
+          "quantity": 2
+        }
+      ],
+      "battle_rules": {
+        "max_item_uses": 5
+      },
+      "id": "default_trainer_leader",
+      "leader": true,
+      "level_thresholds": [
+        {
+          "amount": 4,
+          "until_level": 25
+        },
+        {
+          "amount": 5,
+          "until_level": 50
+        },
+        {
+          "amount": 6,
+          "until_level": 100
+        }
+      ],
+      "name": "rad_gyms.npc.leader",
+      "possible_elemental_types": [
+        "flying"
+      ],
+      "possible_formats": [
+        "singles",
+        "doubles",
+        "triples"
+      ],
+      "requires": "default_trainer_senior",
+      "spawn_relative": {
+        "pos": {
+          "x": 16.0,
+          "y": 2.0,
+          "z": 6.0
+        },
+        "yaw": 0.01
+      },
+      "team_generator": "bst",
+      "team_type": "generated"
+    }
+  ]
+}

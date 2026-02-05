@@ -1,0 +1,60 @@
+{
+  "pools": {
+    "common": {
+      "bergmite aspect=region-bias-hisui": 400,
+      "darmanitan aspect=galarian": 400,
+      "darmanitan aspect=galarian aspect=zen-mode": 400,
+      "darumaka aspect=galarian": 400,
+      "mrmime aspect=galarian": 400,
+      "ninetales aspect=alolan": 400,
+      "sandshrew aspect=alolan": 400,
+      "sandslash aspect=alolan": 400,
+      "smoochum": 400,
+      "snom": 400,
+      "spheal": 400,
+      "swinub": 400,
+      "vulpix aspect=alolan": 400
+    },
+    "epic": {
+      "arceus aspect=ice-plate": 100,
+      "articuno": 100,
+      "calyrex aspect=ice-rider": 100,
+      "glastrier": 100,
+      "ironbundle": 100,
+      "kyurem aspect=black-fusion": 100,
+      "kyurem aspect=white-fusion": 100,
+      "regice": 100,
+      "silvally aspect=ice-memory": 100
+    },
+    "rare": {
+      "avalugg": 200,
+      "beartic": 200,
+      "cetitan": 200,
+      "cryogonal": 200,
+      "eiscue": 200,
+      "eiscue aspect=noice_face": 200,
+      "froslass": 200,
+      "frosmoth": 200,
+      "glaceon": 200,
+      "glalie": 200,
+      "jynx": 200,
+      "mamoswine": 200,
+      "mrrime": 200,
+      "piloswine": 200,
+      "rotom aspect=frost-appliance": 200,
+      "vanilluxe": 200,
+      "walrein": 200
+    },
+    "uncommon": {
+      "bergmite": 300,
+      "castform aspect=snowy-form": 300,
+      "cetoddle": 300,
+      "cubchoo": 300,
+      "delibird": 300,
+      "sealeo": 300,
+      "snorunt": 300,
+      "vanillish": 300,
+      "vanillite": 300
+    }
+  }
+}

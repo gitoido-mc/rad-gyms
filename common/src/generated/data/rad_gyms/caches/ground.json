@@ -1,0 +1,62 @@
+{
+  "pools": {
+    "common": {
+      "cubone aspect=region-bias-alola": 400,
+      "diglett": 400,
+      "sandile": 400,
+      "trapinch": 400,
+      "yamask aspect=galarian": 400
+    },
+    "epic": {
+      "arceus aspect=ground-plate": 100,
+      "greattusk": 100,
+      "groudon": 100,
+      "irontreads": 100,
+      "landorus": 100,
+      "silvally aspect=ground-memory": 100,
+      "zygarde aspect=10-percent": 100,
+      "zygarde aspect=complete-percent": 100,
+      "zygarde aspect=power-construct aspect=10-percent": 100,
+      "zygarde aspect=power-construct aspect=50-percent": 100
+    },
+    "rare": {
+      "claydol": 200,
+      "donphan": 200,
+      "excadrill": 200,
+      "flygon": 200,
+      "gastrodon aspect=east-sea": 200,
+      "gliscor": 200,
+      "golurk": 200,
+      "hippowdon": 200,
+      "krookodile": 200,
+      "mudsdale": 200,
+      "rhydon": 200,
+      "rhyperior": 200,
+      "runerigus": 200,
+      "sandaconda": 200,
+      "sandslash": 200,
+      "stunfisk": 200,
+      "toedscruel": 200,
+      "ursaluna": 200
+    },
+    "uncommon": {
+      "baltoy": 300,
+      "cubone": 300,
+      "drilbur": 300,
+      "dugtrio": 300,
+      "gligar": 300,
+      "golett": 300,
+      "hippopotas": 300,
+      "krokorok": 300,
+      "marowak": 300,
+      "mudbray": 300,
+      "phanpy": 300,
+      "rhyhorn": 300,
+      "sandshrew": 300,
+      "silicobra": 300,
+      "toedscool": 300,
+      "vibrava": 300,
+      "wormadam aspect=sandy-cloak": 300
+    }
+  }
+}

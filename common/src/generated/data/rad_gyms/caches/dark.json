@@ -1,0 +1,73 @@
+{
+  "pools": {
+    "common": {
+      "grimer aspect=alolan": 400,
+      "impidimp": 400,
+      "inkay": 400,
+      "linoone aspect=galarian": 400,
+      "meowth aspect=alolan": 400,
+      "muk aspect=alolan": 400,
+      "nickit": 400,
+      "persian aspect=alolan": 400,
+      "poochyena": 400,
+      "purrloin": 400,
+      "qwilfish aspect=hisuian": 400,
+      "raticate aspect=alolan": 400,
+      "rattata aspect=alolan": 400,
+      "samurott aspect=hisuian": 400,
+      "zigzagoon aspect=galarian": 400
+    },
+    "epic": {
+      "arceus aspect=dark-plate": 100,
+      "chienpao": 100,
+      "chiyu": 100,
+      "darkrai": 100,
+      "greninja aspect=ash": 100,
+      "hoopa aspect=unbound": 100,
+      "hydreigon": 100,
+      "ironjugulis": 100,
+      "moltres aspect=galarian": 100,
+      "silvally aspect=dark-memory": 100,
+      "tinglu": 100,
+      "wochien": 100,
+      "yveltal": 100,
+      "zarude": 100
+    },
+    "rare": {
+      "absol": 200,
+      "bisharp": 200,
+      "greninja aspect=bond": 200,
+      "grimmsnarl": 200,
+      "guzzlord": 200,
+      "honchkrow": 200,
+      "houndoom": 200,
+      "kingambit": 200,
+      "mabosstiff": 200,
+      "malamar": 200,
+      "mandibuzz": 200,
+      "obstagoon": 200,
+      "overqwil": 200,
+      "scrafty": 200,
+      "thievul": 200,
+      "umbreon": 200,
+      "weavile": 200,
+      "zoroark": 200
+    },
+    "uncommon": {
+      "deino": 300,
+      "houndour": 300,
+      "liepard": 300,
+      "maschiff": 300,
+      "mightyena": 300,
+      "morgrem": 300,
+      "murkrow": 300,
+      "pawniard": 300,
+      "sableye": 300,
+      "scraggy": 300,
+      "sneasel": 300,
+      "vullaby": 300,
+      "zorua": 300,
+      "zweilous": 300
+    }
+  }
+}

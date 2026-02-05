@@ -1,0 +1,64 @@
+{
+  "pools": {
+    "common": {
+      "decidueye aspect=hisuian": 400,
+      "farfetchd aspect=galarian": 400,
+      "lilligant aspect=hisuian": 400,
+      "makuhita": 400,
+      "meditite": 400,
+      "riolu": 400,
+      "sneasel aspect=hisuian": 400,
+      "tauros aspect=blaze-breed aspect=paldean": 400,
+      "tauros aspect=paldean": 400,
+      "tauros aspect=paldean aspect=aqua-breed": 400,
+      "tyrogue": 400
+    },
+    "epic": {
+      "arceus aspect=fighting-plate": 100,
+      "ironhands": 100,
+      "keldeo aspect=resolute-form": 100,
+      "koraidon": 100,
+      "kubfu": 100,
+      "marshadow": 100,
+      "meloetta aspect=pirouette-forme": 100,
+      "silvally aspect=fighting-memory": 100,
+      "urshifu": 100,
+      "zamazenta": 100,
+      "zapdos aspect=galarian": 100
+    },
+    "rare": {
+      "annihilape": 200,
+      "conkeldurr": 200,
+      "crabominable": 200,
+      "falinks": 200,
+      "grapploct": 200,
+      "hariyama": 200,
+      "hawlucha": 200,
+      "hitmonchan": 200,
+      "hitmonlee": 200,
+      "hitmontop": 200,
+      "lucario": 200,
+      "machamp": 200,
+      "mienshao": 200,
+      "pangoro": 200,
+      "passimian": 200,
+      "primeape": 200,
+      "sawk": 200,
+      "sirfetchd": 200,
+      "sneasler": 200,
+      "throh": 200
+    },
+    "uncommon": {
+      "clobbopus": 300,
+      "crabrawler": 300,
+      "gurdurr": 300,
+      "machoke": 300,
+      "machop": 300,
+      "mankey": 300,
+      "medicham": 300,
+      "mienfoo": 300,
+      "pancham": 300,
+      "timburr": 300
+    }
+  }
+}

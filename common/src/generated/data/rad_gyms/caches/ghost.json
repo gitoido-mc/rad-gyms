@@ -1,0 +1,61 @@
+{
+  "pools": {
+    "common": {
+      "corsola aspect=galarian": 400,
+      "duskull": 400,
+      "greavard": 400,
+      "litwick": 400,
+      "shuppet": 400,
+      "typhlosion aspect=hisuian": 400
+    },
+    "epic": {
+      "arceus aspect=ghost-plate": 100,
+      "calyrex aspect=shadow-rider": 100,
+      "fluttermane": 100,
+      "giratina": 100,
+      "necrozma aspect=dawn-fusion": 100,
+      "silvally aspect=ghost-memory": 100,
+      "spectrier": 100
+    },
+    "rare": {
+      "aegislash aspect=blade-forme": 200,
+      "banette": 200,
+      "basculegion aspect=female": 200,
+      "chandelure": 200,
+      "cofagrigus": 200,
+      "cursola": 200,
+      "dhelmise": 200,
+      "drifblim": 200,
+      "dusclops": 200,
+      "dusknoir": 200,
+      "gengar": 200,
+      "gourgeist": 200,
+      "houndstone": 200,
+      "mimikyu": 200,
+      "mismagius": 200,
+      "oricorio aspect=sensu-style": 200,
+      "palossand": 200,
+      "polteageist": 200,
+      "polteageist aspect=antique": 200,
+      "sinistcha aspect=masterpiece": 200,
+      "spiritomb": 200,
+      "trevenant": 200
+    },
+    "uncommon": {
+      "drifloon": 300,
+      "gastly": 300,
+      "gimmighoul": 300,
+      "gimmighoul aspect=roaming": 300,
+      "haunter": 300,
+      "lampent": 300,
+      "misdreavus": 300,
+      "phantump": 300,
+      "poltchageist aspect=artisan": 300,
+      "pumpkaboo": 300,
+      "sandygast": 300,
+      "sinistea": 300,
+      "sinistea aspect=antique": 300,
+      "yamask": 300
+    }
+  }
+}

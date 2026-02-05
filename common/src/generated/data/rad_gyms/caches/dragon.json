@@ -1,0 +1,58 @@
+{
+  "pools": {
+    "common": {
+      "dreepy": 400,
+      "exeggutor aspect=alolan": 400,
+      "goomy aspect=region-bias-hisui": 400
+    },
+    "epic": {
+      "arceus aspect=dragon-plate": 100,
+      "dialga aspect=origin-forme": 100,
+      "dragapult": 100,
+      "eternatus aspect=eternamax": 100,
+      "giratina aspect=origin-forme": 100,
+      "kommoo": 100,
+      "kyurem": 100,
+      "latias": 100,
+      "latios": 100,
+      "necrozma aspect=ultra-fusion": 100,
+      "palkia aspect=origin-forme": 100,
+      "rayquaza": 100,
+      "regidrago": 100,
+      "reshiram": 100,
+      "roaringmoon": 100,
+      "salamence": 100,
+      "silvally aspect=dragon-memory": 100,
+      "tatsugiri": 100,
+      "zekrom": 100,
+      "zygarde": 100
+    },
+    "rare": {
+      "altaria": 200,
+      "baxcalibur": 200,
+      "cyclizar": 200,
+      "dragonite": 200,
+      "druddigon": 200,
+      "gabite": 200,
+      "garchomp": 200,
+      "goodra": 200,
+      "haxorus": 200,
+      "sliggoo": 200
+    },
+    "uncommon": {
+      "arctibax": 300,
+      "axew": 300,
+      "bagon": 300,
+      "dragonair": 300,
+      "drakloak": 300,
+      "dratini": 300,
+      "fraxure": 300,
+      "frigibax": 300,
+      "gible": 300,
+      "goomy": 300,
+      "hakamoo": 300,
+      "jangmoo": 300,
+      "shelgon": 300
+    }
+  }
+}

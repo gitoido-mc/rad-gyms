@@ -1,0 +1,36 @@
+{
+  "pools": {
+    "common": {
+      "dartrix aspect=region-bias-hisui": 400,
+      "noibat": 400,
+      "rookidee": 400,
+      "rowlet aspect=region-bias-hisui": 400,
+      "rufflet aspect=region-bias-hisui": 400
+    },
+    "epic": {
+      "arceus aspect=flying-plate": 100,
+      "enamorus": 100,
+      "landorus": 100,
+      "shaymin": 100,
+      "silvally aspect=flying-memory": 100,
+      "thundurus": 100,
+      "tornadus": 100
+    },
+    "rare": {
+      "bombirdier": 200,
+      "corviknight": 200,
+      "cramorant": 200,
+      "flamigo": 200,
+      "noivern": 200,
+      "rotom aspect=fan-appliance": 200
+    },
+    "uncommon": {
+      "corvisquire": 300,
+      "minior aspect=meteor-form": 300,
+      "squawkabilly aspect=squawkabilly-color-blue": 300,
+      "squawkabilly aspect=squawkabilly-color-gray": 300,
+      "squawkabilly aspect=squawkabilly-color-yellow": 300,
+      "vivillon aspect=vivillon-wings-poke-ball": 300
+    }
+  }
+}
