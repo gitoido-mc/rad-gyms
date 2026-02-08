@@ -9,22 +9,28 @@ package lol.gito.radgyms.common.gym.team
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
-import lol.gito.radgyms.common.api.dto.TrainerModel
+import lol.gito.radgyms.common.api.dto.Trainer
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.level.ServerPlayer
 
-class PoolTeamGenerator : GenericTeamGenerator() {
-    fun generateTeam(player: ServerPlayer, trainer: TrainerModel.Json.Trainer, level: Int): MutableList<PokemonModel> {
-        val pokemonCount = trainer
+object PoolTeamGenerator : GenericTeamGenerator() {
+    fun generateTeam(player: ServerPlayer, trainer: Trainer, level: Int): MutableList<PokemonModel> {
+        val initialAmount = trainer
+            .possibleFormats
+            .maxOfOrNull {
+                it.format.cobblemonBattleFormat.battleType.slotsPerActor
+            } ?: 1
+
+        val amount = trainer
             .countPerLevelThreshold
             .filter { it.untilLevel >= level }
             .minByOrNull { it.untilLevel }
-            ?.amount ?: 1
+            ?.amount ?: initialAmount
 
         val rawTeam = trainer.team!!
             .shuffled()
-            .take(pokemonCount)
+            .take(amount)
             .map { assembleProperties(level, it) }
             .apply { this.forEach { it.updateAspects() } }
             .toMutableList()

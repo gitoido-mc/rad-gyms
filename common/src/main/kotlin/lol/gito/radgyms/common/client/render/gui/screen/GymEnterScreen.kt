@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -32,9 +32,8 @@ class GymEnterScreen(
     val maxLevel: Int = RadGyms.CONFIG.maxLevel!!,
     val type: String? = null,
     val pos: BlockPos? = null,
-    val usesLeft: Int? = null,
-
-    ) : AbstractGymScreen(
+    val usesLeft: Int? = null
+) : AbstractGymScreen(
     when {
         (type == null || ElementalTypes.get(type) != null || type == "chaos") -> translatable(
             modId("gui.common.set-gym-level").toLanguageKey(),

@@ -8,14 +8,16 @@
 package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.util.toBlockPos
+import lol.gito.radgyms.common.DEFAULT_GYM_TYPE
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.TELEPORT_PRELOAD_CHUNKS
 import lol.gito.radgyms.common.api.dto.Gym
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsTemplates
-import lol.gito.radgyms.common.state.PlayerData
-import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructurePlacer
+import lol.gito.radgyms.common.world.state.RadGymsState
+import lol.gito.radgyms.common.world.state.dto.PlayerData
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -28,7 +30,12 @@ class GymInitializer(
     private val trainerFactory: TrainerFactory
 ) {
     fun initInstance(serverPlayer: ServerPlayer, serverWorld: ServerLevel, level: Int, type: String?): Boolean {
-        val dto = templateRegistry.templates[type] ?: return false
+        val dto = templateRegistry.templates[type]
+        val gymDimension = serverPlayer.server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)
+
+        if (dto == null || gymDimension == null) {
+            return false
+        }
 
         RadGymsState.setReturnCoordsForPlayer(
             serverPlayer,
@@ -39,11 +46,10 @@ class GymInitializer(
         )
 
         val gymLevel = level.coerceIn(RadGyms.CONFIG.minLevel!!..RadGyms.CONFIG.maxLevel!!)
-        val gymType = if (type in templateRegistry.templates.keys) type else "default"
+        val gymType = if (type in templateRegistry.templates.keys) type else DEFAULT_GYM_TYPE
 
         val gymTemplate = GymTemplate.fromDto(serverPlayer, dto, gymLevel, gymType, trainerFactory)
 
-        val gymDimension = serverPlayer.server!!.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY) ?: return false
         val playerGymCoords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
         val dest = BlockPos.containing(
             playerGymCoords.x + gymTemplate.relativePlayerSpawn.x,
@@ -55,7 +61,7 @@ class GymInitializer(
         gymDimension.chunkSource.addRegionTicket(
             TicketType.PORTAL,
             gymDimension.getChunk(dest).pos,
-            4,
+            TELEPORT_PRELOAD_CHUNKS,
             dest
         )
 
@@ -69,7 +75,7 @@ class GymInitializer(
             trainerUUIDs,
             playerGymCoords,
             gymLevel,
-            type ?: "default",
+            type ?: DEFAULT_GYM_TYPE,
             label
         )
 

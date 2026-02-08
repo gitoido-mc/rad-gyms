@@ -9,10 +9,10 @@ package lol.gito.radgyms.common.gym
 
 
 import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
-import lol.gito.radgyms.common.api.dto.TrainerModel
+import lol.gito.radgyms.common.api.dto.BattleAI
 
 class BattleConfigFactory {
-    fun createFromDto(dto: TrainerModel.Json.AI): RCTBattleAIConfig {
+    fun createFromDto(dto: BattleAI): RCTBattleAIConfig {
         var builder = RCTBattleAIConfig.Builder()
 
         dto.data?.let { data ->

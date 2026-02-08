@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -36,25 +36,29 @@ class GymExitBlock(properties: Properties) : BaseEntityBlock(properties) {
 
     override fun useWithoutItem(
         state: BlockState,
-        world: Level,
+        level: Level,
         pos: BlockPos,
         player: Player,
         hit: BlockHitResult
     ): InteractionResult {
-        if (world.getBlockEntity(pos) !is GymExitEntity) return super.useWithoutItem(state, world, pos, player, hit)
-        if (world.isClientSide) return InteractionResult.PASS
+        if (level.getBlockEntity(pos) !is GymExitEntity) return super.useWithoutItem(state, level, pos, player, hit)
+        var result: InteractionResult = InteractionResult.SUCCESS_NO_ITEM_USED
+        when (level.isClientSide) {
+            true -> result = InteractionResult.PASS
+            false -> {
+                (player as ServerPlayer).also {
+                    debug("Gym exit block used by player ${it.uuid} at $pos in ${level.dimension()}")
 
-        (player as ServerPlayer).also {
-            debug("Gym exit block used by player ${it.uuid} at $pos in ${world.dimension()}")
-
-            if (world.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
-                debug("Client: Opening gym exit screen for ${it.uuid} at $pos in ${world.dimension()}")
-                OpenGymLeaveScreenS2C().sendToPlayer(it)
-            } else {
-                it.displayClientMessage(translatable(EXIT_ROPE.descriptionId.plus(".failed")))
+                    if (level.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+                        debug("Client: Opening gym exit screen for ${it.uuid} at $pos in ${level.dimension()}")
+                        OpenGymLeaveScreenS2C().sendToPlayer(it)
+                    } else {
+                        it.displayClientMessage(translatable(EXIT_ROPE.descriptionId.plus(".failed")))
+                    }
+                }
             }
         }
 
-        return InteractionResult.SUCCESS
+        return result
     }
 }

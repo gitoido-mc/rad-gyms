@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -26,10 +26,10 @@ abstract class AbstractGymScreen(heading: Component): CobblemonRenderable, Scree
         get() = this.minecraft!!.window.guiScaledHeight / 2
 
     // Disabling blurs
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun renderBlurredBackground(delta: Float) = Unit
 
     // Disabling background
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun renderMenuBackground(context: GuiGraphics) = Unit
 
     protected var closeReason: GuiScreenCloseChoice = GuiScreenCloseChoice.CANCEL
 

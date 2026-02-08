@@ -5,17 +5,18 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.pokecache
+package lol.gito.radgyms.common.cache
 
 import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.api.serialization.RaritySerializer
 import net.minecraft.world.entity.ai.behavior.ShufflingList
 import net.minecraft.world.item.Rarity
 
+typealias CachePoolMap = Map<@Serializable(RaritySerializer::class) Rarity, Map<String, Int>>
 
 @Serializable
 class CacheDTO(
-    val pools: Map<@Serializable(RaritySerializer::class) Rarity, Map<String, Int>>
+    val pools: CachePoolMap
 ) {
     fun forRarity(rarity: Rarity): ShufflingList<String> {
         val pokeList = pools[rarity]!!

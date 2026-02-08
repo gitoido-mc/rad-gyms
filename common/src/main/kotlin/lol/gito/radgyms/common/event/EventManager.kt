@@ -46,9 +46,9 @@ import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsCaches
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsTemplates
-import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.hasRadGymsTrainers
 import lol.gito.radgyms.common.world.StructurePlacer
+import lol.gito.radgyms.common.world.state.RadGymsState
 
 object EventManager {
     fun register() {
@@ -191,9 +191,10 @@ object EventManager {
         )
     }
 
+    @Suppress("ReturnCount")
     private fun onBattleWon(event: BattleVictoryEvent) {
         // Early bail if it was wild poke battle
-        if (event.wasWildCapture) return
+        if (event.wasWildCapture)
         // Early bail if not gym related
         if (!hasRadGymsTrainers(event)) return
         if (event.losers.none { it.type == ActorType.NPC }) return
@@ -223,6 +224,7 @@ object EventManager {
         )
     }
 
+    @Suppress("ReturnCount")
     private fun onBattleFainted(event: BattleFaintedEvent) {
         // Early bail if not gym related
         if (!hasRadGymsTrainers(event)) return

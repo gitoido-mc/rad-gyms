@@ -17,8 +17,8 @@ import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
-import lol.gito.radgyms.common.state.RadGymsState
 import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer

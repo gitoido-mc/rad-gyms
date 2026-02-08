@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -9,6 +9,7 @@ package lol.gito.radgyms.common.world
 
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.WORLDGEN_FEATURE_RANDOM_SHIFT_BITS
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.WorldGenLevel
@@ -32,8 +33,13 @@ object StructurePlacer {
                 .setKnownShape(true)
 
             val random = WorldgenRandom(LegacyRandomSource(0L))
-            random.setLargeFeatureSeed(world.seed, pos.x shr 4, pos.z shr 4)
+            random.setLargeFeatureSeed(
+                world.seed,
+                pos.x shr WORLDGEN_FEATURE_RANDOM_SHIFT_BITS,
+                pos.z shr WORLDGEN_FEATURE_RANDOM_SHIFT_BITS
+            )
 
+            @Suppress("MagicNumber")
             if (!structureTemplate.get().placeInWorld(world, pos, pos, structPlacementData, random, 18)) {
                 LOGGER.warn("Error placing structure: $structureResource")
             } else {

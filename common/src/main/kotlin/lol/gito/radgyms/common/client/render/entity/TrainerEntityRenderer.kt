@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -20,6 +20,7 @@ class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
     LivingEntityRenderer<Trainer, PlayerModel<Trainer>>(
         ctx,
         PlayerModel(ctx.bakeLayer(ModelLayers.PLAYER), false),
+        @Suppress("MagicNumber")
         .5f
     ) {
 
@@ -31,8 +32,8 @@ class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
         return try {
             val id = entity.entityData.get(Trainer.GYM_ID)
             modId("textures/npc/${id}.png")
-        } catch (e: Throwable) {
-            RadGyms.LOGGER.warn("Cannot use texture ${entity.entityData.get(Trainer.GYM_ID)}", e)
+        } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
+            RadGyms.LOGGER.warn("Cannot use texture ${Trainer.GYM_ID}", e)
             TEXTURE
         }
     }

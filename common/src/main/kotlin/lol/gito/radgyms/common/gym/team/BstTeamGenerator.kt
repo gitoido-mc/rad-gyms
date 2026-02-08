@@ -13,7 +13,7 @@ import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 
-class BstTeamGenerator : GenericTeamGenerator() {
+object BstTeamGenerator : GenericTeamGenerator() {
     override fun generatePokemon(level: Int, thresholdAmount: Int, type: ElementalType): Pokemon {
         debug("Rolling for pokemon with level $level and type ${type.showdownId}")
         val speciesList = SPECIES_BY_TYPE[type.showdownId]!!

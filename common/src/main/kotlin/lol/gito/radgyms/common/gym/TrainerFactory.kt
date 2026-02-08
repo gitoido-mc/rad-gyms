@@ -14,6 +14,8 @@ import com.gitlab.srcmc.rctapi.api.ai.experimental.SelfdotGen5AI
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.models.BagItemModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
+import lol.gito.radgyms.common.api.dto.Trainer
+import lol.gito.radgyms.common.api.dto.TrainerEntityData
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
 import lol.gito.radgyms.common.gym.team.FixedTeamGenerator
 import lol.gito.radgyms.common.gym.team.PoolTeamGenerator
@@ -26,7 +28,7 @@ class TrainerFactory(
     private val battleConfigBuilder: BattleConfigFactory = BattleConfigFactory()
 ) {
     fun create(
-        trainer: RGTrainerModel.Json.Trainer, level: Int, player: ServerPlayer
+        trainer: Trainer, level: Int, player: ServerPlayer
     ): RGTrainerModel {
         val ai = when (trainer.ai.type) {
             "rct" -> RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))
@@ -39,8 +41,8 @@ class TrainerFactory(
 
         val possibleFormats = trainer.possibleFormats.toMutableList()
         val team = when (trainer.teamType) {
-            GymTeamType.FIXED -> FixedTeamGenerator().generateTeam(player, trainer, level)
-            GymTeamType.POOL -> PoolTeamGenerator().generateTeam(player, trainer, level)
+            GymTeamType.FIXED -> FixedTeamGenerator.generateTeam(player, trainer, level)
+            GymTeamType.POOL -> PoolTeamGenerator.generateTeam(player, trainer, level)
             GymTeamType.GENERATED -> trainer.teamGenerator.instance.generateTeam(
                 trainer,
                 level,
@@ -52,7 +54,7 @@ class TrainerFactory(
 
         return RGTrainerModel(
             trainer.id,
-            RGTrainerModel.EntityData(
+            TrainerEntityData(
                 name = translatable(trainer.name),
                 relativePosition = trainer.spawnRelative.pos.toVec3D(),
                 yaw = trainer.spawnRelative.yaw.toFloat()

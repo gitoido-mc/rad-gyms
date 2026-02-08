@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -87,6 +87,7 @@ class GymEntranceEntity(
             .getOrDefault(player.uuid.toString(), 0)
             .coerceIn(0, CONFIG.maxEntranceUses!!)
 
+        @Suppress("MaxLineLength")
         debug("Uses left for $player for $pos gym entrance: ${CONFIG.maxEntranceUses!! - playerCounter} (config max: ${CONFIG.maxEntranceUses!!})")
         return CONFIG.maxEntranceUses!! - playerCounter
     }

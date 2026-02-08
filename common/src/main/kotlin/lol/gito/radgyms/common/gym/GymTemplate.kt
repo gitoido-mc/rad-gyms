@@ -7,7 +7,8 @@
 
 package lol.gito.radgyms.common.gym
 
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.GymJson
+import lol.gito.radgyms.common.api.dto.LootTableInfo
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 import lol.gito.radgyms.common.api.dto.TrainerModel as RGTrainerModel
@@ -19,12 +20,12 @@ data class GymTemplate(
     val playerYaw: Float,
     val trainers: List<RGTrainerModel>,
     val type: String?,
-    val lootTables: List<Gym.Json.LootTableInfo>
+    val lootTables: List<LootTableInfo>
 ) {
     companion object {
         fun fromDto(
             player: ServerPlayer,
-            dto: Gym.Json,
+            dto: GymJson,
             level: Int,
             type: String?,
             trainerFactory: TrainerFactory = TrainerFactory()

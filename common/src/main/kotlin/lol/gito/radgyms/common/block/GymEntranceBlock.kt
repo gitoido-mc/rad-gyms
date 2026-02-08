@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -9,6 +9,7 @@ package lol.gito.radgyms.common.block
 
 import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
+import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
@@ -50,7 +51,9 @@ private val gymEntranceHorizontalFacing: DirectionProperty = HORIZONTAL_FACING
 
 class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
     private val bounds = Shapes.or(
+        @Suppress("MagicNumber")
         box(3.75, 1.75, 3.75, 12.25, 10.25, 12.25),
+        @Suppress("MagicNumber")
         box(6.5, 10.0, 6.5, 9.5, 11.0, 9.5)
     )
 
@@ -97,45 +100,52 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         player: Player,
         hit: BlockHitResult
     ): InteractionResult {
-        if (level.isClientSide) return InteractionResult.PASS
         if (level.getBlockEntity(pos) !is GymEntranceEntity) return super.useWithoutItem(state, level, pos, player, hit)
+        var result: InteractionResult = InteractionResult.SUCCESS_NO_ITEM_USED
+        when (level.isClientSide) {
+            true -> result = InteractionResult.PASS
+            false -> {
+                (player as ServerPlayer).let { player ->
+                    if (player.party().occupied() < MIN_PLAYER_TEAM_SIZE) {
+                        @Suppress("MaxLineLength")
+                        player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
+                        debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
+                        result = InteractionResult.FAIL
+                    }
 
-        (player as ServerPlayer).let { player ->
-            if (player.party().occupied() < 3) {
-                player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
-                debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
-                return InteractionResult.FAIL
+                    if (player.party().all { it.isFainted() }) {
+                        @Suppress("MaxLineLength")
+                        player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey()))
+                        debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
+                        result = InteractionResult.FAIL
+                    }
+
+                    val gymEntrance: GymEntranceEntity = level.getBlockEntity(pos) as GymEntranceEntity
+
+                    if (gymEntrance.usesLeftForPlayer(player) == 0) {
+                        @Suppress("MaxLineLength")
+                        player.displayClientMessage(translatable(modId("message.info.gym_entrance_exhausted").toLanguageKey()))
+                        debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
+                        result = InteractionResult.FAIL
+                    }
+
+                    val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
+                        true -> player.averagePokePartyLevel()
+                        false -> RadGyms.CONFIG.minLevel!!
+                    }
+
+                    OpenGymEnterScreenS2C(
+                        derivedLevel,
+                        false,
+                        gymEntrance.gymType,
+                        pos,
+                        gymEntrance.usesLeftForPlayer(player)
+                    ).sendToPlayer(player)
+                }
             }
-
-            if (player.party().all { it.isFainted() }) {
-                player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey()))
-                debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
-                return InteractionResult.FAIL
-            }
-
-            val gymEntrance: GymEntranceEntity = level.getBlockEntity(pos) as GymEntranceEntity
-
-            if (gymEntrance.usesLeftForPlayer(player) == 0) {
-                player.displayClientMessage(translatable(modId("message.info.gym_entrance_exhausted").toLanguageKey()))
-                debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
-                return InteractionResult.FAIL
-            }
-
-            val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
-                true -> player.averagePokePartyLevel()
-                false -> RadGyms.CONFIG.minLevel!!
-            }
-
-            OpenGymEnterScreenS2C(
-                derivedLevel,
-                false,
-                gymEntrance.gymType,
-                pos,
-                gymEntrance.usesLeftForPlayer(player)
-            ).sendToPlayer(player)
         }
 
-        return InteractionResult.SUCCESS
+        return result
     }
 
     override fun appendHoverText(

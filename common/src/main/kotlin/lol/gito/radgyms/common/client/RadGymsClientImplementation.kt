@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -19,7 +19,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 interface RadGymsClientImplementation {
     fun registerBlockRenderType(layer: RenderType, vararg blocks: Block)
 
-    fun <T : BlockEntity> registerBlockEntityRenderer(type: BlockEntityType<out T>, factory: BlockEntityRendererProvider<T>)
+    fun <T : BlockEntity> registerBlockEntityRenderer(
+        type: BlockEntityType<out T>,
+        factory: BlockEntityRendererProvider<T>
+    )
 
     fun <T : Entity> registerEntityRenderer(type: EntityType<out T>, factory: EntityRendererProvider<T>)
 }

@@ -14,10 +14,10 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Species
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.api.dto.GymSpecies
-import lol.gito.radgyms.common.pokecache.CacheDTO
+import lol.gito.radgyms.common.api.dto.SpeciesWithForm
+import lol.gito.radgyms.common.cache.CacheDTO
 
-private typealias SpeciesWithForms = List<GymSpecies.Container.SpeciesWithForm>
+private typealias SpeciesWithForms = List<SpeciesWithForm>
 
 private fun Sequence<Species>.mapToSpeciesWithForms(elementalType: ElementalType? = null): SpeciesWithForms = this
     .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
@@ -30,7 +30,7 @@ private fun Sequence<Species>.mapToSpeciesWithForms(elementalType: ElementalType
         forms
             .toMutableSet()
             .map {
-                GymSpecies.Container.SpeciesWithForm(flatMapSpecies, it)
+                SpeciesWithForm(flatMapSpecies, it)
             }
     }
     .toList()
