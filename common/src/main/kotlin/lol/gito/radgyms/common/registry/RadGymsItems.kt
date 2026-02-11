@@ -20,7 +20,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.block.Block
 
-object RadGymsItems: PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item>() {
+object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item>() {
     override val registry: Registry<Item> = BuiltInRegistries.ITEM
     override val resourceKey: ResourceKey<Registry<Item>> = Registries.ITEM
 
@@ -120,5 +120,12 @@ object RadGymsItems: PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>
         RadGymsBlocks.SHARD_BLOCK_EPIC
     )
 
-    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
+    private fun blockItem(
+        name: ResourceLocation,
+        block: Block,
+        rarity: Rarity = Rarity.COMMON
+    ): BlockItem = this.create(
+        name,
+        BlockItem(block, Item.Properties().rarity(rarity))
+    )
 }
