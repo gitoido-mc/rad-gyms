@@ -7,4 +7,4 @@
 
 package lol.gito.radgyms.common.gym.team
 
-object ChaoticTeamGenerator: GenericTeamGenerator()
+object ChaoticTeamGenerator : GenericTeamGenerator()

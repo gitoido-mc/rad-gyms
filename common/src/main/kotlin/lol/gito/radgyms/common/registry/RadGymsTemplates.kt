@@ -21,7 +21,7 @@ import net.minecraft.server.packs.PackType
 import java.io.InputStream
 import java.util.concurrent.ExecutionException
 
-object RadGymsTemplates: JsonDataRegistry<GymJson> {
+object RadGymsTemplates : JsonDataRegistry<GymJson> {
     const val SLUG = "gyms"
     override val resourcePath: String = SLUG
     override val id: ResourceLocation = modId(SLUG)
@@ -46,5 +46,5 @@ object RadGymsTemplates: JsonDataRegistry<GymJson> {
         observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(player: ServerPlayer) = Unit
 }

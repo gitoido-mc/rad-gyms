@@ -25,6 +25,10 @@ import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
 
 abstract class GenericTeamGenerator : TeamGeneratorInterface {
+    companion object {
+        const val GENERATOR_SHINY_ODDS = 10
+    }
+
     protected fun assembleProperties(level: Int, params: String): PokemonProperties = when (params.contains("level=")) {
         true -> PokemonProperties.parse(params)
         false -> PokemonProperties.parse("level=$level $params")
@@ -45,7 +49,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
 
         val rawTeam = mutableListOf<PokemonProperties>()
 
-        (1..pokemonCount).forEach { _ ->
+        for (_ in 1..pokemonCount) {
             rawTeam.add(
                 generatePokemon(
                     level,
@@ -92,7 +96,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         val poke = speciesWithForm.species.create(level)
         poke.form = speciesWithForm.form
         poke.forcedAspects = speciesWithForm.form.aspects.toSet()
-        poke.shiny = (Random.nextInt(1, 10) == 1)
+        poke.shiny = (Random.nextInt(1, GENERATOR_SHINY_ODDS) == 1)
         poke.updateAspects()
 
         return poke

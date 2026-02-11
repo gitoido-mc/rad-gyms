@@ -78,8 +78,9 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
         .battle
         .players
         .filter { it.level().dimension() == RADGYMS_LEVEL_KEY }
-        .forEach { GymTeardownService
-            .withTeleportScheduler(GymTeleportScheduler())
-            .handleGymLeave(it)
+        .forEach {
+            GymTeardownService
+                .withTeleportScheduler(GymTeleportScheduler())
+                .handleGymLeave(it)
         }
 }

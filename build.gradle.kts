@@ -4,6 +4,7 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
+import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
 import java.net.URI
@@ -11,7 +12,7 @@ import java.net.URI
 plugins {
     id("java")
     kotlin("jvm") version "2.3.10"
-    kotlin("plugin.serialization") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.10"
 
     id("com.gradleup.shadow") version "9.3.1" apply false
     id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
@@ -76,6 +77,17 @@ repositories {
     }
 }
 
+
+detekt {
+    config.setFrom(layout.projectDirectory.file("detekt.yml"))
+    buildUponDefaultConfig = true
+}
+
+tasks.withType<Detekt>().configureEach {
+    exclude("**/build/classes/**")
+}
+
+
 val modProjects = listOf(
     "common",
     "fabric",
@@ -90,6 +102,11 @@ modProjects.forEach {
         apply(plugin = "dev.detekt")
         group = property("maven_group")!!
         version = rootProject.version
+
+        detekt {
+            config.setFrom(rootProject.layout.projectDirectory.file("detekt.yml"))
+            buildUponDefaultConfig = true
+        }
 
         repositories {
             mavenCentral()
@@ -141,6 +158,10 @@ modProjects.forEach {
                     freeCompilerArgs.add("-Xreturn-value-checker=check")
                     freeCompilerArgs.add("-Xcontext-parameters")
                 }
+            }
+
+            withType<Detekt>().configureEach {
+                exclude("**/build/**")
             }
         }
     }

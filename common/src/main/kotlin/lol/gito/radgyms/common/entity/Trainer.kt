@@ -111,11 +111,14 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
 
     override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
         if (!level().isClientSide) {
+            var result: InteractionResult = InteractionResult.FAIL
             TRAINER_INTERACT.postThen(
                 GymEvents.TrainerInteractEvent(player as ServerPlayer, this),
-                { _ -> return InteractionResult.FAIL },
-                { _ -> return InteractionResult.sidedSuccess(level().isClientSide) },
+                {},
+                { _ -> result = InteractionResult.sidedSuccess(level().isClientSide) },
             )
+
+            return result
         }
 
         return InteractionResult.sidedSuccess(level().isClientSide)

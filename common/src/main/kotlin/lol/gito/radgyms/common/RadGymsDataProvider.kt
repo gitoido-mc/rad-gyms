@@ -65,7 +65,7 @@ object RadGymsDataProvider : DataProvider {
         }
     }
 
-    private class SimpleResourceReloader(private val type: PackType): ResourceManagerReloadListener {
+    private class SimpleResourceReloader(private val type: PackType) : ResourceManagerReloadListener {
         override fun onResourceManagerReload(manager: ResourceManager) {
             registries
                 .filter { it.type == this.type }

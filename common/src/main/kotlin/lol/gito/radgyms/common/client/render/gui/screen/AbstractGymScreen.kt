@@ -19,7 +19,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-abstract class AbstractGymScreen(heading: Component): CobblemonRenderable, Screen(heading) {
+abstract class AbstractGymScreen(heading: Component) : CobblemonRenderable, Screen(heading) {
     val middleX: Int
         get() = this.minecraft!!.window.guiScaledWidth / 2
     val middleY: Int

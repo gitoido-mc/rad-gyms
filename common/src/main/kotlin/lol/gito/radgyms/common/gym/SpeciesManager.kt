@@ -17,6 +17,7 @@ import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.SpeciesWithForm
 import lol.gito.radgyms.common.cache.CacheDTO
+import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 
 private typealias SpeciesWithForms = List<SpeciesWithForm>
 
@@ -67,7 +68,7 @@ object SpeciesManager {
 
         when (species.isNotEmpty()) {
             true -> return species
-            false -> throw RuntimeException("Cannot get species")
+            false -> throw RadGymsSpeciesListEmptyException("Cannot get species")
         }
     }
 

@@ -17,6 +17,7 @@ import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.common.api.dto.Trainer
 import lol.gito.radgyms.common.api.dto.TrainerEntityData
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
+import lol.gito.radgyms.common.exception.RadGymsUnknownBattleAIException
 import lol.gito.radgyms.common.gym.team.FixedTeamGenerator
 import lol.gito.radgyms.common.gym.team.PoolTeamGenerator
 import net.minecraft.network.chat.Component.translatable
@@ -34,8 +35,9 @@ class TrainerFactory(
             "rct" -> RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))
             "cbl" -> StrongBattleAI(trainer.ai.data?.skillLevel ?: StrongBattleAIConfig().skill())
             "sd5" -> SelfdotGen5AI()
-            else -> throw RuntimeException(
-                "Unknown battle AI type for trainer ${trainer.id}, passed ${trainer.ai.type}, supports only 'rct', 'cbl', 'sd5'"
+            else -> throw RadGymsUnknownBattleAIException(
+                "Unknown battle AI type for trainer {}, passed {}, supports only 'rct', 'cbl', 'sd5'"
+                    .format(trainer.id, trainer.ai.type)
             )
         }
 

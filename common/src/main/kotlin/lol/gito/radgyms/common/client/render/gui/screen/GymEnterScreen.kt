@@ -146,7 +146,7 @@ class GymEnterScreen(
             Component.nullToEmpty("+1"),
             Vec2i(GUI_INC1_WIDTH, GUI_INC1_HEIGHT),
             Vec2i(leftX + GUI_INC1_OFFSET_X, topY + GUI_INC1_OFFSET_Y),
-        )  {
+        ) {
             level = level.inc().coerceIn(this.minLevel, this.maxLevel)
             levelSelectSlider.updateLevel(level)
         }.also {

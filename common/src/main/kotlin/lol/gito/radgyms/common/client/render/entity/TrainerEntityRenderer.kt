@@ -20,7 +20,6 @@ class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
     LivingEntityRenderer<Trainer, PlayerModel<Trainer>>(
         ctx,
         PlayerModel(ctx.bakeLayer(ModelLayers.PLAYER), false),
-        @Suppress("MagicNumber")
         SHADOW_RADIUS
     ) {
     companion object {
@@ -33,8 +32,8 @@ class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
         return try {
             val id = entity.entityData.get(Trainer.GYM_ID)
             modId("textures/npc/${id}.png")
-        } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
-            RadGyms.LOGGER.warn("Cannot use texture ${Trainer.GYM_ID}", e)
+        } catch (expected: NullPointerException) {
+            RadGyms.LOGGER.warn("Cannot use texture ${Trainer.GYM_ID}", expected)
             TEXTURE
         }
     }

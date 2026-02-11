@@ -14,6 +14,7 @@ import lol.gito.radgyms.common.api.dto.Gym
 import lol.gito.radgyms.common.exception.RadGymsLevelNotFoundException
 import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
 import lol.gito.radgyms.common.util.getRadGymsPlayerData
+import lol.gito.radgyms.common.util.putRadGymsInstanceData
 import lol.gito.radgyms.common.util.putRadGymsPlayerData
 import lol.gito.radgyms.common.world.state.dto.PlayerData
 import net.minecraft.core.HolderLookup
@@ -59,8 +60,8 @@ class RadGymsState : SavedData() {
 
         @JvmStatic
         fun getServerState(server: MinecraftServer): RadGymsState {
-            val level = server.getLevel(RADGYMS_LEVEL_KEY) ?:
-                throw RadGymsLevelNotFoundException("Trying to access non-existing level")
+            val level = server.getLevel(RADGYMS_LEVEL_KEY)
+                ?: throw RadGymsLevelNotFoundException("Trying to access non-existing level")
 
             return level.dataStorage.computeIfAbsent(type, MOD_ID).also {
                 it.setDirty()
@@ -133,14 +134,14 @@ class RadGymsState : SavedData() {
             playerDataNbt.putRadGymsPlayerData(uuid.toString(), data)
         }
 
-//        val gymDataNbt = CompoundTag()
-//        gymInstanceMap.forEach { (uuid, data) ->
-//            gymDataNbt.putRadGymsInstanceData(uuid.toString(), data)
-//        }
-//
-//
-//        nbt.put("Players", playerDataNbt)
-//        nbt.put("Gyms", gymDataNbt)
+        val gymDataNbt = CompoundTag()
+        gymInstanceMap.forEach { (uuid, data) ->
+            gymDataNbt.putRadGymsInstanceData(uuid.toString(), data)
+        }
+
+
+        nbt.put("Players", playerDataNbt)
+        nbt.put("Gyms", gymDataNbt)
 
         return nbt
     }

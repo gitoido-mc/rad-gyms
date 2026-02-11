@@ -74,7 +74,9 @@ object RadGyms {
 
     @JvmStatic
     fun debug(message: String, vararg params: Any) {
-        if (CONFIG.debug == true) LOGGER.info(message, *params)
+//        if (CONFIG.debug == true)
+
+        LOGGER.info(message, *params)
     }
 
     @OptIn(ExperimentalSerializationApi::class)

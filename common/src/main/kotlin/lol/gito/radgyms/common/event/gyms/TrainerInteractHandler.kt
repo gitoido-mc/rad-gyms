@@ -8,7 +8,9 @@
 package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.util.giveOrDropItemStack
+import com.gitlab.srcmc.rctapi.api.battle.BattleManager
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
+import com.gitlab.srcmc.rctapi.api.battle.BattleState
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
@@ -107,14 +109,7 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         // Force all battles for player to end
         rctBattleManager.apply {
             this.states.forEach { state ->
-                state.battle.let { battle ->
-                    val actor = battle.actors.firstOrNull { actor -> actor.isForPlayer(event.player) }
-                    if (actor != null && battle.ended) {
-                        debug("Uh-oh, found stuck battle for player actor, ending it")
-                        battle.end()
-                        rctBattleManager.end(battle.battleId, true)
-                    }
-                }
+                finalizeState(state, event, rctBattleManager)
             }
         }
 
@@ -131,6 +126,21 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
             GymBattleFormat.valueOf(event.trainer.format),
             BattleRules()
         )
+    }
+
+    private fun finalizeState(
+        state: BattleState,
+        event: GymEvents.TrainerInteractEvent,
+        rctBattleManager: BattleManager
+    ) {
+        state.battle.let { battle ->
+            val actor = battle.actors.firstOrNull { actor -> actor.isForPlayer(event.player) }
+            if (actor != null && battle.ended) {
+                debug("Uh-oh, found stuck battle for player actor, ending it")
+                battle.end()
+                rctBattleManager.end(battle.battleId, true)
+            }
+        }
     }
 
     private fun notifyPlayer(event: GymEvents.TrainerInteractEvent) {

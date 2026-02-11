@@ -12,14 +12,14 @@ import lol.gito.radgyms.common.RadGyms.modId
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class OpenGymLeaveScreenS2C() : NetworkPacket<OpenGymLeaveScreenS2C> {
+class OpenGymLeaveScreenS2C : NetworkPacket<OpenGymLeaveScreenS2C> {
     override val id: ResourceLocation = ID
 
     companion object {
         val ID = modId("net.gym_leave_screen")
 
         @Suppress("unused_parameter")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenGymLeaveScreenS2C()
+        fun decode(ignored: RegistryFriendlyByteBuf) = OpenGymLeaveScreenS2C()
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) = Unit

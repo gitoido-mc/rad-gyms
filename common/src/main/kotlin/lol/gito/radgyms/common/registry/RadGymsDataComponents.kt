@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceKey
 private typealias DCTRegistry = Registry<DataComponentType<*>>
 private typealias DCTRegistryKey = ResourceKey<Registry<DataComponentType<*>>>
 
-object RadGymsDataComponents: PlatformRegistry<DCTRegistry, DCTRegistryKey, DataComponentType<*>>() {
+object RadGymsDataComponents : PlatformRegistry<DCTRegistry, DCTRegistryKey, DataComponentType<*>>() {
     override val registry: DCTRegistry = BuiltInRegistries.DATA_COMPONENT_TYPE
     override val resourceKey: DCTRegistryKey = Registries.DATA_COMPONENT_TYPE
 

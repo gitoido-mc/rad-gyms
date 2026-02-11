@@ -11,8 +11,11 @@ import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec2
 import kotlin.math.roundToInt
 
+@Suppress("unused")
 class Vec2i(val x: Int = 0, val y: Int = 0) {
     companion object {
+        const val MIN_NEG_FLOAT = 1.0E-4f
+
         @JvmField
         val ZERO: Vec2i = Vec2i(0, 0)
 
@@ -75,13 +78,13 @@ class Vec2i(val x: Int = 0, val y: Int = 0) {
         return Vec2i(x + f, y + f)
     }
 
-    fun equals(vec2: Vec2i): Boolean {
+    fun equalToOther(vec2: Vec2i): Boolean {
         return x == vec2.x && y == vec2.y
     }
 
     fun normalized(): Vec2i {
         val f = Mth.sqrt((x * x + y * y).toFloat())
-        return if (f < 1.0E-4f) ZERO else Vec2i(x / f, y / f)
+        return if (f < MIN_NEG_FLOAT) ZERO else Vec2i(x / f, y / f)
     }
 
     fun length(): Float {

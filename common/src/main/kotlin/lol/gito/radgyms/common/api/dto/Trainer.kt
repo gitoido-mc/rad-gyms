@@ -59,6 +59,7 @@ data class Trainer(
                     requireNotNull(team)
                     require(team.count() in 1..MAX_PARTY_SIZE)
                 }
+
                 GymTeamType.POOL -> {
                     requireNotNull(team)
                     require(team.isNotEmpty() && team.count() > 0)

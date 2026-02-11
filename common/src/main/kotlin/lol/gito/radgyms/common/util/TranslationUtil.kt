@@ -37,23 +37,31 @@ object TranslationUtil {
         buildTypeText(elementalType?.showdownId)
 
     fun buildTypeText(elementalType: String? = null): Component = when {
-        (elementalType == null) -> translatable(modId("item.component.type.chaos").toLanguageKey())
-            .withStyle {
-                it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
-            }
+        (elementalType == null) -> {
+            translatable(modId("item.component.type.chaos").toLanguageKey())
+                .withStyle {
+                    it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
+                }
+        }
 
-        (ElementalTypes.get(elementalType) != null) -> translatable(cobblemonResource("type.$elementalType").toLanguageKey())
-            .withStyle {
-                it.applyFormat(ChatFormatting.DARK_PURPLE)
-            }
+        (ElementalTypes.get(elementalType) != null) -> {
+            translatable(cobblemonResource("type.$elementalType").toLanguageKey())
+                .withStyle {
+                    it.applyFormat(ChatFormatting.DARK_PURPLE)
+                }
+        }
 
-        (elementalType == "chaos") -> translatable(modId("item.component.type.chaos").toLanguageKey())
-            .withStyle {
-                it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
-            }
+        (elementalType == "chaos") -> {
+            translatable(modId("item.component.type.chaos").toLanguageKey())
+                .withStyle {
+                    it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
+                }
+        }
 
-        else -> translatable(modId("item.component.type.$elementalType").toLanguageKey()).withStyle {
-            it.applyFormat(ChatFormatting.GOLD)
+        else -> {
+            translatable(modId("item.component.type.$elementalType").toLanguageKey()).withStyle {
+                it.applyFormat(ChatFormatting.GOLD)
+            }
         }
     }
 }

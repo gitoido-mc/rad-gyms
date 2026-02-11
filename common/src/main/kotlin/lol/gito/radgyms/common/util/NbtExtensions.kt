@@ -159,6 +159,5 @@ fun CompoundTag.putRadGymsTrainerModel(key: String, value: TrainerModel) {
         tag.putString("Requires", value.requires)
     }
 
-
     this.put(key, tag)
 }

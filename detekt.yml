@@ -1,0 +1,6 @@
+style:
+  WildcardImport:
+    active: false
+  ReturnCount:
+    max: 3
+    excludeGuardClauses: true

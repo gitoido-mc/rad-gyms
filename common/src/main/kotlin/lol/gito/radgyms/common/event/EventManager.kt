@@ -196,7 +196,7 @@ object EventManager {
         // Early bail if it was wild poke battle
         if (event.wasWildCapture)
         // Early bail if not gym related
-        if (!hasRadGymsTrainers(event)) return
+            if (!hasRadGymsTrainers(event)) return
         if (event.losers.none { it.type == ActorType.NPC }) return
         if (event.winners.none { it.type == ActorType.PLAYER }) return
 
