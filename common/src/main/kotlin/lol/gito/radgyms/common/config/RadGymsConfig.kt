@@ -7,6 +7,7 @@
 
 package lol.gito.radgyms.common.config
 
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -75,4 +76,10 @@ data class RadGymsConfig(
             pokeCachePools = other.pokeCachePools ?: pokeCachePools
         )
     }
+
+
+
+    @Transient
+    val ignoredSpeciesProps: List<PokemonProperties> = this
+        .ignoredSpecies?.map { PokemonProperties.parse(it) } ?: emptyList()
 }
