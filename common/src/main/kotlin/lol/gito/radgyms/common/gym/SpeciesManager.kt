@@ -7,6 +7,7 @@
 
 package lol.gito.radgyms.common.gym
 
+import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -19,33 +20,41 @@ import lol.gito.radgyms.common.cache.CacheDTO
 
 private typealias SpeciesWithForms = List<SpeciesWithForm>
 
-private fun Sequence<Species>.mapToSpeciesWithForms(elementalType: ElementalType? = null): SpeciesWithForms = this
-    .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
-    .associateWith { associateSpecies ->
-        associateSpecies.forms.apply {
-            this.add(associateSpecies.standardForm)
-        }
-    }
-    .flatMap { (flatMapSpecies, forms) ->
-        forms
-            .toMutableSet()
-            .map {
-                SpeciesWithForm(flatMapSpecies, it)
-            }
-    }
-    .toList()
-    .filter {
-        when (elementalType) {
-            null -> true
-            else -> {
-                it.form.types.contains(elementalType)
+private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null): SpeciesWithForms = this.let { list ->
+    list.filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
+        .associateWith { associateSpecies ->
+            associateSpecies.forms.apply {
+                this.add(associateSpecies.standardForm)
             }
         }
-    }
-    .sortedBy {
-        it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
-    }
+        .flatMap { (flatMapSpecies, forms) ->
+            forms
+                .toMutableSet()
+                .map {
+                    SpeciesWithForm(flatMapSpecies, it)
+                }
+        }
+        .toList()
+        .filter {
+            when (type) {
+                null -> true
+                else -> {
+                    it.form.types.contains(type)
+                }
+            }
+        }
+        .filter {
+            val poke = it.species.create()
+            poke.form = it.form
+            poke.forcedAspects = it.form.aspects.toSet()
+            poke.updateAspects()
 
+            !CONFIG.ignoredSpeciesProps.contains(poke.createPokemonProperties(PokemonPropertyExtractor.ALL))
+        }
+        .sortedBy {
+            it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
+        }
+}
 
 object SpeciesManager {
     var SPECIES_BY_TYPE: HashMap<String, SpeciesWithForms> = HashMap(ElementalTypes.count())
