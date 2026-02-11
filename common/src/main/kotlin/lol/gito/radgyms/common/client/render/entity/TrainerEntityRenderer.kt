@@ -21,10 +21,11 @@ class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
         ctx,
         PlayerModel(ctx.bakeLayer(ModelLayers.PLAYER), false),
         @Suppress("MagicNumber")
-        .5f
+        SHADOW_RADIUS
     ) {
-
     companion object {
+        const val SHADOW_RADIUS = .5f
+
         val TEXTURE: ResourceLocation = modId("textures/npc/default_trainer.png")
     }
 
