@@ -21,7 +21,12 @@ class LevelSliderWidget(
     private val minLevel: Int,
     private val maxLevel: Int,
     private val onChange: (Int) -> Unit
-) : AbstractSliderButton(x, y, 190, 20, CommonComponents.EMPTY, 0.0) {
+) : AbstractSliderButton(x, y, SLIDER_WIDTH, SLIDER_HEIGHT, CommonComponents.EMPTY, 0.0) {
+    companion object {
+        const val SLIDER_WIDTH = 190
+        const val SLIDER_HEIGHT = 20
+    }
+
     var level: Int = this.initialLevel
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
