@@ -26,41 +26,42 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
         val stack = player.mainHandItem
         val gym = RadGymsState.getGymForPlayer(player)
 
-        if (gym != null) {
-            if (stack.item == RadGymsItems.EXIT_ROPE) {
-                stack.consume(1, player)
-
-                GYM_LEAVE.emit(
-                    GymEvents.GymLeaveEvent(
-                        reason = GymLeaveReason.USED_ITEM,
-                        player = player,
-                        gym = gym,
-                        type = gym.type,
-                        level = gym.level,
-                        completed = false,
-                        usedRope = true
-                    )
-                )
-            } else {
-                GYM_LEAVE.emit(
-                    GymEvents.GymLeaveEvent(
-                        reason = GymLeaveReason.USED_BLOCK,
-                        player = player,
-                        gym = gym,
-                        type = gym.type,
-                        level = gym.level,
-                        completed = true,
-                        usedRope = false
-                    )
-                )
-            }
-        } else {
+        if (gym == null) {
             GYM_LEAVE.emit(
                 GymEvents.GymLeaveEvent(
                     reason = GymLeaveReason.USED_ITEM,
                     player = player,
                     completed = false,
                     usedRope = true
+                )
+            )
+            return
+        }
+
+        if (stack.item == RadGymsItems.EXIT_ROPE) {
+            stack.consume(1, player)
+
+            GYM_LEAVE.emit(
+                GymEvents.GymLeaveEvent(
+                    reason = GymLeaveReason.USED_ITEM,
+                    player = player,
+                    gym = gym,
+                    type = gym.type,
+                    level = gym.level,
+                    completed = false,
+                    usedRope = true
+                )
+            )
+        } else {
+            GYM_LEAVE.emit(
+                GymEvents.GymLeaveEvent(
+                    reason = GymLeaveReason.USED_BLOCK,
+                    player = player,
+                    gym = gym,
+                    type = gym.type,
+                    level = gym.level,
+                    completed = true,
+                    usedRope = false
                 )
             )
         }
