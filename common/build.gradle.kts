@@ -45,16 +45,6 @@ dependencies {
     // for Architectury EnvType annotations
     modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
 
-    // Mixin additions
-    "net.fabricmc:sponge-mixin:0.17.0+mixin.0.8.7".let {
-        annotationProcessor(it)
-        compileOnly(it)
-    }
-    "io.github.llamalad7:mixinextras-common:0.5.3".let {
-        annotationProcessor(it)
-        compileOnly(it)
-    }
-
     // Cobblemon
     modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") {
         isTransitive = false

@@ -10,14 +10,14 @@ import java.net.URI
 
 plugins {
     id("java")
-    kotlin("jvm") version "2.3.0"
+    kotlin("jvm") version "2.3.10"
     kotlin("plugin.serialization") version "2.3.0"
 
     id("com.gradleup.shadow") version "9.3.1" apply false
     id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
-//    id("dev.detekt") version "2.0.0-alpha.2"
+    id("dev.detekt") version "2.0.0-alpha.2"
 }
 
 scmVersion {
@@ -67,12 +67,6 @@ repositories {
         }
     }
     maven {
-        url = URI("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
-        content {
-            includeGroup("software.bernie.geckolib")
-        }
-    }
-    maven {
         url = URI("https://packages.aether-mod.net/The-Aether")
         content {
             includeGroup("com.aetherteam.aether")
@@ -93,7 +87,7 @@ modProjects.forEach {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
-//        apply(plugin = "dev.detekt")
+        apply(plugin = "dev.detekt")
         group = property("maven_group")!!
         version = rootProject.version
 
@@ -114,12 +108,6 @@ modProjects.forEach {
                 url = URI("https://api.modrinth.com/maven")
                 content {
                     includeGroup("maven.modrinth")
-                }
-            }
-            maven {
-                url = URI("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
-                content {
-                    includeGroup("software.bernie.geckolib")
                 }
             }
             maven {

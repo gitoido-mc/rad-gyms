@@ -22,7 +22,6 @@ architectury {
 }
 loom {
     silentMojangMappingsLicense()
-
     enableTransitiveAccessWideners.set(true)
 
     @Suppress("UnstableApiUsage")
@@ -51,9 +50,12 @@ dependencies {
     minecraft("net.minecraft:minecraft:${property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
     neoForge("net.neoforged:neoforge:${property("neoforge_version")}")
-    // Needed for cobblemon
     implementation("thedarkcolour:kotlinforforge-neoforge:${property("kotlin_for_forge_version")}") {
         exclude("net.neoforged.fancymodloader", "loader")
+    }
+    modImplementation("dev.architectury:architectury-neoforge:${property("architectury_api_version")}")
+    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
+        isTransitive = false
     }
 
     implementation(project(":common", configuration = "namedElements"))
@@ -62,14 +64,7 @@ dependencies {
     }
     shadowCommon(project(":common", configuration = "transformProductionNeoForge"))
 
-    // Mod deps
-    modImplementation("dev.architectury:architectury-neoforge:${property("architectury_api_version")}")
-    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
-        isTransitive = false
-    }
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_neoforge_version")}")
-
-    // Compat
     modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-neoforge")
 }
 
