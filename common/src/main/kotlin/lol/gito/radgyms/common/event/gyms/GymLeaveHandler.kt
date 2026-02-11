@@ -18,7 +18,6 @@ object GymLeaveHandler {
         debug("gym leave triggered")
         if (event.completed == false) {
             GymTeardownService.destructGym(event.player)
-            return
         }
 
         GymTeardownService
