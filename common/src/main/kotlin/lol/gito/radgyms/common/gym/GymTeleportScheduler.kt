@@ -7,7 +7,7 @@
 
 package lol.gito.radgyms.common.gym
 
-import lol.gito.radgyms.common.util.delayExecute
+import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import lol.gito.radgyms.common.util.displayClientMessage
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import net.minecraft.core.BlockPos
@@ -18,19 +18,19 @@ import net.minecraft.server.level.ServerPlayer
 class GymTeleportScheduler {
     fun scheduleReturnWithCountdown(player: ServerPlayer, dim: ServerLevel, pos: BlockPos) {
         player.displayClientMessage(Component.nullToEmpty("5..."))
-        delayExecute(1f) {
+        afterOnServer(1f) {
             player.displayClientMessage(Component.nullToEmpty("4..."))
         }
-        delayExecute(2f) {
+        afterOnServer(2f) {
             player.displayClientMessage(Component.nullToEmpty("3..."))
         }
-        delayExecute(3f) {
+        afterOnServer(3f) {
             player.displayClientMessage(Component.nullToEmpty("2..."))
         }
-        delayExecute(4f) {
+        afterOnServer(4f) {
             player.displayClientMessage(Component.nullToEmpty("1..."))
         }
-        delayExecute(5f) {
+        afterOnServer(5f) {
             PlayerSpawnHelper.teleportPlayer(player.uuid, dim, pos, yaw = player.yRot, pitch = player.xRot)
         }
     }
