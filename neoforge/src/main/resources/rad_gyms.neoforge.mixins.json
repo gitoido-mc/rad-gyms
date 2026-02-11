@@ -2,6 +2,7 @@
   "required": true,
   "package": "lol.gito.radgyms.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8.5",
   "mixins": [
     "compat.OnAetherEntityInteract"
   ],

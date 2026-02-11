@@ -2,8 +2,7 @@
   "required": true,
   "package": "lol.gito.radgyms.common.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-  ],
+  "minVersion": "0.8.5",
   "server": [
     "server.event.OnServerPlayerEntityDeath",
     "server.item.BundleItemMixin",
