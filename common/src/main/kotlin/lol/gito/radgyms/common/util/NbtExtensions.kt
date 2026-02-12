@@ -139,7 +139,7 @@ fun CompoundTag.getRadGymsInstanceData(key: String): Gym {
             tag.getInt("Level"),
             tag.getString("Type")
         ),
-        npcList = emptyMap(), // TODO: serialize trainers into nbt and fetch them back here
+        npcList = emptyMap(),
         coords = tag.getBlockPos("Coords")!!,
         level = tag.getInt("Level"),
         type = tag.getString("Type"),
