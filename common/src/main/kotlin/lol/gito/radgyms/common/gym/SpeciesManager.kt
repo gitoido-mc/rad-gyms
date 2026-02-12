@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.gym
 
-import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -21,41 +20,41 @@ import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 
 private typealias SpeciesWithForms = List<SpeciesWithForm>
 
-private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null): SpeciesWithForms = this.let { list ->
-    list.filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
-        .associateWith { associateSpecies ->
-            associateSpecies.forms.apply {
-                this.add(associateSpecies.standardForm)
+private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null): SpeciesWithForms = this
+    .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
+    .associateWith { associateSpecies ->
+        associateSpecies.forms.apply {
+            this.add(associateSpecies.standardForm)
+        }
+    }
+    .asSequence()
+    .flatMap { (flatMapSpecies, forms) ->
+        forms
+            .toMutableSet()
+            .map {
+                SpeciesWithForm(flatMapSpecies, it)
             }
-        }
-        .flatMap { (flatMapSpecies, forms) ->
-            forms
-                .toMutableSet()
-                .map {
-                    SpeciesWithForm(flatMapSpecies, it)
-                }
-        }
-        .toList()
-        .filter {
-            when (type) {
-                null -> true
-                else -> {
-                    it.form.types.contains(type)
-                }
-            }
-        }
-        .filter {
-            val poke = it.species.create()
-            poke.form = it.form
-            poke.forcedAspects = it.form.aspects.toSet()
-            poke.updateAspects()
+    }
+    .toList()
+    .filter { speciesPair ->
+        if (type != null && !speciesPair.form.types.contains(type)) return@filter false
 
-            !CONFIG.ignoredSpeciesProps.contains(poke.createPokemonProperties(PokemonPropertyExtractor.ALL))
+        val poke = speciesPair.species.create()
+        poke.form = speciesPair.form
+        poke.forcedAspects = speciesPair.form.aspects.toSet()
+        poke.updateAspects()
+
+        if (CONFIG.ignoredSpeciesProps.any { it.matches(poke) }) {
+            debug("Excluding {} with {} form", poke.species.name, poke.form.name)
+            return@filter false
         }
-        .sortedBy {
-            it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
-        }
-}
+
+        return@filter true
+    }
+    .sortedBy {
+        it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
+    }
+    .toList()
 
 object SpeciesManager {
     var SPECIES_BY_TYPE: HashMap<String, SpeciesWithForms> = HashMap(ElementalTypes.count())
