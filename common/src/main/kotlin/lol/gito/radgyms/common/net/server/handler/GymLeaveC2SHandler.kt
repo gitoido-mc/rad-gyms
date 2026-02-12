@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.net.server.handler
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
@@ -27,6 +28,7 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
         val gym = RadGymsState.getGymForPlayer(player)
 
         if (gym == null) {
+            debug("Gym is null")
             GYM_LEAVE.emit(
                 GymEvents.GymLeaveEvent(
                     reason = GymLeaveReason.USED_ITEM,
@@ -39,6 +41,7 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
         }
 
         if (stack.item == RadGymsItems.EXIT_ROPE) {
+            debug("Player used exit rope")
             stack.consume(1, player)
 
             GYM_LEAVE.emit(
@@ -53,6 +56,7 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
                 )
             )
         } else {
+            debug("Player used exit block")
             GYM_LEAVE.emit(
                 GymEvents.GymLeaveEvent(
                     reason = GymLeaveReason.USED_BLOCK,
