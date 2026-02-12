@@ -27,12 +27,6 @@ sourceSets {
 loom {
     silentMojangMappingsLicense()
     accessWidenerPath = file("src/main/resources/${rootProject.property("mod_id")}.accesswidener")
-
-    @Suppress("UnstableApiUsage")
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "mixins.${rootProject.property("mod_id")}.refmap.json"
-    }
 }
 
 dependencies {

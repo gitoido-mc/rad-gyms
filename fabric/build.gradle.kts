@@ -38,14 +38,7 @@ val shadowCommon: Configuration by configurations.creating {
 
 loom {
     silentMojangMappingsLicense()
-
     enableTransitiveAccessWideners.set(true)
-
-    @Suppress("UnstableApiUsage")
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "${rootProject.property("mod_id")}-refmap.json"
-    }
 
     runs {
         getByName("client") {
@@ -122,6 +115,7 @@ tasks {
     }
 
     remapJar {
+        injectAccessWidener = true
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
 

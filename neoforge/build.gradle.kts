@@ -24,12 +24,6 @@ loom {
     silentMojangMappingsLicense()
     enableTransitiveAccessWideners.set(true)
 
-    @Suppress("UnstableApiUsage")
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "mixins.${rootProject.property("mod_id")}.refmap.json"
-    }
-
     runs {
         getByName("client") {
             programArgs(
@@ -62,7 +56,7 @@ dependencies {
     "developmentNeoForge"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
-    shadowCommon(project(":common", configuration = "transformProductionNeoForge"))
+    shadowCommon(project(":common", configuration = "transformProductionFabric"))
 
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_neoforge_version")}")
     modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-neoforge")
@@ -101,6 +95,7 @@ tasks {
 
     shadowJar {
         exclude("fabric.mod.json")
+        exclude("architectury.common.json")
 
         configurations = listOf(shadowCommon)
 
@@ -115,6 +110,7 @@ tasks {
 
         archiveBaseName.set("${rootProject.name}-${project.name}")
         archiveVersion.set("${project.version}")
+        atAccessWideners.add("${project.property("mod_id")}.accesswidener")
     }
 
     remapSourcesJar {
