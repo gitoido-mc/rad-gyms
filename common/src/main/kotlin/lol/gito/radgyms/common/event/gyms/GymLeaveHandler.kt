@@ -17,7 +17,7 @@ object GymLeaveHandler {
     fun execute(event: GymEvents.GymLeaveEvent) {
         debug("gym leave triggered")
         if (event.completed == false) {
-            GymTeardownService.destructGym(event.player)
+            GymTeardownService.destructGym(event.player, removeCoords = false)
         }
 
         GymTeardownService
