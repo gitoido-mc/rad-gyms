@@ -30,12 +30,6 @@ object RadGymsDataComponents : PlatformRegistry<DCTRegistry, DCTRegistryKey, Dat
     )
 
     @JvmField
-    val RG_GYM_BUNDLE_COMPONENT: DataComponentType<Boolean> = this.create(
-        RadGyms.modId("bundle"),
-        DataComponentType.builder<Boolean>().persistent(Codec.BOOL).build()
-    )
-
-    @JvmField
     val RG_CACHE_SHINY_BOOST_COMPONENT: DataComponentType<Int> = this.create(
         RadGyms.modId("shiny_boost"),
         DataComponentType.builder<Int>().persistent(Codec.INT).build()

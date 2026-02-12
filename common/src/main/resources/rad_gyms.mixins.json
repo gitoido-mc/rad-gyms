@@ -5,7 +5,6 @@
   "minVersion": "0.8.5",
   "server": [
     "server.event.OnServerPlayerEntityDeath",
-    "server.item.BundleItemMixin",
     "server.worldBorder.CollisionGetterMixin",
     "server.worldBorder.EntityMixin",
     "server.worldBorder.LivingEntityMixin",

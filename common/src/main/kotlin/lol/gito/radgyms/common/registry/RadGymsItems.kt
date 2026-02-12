@@ -31,6 +31,12 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     )
 
     @JvmField
+    val GYM_REWARD: GymReward = this.create(
+        modId("gym_reward"),
+        GymReward()
+    )
+
+    @JvmField
     val EXIT_ROPE: ExitRope = this.create(
         modId("exit_rope"),
         ExitRope()

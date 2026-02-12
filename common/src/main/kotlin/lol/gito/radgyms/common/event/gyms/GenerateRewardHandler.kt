@@ -15,7 +15,7 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.item.PokeShardBase
-import lol.gito.radgyms.common.registry.RadGymsDataComponents
+import lol.gito.radgyms.common.registry.RadGymsItems
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
@@ -26,7 +26,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.BundleItem
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.BundleContents
 import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
@@ -34,21 +33,23 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 
 class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
     init {
-        val bundle = ItemStack(Items.BUNDLE)
+        val bundle = ItemStack(RadGymsItems.GYM_REWARD)
         val bundleContents = BundleContents.Mutable(BundleContents.EMPTY)
+
+        debug(
+            "Settling level %d %s type rewards for player %s after beating leader".format(
+                event.level,
+                event.type,
+                event.player.name.tryCollapseToString()
+            )
+        )
+
         event.template
             .lootTables
             .filter {
                 event.level in it.minLevel..it.maxLevel
             }
             .forEach { table ->
-                debug(
-                    "Settling level %d %s type rewards for player %s after beating leader".format(
-                        event.level,
-                        event.type,
-                        event.player.name.tryCollapseToString()
-                    )
-                )
                 val registryLootTable = event.player
                     .server
                     .reloadableRegistries()
@@ -110,7 +111,6 @@ class GenerateRewardHandler(event: GymEvents.GenerateRewardEvent) {
             )
         )
         bundle.set(DataComponents.BUNDLE_CONTENTS, bundleContents.toImmutable())
-        bundle.set(RadGymsDataComponents.RG_GYM_BUNDLE_COMPONENT, true)
         event.player.giveOrDropItemStack(bundle, true)
     }
 }
