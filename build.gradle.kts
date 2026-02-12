@@ -19,6 +19,7 @@ plugins {
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
     id("dev.detekt") version "2.0.0-alpha.2"
+    id("org.jetbrains.kotlinx.kover") version "0.9.7"
 }
 
 scmVersion {
@@ -94,11 +95,18 @@ val modProjects = listOf(
     "neoforge"
 )
 
+dependencies {
+    kover(project(":common"))
+    kover(project(":fabric"))
+    kover(project(":neoforge"))
+}
+
 modProjects.forEach {
     project(it) {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
+        apply(plugin = "org.jetbrains.kotlinx.kover")
         apply(plugin = "dev.detekt")
         group = property("maven_group")!!
         version = rootProject.version
