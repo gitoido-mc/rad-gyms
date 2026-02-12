@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.gym
 
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.Gym
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDimensions
@@ -59,7 +60,7 @@ object GymTeardownService {
         try {
             assert(teleportScheduler != null)
         } catch (_: AssertionError) {
-            RadGyms.debug("Teleport scheduler not set")
+            debug("Teleport scheduler not set")
             return
         }
 
@@ -67,6 +68,7 @@ object GymTeardownService {
         var preloadPos: BlockPos
         var preloadDim: ServerLevel
         if (state.returnCoords != null) {
+            debug("Trying to teleport player here: ${state.returnCoords!!.position}")
             preloadPos = state.returnCoords!!.position
             preloadDim = serverPlayer.server.getLevel(
                 ResourceKey.create(

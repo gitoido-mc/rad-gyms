@@ -116,8 +116,8 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         debug(
             "Starting {} battle between player {} and trainer {}",
             event.trainer.format,
-            event.trainer.displayName?.string as Any,
-            event.player.displayName?.string as Any
+            event.player.displayName?.string as Any,
+            event.trainer.displayName?.string as Any
         )
 
         rctBattleManager.startBattle(

@@ -37,6 +37,8 @@ object BstTeamGenerator : GenericTeamGenerator() {
                 it[derivedChunkIndex].random()
             }
 
+        debug("Picked {} with {} form", derivedSpecies.species.name, derivedSpecies.form.name)
+
         return getPokemon(derivedSpecies, level)
     }
 }
