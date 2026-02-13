@@ -13,6 +13,7 @@ import lol.gito.radgyms.common.RadGyms
 
 @Serializable
 data class GymJson(
+    val id: String,
     @SerialName("interior_template")
     val template: String,
     @SerialName("exit_block_pos")
