@@ -1,2 +1,3 @@
 accessWidener v2 named
 accessible field net/minecraft/server/network/ServerCommonPacketListenerImpl connection Lnet/minecraft/network/Connection;
+transitive-extendable class com/cobblemon/mod/common/battles/ai/StrongBattleAI

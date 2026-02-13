@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE;
 
 @Mixin(ServerPlayer.class)
-public abstract class OnServerPlayerEntityDeath {
+public abstract class OnServerPlayerEntityDeathMixin {
     @Inject(method = "die", at = @At("HEAD"))
     public void RadGyms$onDeath(DamageSource damageSource, CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer) (Object) this;
