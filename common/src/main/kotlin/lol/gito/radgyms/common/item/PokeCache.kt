@@ -18,7 +18,7 @@ import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.cache.CacheHandler
 import lol.gito.radgyms.common.registry.RadGymsDataComponents.RG_CACHE_SHINY_BOOST_COMPONENT
 import lol.gito.radgyms.common.registry.RadGymsDataComponents.RG_GYM_TYPE_COMPONENT
-import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponents.RARITY
 import net.minecraft.network.chat.Component

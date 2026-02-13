@@ -8,7 +8,7 @@
 package lol.gito.radgyms.common.client.render.gui.widget
 
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.util.math.floor
+import lol.gito.radgyms.common.extension.math.floor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractSliderButton
 import net.minecraft.network.chat.CommonComponents

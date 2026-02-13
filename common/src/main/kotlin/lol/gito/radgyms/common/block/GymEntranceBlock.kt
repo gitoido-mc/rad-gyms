@@ -16,8 +16,8 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
-import lol.gito.radgyms.common.util.averagePokePartyLevel
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.extension.averagePokePartyLevel
+import lol.gito.radgyms.common.extension.displayClientMessage
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

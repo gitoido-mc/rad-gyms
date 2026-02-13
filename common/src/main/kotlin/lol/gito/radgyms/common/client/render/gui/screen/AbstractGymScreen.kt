@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.client.render.gui.screen.GymEnterScreen.Companion.BASE_HEIGHT
 import lol.gito.radgyms.common.client.render.gui.screen.GymEnterScreen.Companion.BASE_WIDTH
-import lol.gito.radgyms.common.util.math.Vec2i
+import lol.gito.radgyms.common.extension.math.Vec2i
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen

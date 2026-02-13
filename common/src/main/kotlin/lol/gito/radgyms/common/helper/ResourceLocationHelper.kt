@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.util
+package lol.gito.radgyms.common.helper
 
 import lol.gito.radgyms.common.RadGyms.MOD_ID
 import net.minecraft.client.resources.model.ModelResourceLocation

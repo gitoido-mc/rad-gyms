@@ -78,7 +78,6 @@ data class RadGymsConfig(
     }
 
 
-    @Transient
-    val ignoredSpeciesProps: List<PokemonProperties> = this
+    fun ignoredSpeciesProps(): List<PokemonProperties> = this
         .ignoredSpecies?.map { PokemonProperties.parse(it) } ?: emptyList()
 }

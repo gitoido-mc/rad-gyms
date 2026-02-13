@@ -16,9 +16,9 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsTemplates
-import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
-import lol.gito.radgyms.common.util.averagePokePartyLevel
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
+import lol.gito.radgyms.common.extension.averagePokePartyLevel
+import lol.gito.radgyms.common.extension.displayClientMessage
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Component.translatable

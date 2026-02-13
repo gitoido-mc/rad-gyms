@@ -112,6 +112,7 @@ object RadGymsCodec {
     @JvmStatic
     val GYM: Codec<GymJson> = RecordCodecBuilder.create {
         it.group(
+            Codec.STRING.fieldOf("id").forGetter(GymJson::id),
             Codec.STRING.fieldOf("interior_template").forGetter(GymJson::template),
             COORDS.fieldOf("exit_block_pos").forGetter(GymJson::exitBlockPos),
             ENTITY_COORDS_YAW.fieldOf("player_spawn_relative").forGetter(GymJson::playerSpawnRelative),

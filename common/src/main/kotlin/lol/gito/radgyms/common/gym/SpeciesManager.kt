@@ -44,7 +44,7 @@ private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null)
         poke.forcedAspects = speciesPair.form.aspects.toSet()
         poke.updateAspects()
 
-        if (CONFIG.ignoredSpeciesProps.any { it.matches(poke) }) {
+        if (CONFIG.ignoredSpeciesProps().any { it.matches(poke) }) {
             debug("Excluding {} with {} form", poke.species.name, poke.form.name)
             return@filter false
         }

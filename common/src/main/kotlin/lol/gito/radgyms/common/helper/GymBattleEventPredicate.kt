@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.util
+package lol.gito.radgyms.common.helper
 
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
 import lol.gito.radgyms.common.entity.Trainer
 
-
 @Suppress("FunctionName")
 fun RadGymsTrainerCheckerPredicate(actor: BattleActor): Boolean {
     if (actor.type != ActorType.NPC) return false
@@ -24,7 +23,6 @@ fun RadGymsTrainerCheckerPredicate(actor: BattleActor): Boolean {
     if (actor.entity !is Trainer) return false
     return true
 }
-
 
 fun hasRadGymsTrainers(event: BattleFledEvent): Boolean = event.battle.actors
     .any(::RadGymsTrainerCheckerPredicate)

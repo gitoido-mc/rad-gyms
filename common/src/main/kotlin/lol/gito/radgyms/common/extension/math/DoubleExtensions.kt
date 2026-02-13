@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.util.math
+package lol.gito.radgyms.common.extension.math
 
 import kotlin.math.floor
 

@@ -4,9 +4,13 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
+import com.github.zafarkhaja.semver.Version
 import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
+import pl.allegro.tech.build.axion.release.domain.VersionIncrementerContext
+import pl.allegro.tech.build.axion.release.domain.properties.VersionProperties
+import pl.allegro.tech.build.axion.release.domain.scm.ScmPosition
 import java.net.URI
 
 plugins {
@@ -23,22 +27,29 @@ plugins {
 }
 
 scmVersion {
-    releaseOnlyOnReleaseBranches = true
     releaseBranchNames = listOf("main")
     versionCreator("simple")
 
+    branchVersionCreator.put("bugfix/.*", "simple")
+    branchVersionCreator.put(
+        "feature/.*",
+        VersionProperties.Creator { version: String, position: ScmPosition ->
+            "$version-${position.branch.split("/").last()}"
+        }
+    )
+
     tag {
-        prefix = "1.7.0+"
-        fallbackPrefixes = listOf("1.6.1+")
+        prefix = "${project.property("cobblemon_version")}+"
+        fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+")
     }
 
     branchVersionIncrementer.putAll(
         mapOf(
-            "main" to "incrementMinor",
+            "main" to "incrementPatch",
             "develop" to "incrementPrerelease",
-            "feature/*" to "incrementPatch",
-            "hotfix/*" to "incrementPatch",
-            "refactor/*" to "incrementPatch",
+            "feature/.*" to "incrementPrerelease",
+            "hotfix/.*" to "incrementPrerelease",
+            "refactor/.*" to "incrementPrerelease",
         )
     )
 }
@@ -87,7 +98,6 @@ detekt {
 tasks.withType<Detekt>().configureEach {
     exclude("**/build/classes/**")
 }
-
 
 val modProjects = listOf(
     "common",

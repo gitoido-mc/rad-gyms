@@ -42,6 +42,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
 
     @Suppress("LongMethod", "MagicNumber")
     private fun getDefaultElementalGymDto(type: ElementalType): GymJson = GymJson(
+        id = type.showdownId,
         template = "rad_gyms:gym_interior_default",
         exitBlockPos = Coords(16.0, 2.0, 16.0),
         playerSpawnRelative = EntityCoordsAndYaw(

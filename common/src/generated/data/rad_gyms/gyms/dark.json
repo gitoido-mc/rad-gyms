@@ -4,6 +4,7 @@
     "y": 2.0,
     "z": 16.0
   },
+  "id": "dark",
   "interior_template": "rad_gyms:gym_interior_default",
   "player_spawn_relative": {
     "pos": {

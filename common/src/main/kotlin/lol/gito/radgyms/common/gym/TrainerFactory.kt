@@ -29,7 +29,7 @@ class TrainerFactory(
     private val battleConfigBuilder: BattleConfigFactory = BattleConfigFactory()
 ) {
     fun create(
-        trainer: Trainer, level: Int, player: ServerPlayer
+        trainer: Trainer, level: Int, player: ServerPlayer?
     ): RGTrainerModel {
         val ai = when (trainer.ai.type) {
             "rct" -> RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))

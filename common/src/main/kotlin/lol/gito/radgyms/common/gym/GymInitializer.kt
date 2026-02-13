@@ -37,6 +37,7 @@ class GymInitializer(
             return false
         }
 
+        RadGymsState.incrementVisitsForPlayer(serverPlayer)
         RadGymsState.setReturnCoordsForPlayer(
             serverPlayer,
             PlayerData.ReturnCoords(
@@ -44,6 +45,7 @@ class GymInitializer(
                 serverPlayer.position().toBlockPos()
             )
         )
+        RadGymsState.markDirty(serverPlayer)
 
         val gymLevel = level.coerceIn(RadGyms.CONFIG.minLevel!!..RadGyms.CONFIG.maxLevel!!)
         val gymType = if (type in templateRegistry.templates.keys) type else DEFAULT_GYM_TYPE

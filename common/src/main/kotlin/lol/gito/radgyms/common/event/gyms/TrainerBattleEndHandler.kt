@@ -19,7 +19,7 @@ import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.GymTeleportScheduler
 import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerPlayer

@@ -12,8 +12,8 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.LEAVE_SCREEN_CLOSE
-import lol.gito.radgyms.common.util.math.Vec2i
-import lol.gito.radgyms.common.util.radGymsResource
+import lol.gito.radgyms.common.extension.math.Vec2i
+import lol.gito.radgyms.common.helper.radGymsResource
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component.translatable

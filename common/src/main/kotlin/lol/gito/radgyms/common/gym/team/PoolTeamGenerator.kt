@@ -15,7 +15,7 @@ import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.level.ServerPlayer
 
 object PoolTeamGenerator : GenericTeamGenerator() {
-    fun generateTeam(player: ServerPlayer, trainer: Trainer, level: Int): MutableList<PokemonModel> {
+    fun generateTeam(player: ServerPlayer?, trainer: Trainer, level: Int): MutableList<PokemonModel> {
         val initialAmount = trainer
             .possibleFormats
             .maxOfOrNull {

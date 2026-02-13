@@ -15,8 +15,8 @@ import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.ENTER_SCREEN_CLOSE
 import lol.gito.radgyms.common.client.render.gui.widget.LevelSliderWidget
-import lol.gito.radgyms.common.util.TranslationUtil.buildTypeText
-import lol.gito.radgyms.common.util.math.Vec2i
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildTypeText
+import lol.gito.radgyms.common.extension.math.Vec2i
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents

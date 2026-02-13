@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.util
+package lol.gito.radgyms.common.extension
 
 import com.cobblemon.mod.common.api.text.text
 import net.minecraft.ChatFormatting

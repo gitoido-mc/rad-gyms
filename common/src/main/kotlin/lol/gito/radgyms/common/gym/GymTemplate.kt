@@ -14,6 +14,7 @@ import net.minecraft.world.phys.Vec3
 import lol.gito.radgyms.common.api.dto.TrainerModel as RGTrainerModel
 
 data class GymTemplate(
+    val id: String,
     val structure: String,
     val relativeExitBlockSpawn: Vec3,
     val relativePlayerSpawn: Vec3,
@@ -24,7 +25,7 @@ data class GymTemplate(
 ) {
     companion object {
         fun fromDto(
-            player: ServerPlayer,
+            player: ServerPlayer?,
             dto: GymJson,
             level: Int,
             type: String?,
@@ -35,6 +36,7 @@ data class GymTemplate(
             }
 
             return GymTemplate(
+                id = dto.id,
                 structure = dto.template,
                 relativeExitBlockSpawn = dto.exitBlockPos.toVec3D(),
                 relativePlayerSpawn = dto.playerSpawnRelative.pos.toVec3D(),

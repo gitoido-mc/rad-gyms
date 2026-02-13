@@ -13,7 +13,7 @@ import lol.gito.radgyms.common.block.entity.GymExitEntity
 import lol.gito.radgyms.common.net.server.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.extension.displayClientMessage
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerPlayer

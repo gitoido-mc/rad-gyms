@@ -19,7 +19,7 @@ import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerLevel
@@ -98,10 +98,14 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         val trainerRegistry = RCT.trainerRegistry
         val rctBattleManager = RCT.battleManager
         val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
-        val npcTrainer: TrainerNPC = trainerRegistry.registerNPC(
-            event.trainer.trainerId.toString(),
-            gym.npcList[event.trainer.trainerId]!!.trainer,
-        )
+        val npcTrainer: TrainerNPC = try {
+            trainerRegistry.registerNPC(
+                event.trainer.trainerId.toString(),
+                gym.npcList[event.trainer.trainerId]!!.trainer,
+            )
+        } catch (_: IllegalArgumentException) {
+            trainerRegistry.getById(event.trainer.trainerId.toString(), TrainerNPC::class.java)
+        }
 
         npcTrainer.entity = event.trainer
 

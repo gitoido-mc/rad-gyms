@@ -37,7 +37,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
     override fun generateTeam(
         trainer: Trainer,
         level: Int,
-        player: ServerPlayer,
+        player: ServerPlayer?,
         possibleFormats: MutableList<GymBattleFormat>?,
         types: List<ElementalType>?
     ): MutableList<PokemonModel> {

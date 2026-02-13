@@ -11,7 +11,7 @@ import com.cobblemon.mod.common.item.CobblemonItem
 import lol.gito.radgyms.common.net.server.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.extension.displayClientMessage
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component

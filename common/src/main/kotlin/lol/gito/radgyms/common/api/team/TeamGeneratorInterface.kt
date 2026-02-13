@@ -19,7 +19,7 @@ interface TeamGeneratorInterface {
     fun generateTeam(
         trainer: Trainer,
         level: Int,
-        player: ServerPlayer,
+        player: ServerPlayer?,
         possibleFormats: MutableList<GymBattleFormat>? = mutableListOf(GymBattleFormat.SINGLES),
         types: List<ElementalType>? = listOf(ElementalTypes.getRandomType())
     ): MutableList<PokemonModel>

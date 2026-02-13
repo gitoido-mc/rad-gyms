@@ -76,7 +76,7 @@ object GymEvents {
     )
 
     data class GenerateTeamEvent(
-        val player: ServerPlayer,
+        val player: ServerPlayer?,
         val type: List<ElementalType>,
         val level: Int,
         val trainerId: String,

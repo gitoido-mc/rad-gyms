@@ -29,7 +29,6 @@ object PlayerSpawnHelper {
         val playerX: Int = seed.nextInt(border.minZ.toInt(), border.maxZ.toInt())
         // get uniq z coord based on player uuid
         val playerZ: Int = RadGymsState
-            .also { it.incrementVisitsForPlayer(serverPlayer) }
             .getPlayerState(serverPlayer)
             .visits * GYM_SPACING_IN_DIMENSION
 

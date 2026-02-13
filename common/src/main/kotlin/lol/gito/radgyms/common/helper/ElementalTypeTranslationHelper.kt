@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.util
+package lol.gito.radgyms.common.helper
 
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -16,7 +16,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Component.translatable
 
 @Suppress("unused")
-object TranslationUtil {
+object ElementalTypeTranslationHelper {
     fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): Component =
         buildPrefixedSuffixedTypeText(elementalType?.showdownId)
 

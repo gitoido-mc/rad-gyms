@@ -8,7 +8,7 @@
 package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
