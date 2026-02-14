@@ -13,10 +13,12 @@ import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.RadGymsImplementation
+import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
 import net.fabricmc.api.EnvType
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
@@ -73,6 +75,8 @@ object RadGymsFabric : RadGymsImplementation {
         ServerLifecycleEvents.SERVER_STARTING.register {
             this.server = it
         }
+
+        CommandRegistrationCallback.EVENT.register(RadGymsCommands::register)
     }
 
     override fun registerDataComponents() = RadGymsDataComponents.register { identifier, component ->

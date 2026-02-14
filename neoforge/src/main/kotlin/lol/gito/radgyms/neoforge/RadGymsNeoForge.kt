@@ -14,6 +14,7 @@ import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.RadGymsImplementation
+import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
 import lol.gito.radgyms.common.extension.displayClientMessage
@@ -39,6 +40,7 @@ import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.OnDatapackSyncEvent
+import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.level.BlockEvent
@@ -70,6 +72,7 @@ class RadGymsNeoForge : RadGymsImplementation {
             addListener(::onLogout)
             addListener(::onReload)
             addListener(::onBlockBreak)
+            addListener(::registerCommands)
         }
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -169,14 +172,10 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
-    private fun onReload(e: AddReloadListenerEvent) {
-        this.reloadableResources.forEach(e::addListener)
-    }
-
     override fun server(): MinecraftServer? = ServerLifecycleHooks.getCurrentServer()
 
-
     override fun initialize() = Unit
+
 
     fun initialize(event: FMLCommonSetupEvent) {
         info("Initializing Rad Gyms for NeoForge!")
@@ -196,6 +195,14 @@ class RadGymsNeoForge : RadGymsImplementation {
 
     fun onLogout(event: PlayerEvent.PlayerLoggedOutEvent) {
         this.hasBeenSynced.remove(event.entity.uuid)
+    }
+
+    private fun registerCommands(e: RegisterCommandsEvent) {
+        RadGymsCommands.register(e.dispatcher, e.buildContext, e.commandSelection)
+    }
+
+    private fun onReload(e: AddReloadListenerEvent) {
+        this.reloadableResources.forEach(e::addListener)
     }
 
     private fun onBuildContents(e: BuildCreativeModeTabContentsEvent) {
