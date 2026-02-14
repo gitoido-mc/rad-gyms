@@ -11,5 +11,6 @@ object RadGymsCommands {
         registry: CommandBuildContext,
         selection: Commands.CommandSelection
     ) {
+        KickCommand.register(dispatcher)
     }
 }
