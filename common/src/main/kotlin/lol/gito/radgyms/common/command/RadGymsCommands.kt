@@ -6,11 +6,13 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 
 object RadGymsCommands {
+    @Suppress("unused")
     fun register(
         dispatcher: CommandDispatcher<CommandSourceStack>,
         registry: CommandBuildContext,
         selection: Commands.CommandSelection
     ) {
         KickCommand.register(dispatcher)
+        ReloadCommand.register(dispatcher)
     }
 }
