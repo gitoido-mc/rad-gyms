@@ -5,13 +5,16 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.api.dto
+package lol.gito.radgyms.common.api.dto.trainer
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.*
+import lol.gito.radgyms.common.api.dto.battle.BattleAI
+import lol.gito.radgyms.common.api.dto.battle.BattleRules
+import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
@@ -23,12 +26,12 @@ data class Trainer(
     var name: String = "rad_gyms.npc.default_trainer",
     @SerialName("spawn_relative")
     val spawnRelative: EntityCoordsAndYaw,
-    @SerialName("team_type")
+    @SerialName("type")
     val teamType: GymTeamType = GymTeamType.GENERATED,
-    @SerialName("team_generator")
+    @SerialName("generator")
     val teamGenerator: GymTeamGeneratorType = GymTeamGeneratorType.CHAOTIC,
     @Contextual
-    @SerialName("possible_elemental_types")
+    @SerialName("elemental_types")
     val possibleElementalTypes: ElementalListType = listOf(
         ElementalTypes.getRandomType()
     ),

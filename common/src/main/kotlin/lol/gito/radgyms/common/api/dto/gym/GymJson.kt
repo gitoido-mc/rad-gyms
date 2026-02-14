@@ -1,15 +1,14 @@
-/*
- * Copyright (c) 2026. gitoido-mc
- * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
- * If a copy of the GNU General Public License v3.0 was not distributed with this file,
- * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
- */
-
-package lol.gito.radgyms.common.api.dto
+package lol.gito.radgyms.common.api.dto.gym
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.api.dto.geospatial.Coords
+import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
+import lol.gito.radgyms.common.api.dto.reward.CommandReward
+import lol.gito.radgyms.common.api.dto.reward.LootTableReward
+import lol.gito.radgyms.common.api.dto.reward.RewardInterface
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
 
 @Serializable
 data class GymJson(
@@ -22,29 +21,30 @@ data class GymJson(
     val playerSpawnRelative: EntityCoordsAndYaw,
     @SerialName("trainers")
     val trainers: List<Trainer>,
-    @SerialName("reward_loot_tables")
-    val rewardLootTables: List<LootTableInfo>? = listOf(
-        LootTableInfo(
+    @SerialName("rewards")
+    val rewards: List<RewardInterface>? = listOf(
+        CommandReward(
+            execute = "/say Congratulations on beating the gym!"
+        ),
+        LootTableReward(
             id = "rad_gyms:gyms/default/shared_loot_table",
-            minLevel = 1,
             maxLevel = RadGyms.CONFIG.maxLevel!!
         ),
-        LootTableInfo(
+        LootTableReward(
             id = "rad_gyms:gyms/default/common_loot_table",
-            minLevel = 1,
             maxLevel = 25
         ),
-        LootTableInfo(
+        LootTableReward(
             id = "rad_gyms:gyms/default/uncommon_loot_table",
             minLevel = 26,
             maxLevel = 50
         ),
-        LootTableInfo(
+        LootTableReward(
             id = "rad_gyms:gyms/default/rare_loot_table",
             minLevel = 51,
             maxLevel = 75
         ),
-        LootTableInfo(
+        LootTableReward(
             id = "rad_gyms:gyms/default/epic_loot_table",
             minLevel = 76
         ),

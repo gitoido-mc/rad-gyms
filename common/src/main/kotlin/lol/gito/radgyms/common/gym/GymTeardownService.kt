@@ -9,7 +9,7 @@ package lol.gito.radgyms.common.gym
 
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.world.state.RadGymsState
@@ -38,22 +38,11 @@ object GymTeardownService {
         val world = serverPlayer.server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
 
         gym.npcList.forEach {
-            RadGyms.RCT.trainerRegistry.unregisterById(it.key.toString())
-            world.getEntity(it.key)?.discard()
+            RadGyms.RCT.trainerRegistry.unregisterById(it.toString())
+            world.getEntity(it)?.discard()
         }
 
         RadGymsState.removeGymForPlayer(serverPlayer)
-    }
-
-    fun destructOfflineGym(server: MinecraftServer, uuid: UUID, gym: Gym) {
-        val world = server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
-
-        gym.npcList.forEach {
-            RadGyms.RCT.trainerRegistry.unregisterById(it.key.toString())
-            world.getEntity(it.key)?.discard()
-        }
-
-        RadGymsState.removeGymForPlayerByUuid(uuid)
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayer) {

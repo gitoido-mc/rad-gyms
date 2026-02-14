@@ -9,7 +9,7 @@ package lol.gito.radgyms.common.gym.team
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
-import lol.gito.radgyms.common.api.dto.Trainer
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.level.ServerPlayer

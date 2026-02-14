@@ -11,7 +11,7 @@ import com.cobblemon.mod.common.util.toBlockPos
 import lol.gito.radgyms.common.DEFAULT_GYM_TYPE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.TELEPORT_PRELOAD_CHUNKS
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
+import net.minecraft.world.level.ChunkPos
 
 class GymInitializer(
     private val templateRegistry: RadGymsTemplates,
@@ -29,13 +30,11 @@ class GymInitializer(
     private val structureManager: StructurePlacer,
     private val trainerFactory: TrainerFactory
 ) {
-    fun initInstance(serverPlayer: ServerPlayer, serverWorld: ServerLevel, level: Int, type: String?): Boolean {
+    fun initInstance(serverPlayer: ServerPlayer, serverWorld: ServerLevel, level: Int, type: String?) {
         val dto = templateRegistry.templates[type]
         val gymDimension = serverPlayer.server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)
 
-        if (dto == null || gymDimension == null) {
-            return false
-        }
+        if (dto == null || gymDimension == null) return
 
         RadGymsState.incrementVisitsForPlayer(serverPlayer)
         RadGymsState.setReturnCoordsForPlayer(
@@ -62,27 +61,23 @@ class GymInitializer(
         structureManager.placeStructure(gymDimension, playerGymCoords, gymTemplate.structure)
         gymDimension.chunkSource.addRegionTicket(
             TicketType.PORTAL,
-            gymDimension.getChunk(dest).pos,
+            ChunkPos(dest),
             TELEPORT_PRELOAD_CHUNKS,
             dest
         )
 
         PlayerSpawnHelper.teleportPlayer(serverPlayer, gymDimension, dest, gymTemplate.playerYaw, 0.0F)
 
-        val trainerUUIDs = trainerSpawner.spawnAll(gymTemplate, gymDimension, playerGymCoords)
+        val trainers = trainerSpawner.spawnAll(gymTemplate, gymDimension, playerGymCoords)
 
-        val label = "" // compute label similarly to previous logic
         val gymInstance = Gym(
             gymTemplate,
-            trainerUUIDs,
+            trainers.keys.toList(),
             playerGymCoords,
             gymLevel,
-            type ?: DEFAULT_GYM_TYPE,
-            label
+            type ?: DEFAULT_GYM_TYPE
         )
 
         RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
-
-        return true
     }
 }

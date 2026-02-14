@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.BundleContents
 import net.minecraft.world.level.Level
 
-class GymReward : BundleItem(
+class GymRewardBag : BundleItem(
     Properties().stacksTo(1).component(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY)
 ) {
     companion object {

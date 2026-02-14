@@ -118,6 +118,7 @@ modProjects.forEach {
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
         apply(plugin = "org.jetbrains.kotlinx.kover")
         apply(plugin = "dev.detekt")
+
         group = property("maven_group")!!
         version = rootProject.version
 

@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
@@ -98,9 +98,7 @@ object GymEvents {
         val player: ServerPlayer,
         val completed: Boolean?,
         val usedRope: Boolean?,
-        val gym: Gym? = null,
-        val type: String? = null,
-        val level: Int? = null
+        val gym: Gym? = null
     )
 
     // Trainer interaction

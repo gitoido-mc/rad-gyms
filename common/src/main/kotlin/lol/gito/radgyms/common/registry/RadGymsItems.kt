@@ -31,9 +31,9 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     )
 
     @JvmField
-    val GYM_REWARD: GymReward = this.create(
+    val GYM_REWARD: GymRewardBag = this.create(
         modId("gym_reward"),
-        GymReward()
+        GymRewardBag()
     )
 
     @JvmField

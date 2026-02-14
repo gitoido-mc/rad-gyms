@@ -3,8 +3,8 @@ package lol.gito.radgyms.common.extension.nbt
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import net.minecraft.nbt.CompoundTag
 
-fun CompoundTag.getRadGymsBattleRules(key: String): BattleRules? {
-    val nbt = this.getCompound(key) ?: return null
+fun CompoundTag.getRadGymsBattleRules(key: String): BattleRules {
+    val nbt = this.getCompound(key)
 
     return BattleRules.Builder()
         .withMaxItemUses(nbt.getInt("MaxItemUses"))

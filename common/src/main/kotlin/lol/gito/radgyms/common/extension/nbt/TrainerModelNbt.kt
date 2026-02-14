@@ -1,6 +1,6 @@
 package lol.gito.radgyms.common.extension.nbt
 
-import lol.gito.radgyms.common.api.dto.TrainerModel
+import lol.gito.radgyms.common.api.dto.trainer.TrainerModel
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import net.minecraft.nbt.CompoundTag
 

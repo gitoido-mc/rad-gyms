@@ -8,7 +8,8 @@
 package lol.gito.radgyms.common.gym
 
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.api.dto.TrainerModel
+import lol.gito.radgyms.common.api.dto.trainer.TrainerConfiguration
+import lol.gito.radgyms.common.api.dto.trainer.TrainerModel
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.registry.RadGymsEntities
 import net.minecraft.core.BlockPos
@@ -47,6 +48,11 @@ object TrainerSpawner {
             yHeadRot = trainer.npc.yaw
             yBodyRot = trainer.npc.yaw
             customName = trainer.npc.name
+            configuration = TrainerConfiguration(
+                trainer.battleRules,
+                trainer.trainer.bag,
+                trainer.trainer.team
+            )
             isCustomNameVisible = true
             setPersistenceRequired()
             setPos(

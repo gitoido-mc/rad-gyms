@@ -82,6 +82,7 @@ object EventManager {
 
         // Mod events
         RadGymsTemplates.observable.subscribe(Priority.NORMAL) { registry ->
+            debug("Creating gym initializer")
             RadGyms.gymInitializer = GymInitializer(
                 templateRegistry = registry,
                 trainerSpawner = TrainerSpawner,

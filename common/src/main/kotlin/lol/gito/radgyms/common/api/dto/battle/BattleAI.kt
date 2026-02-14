@@ -5,16 +5,12 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.api.dto
+package lol.gito.radgyms.common.api.dto.battle
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LootTableInfo(
-    val id: String,
-    @SerialName("min_level")
-    val minLevel: Int = 1,
-    @SerialName("max_level")
-    val maxLevel: Int = 100
+data class BattleAI(
+    val type: String = "rct",
+    val data: BattleAIConfig? = null,
 )

@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.item.CobblemonItem
+import lol.gito.radgyms.common.EXIT_ROPE_COOLDOWN
 import lol.gito.radgyms.common.net.server.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
@@ -39,8 +40,12 @@ class ExitRope : CobblemonItem(Properties()) {
             else -> player.displayClientMessage(translatable(EXIT_ROPE.descriptionId.plus(".failed")))
         }
 
+
+        player.cooldowns.addCooldown(this, EXIT_ROPE_COOLDOWN)
         return super.use(level, player, hand)
     }
+
+
 
     override fun appendHoverText(
         stack: ItemStack,

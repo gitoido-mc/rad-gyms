@@ -49,8 +49,6 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
                     reason = GymLeaveReason.USED_ITEM,
                     player = player,
                     gym = gym,
-                    type = gym.type,
-                    level = gym.level,
                     completed = false,
                     usedRope = true
                 )
@@ -62,8 +60,6 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
                     reason = GymLeaveReason.USED_BLOCK,
                     player = player,
                     gym = gym,
-                    type = gym.type,
-                    level = gym.level,
                     completed = true,
                     usedRope = false
                 )

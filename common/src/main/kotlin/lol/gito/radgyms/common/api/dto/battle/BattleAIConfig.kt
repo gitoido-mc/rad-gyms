@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.api.dto
+package lol.gito.radgyms.common.api.dto.battle
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

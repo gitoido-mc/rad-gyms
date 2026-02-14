@@ -5,12 +5,13 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.api.dto
+package lol.gito.radgyms.common.api.dto.trainer
 
-import kotlinx.serialization.Serializable
+import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.Vec3
 
-@Serializable
-data class Coords(val x: Double, val y: Double, val z: Double) {
-    fun toVec3D(): Vec3 = Vec3(this.x, this.y, this.z)
-}
+data class TrainerEntityData(
+    val name: Component,
+    val relativePosition: Vec3,
+    val yaw: Float,
+)

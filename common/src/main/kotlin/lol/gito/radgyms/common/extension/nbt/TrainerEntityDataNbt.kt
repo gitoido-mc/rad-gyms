@@ -1,6 +1,6 @@
 package lol.gito.radgyms.common.extension.nbt
 
-import lol.gito.radgyms.common.api.dto.TrainerEntityData
+import lol.gito.radgyms.common.api.dto.trainer.TrainerEntityData
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 

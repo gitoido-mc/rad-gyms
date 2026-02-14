@@ -12,6 +12,16 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.mojang.serialization.codecs.UnboundedMapCodec
 import lol.gito.radgyms.common.api.dto.*
+import lol.gito.radgyms.common.api.dto.battle.BattleAI
+import lol.gito.radgyms.common.api.dto.battle.BattleAIConfig
+import lol.gito.radgyms.common.api.dto.battle.BattleRules
+import lol.gito.radgyms.common.api.dto.geospatial.Coords
+import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
+import lol.gito.radgyms.common.api.dto.gym.GymJson
+import lol.gito.radgyms.common.api.dto.reward.RewardInterface
+import lol.gito.radgyms.common.api.dto.trainer.TeamLevelThreshold
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
+import lol.gito.radgyms.common.api.dto.trainer.TrainerBag
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
@@ -34,15 +44,6 @@ object RadGymsCodec {
             COORDS.fieldOf("pos").forGetter(EntityCoordsAndYaw::pos),
             Codec.DOUBLE.fieldOf("yaw").forGetter(EntityCoordsAndYaw::yaw)
         ).apply(it, ::EntityCoordsAndYaw)
-    }
-
-    @JvmStatic
-    val LOOT_TABLE_INFO: Codec<LootTableInfo> = RecordCodecBuilder.create {
-        it.group(
-            Codec.STRING.fieldOf("id").forGetter(LootTableInfo::id),
-            Codec.INT.fieldOf("min_level").forGetter(LootTableInfo::minLevel),
-            Codec.INT.fieldOf("max_level").forGetter(LootTableInfo::maxLevel),
-        ).apply(it, ::LootTableInfo)
     }
 
     @JvmStatic
@@ -109,6 +110,14 @@ object RadGymsCodec {
         ).apply(it, ::Trainer)
     }
 
+    val GYM_REWARD_TYPE: Codec<GymRewardType<*>> = GymRewardType.REGISTRY.byNameCodec()
+
+    val GYM_REWARD: Codec<RewardInterface> = GYM_REWARD_TYPE.dispatch(
+        "type",
+        RewardInterface::getRewardType,
+        GymRewardType<*>::codec
+    )
+
     @JvmStatic
     val GYM: Codec<GymJson> = RecordCodecBuilder.create {
         it.group(
@@ -117,7 +126,7 @@ object RadGymsCodec {
             COORDS.fieldOf("exit_block_pos").forGetter(GymJson::exitBlockPos),
             ENTITY_COORDS_YAW.fieldOf("player_spawn_relative").forGetter(GymJson::playerSpawnRelative),
             Codec.list(TRAINER).fieldOf("trainers").forGetter(GymJson::trainers),
-            Codec.list(LOOT_TABLE_INFO).fieldOf("reward_loot_tables").forGetter(GymJson::rewardLootTables)
+            Codec.list(GYM_REWARD).fieldOf("rewards").forGetter(GymJson::rewards)
         ).apply(it, ::GymJson)
     }
 

@@ -7,7 +7,7 @@
 
 package lol.gito.radgyms.common.mixin.server.event;
 
-import lol.gito.radgyms.common.api.dto.Gym;
+import lol.gito.radgyms.common.api.dto.gym.Gym;
 import lol.gito.radgyms.common.api.enumeration.GymLeaveReason;
 import lol.gito.radgyms.common.api.event.GymEvents;
 import lol.gito.radgyms.common.world.state.RadGymsState;
@@ -33,9 +33,7 @@ public abstract class OnServerPlayerEntityDeathMixin {
                 player,
                 false,
                 false,
-                gym,
-                gym.getType(),
-                gym.getLevel()
+                gym
             ));
         }
     }

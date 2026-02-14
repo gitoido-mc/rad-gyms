@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import lol.gito.radgyms.common.api.dto.SpeciesWithForm
-import lol.gito.radgyms.common.api.dto.Trainer
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM

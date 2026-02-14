@@ -1,7 +1,7 @@
 package lol.gito.radgyms.common.extension.nbt
 
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.registry.RadGymsTemplates
 import net.minecraft.nbt.CompoundTag
@@ -14,6 +14,12 @@ fun CompoundTag.getRadGymsInstanceData(key: String): Gym? {
         UUID.fromString(key)
     )
 
+    val npcList = mutableListOf<UUID>()
+
+    tag.getCompound("Trainers").allKeys.forEach { index ->
+        npcList.add(tag.getCompound("Trainers").getUUID(index))
+    }
+
     return Gym(
         template = GymTemplate.fromDto(
             player,
@@ -21,11 +27,10 @@ fun CompoundTag.getRadGymsInstanceData(key: String): Gym? {
             tag.getInt("Level"),
             tag.getString("Type")
         ),
-        npcList = emptyMap(),
+        npcList = npcList,
         coords = tag.getBlockPos("Coords")!!,
         level = tag.getInt("Level"),
-        type = tag.getString("Type"),
-        label = tag.getString("Label")
+        type = tag.getString("Type")
     )
 }
 
@@ -43,10 +48,9 @@ fun CompoundTag.putRadGymsInstanceData(key: String, value: Gym) {
     nbt.putBlockPos("Coords", value.coords)
     nbt.putInt("Level", value.level)
     nbt.putString("Type", value.type)
-    nbt.putString("Label", value.label)
 
-    value.npcList.forEach { (uuid, model) ->
-        trainersNbt.putRadGymsTrainerModel(uuid.toString(), model)
+    value.npcList.forEachIndexed { index, uuid ->
+        trainersNbt.putUUID(index.toString(), uuid)
     }
 
     nbt.put("Trainers", trainersNbt)

@@ -14,8 +14,8 @@ import com.gitlab.srcmc.rctapi.api.ai.experimental.SelfdotGen5AI
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.models.BagItemModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
-import lol.gito.radgyms.common.api.dto.Trainer
-import lol.gito.radgyms.common.api.dto.TrainerEntityData
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
+import lol.gito.radgyms.common.api.dto.trainer.TrainerEntityData
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
 import lol.gito.radgyms.common.exception.RadGymsUnknownBattleAIException
 import lol.gito.radgyms.common.gym.team.FixedTeamGenerator
@@ -23,7 +23,7 @@ import lol.gito.radgyms.common.gym.team.PoolTeamGenerator
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerPlayer
 import com.gitlab.srcmc.rctapi.api.models.TrainerModel as RCTTrainerModel
-import lol.gito.radgyms.common.api.dto.TrainerModel as RGTrainerModel
+import lol.gito.radgyms.common.api.dto.trainer.TrainerModel as RGTrainerModel
 
 class TrainerFactory(
     private val battleConfigBuilder: BattleConfigFactory = BattleConfigFactory()

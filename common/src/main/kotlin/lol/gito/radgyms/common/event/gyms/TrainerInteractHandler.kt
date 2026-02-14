@@ -8,18 +8,22 @@
 package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.util.giveOrDropItemStack
+import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
+import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.battle.BattleState
+import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
+import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.warn
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
 import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerLevel
@@ -75,7 +79,7 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
             return
         }
 
-        if (event.trainer.trainerId == null) {
+        if (event.trainer.uuid == null) {
             warn(
                 "Player {} tried to initialize battle with trainer entity {} without trainerId",
                 event.player.uuid,
@@ -85,7 +89,7 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
             return
         }
 
-        if (event.trainer.trainerId !in gym.npcList.keys) {
+        if (event.trainer.uuid !in gym.npcList) {
             warn(
                 "Gym instance for player {} does not contain information about trainer {}",
                 event.player.uuid,
@@ -100,11 +104,16 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
         val npcTrainer: TrainerNPC = try {
             trainerRegistry.registerNPC(
-                event.trainer.trainerId.toString(),
-                gym.npcList[event.trainer.trainerId]!!.trainer,
+                event.trainer.stringUUID,
+                TrainerModel(
+                    event.trainer.name.string,
+                    JTO.of { RCTBattleAI(RCTBattleAIConfig.Builder().build()) },
+                    event.trainer.configuration.bag,
+                    event.trainer.configuration.team
+                ),
             )
         } catch (_: IllegalArgumentException) {
-            trainerRegistry.getById(event.trainer.trainerId.toString(), TrainerNPC::class.java)
+            trainerRegistry.getById(event.trainer.stringUUID, TrainerNPC::class.java)
         }
 
         npcTrainer.entity = event.trainer

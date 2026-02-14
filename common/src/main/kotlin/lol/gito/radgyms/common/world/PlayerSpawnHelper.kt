@@ -14,6 +14,7 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.portal.DimensionTransition
@@ -28,6 +29,10 @@ object PlayerSpawnHelper {
 
         val playerX: Int = seed.nextInt(border.minZ.toInt(), border.maxZ.toInt())
         // get uniq z coord based on player uuid
+        val visits = RadGymsState
+            .getPlayerState(serverPlayer)
+            .visits
+        serverPlayer.sendSystemMessage(Component.literal("visits $visits"))
         val playerZ: Int = RadGymsState
             .getPlayerState(serverPlayer)
             .visits * GYM_SPACING_IN_DIMENSION
@@ -38,7 +43,7 @@ object PlayerSpawnHelper {
         return BlockPos(
             playerX,
             0,
-            0 + playerZ, // world border
+            (border.minX.toLong() + playerZ).toInt(), // world border
         )
     }
 

@@ -10,7 +10,7 @@ package lol.gito.radgyms.common.world.state
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.MOD_ID
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.exception.RadGymsLevelNotFoundException
 import lol.gito.radgyms.common.extension.nbt.getRadGymsInstanceData
 import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
@@ -57,12 +57,12 @@ class RadGymsState : SavedData() {
 
             playersCompound.allKeys.forEach { uuidString ->
                 val uuid = UUID.fromString(uuidString)
-                state.playerDataMap[uuid] = playersCompound.getRadGymsPlayerData(uuidString)!!
+                state.playerDataMap.putIfAbsent(uuid, playersCompound.getRadGymsPlayerData(uuidString)!!)
             }
 
             gymsCompound.allKeys.forEach { uuidString ->
                 val uuid = UUID.fromString(uuidString)
-                state.gymInstanceMap[uuid] = gymsCompound.getRadGymsInstanceData(uuidString)!!
+                state.gymInstanceMap.putIfAbsent(uuid, gymsCompound.getRadGymsInstanceData(uuidString)!!)
             }
 
             return state
@@ -76,14 +76,6 @@ class RadGymsState : SavedData() {
             return level.dataStorage.computeIfAbsent(type, MOD_ID).also {
                 it.setDirty()
             }
-        }
-
-        @JvmStatic
-        fun markDirty(server: MinecraftServer) {
-            val level = server.getLevel(RADGYMS_LEVEL_KEY)
-                ?: throw RadGymsLevelNotFoundException("Trying to access non-existing level")
-
-            level.dataStorage.computeIfAbsent(type, MOD_ID).setDirty()
         }
 
         @JvmStatic
@@ -133,21 +125,6 @@ class RadGymsState : SavedData() {
         @JvmStatic
         fun removeGymForPlayer(player: ServerPlayer) {
             getServerState(player.server).gymInstanceMap.remove(player.uuid)
-        }
-
-        @JvmStatic
-        fun removeGymForPlayerByUuid(uuid: UUID) {
-            RadGyms.implementation.server()?.let {
-                debug("Removing gyms for player {}", uuid)
-                getServerState(it).gymInstanceMap.remove(uuid)
-            }
-        }
-
-        fun getPlayerUUIDForGym(gym: Gym): UUID {
-            return getServerState(RadGyms.implementation.server()!!).gymInstanceMap.firstNotNullOf {
-                if (it.value == gym) return@firstNotNullOf it.key
-                return@firstNotNullOf null
-            }
         }
     }
 

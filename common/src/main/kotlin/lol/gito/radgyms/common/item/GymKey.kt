@@ -19,6 +19,7 @@ import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.registry.RadGymsDimensions
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Component.translatable
@@ -37,14 +38,15 @@ class GymKey : CobblemonItem(
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
-        RadGymsTemplates.templates.forEach { (key, value) ->
-            debug("Found template")
-            debug("Type: $key")
-            debug("Interior: ${value.template}")
-        }
-
         val party = (player as ServerPlayer).party()
         return when {
+            (level.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) -> {
+                player.displayClientMessage(
+                    translatable(modId("message.info.gym_key_wrong_place").toLanguageKey())
+                )
+                InteractionResultHolder.fail(player.getItemInHand(hand))
+            }
+
             (party.occupied() < MIN_PLAYER_TEAM_SIZE) -> {
                 player.displayClientMessage(
                     translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey())

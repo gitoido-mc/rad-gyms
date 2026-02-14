@@ -9,7 +9,7 @@ package lol.gito.radgyms.common.gym
 
 
 import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
-import lol.gito.radgyms.common.api.dto.BattleAI
+import lol.gito.radgyms.common.api.dto.battle.BattleAI
 
 class BattleConfigFactory {
     fun createFromDto(dto: BattleAI): RCTBattleAIConfig {

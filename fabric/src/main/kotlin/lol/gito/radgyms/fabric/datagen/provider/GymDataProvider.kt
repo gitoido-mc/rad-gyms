@@ -11,6 +11,11 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.*
+import lol.gito.radgyms.common.api.dto.geospatial.Coords
+import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
+import lol.gito.radgyms.common.api.dto.gym.GymJson
+import lol.gito.radgyms.common.api.dto.trainer.TeamLevelThreshold
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType

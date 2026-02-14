@@ -5,12 +5,14 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.api.dto
+package lol.gito.radgyms.common.api.dto.trainer
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TrainerBag(
-    val item: String,
-    val quantity: Int
+data class TeamLevelThreshold(
+    val amount: Int,
+    @SerialName("until_level")
+    val untilLevel: Int
 )
