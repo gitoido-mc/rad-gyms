@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -8,7 +8,7 @@
 package lol.gito.radgyms.common.client.render.gui.widget
 
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.util.math.floor
+import lol.gito.radgyms.common.extension.math.floor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractSliderButton
 import net.minecraft.network.chat.CommonComponents
@@ -21,14 +21,12 @@ class LevelSliderWidget(
     private val minLevel: Int,
     private val maxLevel: Int,
     private val onChange: (Int) -> Unit
-) : AbstractSliderButton(
-    x,
-    y,
-    190,
-    20,
-    CommonComponents.EMPTY,
-    0.0
-) {
+) : AbstractSliderButton(x, y, SLIDER_WIDTH, SLIDER_HEIGHT, CommonComponents.EMPTY, 0.0) {
+    companion object {
+        const val SLIDER_WIDTH = 190
+        const val SLIDER_HEIGHT = 20
+    }
+
     var level: Int = this.initialLevel
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {

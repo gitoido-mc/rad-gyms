@@ -7,24 +7,26 @@
 
 package lol.gito.radgyms.common.gym
 
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.gym.GymJson
+import lol.gito.radgyms.common.api.dto.reward.RewardInterface
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
-import lol.gito.radgyms.common.api.dto.TrainerModel as RGTrainerModel
+import lol.gito.radgyms.common.api.dto.trainer.TrainerModel as RGTrainerModel
 
 data class GymTemplate(
+    val id: String,
     val structure: String,
     val relativeExitBlockSpawn: Vec3,
     val relativePlayerSpawn: Vec3,
     val playerYaw: Float,
     val trainers: List<RGTrainerModel>,
     val type: String?,
-    val lootTables: List<Gym.Json.LootTableInfo>
+    val rewards: List<RewardInterface>
 ) {
     companion object {
         fun fromDto(
-            player: ServerPlayer,
-            dto: Gym.Json,
+            player: ServerPlayer?,
+            dto: GymJson,
             level: Int,
             type: String?,
             trainerFactory: TrainerFactory = TrainerFactory()
@@ -34,13 +36,14 @@ data class GymTemplate(
             }
 
             return GymTemplate(
+                id = dto.id,
                 structure = dto.template,
                 relativeExitBlockSpawn = dto.exitBlockPos.toVec3D(),
                 relativePlayerSpawn = dto.playerSpawnRelative.pos.toVec3D(),
                 playerYaw = dto.playerSpawnRelative.yaw.toFloat(),
                 trainers = trainers,
                 type = type,
-                lootTables = dto.rewardLootTables!!
+                rewards = dto.rewards!!
             )
         }
     }

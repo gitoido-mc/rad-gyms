@@ -28,6 +28,7 @@ public class ServerGamePacketListenerMixin {
     )
     private WorldBorder modifyContains(WorldBorder defaultBorder, BlockPos pos) {
         ServerPlayer player = ((ServerGamePacketListenerImpl) (Object) this).player;
+        //noinspection resource
         if (player.level().dimension() != RadGymsDimensions.RADGYMS_LEVEL_KEY) return defaultBorder;
         return RadGyms.dimensionWorldBorder;
     }

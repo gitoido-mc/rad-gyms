@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -8,10 +8,11 @@
 package lol.gito.radgyms.common.gym
 
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDimensions
-import lol.gito.radgyms.common.state.RadGymsState
+import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
@@ -37,29 +38,18 @@ object GymTeardownService {
         val world = serverPlayer.server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
 
         gym.npcList.forEach {
-            RadGyms.RCT.trainerRegistry.unregisterById(it.key.toString())
-            world.getEntity(it.key)?.discard()
+            RadGyms.RCT.trainerRegistry.unregisterById(it.toString())
+            world.getEntity(it)?.discard()
         }
 
         RadGymsState.removeGymForPlayer(serverPlayer)
-    }
-
-    fun destructOfflineGym(server: MinecraftServer, uuid: UUID, gym: Gym) {
-        val world = server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
-
-        gym.npcList.forEach {
-            RadGyms.RCT.trainerRegistry.unregisterById(it.key.toString())
-            world.getEntity(it.key)?.discard()
-        }
-
-        RadGymsState.removeGymForPlayerByUuid(uuid)
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayer) {
         try {
             assert(teleportScheduler != null)
         } catch (_: AssertionError) {
-            RadGyms.debug("Teleport scheduler not set")
+            debug("Teleport scheduler not set")
             return
         }
 
@@ -67,6 +57,7 @@ object GymTeardownService {
         var preloadPos: BlockPos
         var preloadDim: ServerLevel
         if (state.returnCoords != null) {
+            debug("Trying to teleport player here: ${state.returnCoords!!.position}")
             preloadPos = state.returnCoords!!.position
             preloadDim = serverPlayer.server.getLevel(
                 ResourceKey.create(

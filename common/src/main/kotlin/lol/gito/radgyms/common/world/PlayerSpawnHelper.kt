@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -8,11 +8,13 @@
 package lol.gito.radgyms.common.world
 
 import com.cobblemon.mod.common.util.squeezeWithinBounds
+import lol.gito.radgyms.common.GYM_SPACING_IN_DIMENSION
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.registry.RadGymsDimensions
-import lol.gito.radgyms.common.state.RadGymsState
+import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.portal.DimensionTransition
@@ -27,10 +29,13 @@ object PlayerSpawnHelper {
 
         val playerX: Int = seed.nextInt(border.minZ.toInt(), border.maxZ.toInt())
         // get uniq z coord based on player uuid
-        val playerZ: Int = RadGymsState
-            .also { it.incrementVisitsForPlayer(serverPlayer) }
+        val visits = RadGymsState
             .getPlayerState(serverPlayer)
-            .visits * 128
+            .visits
+        serverPlayer.sendSystemMessage(Component.literal("visits $visits"))
+        val playerZ: Int = RadGymsState
+            .getPlayerState(serverPlayer)
+            .visits * GYM_SPACING_IN_DIMENSION
 
         debug("Derived player ${serverPlayer.name} unique X coordinate from UUID: $playerX")
         debug("Derived player ${serverPlayer.name} unique Z coordinate from UUID: ${border.minX.toLong() + playerZ}")
@@ -38,7 +43,7 @@ object PlayerSpawnHelper {
         return BlockPos(
             playerX,
             0,
-            0 + playerZ, // world border
+            (border.minX.toLong() + playerZ).toInt(), // world border
         )
     }
 

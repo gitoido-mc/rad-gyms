@@ -27,6 +27,11 @@ jobs:
           distribution: 'temurin'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
+      - name: Run detekt checks
+        uses: burrunan/gradle-cache-action@v3
+        with:
+          read-only: false
+          arguments: detekt
       - name: Build
         uses: burrunan/gradle-cache-action@v3
         with:

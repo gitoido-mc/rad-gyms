@@ -131,7 +131,9 @@ object RadGymsItemGroups {
         val key: ResourceKey<CreativeModeTab>,
         val displayIconProvider: () -> ItemStack,
         val entryCollector: DisplayItemsGenerator,
-        val displayName: Component = Component.translatable("itemGroup.${key.location().namespace}.${key.location().path}")
+        val displayName: Component = Component.translatable(
+            "itemGroup.${key.location().namespace}.${key.location().path}"
+        )
     )
 
     private fun create(

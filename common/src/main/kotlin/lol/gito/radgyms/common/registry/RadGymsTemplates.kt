@@ -14,30 +14,30 @@ import kotlinx.serialization.json.decodeFromStream
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.data.JsonDataRegistry
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.gym.GymJson
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import java.io.InputStream
 import java.util.concurrent.ExecutionException
 
-object RadGymsTemplates: JsonDataRegistry<Gym.Json> {
+object RadGymsTemplates : JsonDataRegistry<GymJson> {
     const val SLUG = "gyms"
     override val resourcePath: String = SLUG
     override val id: ResourceLocation = modId(SLUG)
     override val type: PackType = PackType.SERVER_DATA
     override val observable: SimpleObservable<RadGymsTemplates> = SimpleObservable<RadGymsTemplates>()
 
-    val templates = mutableMapOf<String, Gym.Json>()
+    val templates = mutableMapOf<String, GymJson>()
 
     @OptIn(ExperimentalSerializationApi::class)
     @Throws(ExecutionException::class)
     override fun parse(
         stream: InputStream,
         identifier: ResourceLocation
-    ): Gym.Json = Json.decodeFromStream<Gym.Json>(stream)
+    ): GymJson = Json.decodeFromStream<GymJson>(stream)
 
-    override fun reload(data: Map<ResourceLocation, Gym.Json>) {
+    override fun reload(data: Map<ResourceLocation, GymJson>) {
         templates.clear()
         data.forEach { (key, value) ->
             templates[key.path] = value
@@ -46,5 +46,5 @@ object RadGymsTemplates: JsonDataRegistry<Gym.Json> {
         observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(player: ServerPlayer) = Unit
 }

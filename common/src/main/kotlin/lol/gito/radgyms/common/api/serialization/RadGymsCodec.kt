@@ -10,17 +10,22 @@ package lol.gito.radgyms.common.api.serialization
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import lol.gito.radgyms.common.api.dto.Gym.Json
-import lol.gito.radgyms.common.api.dto.Gym.Json.*
-import lol.gito.radgyms.common.api.dto.TrainerModel.Json.AI
-import lol.gito.radgyms.common.api.dto.TrainerModel.Json.AI.Config
-import lol.gito.radgyms.common.api.dto.TrainerModel.Json.Bag
-import lol.gito.radgyms.common.api.dto.TrainerModel.Json.BattleRules
-import lol.gito.radgyms.common.api.dto.TrainerModel.Json.Threshold
-import lol.gito.radgyms.common.api.dto.TrainerModel.Json.Trainer
+import com.mojang.serialization.codecs.UnboundedMapCodec
+import lol.gito.radgyms.common.api.dto.*
+import lol.gito.radgyms.common.api.dto.battle.BattleAI
+import lol.gito.radgyms.common.api.dto.battle.BattleAIConfig
+import lol.gito.radgyms.common.api.dto.battle.BattleRules
+import lol.gito.radgyms.common.api.dto.geospatial.Coords
+import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
+import lol.gito.radgyms.common.api.dto.gym.GymJson
+import lol.gito.radgyms.common.api.dto.reward.RewardInterface
+import lol.gito.radgyms.common.api.dto.trainer.TeamLevelThreshold
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
+import lol.gito.radgyms.common.api.dto.trainer.TrainerBag
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
+import lol.gito.radgyms.common.cache.CacheDTO
 import net.minecraft.world.item.Rarity
 
 object RadGymsCodec {
@@ -42,48 +47,39 @@ object RadGymsCodec {
     }
 
     @JvmStatic
-    val LOOT_TABLE_INFO: Codec<LootTableInfo> = RecordCodecBuilder.create {
+    val THRESHOLD: Codec<TeamLevelThreshold> = RecordCodecBuilder.create {
         it.group(
-            Codec.STRING.fieldOf("id").forGetter(LootTableInfo::id),
-            Codec.INT.fieldOf("min_level").forGetter(LootTableInfo::minLevel),
-            Codec.INT.fieldOf("max_level").forGetter(LootTableInfo::maxLevel),
-        ).apply(it, ::LootTableInfo)
+            Codec.INT.fieldOf("amount").forGetter(TeamLevelThreshold::amount),
+            Codec.INT.fieldOf("until_level").forGetter(TeamLevelThreshold::untilLevel),
+        ).apply(it, ::TeamLevelThreshold)
     }
 
     @JvmStatic
-    val THRESHOLD: Codec<Threshold> = RecordCodecBuilder.create {
+    val BAG: Codec<TrainerBag> = RecordCodecBuilder.create {
         it.group(
-            Codec.INT.fieldOf("amount").forGetter(Threshold::amount),
-            Codec.INT.fieldOf("until_level").forGetter(Threshold::untilLevel),
-        ).apply(it, ::Threshold)
+            Codec.STRING.fieldOf("item").forGetter(TrainerBag::item),
+            Codec.INT.fieldOf("quantity").forGetter(TrainerBag::quantity)
+        ).apply(it, ::TrainerBag)
     }
 
     @JvmStatic
-    val BAG: Codec<Bag> = RecordCodecBuilder.create {
+    val AI_CONFIG: Codec<BattleAIConfig> = RecordCodecBuilder.create {
         it.group(
-            Codec.STRING.fieldOf("item").forGetter(Bag::item),
-            Codec.INT.fieldOf("quantity").forGetter(Bag::quantity)
-        ).apply(it, ::Bag)
+            Codec.DOUBLE.lenientOptionalFieldOf("move_bias", null).forGetter(BattleAIConfig::moveBias),
+            Codec.DOUBLE.lenientOptionalFieldOf("status_move_bias", null).forGetter(BattleAIConfig::statusMoveBias),
+            Codec.DOUBLE.lenientOptionalFieldOf("switch_bias", null).forGetter(BattleAIConfig::switchBias),
+            Codec.DOUBLE.lenientOptionalFieldOf("item_bias", null).forGetter(BattleAIConfig::itemBias),
+            Codec.DOUBLE.lenientOptionalFieldOf("max_select_margin", null).forGetter(BattleAIConfig::maxSelectMargin),
+            Codec.INT.lenientOptionalFieldOf("skill_level", null).forGetter(BattleAIConfig::skillLevel)
+        ).apply(it, ::BattleAIConfig)
     }
 
     @JvmStatic
-    val AI_CONFIG: Codec<Config> = RecordCodecBuilder.create {
+    val TRAINER_AI: Codec<BattleAI> = RecordCodecBuilder.create {
         it.group(
-            Codec.DOUBLE.lenientOptionalFieldOf("move_bias", null).forGetter(Config::moveBias),
-            Codec.DOUBLE.lenientOptionalFieldOf("status_move_bias", null).forGetter(Config::statusMoveBias),
-            Codec.DOUBLE.lenientOptionalFieldOf("switch_bias", null).forGetter(Config::switchBias),
-            Codec.DOUBLE.lenientOptionalFieldOf("item_bias", null).forGetter(Config::itemBias),
-            Codec.DOUBLE.lenientOptionalFieldOf("max_select_margin", null).forGetter(Config::maxSelectMargin),
-            Codec.INT.lenientOptionalFieldOf("skill_level", null).forGetter(Config::skillLevel)
-        ).apply(it, ::Config)
-    }
-
-    @JvmStatic
-    val TRAINER_AI: Codec<AI> = RecordCodecBuilder.create {
-        it.group(
-            Codec.STRING.fieldOf("type").forGetter(AI::type),
-            AI_CONFIG.optionalFieldOf("data", null).forGetter(AI::data)
-        ).apply(it, ::AI)
+            Codec.STRING.fieldOf("type").forGetter(BattleAI::type),
+            AI_CONFIG.optionalFieldOf("data", null).forGetter(BattleAI::data)
+        ).apply(it, ::BattleAI)
     }
 
     @JvmStatic
@@ -114,22 +110,33 @@ object RadGymsCodec {
         ).apply(it, ::Trainer)
     }
 
+    val GYM_REWARD_TYPE: Codec<GymRewardType<*>> = GymRewardType.REGISTRY.byNameCodec()
+
+    val GYM_REWARD: Codec<RewardInterface> = GYM_REWARD_TYPE.dispatch(
+        "type",
+        RewardInterface::getRewardType,
+        GymRewardType<*>::codec
+    )
+
     @JvmStatic
-    val GYM: Codec<Json> = RecordCodecBuilder.create {
+    val GYM: Codec<GymJson> = RecordCodecBuilder.create {
         it.group(
-            Codec.STRING.fieldOf("interior_template").forGetter(Json::template),
-            COORDS.fieldOf("exit_block_pos").forGetter(Json::exitBlockPos),
-            ENTITY_COORDS_YAW.fieldOf("player_spawn_relative").forGetter(Json::playerSpawnRelative),
-            Codec.list(TRAINER).fieldOf("trainers").forGetter(Json::trainers),
-            Codec.list(LOOT_TABLE_INFO).fieldOf("reward_loot_tables").forGetter(Json::rewardLootTables)
-        ).apply(it, ::Json)
+            Codec.STRING.fieldOf("id").forGetter(GymJson::id),
+            Codec.STRING.fieldOf("interior_template").forGetter(GymJson::template),
+            COORDS.fieldOf("exit_block_pos").forGetter(GymJson::exitBlockPos),
+            ENTITY_COORDS_YAW.fieldOf("player_spawn_relative").forGetter(GymJson::playerSpawnRelative),
+            Codec.list(TRAINER).fieldOf("trainers").forGetter(GymJson::trainers),
+            Codec.list(GYM_REWARD).fieldOf("rewards").forGetter(GymJson::rewards)
+        ).apply(it, ::GymJson)
     }
 
     @JvmStatic
-    val CACHE: Codec<Map<String, Map<Rarity, Map<String, Int>>>> = Codec.unboundedMap(
-        Codec.STRING, Codec.unboundedMap(
-            Rarity.CODEC,
-            Codec.unboundedMap(Codec.STRING, Codec.INT)
-        )
+    val CACHE_POOL: UnboundedMapCodec<Rarity, Map<String, Int>> = Codec.unboundedMap(
+        Rarity.CODEC, Codec.unboundedMap(Codec.STRING, Codec.INT)
     )
+
+    @JvmStatic
+    val CACHE: Codec<CacheDTO> = RecordCodecBuilder.create {
+        it.group(CACHE_POOL.fieldOf("pools").forGetter(CacheDTO::pools)).apply(it, ::CacheDTO)
+    }
 }

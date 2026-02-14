@@ -4,38 +4,52 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
+import com.github.zafarkhaja.semver.Version
+import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
+import pl.allegro.tech.build.axion.release.domain.VersionIncrementerContext
+import pl.allegro.tech.build.axion.release.domain.properties.VersionProperties
+import pl.allegro.tech.build.axion.release.domain.scm.ScmPosition
 import java.net.URI
 
 plugins {
     id("java")
-    kotlin("jvm") version "2.3.0"
-    kotlin("plugin.serialization") version "2.3.0"
+    kotlin("jvm") version "2.3.10"
+    kotlin("plugin.serialization") version "2.3.10"
 
     id("com.gradleup.shadow") version "9.3.1" apply false
     id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
+    id("dev.detekt") version "2.0.0-alpha.2"
+    id("org.jetbrains.kotlinx.kover") version "0.9.7"
 }
 
 scmVersion {
-    releaseOnlyOnReleaseBranches = true
     releaseBranchNames = listOf("main")
     versionCreator("simple")
 
+    branchVersionCreator.put("bugfix/.*", "simple")
+    branchVersionCreator.put(
+        "feature/.*",
+        VersionProperties.Creator { version: String, position: ScmPosition ->
+            "$version-${position.branch.split("/").last()}"
+        }
+    )
+
     tag {
-        prefix = "1.7.0+"
-        fallbackPrefixes = listOf("1.6.1+")
+        prefix = "${project.property("cobblemon_version")}+"
+        fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+")
     }
 
     branchVersionIncrementer.putAll(
         mapOf(
-            "main" to "incrementMinor",
+            "main" to "incrementPatch",
             "develop" to "incrementPrerelease",
-            "feature/*" to "incrementPatch",
-            "hotfix/*" to "incrementPatch",
-            "refactor/*" to "incrementPatch",
+            "feature/.*" to "incrementPrerelease",
+            "hotfix/.*" to "incrementPrerelease",
+            "refactor/.*" to "incrementPrerelease",
         )
     )
 }
@@ -66,12 +80,6 @@ repositories {
         }
     }
     maven {
-        url = URI("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
-        content {
-            includeGroup("software.bernie.geckolib")
-        }
-    }
-    maven {
         url = URI("https://packages.aether-mod.net/The-Aether")
         content {
             includeGroup("com.aetherteam.aether")
@@ -81,19 +89,43 @@ repositories {
     }
 }
 
+
+detekt {
+    config.setFrom(layout.projectDirectory.file("detekt.yml"))
+    buildUponDefaultConfig = true
+}
+
+tasks.withType<Detekt>().configureEach {
+    exclude("**/build/classes/**")
+}
+
 val modProjects = listOf(
     "common",
     "fabric",
     "neoforge"
 )
 
+dependencies {
+    kover(project(":common"))
+    kover(project(":fabric"))
+    kover(project(":neoforge"))
+}
+
 modProjects.forEach {
     project(it) {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
+        apply(plugin = "org.jetbrains.kotlinx.kover")
+        apply(plugin = "dev.detekt")
+
         group = property("maven_group")!!
         version = rootProject.version
+
+        detekt {
+            config.setFrom(rootProject.layout.projectDirectory.file("detekt.yml"))
+            buildUponDefaultConfig = true
+        }
 
         repositories {
             mavenCentral()
@@ -112,12 +144,6 @@ modProjects.forEach {
                 url = URI("https://api.modrinth.com/maven")
                 content {
                     includeGroup("maven.modrinth")
-                }
-            }
-            maven {
-                url = URI("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
-                content {
-                    includeGroup("software.bernie.geckolib")
                 }
             }
             maven {
@@ -151,6 +177,10 @@ modProjects.forEach {
                     freeCompilerArgs.add("-Xreturn-value-checker=check")
                     freeCompilerArgs.add("-Xcontext-parameters")
                 }
+            }
+
+            withType<Detekt>().configureEach {
+                exclude("**/build/**")
             }
         }
     }

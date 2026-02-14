@@ -14,7 +14,7 @@ import kotlinx.serialization.json.decodeFromStream
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.data.JsonDataRegistry
-import lol.gito.radgyms.common.pokecache.CacheDTO
+import lol.gito.radgyms.common.cache.CacheDTO
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -44,5 +44,5 @@ object RadGymsCaches : JsonDataRegistry<CacheDTO> {
         observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(player: ServerPlayer) = Unit
 }

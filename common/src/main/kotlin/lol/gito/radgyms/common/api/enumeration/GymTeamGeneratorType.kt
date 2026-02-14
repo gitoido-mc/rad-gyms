@@ -19,13 +19,13 @@ enum class GymTeamGeneratorType : StringRepresentable {
     @JvmField
     @SerialName("bst")
     BST {
-        override val instance: GenericTeamGenerator = BstTeamGenerator()
+        override val instance: GenericTeamGenerator = BstTeamGenerator
     },
 
     @JvmField
     @SerialName("chaotic")
     CHAOTIC {
-        override val instance: GenericTeamGenerator = ChaoticTeamGenerator()
+        override val instance: GenericTeamGenerator = ChaoticTeamGenerator
     };
 
     override fun getSerializedName(): String = this.name.lowercase()

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -19,8 +19,9 @@ import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.GymTeleportScheduler
 import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
-import lol.gito.radgyms.common.state.RadGymsState
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.registry.RadGymsDimensions
+import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerPlayer
 
@@ -45,14 +46,14 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
 
         val defeatedLeader: Trainer? = event.losers
             .filter { it.type == ActorType.NPC }
-            .filter { it is TrainerEntityBattleActor }
-            .filter { (it as TrainerEntityBattleActor).entity is Trainer }
+            .filterIsInstance<TrainerEntityBattleActor>()
+            .filter { it.entity is Trainer }
             .firstOrNull {
-                val npc = (it as TrainerEntityBattleActor).entity as Trainer
+                val npc = it.entity as Trainer
                 npc.defeated && npc.leader
             }
             ?.let {
-                (it as TrainerEntityBattleActor).entity as Trainer
+                it.entity as Trainer
             }
 
         if (defeatedLeader != null) {
@@ -62,7 +63,9 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
 
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
 
-            gym.let { GymTeardownService.spawnExitBlock(firstPlayer.server, it) }
+            if (firstPlayer.level().dimension() == RADGYMS_LEVEL_KEY) {
+                gym.let { GymTeardownService.spawnExitBlock(firstPlayer.server, it) }
+            }
 
             winnerPlayers.forEach {
                 GENERATE_REWARD.emit(
@@ -78,8 +81,9 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
         .battle
         .players
         .filter { it.level().dimension() == RADGYMS_LEVEL_KEY }
-        .forEach { GymTeardownService
-            .withTeleportScheduler(GymTeleportScheduler())
-            .handleGymLeave(it)
+        .forEach {
+            GymTeardownService
+                .withTeleportScheduler(GymTeleportScheduler())
+                .handleGymLeave(it)
         }
 }

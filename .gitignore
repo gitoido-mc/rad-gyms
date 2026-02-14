@@ -45,10 +45,13 @@ docs/src/pages/.vault-nickname
 /.architectury-transformer/
 /*/run/
 
+/common/jars/
+/fabric/jars/
+/neoforge/jars/
+
 /common/src/generated/.cache/
-
 /fabric/src/generated/
-/fabric/src/main/resources/rad_gyms.accesswidener
-
 /neoforge/src/generated/
+
 /neoforge/src/main/resources/rad_gyms.accesswidener
+/fabric/src/main/resources/rad_gyms.accesswidener

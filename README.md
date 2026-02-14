@@ -4,6 +4,7 @@
 <div align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/rad-gyms-cobblemon" title="Rad Gyms on Curseforge" target="_blank"><img src="https://img.shields.io/curseforge/dt/1196570?style=for-the-badge&logo=curseforge&logoColor=%23F16436&logoSize=auto&label=&labelColor=%23222222&color=%23F16436"/></a>
   <a href="https://modrinth.com/mod/rad-gyms" title="Rad Gyms on Modrinth" target="_blank"><img src="https://img.shields.io/modrinth/dt/eF8kqlHd?style=for-the-badge&logo=modrinth&logoColor=%2300AF5C&color=%2300AF5C&logoSize=auto&labelColor=%23222222&label="/></a>
+  <img alt="GitHub License" src="https://img.shields.io/github/license/gitoido-mc/rad-gyms?style=for-the-badge&logoSize=auto&labelColor=%23222222">
 </div>
 
 ### Lore bit

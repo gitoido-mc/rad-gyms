@@ -12,8 +12,8 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.LEAVE_SCREEN_CLOSE
-import lol.gito.radgyms.common.util.math.Vec2i
-import lol.gito.radgyms.common.util.radGymsResource
+import lol.gito.radgyms.common.extension.math.Vec2i
+import lol.gito.radgyms.common.helper.radGymsResource
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component.translatable
@@ -22,8 +22,21 @@ import org.lwjgl.glfw.GLFW
 
 class GymLeaveScreen : AbstractGymScreen(translatable(modId("gui.common.leave").toLanguageKey())) {
     companion object {
+        // Screen root widget params
         const val BASE_WIDTH = 300
         const val BASE_HEIGHT = 80
+
+        // Proceed button widget params
+        const val GUI_PROCEED_WIDTH = 50
+        const val GUI_PROCEED_HEIGHT = 20
+        const val GUI_PROCEED_OFFSET_X = 10
+        const val GUI_PROCEED_OFFSET_Y = 30
+
+        // Cancel button widget params
+        const val GUI_CANCEL_WIDTH = 50
+        const val GUI_CANCEL_HEIGHT = 20
+        const val GUI_CANCEL_OFFSET_X = 60
+        const val GUI_CANCEL_OFFSET_Y = 30
 
         private val panelResource = radGymsResource("textures/gui/gym_leave.png")
     }
@@ -37,8 +50,11 @@ class GymLeaveScreen : AbstractGymScreen(translatable(modId("gui.common.leave").
     override fun init() {
         createButton(
             CommonComponents.GUI_PROCEED,
-            Vec2i(50, 20),
-            Vec2i(leftX + 10, topY + (BASE_HEIGHT - 30))
+            Vec2i(GUI_PROCEED_WIDTH, GUI_PROCEED_HEIGHT),
+            Vec2i(
+                leftX + GUI_PROCEED_OFFSET_X,
+                topY + (BASE_HEIGHT - GUI_PROCEED_OFFSET_Y)
+            )
         ) {
             onClose(GuiScreenCloseChoice.PROCEED)
         }.also {
@@ -47,8 +63,11 @@ class GymLeaveScreen : AbstractGymScreen(translatable(modId("gui.common.leave").
 
         createButton(
             CommonComponents.GUI_CANCEL,
-            Vec2i(50, 20),
-            Vec2i(leftX + (BASE_WIDTH - 60), topY + (BASE_HEIGHT - 30))
+            Vec2i(GUI_CANCEL_WIDTH, GUI_CANCEL_HEIGHT),
+            Vec2i(
+                leftX + (BASE_WIDTH - GUI_CANCEL_OFFSET_X),
+                topY + (BASE_HEIGHT - GUI_CANCEL_OFFSET_Y)
+            )
         ) {
             onClose(GuiScreenCloseChoice.CANCEL)
         }.also {
@@ -102,7 +121,6 @@ class GymLeaveScreen : AbstractGymScreen(translatable(modId("gui.common.leave").
             centered = true,
             colour = CommonColors.BLACK
         )
-
 
         super.render(context, mouseX, mouseY, delta)
     }

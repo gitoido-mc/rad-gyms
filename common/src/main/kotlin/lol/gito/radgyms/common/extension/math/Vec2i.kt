@@ -1,0 +1,107 @@
+/*
+ * Copyright (c) 2025. gitoido-mc
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ */
+
+package lol.gito.radgyms.common.extension.math
+
+import net.minecraft.util.Mth
+import net.minecraft.world.phys.Vec2
+import kotlin.math.roundToInt
+
+@Suppress("unused")
+class Vec2i(val x: Int = 0, val y: Int = 0) {
+    companion object {
+        const val MIN_NEG_FLOAT = 1.0E-4f
+
+        @JvmField
+        val ZERO: Vec2i = Vec2i(0, 0)
+
+        @JvmField
+        val ONE: Vec2i = Vec2i(1, 1)
+
+        @JvmField
+        val UNIT_X: Vec2i = Vec2i(1, 0)
+
+        @JvmField
+        val NEG_UNIT_X: Vec2i = Vec2i(-1, 0)
+
+        @JvmField
+        val UNIT_Y: Vec2i = Vec2i(0, 1)
+
+        @JvmField
+        val NEG_UNIT_Y: Vec2i = Vec2i(0, -1)
+
+        @JvmField
+        val MAX: Vec2i = Vec2i(Int.MAX_VALUE, Int.MAX_VALUE)
+
+        @JvmField
+        val MIN: Vec2i = Vec2i(Int.MIN_VALUE, Int.MIN_VALUE)
+    }
+
+    constructor(x: Number, y: Number) : this(
+        when (x) {
+            is Int -> x
+            is Long -> x.toInt()
+            is Short -> x.toInt()
+            is Byte -> x.toInt()
+            is Double -> x.roundToInt()
+            is Float -> x.roundToInt()
+            else -> throw TypeCastException("Cannot convert X value $x to Int")
+        },
+        when (y) {
+            is Int -> y
+            is Long -> y.toInt()
+            is Short -> y.toInt()
+            is Byte -> y.toInt()
+            is Double -> y.roundToInt()
+            is Float -> y.roundToInt()
+            else -> throw TypeCastException("Cannot convert Y value $y to Int")
+        }
+    )
+
+    fun scale(f: Float): Vec2i {
+        return Vec2i(x * f, y * f)
+    }
+
+    fun dot(vec2: Vec2i): Int {
+        return x * vec2.x + y * vec2.y
+    }
+
+    fun add(vec2: Vec2): Vec2i {
+        return Vec2i(x + vec2.x, y + vec2.y)
+    }
+
+    fun add(f: Float): Vec2i {
+        return Vec2i(x + f, y + f)
+    }
+
+    fun equalToOther(vec2: Vec2i): Boolean {
+        return x == vec2.x && y == vec2.y
+    }
+
+    fun normalized(): Vec2i {
+        val f = Mth.sqrt((x * x + y * y).toFloat())
+        return if (f < MIN_NEG_FLOAT) ZERO else Vec2i(x / f, y / f)
+    }
+
+    fun length(): Float {
+        return Mth.sqrt((x * x + y * y).toFloat())
+    }
+
+    fun lengthSquared(): Int {
+        return x * x + y * y
+    }
+
+    fun distanceToSqr(vec2: Vec2): Float {
+        val f: Float = vec2.x - x
+        val g: Float = vec2.y - y
+        return f * f + g * g
+    }
+
+    fun negated(): Vec2i {
+        return Vec2i(-x, -y)
+    }
+}

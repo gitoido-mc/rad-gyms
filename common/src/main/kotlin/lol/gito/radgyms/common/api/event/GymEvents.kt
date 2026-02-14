@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -14,9 +14,8 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.types.ElementalType
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.api.dto.Gym
+import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
@@ -77,7 +76,7 @@ object GymEvents {
     )
 
     data class GenerateTeamEvent(
-        val player: ServerPlayer,
+        val player: ServerPlayer?,
         val type: List<ElementalType>,
         val level: Int,
         val trainerId: String,
@@ -99,9 +98,7 @@ object GymEvents {
         val player: ServerPlayer,
         val completed: Boolean?,
         val usedRope: Boolean?,
-        val gym: Gym? = null,
-        val type: String? = null,
-        val level: Int? = null
+        val gym: Gym? = null
     )
 
     // Trainer interaction

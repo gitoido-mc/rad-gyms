@@ -14,8 +14,8 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
-import lol.gito.radgyms.common.api.dto.GymSpecies
-import lol.gito.radgyms.common.api.dto.TrainerModel
+import lol.gito.radgyms.common.api.dto.SpeciesWithForm
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
@@ -25,15 +25,19 @@ import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
 
 abstract class GenericTeamGenerator : TeamGeneratorInterface {
+    companion object {
+        const val GENERATOR_SHINY_ODDS = 10
+    }
+
     protected fun assembleProperties(level: Int, params: String): PokemonProperties = when (params.contains("level=")) {
         true -> PokemonProperties.parse(params)
         false -> PokemonProperties.parse("level=$level $params")
     }
 
     override fun generateTeam(
-        trainer: TrainerModel.Json.Trainer,
+        trainer: Trainer,
         level: Int,
-        player: ServerPlayer,
+        player: ServerPlayer?,
         possibleFormats: MutableList<GymBattleFormat>?,
         types: List<ElementalType>?
     ): MutableList<PokemonModel> {
@@ -45,7 +49,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
 
         val rawTeam = mutableListOf<PokemonProperties>()
 
-        (1..pokemonCount).forEach { _ ->
+        for (_ in 1..pokemonCount) {
             rawTeam.add(
                 generatePokemon(
                     level,
@@ -86,13 +90,13 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
     }
 
     protected fun getPokemon(
-        speciesWithForm: GymSpecies.Container.SpeciesWithForm,
+        speciesWithForm: SpeciesWithForm,
         level: Int
     ): Pokemon {
         val poke = speciesWithForm.species.create(level)
         poke.form = speciesWithForm.form
         poke.forcedAspects = speciesWithForm.form.aspects.toSet()
-        poke.shiny = (Random.nextInt(1, 10) == 1)
+        poke.shiny = (Random.nextInt(1, GENERATOR_SHINY_ODDS) == 1)
         poke.updateAspects()
 
         return poke

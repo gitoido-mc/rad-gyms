@@ -22,14 +22,7 @@ architectury {
 }
 loom {
     silentMojangMappingsLicense()
-
     enableTransitiveAccessWideners.set(true)
-
-    @Suppress("UnstableApiUsage")
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "mixins.${rootProject.property("mod_id")}.refmap.json"
-    }
 
     runs {
         getByName("client") {
@@ -51,25 +44,21 @@ dependencies {
     minecraft("net.minecraft:minecraft:${property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
     neoForge("net.neoforged:neoforge:${property("neoforge_version")}")
-    // Needed for cobblemon
     implementation("thedarkcolour:kotlinforforge-neoforge:${property("kotlin_for_forge_version")}") {
         exclude("net.neoforged.fancymodloader", "loader")
+    }
+    modImplementation("dev.architectury:architectury-neoforge:${property("architectury_api_version")}")
+    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
+        isTransitive = false
     }
 
     implementation(project(":common", configuration = "namedElements"))
     "developmentNeoForge"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
-    shadowCommon(project(":common", configuration = "transformProductionNeoForge"))
+    shadowCommon(project(":common", configuration = "transformProductionFabric"))
 
-    // Mod deps
-    modImplementation("dev.architectury:architectury-neoforge:${property("architectury_api_version")}")
-    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
-        isTransitive = false
-    }
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_neoforge_version")}")
-
-    // Compat
     modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-neoforge")
 }
 
@@ -106,6 +95,7 @@ tasks {
 
     shadowJar {
         exclude("fabric.mod.json")
+        exclude("architectury.common.json")
 
         configurations = listOf(shadowCommon)
 
@@ -120,6 +110,7 @@ tasks {
 
         archiveBaseName.set("${rootProject.name}-${project.name}")
         archiveVersion.set("${project.version}")
+        atAccessWideners.add("${project.property("mod_id")}.accesswidener")
     }
 
     remapSourcesJar {

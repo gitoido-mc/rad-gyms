@@ -4,7 +4,7 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-
+@file:Suppress("WildcardImport")
 package lol.gito.radgyms.fabric
 
 import com.cobblemon.mod.common.Environment
@@ -14,7 +14,7 @@ import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.RadGymsImplementation
 import lol.gito.radgyms.common.registry.*
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -42,6 +42,7 @@ import net.minecraft.world.level.block.state.BlockState
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 
+@Suppress("TooManyFunctions")
 object RadGymsFabric : RadGymsImplementation {
     override val modAPI: ModAPI = ModAPI.FABRIC
 
@@ -52,7 +53,7 @@ object RadGymsFabric : RadGymsImplementation {
     override fun environment(): Environment = when (FabricLoader.getInstance().environmentType) {
         EnvType.CLIENT -> Environment.CLIENT
         EnvType.SERVER -> Environment.SERVER
-        else -> throw IllegalStateException("Fabric implementation cannot resolve environment yet")
+        else -> error("Fabric implementation cannot resolve environment yet")
     }
 
     override fun isModInstalled(id: String): Boolean = FabricLoader.getInstance().isModLoaded(id)
@@ -141,8 +142,12 @@ object RadGymsFabric : RadGymsImplementation {
 
         if (state.block == RadGymsBlocks.GYM_ENTRANCE) {
             if (!player.isShiftKeyDown) {
-                player.displayClientMessage(Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey()))
-                player.displayClientMessage(Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey()))
+                player.displayClientMessage(
+                    Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey())
+                )
+                player.displayClientMessage(
+                    Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey())
+                )
                 allowBreak = false
             } else {
                 allowBreak = true

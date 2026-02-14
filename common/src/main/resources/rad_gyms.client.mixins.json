@@ -2,11 +2,15 @@
   "required": true,
   "package": "lol.gito.radgyms.common.mixin.client",
   "compatibilityLevel": "JAVA_21",
-  "injectors": {
-    "defaultRequire": 1
-  },
+  "minVersion": "0.8.5",
   "client": [
     "render.OnLoadModels",
     "render.OnRenderItemModel"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
 }

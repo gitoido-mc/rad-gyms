@@ -10,8 +10,8 @@ package lol.gito.radgyms.common.event.cache
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
-import lol.gito.radgyms.common.util.displayClientMessage
-import lol.gito.radgyms.common.util.rainbow
+import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.extension.rainbow
 import net.minecraft.network.chat.Component.translatable
 
 class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {

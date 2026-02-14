@@ -9,13 +9,13 @@ package lol.gito.radgyms.common.gym.team
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
-import lol.gito.radgyms.common.api.dto.TrainerModel
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.level.ServerPlayer
 
-class FixedTeamGenerator : GenericTeamGenerator() {
-    fun generateTeam(player: ServerPlayer, trainer: TrainerModel.Json.Trainer, level: Int): MutableList<PokemonModel> {
+object FixedTeamGenerator : GenericTeamGenerator() {
+    fun generateTeam(player: ServerPlayer?, trainer: Trainer, level: Int): MutableList<PokemonModel> {
         val rawTeam = trainer.team!!
             .map { assembleProperties(level, it) }
             .apply { this.forEach { it.updateAspects() } }

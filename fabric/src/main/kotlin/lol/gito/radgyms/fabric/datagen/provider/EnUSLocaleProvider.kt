@@ -41,6 +41,7 @@ class EnUSLocaleProvider(
     "en_us",
     registryLookup
 ) {
+    @Suppress("LongMethod")
     private fun provideTranslations(): MutableMap<String, String> {
         return mutableMapOf(
             GENERAL_GROUP!!.displayName.string to
@@ -118,7 +119,8 @@ class EnUSLocaleProvider(
             modId("npc.leader").toLanguageKey() to
                     "Gym Leader",
             modId("message.info.gym_entrance_breaking").toLanguageKey() to
-                    "Gym entrances do not drop when broken. If you break it, all players will lose access to this entrance",
+                    "Gym entrances do not drop when broken."
+                        .plus(" If you break it, all players will lose access to this entrance"),
             modId("message.info.gym_entrance_exhausted").toLanguageKey() to
                     "This gym entrance lost all his energies, look for another one",
             modId("message.info.gym_entrance_party_empty").toLanguageKey() to

@@ -10,8 +10,12 @@ package lol.gito.radgyms.fabric.datagen.provider
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.api.dto.Gym
-import lol.gito.radgyms.common.api.dto.TrainerModel
+import lol.gito.radgyms.common.api.dto.*
+import lol.gito.radgyms.common.api.dto.geospatial.Coords
+import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
+import lol.gito.radgyms.common.api.dto.gym.GymJson
+import lol.gito.radgyms.common.api.dto.trainer.TeamLevelThreshold
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
@@ -25,7 +29,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 
 class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>) :
-    FabricCodecDataProvider<Gym.Json>(
+    FabricCodecDataProvider<GymJson>(
         output,
         lookup,
         PackOutput.Target.DATA_PACK,
@@ -35,25 +39,27 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
 
     override fun getName(): String = "Gym data"
 
-    override fun configure(provider: BiConsumer<ResourceLocation, Gym.Json>, lookup: HolderLookup.Provider) {
+    override fun configure(provider: BiConsumer<ResourceLocation, GymJson>, lookup: HolderLookup.Provider) {
         ElementalTypes.all().forEach {
             provider.accept(modId(it.showdownId), getDefaultElementalGymDto(it))
         }
     }
 
-    private fun getDefaultElementalGymDto(type: ElementalType): Gym.Json = Gym.Json(
+    @Suppress("LongMethod", "MagicNumber")
+    private fun getDefaultElementalGymDto(type: ElementalType): GymJson = GymJson(
+        id = type.showdownId,
         template = "rad_gyms:gym_interior_default",
-        exitBlockPos = Gym.Json.Coords(16.0, 2.0, 16.0),
-        playerSpawnRelative = Gym.Json.EntityCoordsAndYaw(
-            Gym.Json.Coords(16.5, 2.0, 27.0),
+        exitBlockPos = Coords(16.0, 2.0, 16.0),
+        playerSpawnRelative = EntityCoordsAndYaw(
+            Coords(16.5, 2.0, 27.0),
             yaw = -180.0
         ),
         trainers = listOf(
-            TrainerModel.Json.Trainer(
+            Trainer(
                 id = "default_trainer_junior",
                 name = modId("npc.trainer_junior").toLanguageKey(),
-                spawnRelative = Gym.Json.EntityCoordsAndYaw(
-                    Gym.Json.Coords(26.5, 2.0, 15.5),
+                spawnRelative = EntityCoordsAndYaw(
+                    Coords(26.5, 2.0, 15.5),
                     yaw = 42.5
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES),
@@ -61,17 +67,17 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 teamType = GymTeamType.GENERATED,
                 teamGenerator = GymTeamGeneratorType.BST,
                 countPerLevelThreshold = listOf(
-                    TrainerModel.Json.Threshold(2, 25),
-                    TrainerModel.Json.Threshold(3, 50),
-                    TrainerModel.Json.Threshold(4, 100)
+                    TeamLevelThreshold(2, 25),
+                    TeamLevelThreshold(3, 50),
+                    TeamLevelThreshold(4, 100)
                 )
             ),
-            TrainerModel.Json.Trainer(
+            Trainer(
                 id = "default_trainer_senior",
                 name = modId("npc.trainer_senior").toLanguageKey(),
                 requires = "default_trainer_junior",
-                spawnRelative = Gym.Json.EntityCoordsAndYaw(
-                    Gym.Json.Coords(5.5, 2.0, 15.5),
+                spawnRelative = EntityCoordsAndYaw(
+                    Coords(5.5, 2.0, 15.5),
                     yaw = -42.5
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES, GymBattleFormat.DOUBLES),
@@ -79,18 +85,18 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 teamType = GymTeamType.GENERATED,
                 teamGenerator = GymTeamGeneratorType.BST,
                 countPerLevelThreshold = listOf(
-                    TrainerModel.Json.Threshold(3, 25),
-                    TrainerModel.Json.Threshold(4, 50),
-                    TrainerModel.Json.Threshold(5, 100)
+                    TeamLevelThreshold(3, 25),
+                    TeamLevelThreshold(4, 50),
+                    TeamLevelThreshold(5, 100)
                 )
             ),
-            TrainerModel.Json.Trainer(
+            Trainer(
                 id = "default_trainer_leader",
                 name = modId("npc.leader").toLanguageKey(),
                 requires = "default_trainer_senior",
                 leader = true,
-                spawnRelative = Gym.Json.EntityCoordsAndYaw(
-                    Gym.Json.Coords(16.0, 2.0, 6.0),
+                spawnRelative = EntityCoordsAndYaw(
+                    Coords(16.0, 2.0, 6.0),
                     yaw = 0.01
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES, GymBattleFormat.DOUBLES, GymBattleFormat.TRIPLES),
@@ -98,9 +104,9 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 teamType = GymTeamType.GENERATED,
                 teamGenerator = GymTeamGeneratorType.BST,
                 countPerLevelThreshold = listOf(
-                    TrainerModel.Json.Threshold(4, 25),
-                    TrainerModel.Json.Threshold(5, 50),
-                    TrainerModel.Json.Threshold(6, 100)
+                    TeamLevelThreshold(4, 25),
+                    TeamLevelThreshold(5, 50),
+                    TeamLevelThreshold(6, 100)
                 )
             ),
         )

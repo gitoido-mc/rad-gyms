@@ -4,7 +4,7 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-
+@file:Suppress("WildcardImport")
 package lol.gito.radgyms.neoforge
 
 import com.cobblemon.mod.common.Environment
@@ -15,7 +15,8 @@ import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.RadGymsImplementation
 import lol.gito.radgyms.common.registry.*
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
 import lol.gito.radgyms.neoforge.net.RadGymsNeoForgeNetworkManager
 import net.minecraft.core.registries.Registries
@@ -47,6 +48,7 @@ import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import java.util.*
 
 @Mod(RadGyms.MOD_ID)
+@Suppress("TooManyFunctions")
 class RadGymsNeoForge : RadGymsImplementation {
     override val modAPI: ModAPI = ModAPI.NEOFORGE
 
@@ -174,7 +176,7 @@ class RadGymsNeoForge : RadGymsImplementation {
     override fun server(): MinecraftServer? = ServerLifecycleHooks.getCurrentServer()
 
 
-    override fun initialize() {}
+    override fun initialize() = Unit
 
     fun initialize(event: FMLCommonSetupEvent) {
         info("Initializing Rad Gyms for NeoForge!")
@@ -228,9 +230,10 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
+    @Suppress("ReturnCount")
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
         if (e.level !is ServerLevel) return
-        if ((e.level as ServerLevel).dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+        if ((e.level as ServerLevel).dimension() == RADGYMS_LEVEL_KEY) {
             if (CONFIG.debug == true) {
                 return
             }
@@ -240,8 +243,12 @@ class RadGymsNeoForge : RadGymsImplementation {
 
         if (e.state.block == RadGymsBlocks.GYM_ENTRANCE) {
             if (!e.player.isShiftKeyDown) {
-                e.player.displayClientMessage(Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey()))
-                e.player.displayClientMessage(Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey()))
+                e.player.displayClientMessage(
+                    Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey())
+                )
+                e.player.displayClientMessage(
+                    Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey())
+                )
                 e.isCanceled = false
             } else {
                 e.isCanceled = true

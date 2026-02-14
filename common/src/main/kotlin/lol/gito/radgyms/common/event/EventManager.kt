@@ -38,18 +38,22 @@ import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.common.event.gyms.*
-import lol.gito.radgyms.common.gym.*
+import lol.gito.radgyms.common.gym.GymInitializer
+import lol.gito.radgyms.common.gym.SpeciesManager
 import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
+import lol.gito.radgyms.common.gym.TrainerFactory
+import lol.gito.radgyms.common.gym.TrainerSpawner
+import lol.gito.radgyms.common.helper.hasRadGymsTrainers
 import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsCaches
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsTemplates
-import lol.gito.radgyms.common.state.RadGymsState
-import lol.gito.radgyms.common.util.hasRadGymsTrainers
 import lol.gito.radgyms.common.world.StructurePlacer
+import lol.gito.radgyms.common.world.state.RadGymsState
 
+@Suppress("TooManyFunctions")
 object EventManager {
     fun register() {
         PokeBalls.SLATE_BALL.let {
@@ -59,7 +63,7 @@ object EventManager {
         debug("Registering event handlers")
         // Minecraft events
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStarting)
-        PlatformEvents.SERVER_STOPPING.subscribe(Priority.HIGHEST, ::onServerStopping)
+        PlatformEvents.SERVER_STARTED.subscribe(Priority.NORMAL, ::onServerStarted)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
@@ -78,6 +82,7 @@ object EventManager {
 
         // Mod events
         RadGymsTemplates.observable.subscribe(Priority.NORMAL) { registry ->
+            debug("Creating gym initializer")
             RadGyms.gymInitializer = GymInitializer(
                 templateRegistry = registry,
                 trainerSpawner = TrainerSpawner,
@@ -121,15 +126,8 @@ object EventManager {
         trainerRegistry.init(event.server)
     }
 
-    private fun onServerStopping(event: ServerEvent.Stopping) {
-        debug("cleaning up all gyms")
-        RadGymsState.getServerState(event.server).gymInstanceMap.let {
-            it.forEach { (playerUuid, gym) ->
-                GymTeardownService.spawnExitBlock(event.server, gym)
-                GymTeardownService.destructOfflineGym(event.server, playerUuid, gym)
-            }
-            it.clear()
-        }
+    private fun onServerStarted(event: ServerEvent.Started) {
+        RadGymsState.getServerState(event.server)
     }
 
     private fun onPlayerJoin(event: ServerPlayerEvent) {
@@ -158,10 +156,6 @@ object EventManager {
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
 
         if (RadGymsState.getGymForPlayer(event.player) == null) return
-        if (event.player.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
-            GymTeardownService.spawnExitBlock(event.player.server, RadGymsState.getGymForPlayer(event.player)!!)
-            GymTeardownService.destructGym(event.player, removeCoords = false)
-        }
     }
 
     private fun onSpeciesUpdate() {
@@ -191,11 +185,12 @@ object EventManager {
         )
     }
 
+    @Suppress("ReturnCount")
     private fun onBattleWon(event: BattleVictoryEvent) {
         // Early bail if it was wild poke battle
-        if (event.wasWildCapture) return
+        if (event.wasWildCapture)
         // Early bail if not gym related
-        if (!hasRadGymsTrainers(event)) return
+            if (!hasRadGymsTrainers(event)) return
         if (event.losers.none { it.type == ActorType.NPC }) return
         if (event.winners.none { it.type == ActorType.PLAYER }) return
 
@@ -223,6 +218,7 @@ object EventManager {
         )
     }
 
+    @Suppress("ReturnCount")
     private fun onBattleFainted(event: BattleFaintedEvent) {
         // Early bail if not gym related
         if (!hasRadGymsTrainers(event)) return

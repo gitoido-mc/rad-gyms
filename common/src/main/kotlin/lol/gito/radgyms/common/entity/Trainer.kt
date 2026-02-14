@@ -7,6 +7,7 @@
 
 package lol.gito.radgyms.common.entity
 
+import lol.gito.radgyms.common.api.dto.trainer.TrainerConfiguration
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
@@ -44,6 +45,8 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
             SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.BOOLEAN)
         val LEADER: EntityDataAccessor<Boolean> =
             SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.BOOLEAN)
+        val CONFIGURATION: EntityDataAccessor<CompoundTag> =
+            SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.COMPOUND_TAG)
     }
 
     private val gymTrainerIdKey = "gymTrainerId"
@@ -52,6 +55,7 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
     private val battleFormat = "format"
     private val defeatedKey = "isDefeated"
     private val leaderKey = "isLeader"
+    private val configurationKey = "configuration"
 
     var gymId: String
         get() = entityData.get(GYM_ID) ?: "default_trainer"
@@ -69,7 +73,6 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
         get() = entityData.get(REQUIRES)?.getOrNull()
         set(value) = entityData.set(REQUIRES, Optional<UUID>.ofNullable(value))
 
-
     var defeated: Boolean
         get() = entityData.get(DEFEATED) ?: false
         set(value) = entityData.set(DEFEATED, value)
@@ -77,6 +80,10 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
     var leader: Boolean
         get() = entityData.get(LEADER) ?: false
         set(value) = entityData.set(LEADER, value)
+
+    var configuration: TrainerConfiguration
+        get() = TrainerConfiguration.fromCompoundTag(entityData.get(CONFIGURATION))
+        set(value) = entityData.set(CONFIGURATION, value.toCompoundTag())
 
     init {
         this.setLevel(level)
@@ -97,6 +104,7 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
                 .define(REQUIRES, Optional<UUID>.ofNullable(null))
                 .define(DEFEATED, false)
                 .define(LEADER, false)
+                .define(CONFIGURATION, CompoundTag())
         )
     }
 
@@ -111,11 +119,14 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
 
     override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
         if (!level().isClientSide) {
+            var result: InteractionResult = InteractionResult.FAIL
             TRAINER_INTERACT.postThen(
                 GymEvents.TrainerInteractEvent(player as ServerPlayer, this),
-                { _ -> return InteractionResult.FAIL },
-                { _ -> return InteractionResult.sidedSuccess(level().isClientSide) },
+                {},
+                { _ -> result = InteractionResult.sidedSuccess(level().isClientSide) },
             )
+
+            return result
         }
 
         return InteractionResult.sidedSuccess(level().isClientSide)
@@ -127,6 +138,7 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
         nbt.putString(battleFormat, format)
         nbt.putBoolean(leaderKey, leader)
         nbt.putBoolean(defeatedKey, defeated)
+        nbt.put(configurationKey, configuration.toCompoundTag())
 
         if (trainerId != null) {
             nbt.putUUID(trainerIdKey, trainerId!!)
@@ -155,6 +167,9 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
         }
         if (nbt.contains(leaderKey)) {
             leader = nbt.getBoolean(leaderKey)
+        }
+        if (nbt.contains(configurationKey)) {
+            configuration = TrainerConfiguration.fromCompoundTag(nbt.getCompound(configurationKey))
         }
     }
 }

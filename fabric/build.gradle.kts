@@ -38,14 +38,7 @@ val shadowCommon: Configuration by configurations.creating {
 
 loom {
     silentMojangMappingsLicense()
-
     enableTransitiveAccessWideners.set(true)
-
-    @Suppress("UnstableApiUsage")
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "${rootProject.property("mod_id")}-refmap.json"
-    }
 
     runs {
         getByName("client") {
@@ -65,11 +58,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
-
-    // Helpers
     modImplementation("dev.architectury:architectury-fabric:${property("architectury_api_version")}")
-
-    // Cobblemon
     modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") {
         isTransitive = false
     }
@@ -79,10 +68,7 @@ dependencies {
     "developmentFabric"(project(":common", configuration = "namedElements"))
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
 
-    // Platform specific
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_fabric_version")}")
-
-    // Compat
     modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-fabric")
 }
 
@@ -129,6 +115,7 @@ tasks {
     }
 
     remapJar {
+        injectAccessWidener = true
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
 

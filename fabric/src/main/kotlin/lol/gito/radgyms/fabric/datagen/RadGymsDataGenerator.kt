@@ -5,6 +5,8 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
+@file:Suppress("WildcardImport")
+
 package lol.gito.radgyms.fabric.datagen
 
 import lol.gito.radgyms.fabric.datagen.provider.*

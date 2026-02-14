@@ -32,14 +32,26 @@ class StructureLootDataProvider(
     output: FabricDataOutput,
     registryLookup: CompletableFuture<HolderLookup.Provider>,
 ) : SimpleFabricLootTableProvider(output, registryLookup, LootContextParamSets.ARCHAEOLOGY) {
+    companion object {
+        const val FLINT_WEIGHT = 50
+        const val IRON_INGOT_WEIGHT = 10
+        const val LAPIS_LAZULI_WEIGHT = 25
+        const val RAW_COPPER_WEIGHT = 25
+        const val RAW_GOLD_WEIGHT = 5
+        const val EXIT_ROPE_WEIGHT = 10
+        const val GYM_KEY_WEIGHT = 3
+        const val TYPED_GEM_WEIGHT = 5
+    }
+
+    @Suppress("MagicNumber")
     val commonItemWeight = mapOf(
-        Items.FLINT to 50,
-        Items.RAW_IRON to 10,
-        Items.LAPIS_LAZULI to 25,
-        Items.RAW_COPPER to 25,
-        Items.RAW_GOLD to 5,
-        RadGymsItems.EXIT_ROPE to 10,
-        RadGymsItems.GYM_KEY to 3
+        Items.FLINT to FLINT_WEIGHT,
+        Items.RAW_IRON to IRON_INGOT_WEIGHT,
+        Items.LAPIS_LAZULI to LAPIS_LAZULI_WEIGHT,
+        Items.RAW_COPPER to RAW_COPPER_WEIGHT,
+        Items.RAW_GOLD to RAW_GOLD_WEIGHT,
+        RadGymsItems.EXIT_ROPE to EXIT_ROPE_WEIGHT,
+        RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
     )
 
     override fun generate(lootTableBiConsumer: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
@@ -95,102 +107,98 @@ class StructureLootDataProvider(
         )
     }
 
-    private fun typedItemList(type: ElementalType): Map<Item, Int> {
-        val gemWeight = 5
-        val keyWeight = 3
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
+    private fun typedItemList(type: ElementalType): Map<Item, Int> = when (type) {
+        ElementalTypes.BUG -> mapOf(
+            CobblemonItems.BUG_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-        return when (type) {
-            ElementalTypes.BUG -> mapOf(
-                CobblemonItems.BUG_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.DARK -> mapOf(
+            CobblemonItems.DARK_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.DARK -> mapOf(
-                CobblemonItems.DARK_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.DRAGON -> mapOf(
+            CobblemonItems.DRAGON_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.DRAGON -> mapOf(
-                CobblemonItems.DRAGON_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.ELECTRIC -> mapOf(
+            CobblemonItems.ELECTRIC_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.ELECTRIC -> mapOf(
-                CobblemonItems.ELECTRIC_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.FAIRY -> mapOf(
+            CobblemonItems.FAIRY_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.FAIRY -> mapOf(
-                CobblemonItems.FAIRY_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.FIGHTING -> mapOf(
+            CobblemonItems.FIGHTING_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.FIGHTING -> mapOf(
-                CobblemonItems.FIGHTING_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.FIRE -> mapOf(
+            CobblemonItems.FIRE_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.FIRE -> mapOf(
-                CobblemonItems.FIRE_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.FLYING -> mapOf(
+            CobblemonItems.FLYING_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.FLYING -> mapOf(
-                CobblemonItems.FLYING_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.GHOST -> mapOf(
+            CobblemonItems.GHOST_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.GHOST -> mapOf(
-                CobblemonItems.GHOST_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.GRASS -> mapOf(
+            CobblemonItems.GRASS_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.GRASS -> mapOf(
-                CobblemonItems.GRASS_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.GROUND -> mapOf(
+            CobblemonItems.GROUND_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.GROUND -> mapOf(
-                CobblemonItems.GROUND_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.ICE -> mapOf(
+            CobblemonItems.ICE_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.ICE -> mapOf(
-                CobblemonItems.ICE_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.NORMAL -> mapOf(
+            CobblemonItems.NORMAL_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.NORMAL -> mapOf(
-                CobblemonItems.NORMAL_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.POISON -> mapOf(
+            CobblemonItems.POISON_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.POISON -> mapOf(
-                CobblemonItems.POISON_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.PSYCHIC -> mapOf(
+            CobblemonItems.PSYCHIC_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.PSYCHIC -> mapOf(
-                CobblemonItems.PSYCHIC_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.ROCK -> mapOf(
+            CobblemonItems.ROCK_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.ROCK -> mapOf(
-                CobblemonItems.ROCK_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.STEEL -> mapOf(
+            CobblemonItems.STEEL_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.STEEL -> mapOf(
-                CobblemonItems.STEEL_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
+        ElementalTypes.WATER -> mapOf(
+            CobblemonItems.WATER_GEM to TYPED_GEM_WEIGHT,
+            RadGymsItems.GYM_KEY to GYM_KEY_WEIGHT
+        )
 
-            ElementalTypes.WATER -> mapOf(
-                CobblemonItems.WATER_GEM to gemWeight,
-                RadGymsItems.GYM_KEY to keyWeight
-            )
-
-            else -> emptyMap()
-        }
+        else -> emptyMap()
     }
 }

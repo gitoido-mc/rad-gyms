@@ -14,8 +14,8 @@ import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.net.client.payload.GymEnterC2S
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsItems
-import lol.gito.radgyms.common.util.TranslationUtil
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper
+import lol.gito.radgyms.common.extension.displayClientMessage
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -29,7 +29,7 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
         RadGyms.debug("Using key? : ${packet.key}")
         var message = translatable(
             RadGyms.modId("message.info.gym_init").toLanguageKey(),
-            TranslationUtil.buildTypeText(packet.type)
+            ElementalTypeTranslationHelper.buildTypeText(packet.type)
         )
 
         val type: String = when (packet.type) {
@@ -52,7 +52,7 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
 
                 message = translatable(
                     RadGyms.modId("message.info.gym_init").toLanguageKey(),
-                    TranslationUtil.buildTypeText(stackType)
+                    ElementalTypeTranslationHelper.buildTypeText(stackType)
                 )
 
                 stack.consume(1, player)

@@ -11,15 +11,15 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
-import lol.gito.radgyms.common.api.dto.TrainerModel
+import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import net.minecraft.server.level.ServerPlayer
 
 interface TeamGeneratorInterface {
     fun generateTeam(
-        trainer: TrainerModel.Json.Trainer,
+        trainer: Trainer,
         level: Int,
-        player: ServerPlayer,
+        player: ServerPlayer?,
         possibleFormats: MutableList<GymBattleFormat>? = mutableListOf(GymBattleFormat.SINGLES),
         types: List<ElementalType>? = listOf(ElementalTypes.getRandomType())
     ): MutableList<PokemonModel>

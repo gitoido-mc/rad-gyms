@@ -54,6 +54,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 
+@Suppress("MagicNumber")
 class GymLootDataProvider(
     output: FabricDataOutput,
     lookup: CompletableFuture<HolderLookup.Provider>,

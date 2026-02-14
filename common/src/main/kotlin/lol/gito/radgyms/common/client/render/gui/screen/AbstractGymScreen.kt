@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -12,24 +12,24 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.client.render.gui.screen.GymEnterScreen.Companion.BASE_HEIGHT
 import lol.gito.radgyms.common.client.render.gui.screen.GymEnterScreen.Companion.BASE_WIDTH
-import lol.gito.radgyms.common.util.math.Vec2i
+import lol.gito.radgyms.common.extension.math.Vec2i
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-abstract class AbstractGymScreen(heading: Component): CobblemonRenderable, Screen(heading) {
+abstract class AbstractGymScreen(heading: Component) : CobblemonRenderable, Screen(heading) {
     val middleX: Int
         get() = this.minecraft!!.window.guiScaledWidth / 2
     val middleY: Int
         get() = this.minecraft!!.window.guiScaledHeight / 2
 
     // Disabling blurs
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun renderBlurredBackground(delta: Float) = Unit
 
     // Disabling background
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun renderMenuBackground(context: GuiGraphics) = Unit
 
     protected var closeReason: GuiScreenCloseChoice = GuiScreenCloseChoice.CANCEL
 

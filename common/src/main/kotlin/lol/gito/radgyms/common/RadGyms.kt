@@ -14,7 +14,6 @@ import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 import lol.gito.radgyms.common.api.data.DataProvider
 import lol.gito.radgyms.common.config.RadGymsConfig
-import lol.gito.radgyms.common.data.RadGymsDataProvider
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymInitializer
 import lol.gito.radgyms.common.gym.SpeciesManager
@@ -75,7 +74,9 @@ object RadGyms {
 
     @JvmStatic
     fun debug(message: String, vararg params: Any) {
-        if (CONFIG.debug == true) LOGGER.info(message, *params)
+//        if (CONFIG.debug == true)
+
+        LOGGER.info(message, *params)
     }
 
     @OptIn(ExperimentalSerializationApi::class)

@@ -4,6 +4,7 @@
     "y": 2.0,
     "z": 16.0
   },
+  "id": "normal",
   "interior_template": "rad_gyms:gym_interior_default",
   "player_spawn_relative": {
     "pos": {
@@ -13,28 +14,39 @@
     },
     "yaw": -180.0
   },
-  "reward_loot_tables": [
+  "rewards": [
     {
+      "type": "rad_gyms:command",
+      "execute": "/say Congratulations on beating the gym!",
+      "max_level": 100,
+      "min_level": 1
+    },
+    {
+      "type": "rad_gyms:loot_table",
       "id": "rad_gyms:gyms/default/shared_loot_table",
       "max_level": 100,
       "min_level": 1
     },
     {
+      "type": "rad_gyms:loot_table",
       "id": "rad_gyms:gyms/default/common_loot_table",
       "max_level": 25,
       "min_level": 1
     },
     {
+      "type": "rad_gyms:loot_table",
       "id": "rad_gyms:gyms/default/uncommon_loot_table",
       "max_level": 50,
       "min_level": 26
     },
     {
+      "type": "rad_gyms:loot_table",
       "id": "rad_gyms:gyms/default/rare_loot_table",
       "max_level": 75,
       "min_level": 51
     },
     {
+      "type": "rad_gyms:loot_table",
       "id": "rad_gyms:gyms/default/epic_loot_table",
       "max_level": 100,
       "min_level": 76

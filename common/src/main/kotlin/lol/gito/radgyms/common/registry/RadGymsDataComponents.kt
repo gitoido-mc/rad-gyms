@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceKey
 private typealias DCTRegistry = Registry<DataComponentType<*>>
 private typealias DCTRegistryKey = ResourceKey<Registry<DataComponentType<*>>>
 
-object RadGymsDataComponents: PlatformRegistry<DCTRegistry, DCTRegistryKey, DataComponentType<*>>() {
+object RadGymsDataComponents : PlatformRegistry<DCTRegistry, DCTRegistryKey, DataComponentType<*>>() {
     override val registry: DCTRegistry = BuiltInRegistries.DATA_COMPONENT_TYPE
     override val resourceKey: DCTRegistryKey = Registries.DATA_COMPONENT_TYPE
 
@@ -27,12 +27,6 @@ object RadGymsDataComponents: PlatformRegistry<DCTRegistry, DCTRegistryKey, Data
     val RG_GYM_TYPE_COMPONENT: DataComponentType<String> = this.create(
         RadGyms.modId("gym_type_component"),
         DataComponentType.builder<String>().persistent(Codec.STRING).build()
-    )
-
-    @JvmField
-    val RG_GYM_BUNDLE_COMPONENT: DataComponentType<Boolean> = this.create(
-        RadGyms.modId("bundle"),
-        DataComponentType.builder<Boolean>().persistent(Codec.BOOL).build()
     )
 
     @JvmField

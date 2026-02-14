@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -15,8 +15,8 @@ import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.ENTER_SCREEN_CLOSE
 import lol.gito.radgyms.common.client.render.gui.widget.LevelSliderWidget
-import lol.gito.radgyms.common.util.TranslationUtil.buildTypeText
-import lol.gito.radgyms.common.util.math.Vec2i
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildTypeText
+import lol.gito.radgyms.common.extension.math.Vec2i
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
@@ -25,6 +25,7 @@ import net.minecraft.network.chat.Component.translatable
 import net.minecraft.util.CommonColors
 import org.lwjgl.glfw.GLFW
 
+@Suppress("LongParameterList")
 class GymEnterScreen(
     val key: Boolean,
     val selectedLevel: Int,
@@ -32,9 +33,8 @@ class GymEnterScreen(
     val maxLevel: Int = RadGyms.CONFIG.maxLevel!!,
     val type: String? = null,
     val pos: BlockPos? = null,
-    val usesLeft: Int? = null,
-
-    ) : AbstractGymScreen(
+    val usesLeft: Int? = null
+) : AbstractGymScreen(
     when {
         (type == null || ElementalTypes.get(type) != null || type == "chaos") -> translatable(
             modId("gui.common.set-gym-level").toLanguageKey(),
@@ -48,8 +48,52 @@ class GymEnterScreen(
     }
 ) {
     companion object {
+        // Screen root widget params
         const val BASE_WIDTH = 300
         const val BASE_HEIGHT = 80
+
+        // Proceed button widget params
+        const val GUI_PROCEED_WIDTH = 50
+        const val GUI_PROCEED_HEIGHT = 20
+        const val GUI_PROCEED_OFFSET_X = 10
+        const val GUI_PROCEED_OFFSET_Y = 30
+
+        // Cancel button widget params
+        const val GUI_CANCEL_WIDTH = 50
+        const val GUI_CANCEL_HEIGHT = 20
+        const val GUI_CANCEL_OFFSET_X = 60
+        const val GUI_CANCEL_OFFSET_Y = 30
+
+        // +1 button widget params
+        const val GUI_INC1_WIDTH = 20
+        const val GUI_INC1_HEIGHT = 20
+        const val GUI_INC1_OFFSET_X = 245
+        const val GUI_INC1_OFFSET_Y = 25
+
+        // +10 button widget params
+        const val GUI_INC10_WIDTH = 25
+        const val GUI_INC10_HEIGHT = 20
+        const val GUI_INC10_OFFSET_X = 265
+        const val GUI_INC10_OFFSET_Y = 25
+        const val GUI_INC10_AMOUNT = 10
+
+        // -1 button widget params
+        const val GUI_DEC1_WIDTH = 20
+        const val GUI_DEC1_HEIGHT = 20
+        const val GUI_DEC1_OFFSET_X = 10
+        const val GUI_DEC1_OFFSET_Y = 25
+
+        // -10 button widget params
+        const val GUI_DEC10_WIDTH = 25
+        const val GUI_DEC10_HEIGHT = 20
+        const val GUI_DEC10_OFFSET_X = 30
+        const val GUI_DEC10_OFFSET_Y = 25
+        const val GUI_DEC10_AMOUNT = 10
+
+
+        // Level select slider widget params
+        const val GUI_LSS_OFFSET_X = 55
+        const val GUI_LSS_OFFSET_Y = 25
 
         private val panelResource = modId("textures/gui/gym_enter.png")
     }
@@ -61,11 +105,11 @@ class GymEnterScreen(
 
     var level: Int = this.selectedLevel.coerceIn(this.minLevel, this.maxLevel)
 
-    @Suppress("DuplicatedCode")
+    @Suppress("DuplicatedCode", "LongMethod")
     override fun init() {
         val levelSelectSlider = LevelSliderWidget(
-            x = leftX + 55,
-            y = topY + 25,
+            x = leftX + GUI_LSS_OFFSET_X,
+            y = topY + GUI_LSS_OFFSET_Y,
             initialLevel = this.level,
             minLevel = this.minLevel,
             maxLevel = this.maxLevel,
@@ -78,8 +122,8 @@ class GymEnterScreen(
 
         createButton(
             Component.nullToEmpty("-1"),
-            Vec2i(20, 20),
-            Vec2i(leftX + 10, topY + 25)
+            Vec2i(GUI_DEC1_WIDTH, GUI_DEC1_HEIGHT),
+            Vec2i(leftX + GUI_DEC1_OFFSET_X, topY + GUI_DEC1_OFFSET_Y)
         ) {
             level = level.dec().coerceIn(this.minLevel, this.maxLevel)
             levelSelectSlider.updateLevel(level)
@@ -89,10 +133,10 @@ class GymEnterScreen(
 
         createButton(
             Component.nullToEmpty("-10"),
-            Vec2i(25, 20),
-            Vec2i(leftX + 30, topY + 25)
+            Vec2i(GUI_DEC10_WIDTH, GUI_DEC10_HEIGHT),
+            Vec2i(leftX + GUI_DEC10_OFFSET_X, topY + GUI_DEC10_OFFSET_Y)
         ) {
-            level = level.minus(10).coerceIn(this.minLevel, this.maxLevel)
+            level = level.minus(GUI_DEC10_AMOUNT).coerceIn(this.minLevel, this.maxLevel)
             levelSelectSlider.updateLevel(level)
         }.also {
             this.addRenderableWidget(it)
@@ -100,9 +144,9 @@ class GymEnterScreen(
 
         createButton(
             Component.nullToEmpty("+1"),
-            Vec2i(20, 20),
-            Vec2i(leftX + 245, topY + 25),
-        )  {
+            Vec2i(GUI_INC1_WIDTH, GUI_INC1_HEIGHT),
+            Vec2i(leftX + GUI_INC1_OFFSET_X, topY + GUI_INC1_OFFSET_Y),
+        ) {
             level = level.inc().coerceIn(this.minLevel, this.maxLevel)
             levelSelectSlider.updateLevel(level)
         }.also {
@@ -111,10 +155,10 @@ class GymEnterScreen(
 
         createButton(
             Component.nullToEmpty("+10"),
-            Vec2i(25, 20),
-            Vec2i(leftX + 265, topY + 25)
+            Vec2i(GUI_INC10_WIDTH, GUI_INC10_HEIGHT),
+            Vec2i(leftX + GUI_INC10_OFFSET_X, topY + GUI_INC10_OFFSET_Y),
         ) {
-            level = level.plus(10).coerceIn(this.minLevel, this.maxLevel)
+            level = level.plus(GUI_INC10_AMOUNT).coerceIn(this.minLevel, this.maxLevel)
             levelSelectSlider.updateLevel(level)
         }.also {
             this.addRenderableWidget(it)
@@ -122,8 +166,11 @@ class GymEnterScreen(
 
         createButton(
             CommonComponents.GUI_PROCEED,
-            Vec2i(50, 20),
-            Vec2i(leftX + 10, topY + (BASE_HEIGHT - 30))
+            Vec2i(GUI_PROCEED_WIDTH, GUI_PROCEED_HEIGHT),
+            Vec2i(
+                leftX + GUI_PROCEED_OFFSET_X,
+                topY + (BASE_HEIGHT - GUI_PROCEED_OFFSET_Y)
+            )
         ) {
             onClose(GuiScreenCloseChoice.PROCEED)
         }.also {
@@ -132,8 +179,11 @@ class GymEnterScreen(
 
         createButton(
             CommonComponents.GUI_CANCEL,
-            Vec2i(50, 20),
-            Vec2i(leftX + (BASE_WIDTH - 60), topY + (BASE_HEIGHT - 30))
+            Vec2i(GUI_CANCEL_WIDTH, GUI_CANCEL_HEIGHT),
+            Vec2i(
+                leftX + (BASE_WIDTH - GUI_CANCEL_OFFSET_X),
+                topY + (BASE_HEIGHT - GUI_CANCEL_OFFSET_Y)
+            )
         ) {
             onClose(GuiScreenCloseChoice.CANCEL)
         }.also {

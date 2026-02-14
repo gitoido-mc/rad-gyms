@@ -22,7 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 private typealias ETRegistry = Registry<EntityType<*>>
 private typealias ETRegistryKey = ResourceKey<Registry<EntityType<*>>>
 
-object RadGymsEntities: PlatformRegistry<ETRegistry, ETRegistryKey, EntityType<*>>() {
+object RadGymsEntities : PlatformRegistry<ETRegistry, ETRegistryKey, EntityType<*>>() {
     override val registry: ETRegistry = BuiltInRegistries.ENTITY_TYPE
     override val resourceKey: ETRegistryKey = Registries.ENTITY_TYPE
 

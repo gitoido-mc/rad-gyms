@@ -9,15 +9,17 @@ package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.util.party
+import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsTemplates
-import lol.gito.radgyms.common.util.TranslationUtil.buildPrefixedSuffixedTypeText
-import lol.gito.radgyms.common.util.averagePokePartyLevel
-import lol.gito.radgyms.common.util.displayClientMessage
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
+import lol.gito.radgyms.common.extension.averagePokePartyLevel
+import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.registry.RadGymsDimensions
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Component.translatable
@@ -35,36 +37,47 @@ class GymKey : CobblemonItem(
 ) {
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
-        RadGymsTemplates.templates.forEach { (key, value) ->
-            debug("Found template")
-            debug("Type: $key")
-            debug("Interior: ${value.template}")
-        }
 
         val party = (player as ServerPlayer).party()
-        if (party.occupied() < 3) {
-            player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
-            debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
-            return InteractionResultHolder.fail(player.getItemInHand(hand))
-        }
-        if (party.all { it.isFainted() }) {
-            player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey()))
-            debug("Player ${player.uuid} tried to use gym key with party fainted, denying...")
-            return InteractionResultHolder.fail(player.getItemInHand(hand))
-        }
+        return when {
+            (level.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) -> {
+                player.displayClientMessage(
+                    translatable(modId("message.info.gym_key_wrong_place").toLanguageKey())
+                )
+                InteractionResultHolder.fail(player.getItemInHand(hand))
+            }
 
-        val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
-            true -> player.averagePokePartyLevel()
-            false -> RadGyms.CONFIG.minLevel!!
+            (party.occupied() < MIN_PLAYER_TEAM_SIZE) -> {
+                player.displayClientMessage(
+                    translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey())
+                )
+                debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
+                InteractionResultHolder.fail(player.getItemInHand(hand))
+            }
+
+            (party.all { it.isFainted() }) -> {
+                player.displayClientMessage(
+                    translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey())
+                )
+                debug("Player ${player.uuid} tried to use gym key with party fainted, denying...")
+                InteractionResultHolder.fail(player.getItemInHand(hand))
+            }
+
+            else -> {
+                val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
+                    true -> player.averagePokePartyLevel()
+                    false -> RadGyms.CONFIG.minLevel!!
+                }
+                val type = player.getItemInHand(hand).getOrDefault(
+                    RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,
+                    "chaos"
+                )
+
+                OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(player)
+
+                InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), true)
+            }
         }
-        val type = player.getItemInHand(hand).getOrDefault(
-            RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,
-            "chaos"
-        )
-
-        OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(player)
-
-        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), true)
     }
 
     override fun appendHoverText(

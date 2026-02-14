@@ -88,6 +88,7 @@ class RecipeProvider(
     output: FabricDataOutput,
     lookup: CompletableFuture<HolderLookup.Provider>
 ) : FabricRecipeProvider(output, lookup) {
+    @Suppress("LongMethod", "MagicNumber")
     override fun buildRecipes(recipeExporter: RecipeOutput) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, GYM_KEY, 1)
             .pattern(" g")
@@ -220,6 +221,7 @@ class RecipeProvider(
         }
     }
 
+    @Suppress("CyclomaticComplexMethod")
     @Throws(NotImplementedError::class)
     private fun elementalTypeKeyConfig(type: ElementalType): Pair<GymKey, CobblemonItem> = when (type) {
         BUG -> Pair(GYM_KEY, BUG_GEM)
@@ -245,6 +247,7 @@ class RecipeProvider(
         }
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun elementalTypeCacheConfig(cache: PokeCache, type: ElementalType): Pair<PokeCache, CobblemonItem> =
         when (type) {
             BUG -> Pair(cache, BUG_GEM)

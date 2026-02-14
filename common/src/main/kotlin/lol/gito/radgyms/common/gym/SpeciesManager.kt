@@ -14,38 +14,47 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Species
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.api.dto.GymSpecies
-import lol.gito.radgyms.common.pokecache.CacheDTO
+import lol.gito.radgyms.common.api.dto.SpeciesWithForm
+import lol.gito.radgyms.common.cache.CacheDTO
+import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 
-private typealias SpeciesWithForms = List<GymSpecies.Container.SpeciesWithForm>
+private typealias SpeciesWithForms = List<SpeciesWithForm>
 
-private fun Sequence<Species>.mapToSpeciesWithForms(elementalType: ElementalType? = null): SpeciesWithForms = this
+private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null): SpeciesWithForms = this
     .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
     .associateWith { associateSpecies ->
         associateSpecies.forms.apply {
             this.add(associateSpecies.standardForm)
         }
     }
+    .asSequence()
     .flatMap { (flatMapSpecies, forms) ->
         forms
             .toMutableSet()
             .map {
-                GymSpecies.Container.SpeciesWithForm(flatMapSpecies, it)
+                SpeciesWithForm(flatMapSpecies, it)
             }
     }
     .toList()
-    .filter {
-        when (elementalType) {
-            null -> true
-            else -> {
-                it.form.types.contains(elementalType)
-            }
+    .filter { speciesPair ->
+        if (type != null && !speciesPair.form.types.contains(type)) return@filter false
+
+        val poke = speciesPair.species.create()
+        poke.form = speciesPair.form
+        poke.forcedAspects = speciesPair.form.aspects.toSet()
+        poke.updateAspects()
+
+        if (CONFIG.ignoredSpeciesProps().any { it.matches(poke) }) {
+            debug("Excluding {} with {} form", poke.species.name, poke.form.name)
+            return@filter false
         }
+
+        return@filter true
     }
     .sortedBy {
         it.form.baseStats.filterKeys { key -> key.type == Stat.Type.PERMANENT }.values.sum()
     }
-
+    .toList()
 
 object SpeciesManager {
     var SPECIES_BY_TYPE: HashMap<String, SpeciesWithForms> = HashMap(ElementalTypes.count())
@@ -58,7 +67,7 @@ object SpeciesManager {
 
         when (species.isNotEmpty()) {
             true -> return species
-            false -> throw RuntimeException("Cannot get species")
+            false -> throw RadGymsSpeciesListEmptyException("Cannot get species")
         }
     }
 
