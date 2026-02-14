@@ -5,9 +5,13 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
+@file:JvmName("RadGymsConstant")
+
 package lol.gito.radgyms.common
 
 const val DEFAULT_GYM_TYPE = "default"
+
+const val COMMANDS_PREFIX = "rg"
 
 const val TELEPORT_PRELOAD_CHUNKS = 4
 
