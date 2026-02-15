@@ -7,7 +7,7 @@
 
 package lol.gito.radgyms.common.registry
 
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.modId
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.Level
@@ -17,8 +17,8 @@ import net.minecraft.world.level.Level
  */
 object RadGymsDimensions {
     @JvmField
-    val RADGYMS_LEVEL_KEY: ResourceKey<Level> = ResourceKey.create(
+    val GYM_DIMENSION: ResourceKey<Level> = ResourceKey.create(
         Registries.DIMENSION,
-        RadGyms.modId("${RadGyms.MOD_ID}_dim")
+        modId("gym_dim")
     )
 }

@@ -113,7 +113,7 @@ object EventManager {
 
     @Suppress("UNUSED_PARAMETER")
     private fun onBlockInteract(event: ServerPlayerEvent.RightClickBlock) {
-        if (event.player.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+        if (event.player.level().dimension() == RadGymsDimensions.GYM_DIMENSION) {
             if (CONFIG.debug == true) return
             if (event.player.level().getBlockState(event.pos).block == RadGymsBlocks.GYM_EXIT) return
             event.cancel()

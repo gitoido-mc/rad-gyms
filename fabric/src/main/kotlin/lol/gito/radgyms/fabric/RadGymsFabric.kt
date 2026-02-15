@@ -138,7 +138,7 @@ object RadGymsFabric : RadGymsImplementation {
     ): Boolean {
         var allowBreak = true
 
-        if (world.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+        if (world.dimension() == RadGymsDimensions.GYM_DIMENSION) {
             if (CONFIG.debug == true) return true
 
             allowBreak = false

@@ -1,5 +1,5 @@
 {
-  "type": "rad_gyms:rad_gyms_dim",
+  "type": "rad_gyms:gym_dim",
   "generator": {
     "type": "minecraft:flat",
     "settings": {

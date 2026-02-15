@@ -15,7 +15,6 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
-import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
@@ -40,7 +39,7 @@ class GymKey : CobblemonItem(
 
         val party = (player as ServerPlayer).party()
         return when {
-            (level.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) -> {
+            (level.dimension() == RadGymsDimensions.GYM_DIMENSION) -> {
                 player.displayClientMessage(
                     translatable(modId("message.info.gym_key_wrong_place").toLanguageKey())
                 )

@@ -63,7 +63,7 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
 
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
 
-            if (firstPlayer.level().dimension() == RADGYMS_LEVEL_KEY) {
+            if (firstPlayer.level().dimension() == GYM_DIMENSION) {
                 gym.let { GymTeardownService.spawnExitBlock(firstPlayer.server, it) }
             }
 
@@ -80,7 +80,7 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
     private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) = event
         .battle
         .players
-        .filter { it.level().dimension() == RADGYMS_LEVEL_KEY }
+        .filter { it.level().dimension() == GYM_DIMENSION }
         .forEach {
             GymTeardownService
                 .withTeleportScheduler(GymTeleportScheduler())

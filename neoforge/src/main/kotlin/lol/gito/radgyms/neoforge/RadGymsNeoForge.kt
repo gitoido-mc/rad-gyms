@@ -240,7 +240,7 @@ class RadGymsNeoForge : RadGymsImplementation {
     @Suppress("ReturnCount")
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
         if (e.level !is ServerLevel) return
-        if ((e.level as ServerLevel).dimension() == RADGYMS_LEVEL_KEY) {
+        if ((e.level as ServerLevel).dimension() == GYM_DIMENSION) {
             if (CONFIG.debug == true) {
                 return
             }
