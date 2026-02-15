@@ -54,6 +54,7 @@
   ],
   "trainers": [
     {
+      "type": "generated",
       "ai": {
         "type": "rct"
       },
@@ -66,6 +67,13 @@
       "battle_rules": {
         "max_item_uses": 5
       },
+      "elemental_types": [
+        "fairy"
+      ],
+      "formats": [
+        "singles"
+      ],
+      "generator": "bst",
       "id": "default_trainer_junior",
       "leader": false,
       "level_thresholds": [
@@ -83,12 +91,6 @@
         }
       ],
       "name": "rad_gyms.npc.trainer_junior",
-      "possible_elemental_types": [
-        "fairy"
-      ],
-      "possible_formats": [
-        "singles"
-      ],
       "spawn_relative": {
         "pos": {
           "x": 26.5,
@@ -96,11 +98,10 @@
           "z": 15.5
         },
         "yaw": 42.5
-      },
-      "team_generator": "bst",
-      "team_type": "generated"
+      }
     },
     {
+      "type": "generated",
       "ai": {
         "type": "rct"
       },
@@ -113,6 +114,14 @@
       "battle_rules": {
         "max_item_uses": 5
       },
+      "elemental_types": [
+        "fairy"
+      ],
+      "formats": [
+        "singles",
+        "doubles"
+      ],
+      "generator": "bst",
       "id": "default_trainer_senior",
       "leader": false,
       "level_thresholds": [
@@ -130,13 +139,6 @@
         }
       ],
       "name": "rad_gyms.npc.trainer_senior",
-      "possible_elemental_types": [
-        "fairy"
-      ],
-      "possible_formats": [
-        "singles",
-        "doubles"
-      ],
       "requires": "default_trainer_junior",
       "spawn_relative": {
         "pos": {
@@ -145,11 +147,10 @@
           "z": 15.5
         },
         "yaw": -42.5
-      },
-      "team_generator": "bst",
-      "team_type": "generated"
+      }
     },
     {
+      "type": "generated",
       "ai": {
         "type": "rct"
       },
@@ -162,6 +163,15 @@
       "battle_rules": {
         "max_item_uses": 5
       },
+      "elemental_types": [
+        "fairy"
+      ],
+      "formats": [
+        "singles",
+        "doubles",
+        "triples"
+      ],
+      "generator": "bst",
       "id": "default_trainer_leader",
       "leader": true,
       "level_thresholds": [
@@ -179,14 +189,6 @@
         }
       ],
       "name": "rad_gyms.npc.leader",
-      "possible_elemental_types": [
-        "fairy"
-      ],
-      "possible_formats": [
-        "singles",
-        "doubles",
-        "triples"
-      ],
       "requires": "default_trainer_senior",
       "spawn_relative": {
         "pos": {
@@ -195,9 +197,7 @@
           "z": 6.0
         },
         "yaw": 0.01
-      },
-      "team_generator": "bst",
-      "team_type": "generated"
+      }
     }
   ]
 }

@@ -32,7 +32,7 @@ public class ServerLevelMixin {
     private WorldBorder RadGyms$modifyContains(WorldBorder defaultBorder, BlockPos pos, @Local(argsOnly = true) Player player) {
         if (!(player instanceof ServerPlayer)) return defaultBorder;
         //noinspection resource
-        if (player.level().dimension() != RadGymsDimensions.RADGYMS_LEVEL_KEY) return defaultBorder;
+        if (player.level().dimension() != RadGymsDimensions.GYM_DIMENSION) return defaultBorder;
         return RadGyms.dimensionWorldBorder;
     }
 

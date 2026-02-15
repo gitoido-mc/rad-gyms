@@ -32,7 +32,7 @@ class GymInitializer(
 ) {
     fun initInstance(serverPlayer: ServerPlayer, serverWorld: ServerLevel, level: Int, type: String?) {
         val dto = templateRegistry.templates[type]
-        val gymDimension = serverPlayer.server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)
+        val gymDimension = serverPlayer.server.getLevel(RadGymsDimensions.GYM_DIMENSION)
 
         if (dto == null || gymDimension == null) return
 

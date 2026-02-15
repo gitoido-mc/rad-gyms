@@ -20,7 +20,6 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
-import java.util.*
 
 object GymTeardownService {
     private var teleportScheduler: GymTeleportScheduler? = null
@@ -35,7 +34,7 @@ object GymTeardownService {
         if (removeCoords) RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
 
         val gym = RadGymsState.getGymForPlayer(serverPlayer)!!
-        val world = serverPlayer.server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
+        val world = serverPlayer.server.getLevel(RadGymsDimensions.GYM_DIMENSION)!!
 
         gym.npcList.forEach {
             RadGyms.RCT.trainerRegistry.unregisterById(it.toString())
@@ -89,7 +88,7 @@ object GymTeardownService {
             (gym.coords.z + gym.template.relativeExitBlockSpawn.z).toInt(),
         )
 
-        val world = server.getLevel(RadGymsDimensions.RADGYMS_LEVEL_KEY)!!
+        val world = server.getLevel(RadGymsDimensions.GYM_DIMENSION)!!
 
         world.setBlockAndUpdate(
             exitPos,

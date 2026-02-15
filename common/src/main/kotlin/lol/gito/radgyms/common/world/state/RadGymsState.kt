@@ -7,13 +7,11 @@
 
 package lol.gito.radgyms.common.world.state
 
-import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.MOD_ID
-import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.exception.RadGymsLevelNotFoundException
 import lol.gito.radgyms.common.extension.nbt.getRadGymsInstanceData
-import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.extension.nbt.getRadGymsPlayerData
 import lol.gito.radgyms.common.extension.nbt.putRadGymsInstanceData
 import lol.gito.radgyms.common.extension.nbt.putRadGymsPlayerData
@@ -70,7 +68,7 @@ class RadGymsState : SavedData() {
 
         @JvmStatic
         fun getServerState(server: MinecraftServer): RadGymsState {
-            val level = server.getLevel(RADGYMS_LEVEL_KEY)
+            val level = server.getLevel(GYM_DIMENSION)
                 ?: throw RadGymsLevelNotFoundException("Trying to access non-existing level")
 
             return level.dataStorage.computeIfAbsent(type, MOD_ID).also {
@@ -80,7 +78,7 @@ class RadGymsState : SavedData() {
 
         @JvmStatic
         fun markDirty(player: ServerPlayer) {
-            val level = player.server.getLevel(RADGYMS_LEVEL_KEY)
+            val level = player.server.getLevel(GYM_DIMENSION)
                 ?: throw RadGymsLevelNotFoundException("Trying to access non-existing level")
 
             level.dataStorage.computeIfAbsent(type, MOD_ID).setDirty()

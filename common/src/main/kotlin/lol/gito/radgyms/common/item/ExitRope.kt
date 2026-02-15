@@ -35,7 +35,7 @@ class ExitRope : CobblemonItem(Properties()) {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
         when (level.dimension()) {
-            RadGymsDimensions.RADGYMS_LEVEL_KEY -> OpenGymLeaveScreenS2C().sendToPlayer(player as ServerPlayer)
+            RadGymsDimensions.GYM_DIMENSION -> OpenGymLeaveScreenS2C().sendToPlayer(player as ServerPlayer)
 
             else -> player.displayClientMessage(translatable(EXIT_ROPE.descriptionId.plus(".failed")))
         }

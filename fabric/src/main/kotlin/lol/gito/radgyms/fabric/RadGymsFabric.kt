@@ -9,14 +9,18 @@ package lol.gito.radgyms.fabric
 
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
+import com.mojang.brigadier.arguments.ArgumentType
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.RadGymsImplementation
+import lol.gito.radgyms.common.api.RadGymsImplementation
+import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
 import net.fabricmc.api.EnvType
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
@@ -25,6 +29,7 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
+import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
@@ -41,6 +46,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
+import kotlin.reflect.KClass
 
 @Suppress("TooManyFunctions")
 object RadGymsFabric : RadGymsImplementation {
@@ -73,6 +79,8 @@ object RadGymsFabric : RadGymsImplementation {
         ServerLifecycleEvents.SERVER_STARTING.register {
             this.server = it
         }
+
+        CommandRegistrationCallback.EVENT.register(RadGymsCommands::register)
     }
 
     override fun registerDataComponents() = RadGymsDataComponents.register { identifier, component ->
@@ -119,6 +127,14 @@ object RadGymsFabric : RadGymsImplementation {
         RadGymsReloadListener(identifier, reloader, dependencies)
     )
 
+    override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(
+        identifier: ResourceLocation,
+        argumentClass: KClass<A>,
+        serializer: ArgumentTypeInfo<A, T>
+    ) {
+        ArgumentTypeRegistry.registerArgumentType(identifier, argumentClass.java, serializer)
+    }
+
     override fun server(): MinecraftServer? = when (this.environment()) {
         Environment.CLIENT -> Minecraft.getInstance().singleplayerServer
         Environment.SERVER -> this.server
@@ -134,7 +150,7 @@ object RadGymsFabric : RadGymsImplementation {
     ): Boolean {
         var allowBreak = true
 
-        if (world.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+        if (world.dimension() == RadGymsDimensions.GYM_DIMENSION) {
             if (CONFIG.debug == true) return true
 
             allowBreak = false

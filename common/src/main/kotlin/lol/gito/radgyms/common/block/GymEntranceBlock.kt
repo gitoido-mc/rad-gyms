@@ -111,6 +111,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                         player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
                         debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
                         result = InteractionResult.FAIL
+                        return@let
                     }
 
                     if (player.party().all { it.isFainted() }) {
@@ -118,6 +119,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                         player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey()))
                         debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
                         result = InteractionResult.FAIL
+                        return@let
                     }
 
                     val gymEntrance: GymEntranceEntity = level.getBlockEntity(pos) as GymEntranceEntity
@@ -127,6 +129,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                         player.displayClientMessage(translatable(modId("message.info.gym_entrance_exhausted").toLanguageKey()))
                         debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
                         result = InteractionResult.FAIL
+                        return@let
                     }
 
                     val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {

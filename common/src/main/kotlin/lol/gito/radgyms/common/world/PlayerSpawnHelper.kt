@@ -73,9 +73,10 @@ object PlayerSpawnHelper {
         val xpProgress: Float = serverPlayer.experienceProgress
         val totalExperience: Int = serverPlayer.totalExperience
 
+        val offset = Vec3(0.0, 1.0, 0.0)
         val finalPos = when (serverWorld.dimension()) {
-            RadGymsDimensions.RADGYMS_LEVEL_KEY -> pos.center.add(0.0, 1.0, 0.0)
-            else -> serverWorld.squeezeWithinBounds(pos).center.add(0.0, 1.0, 0.0)
+            RadGymsDimensions.GYM_DIMENSION -> pos.center.add(offset)
+            else -> serverWorld.squeezeWithinBounds(pos).center.add(offset)
         }
         val teleportTarget = DimensionTransition(
             serverWorld,

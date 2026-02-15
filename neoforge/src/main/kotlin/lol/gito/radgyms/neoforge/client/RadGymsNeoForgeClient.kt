@@ -8,7 +8,7 @@
 package lol.gito.radgyms.neoforge.client
 
 import lol.gito.radgyms.common.client.RadGymsClient
-import lol.gito.radgyms.common.client.RadGymsClientImplementation
+import lol.gito.radgyms.common.api.client.RadGymsClientImplementation
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.RenderType

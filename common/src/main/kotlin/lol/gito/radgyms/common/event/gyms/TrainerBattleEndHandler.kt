@@ -18,9 +18,8 @@ import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.GymTeleportScheduler
-import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.extension.displayClientMessage
-import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerPlayer
@@ -63,7 +62,7 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
 
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
 
-            if (firstPlayer.level().dimension() == RADGYMS_LEVEL_KEY) {
+            if (firstPlayer.level().dimension() == GYM_DIMENSION) {
                 gym.let { GymTeardownService.spawnExitBlock(firstPlayer.server, it) }
             }
 
@@ -80,7 +79,7 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
     private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) = event
         .battle
         .players
-        .filter { it.level().dimension() == RADGYMS_LEVEL_KEY }
+        .filter { it.level().dimension() == GYM_DIMENSION }
         .forEach {
             GymTeardownService
                 .withTeleportScheduler(GymTeleportScheduler())

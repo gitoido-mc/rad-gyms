@@ -5,32 +5,38 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
+@file:JvmName("RadGymsConstant")
+
 package lol.gito.radgyms.common
+
+/**
+ * Purpose of this file is to collect all hardcoded simple values in project in one place
+ * Candidates to appear in this file SHOULD be used at least twice across project
+ */
 
 const val DEFAULT_GYM_TYPE = "default"
 
-const val TELEPORT_PRELOAD_CHUNKS = 4
+const val COMMANDS_PREFIX = "rg"
 
+const val TELEPORT_PRELOAD_CHUNKS = 4
 const val WORLDGEN_FEATURE_RANDOM_SHIFT_BITS = 4
 const val GYM_SPACING_IN_DIMENSION = 128
 
 const val EXIT_ROPE_COOLDOWN = 100
 
+const val MIN_POKE_LEVEL = 1
+const val MAX_POKE_LEVEL = 100
 const val MAX_PARTY_SIZE = 6
 const val MIN_PLAYER_TEAM_SIZE = 3
-
-const val T1_TEAM_SIZE = 3
-const val T2_TEAM_SIZE = 4
-const val T3_TEAM_SIZE = 5
-const val T4_TEAM_SIZE = 6
-
-const val T1_TEAM_LEVEL_THRESHOLD = 25
-const val T2_TEAM_LEVEL_THRESHOLD = 50
-const val T3_TEAM_LEVEL_THRESHOLD = 75
-const val T4_TEAM_LEVEL_THRESHOLD = 100
 
 const val CACHE_STARTER_ENTRY_WEIGHT = 150
 const val CACHE_DEFAULT_ENTRY_WEIGHT_COMMON = 400
 const val CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON = 300
 const val CACHE_DEFAULT_ENTRY_WEIGHT_RARE = 200
 const val CACHE_DEFAULT_ENTRY_WEIGHT_EPIC = 100
+
+const val REGISTRY_REWARD_TYPE_LOOT_TABLE = "rad_gyms:loot_table"
+const val REGISTRY_REWARD_TYPE_POKEMON = "rad_gyms:pokemon"
+const val REGISTRY_REWARD_TYPE_COMMAND = "rad_gyms:command"
+
+

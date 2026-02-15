@@ -27,7 +27,7 @@ public class PlayerManagerMixin {
         )
     )
     private WorldBorder sendModifiedBorder(WorldBorder original, ServerPlayer player, ServerLevel level) {
-        if (level.dimension() != RadGymsDimensions.RADGYMS_LEVEL_KEY) return original;
+        if (level.dimension() != RadGymsDimensions.GYM_DIMENSION) return original;
         return RadGyms.dimensionWorldBorder;
     }
 }

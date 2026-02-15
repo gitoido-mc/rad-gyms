@@ -25,7 +25,7 @@ import net.minecraft.world.item.crafting.ShapelessRecipe
 import net.minecraft.world.level.ItemLike
 
 
-@Suppress("unused", "MemberVisibilityCanBePrivate")
+@Suppress("unused", "MemberVisibilityCanBePrivate", "TooManyFunctions")
 class ShapelessWithComponentRecipeJsonBuilder(
     private val category: RecipeCategory,
     private val output: Item,

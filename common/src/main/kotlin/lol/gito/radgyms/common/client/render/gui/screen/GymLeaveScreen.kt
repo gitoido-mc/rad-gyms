@@ -13,7 +13,7 @@ import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.LEAVE_SCREEN_CLOSE
 import lol.gito.radgyms.common.extension.math.Vec2i
-import lol.gito.radgyms.common.helper.radGymsResource
+import lol.gito.radgyms.common.helper.modResource
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component.translatable
@@ -38,7 +38,7 @@ class GymLeaveScreen : AbstractGymScreen(translatable(modId("gui.common.leave").
         const val GUI_CANCEL_OFFSET_X = 60
         const val GUI_CANCEL_OFFSET_Y = 30
 
-        private val panelResource = radGymsResource("textures/gui/gym_leave.png")
+        private val panelResource = modResource("textures/gui/gym_leave.png")
     }
 
     val leftX: Int

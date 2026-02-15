@@ -9,16 +9,21 @@ package lol.gito.radgyms.neoforge
 
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
+import com.mojang.brigadier.arguments.ArgumentType
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.MOD_ID
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.RadGymsImplementation
+import lol.gito.radgyms.common.api.RadGymsImplementation
+import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.registry.*
-import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
 import lol.gito.radgyms.neoforge.net.RadGymsNeoForgeNetworkManager
+import net.minecraft.commands.synchronization.ArgumentTypeInfo
+import net.minecraft.commands.synchronization.ArgumentTypeInfos
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -39,20 +44,24 @@ import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.OnDatapackSyncEvent
+import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.level.BlockEvent
+import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import java.util.*
+import kotlin.reflect.KClass
 
-@Mod(RadGyms.MOD_ID)
+@Mod(MOD_ID)
 @Suppress("TooManyFunctions")
 class RadGymsNeoForge : RadGymsImplementation {
     override val modAPI: ModAPI = ModAPI.NEOFORGE
 
     private val hasBeenSynced = hashSetOf<UUID>()
+    private val commandArgumentTypes = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, MOD_ID)
     private val reloadableResources = arrayListOf<PreparableReloadListener>()
     private val queuedWork = arrayListOf<() -> Unit>()
     override val networkManager = RadGymsNeoForgeNetworkManager
@@ -70,6 +79,7 @@ class RadGymsNeoForge : RadGymsImplementation {
             addListener(::onLogout)
             addListener(::onReload)
             addListener(::onBlockBreak)
+            addListener(::registerCommands)
         }
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -169,14 +179,20 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
-    private fun onReload(e: AddReloadListenerEvent) {
-        this.reloadableResources.forEach(e::addListener)
+    override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(
+        identifier: ResourceLocation,
+        argumentClass: KClass<A>,
+        serializer: ArgumentTypeInfo<A, T>
+    ) {
+        this.commandArgumentTypes.register(identifier.path) { _ ->
+            ArgumentTypeInfos.registerByClass(argumentClass.java, serializer)
+        }
     }
 
     override fun server(): MinecraftServer? = ServerLifecycleHooks.getCurrentServer()
 
-
     override fun initialize() = Unit
+
 
     fun initialize(event: FMLCommonSetupEvent) {
         info("Initializing Rad Gyms for NeoForge!")
@@ -198,13 +214,21 @@ class RadGymsNeoForge : RadGymsImplementation {
         this.hasBeenSynced.remove(event.entity.uuid)
     }
 
+    private fun registerCommands(e: RegisterCommandsEvent) {
+        RadGymsCommands.register(e.dispatcher, e.buildContext, e.commandSelection)
+    }
+
+    private fun onReload(e: AddReloadListenerEvent) {
+        this.reloadableResources.forEach(e::addListener)
+    }
+
     private fun onBuildContents(e: BuildCreativeModeTabContentsEvent) {
         val forgeInject = ForgeItemGroupInject(e)
         RadGymsItemGroups.inject(e.tabKey, forgeInject)
     }
 
 
-    private class ForgeItemGroupInject(private val entries: BuildCreativeModeTabContentsEvent) :
+    private class ForgeItemGroupInject(@Suppress("unused") private val entries: BuildCreativeModeTabContentsEvent) :
         RadGymsItemGroups.Injector {
 
         override fun putFirst(item: ItemLike) {
@@ -233,7 +257,7 @@ class RadGymsNeoForge : RadGymsImplementation {
     @Suppress("ReturnCount")
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
         if (e.level !is ServerLevel) return
-        if ((e.level as ServerLevel).dimension() == RADGYMS_LEVEL_KEY) {
+        if ((e.level as ServerLevel).dimension() == GYM_DIMENSION) {
             if (CONFIG.debug == true) {
                 return
             }

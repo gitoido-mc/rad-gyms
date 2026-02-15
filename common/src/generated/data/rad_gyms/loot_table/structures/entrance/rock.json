@@ -14,7 +14,7 @@
           "functions": [
             {
               "components": {
-                "rad_gyms:gym_type_component": "rock"
+                "rad_gyms:gym_type": "rock"
               },
               "function": "minecraft:set_components"
             }

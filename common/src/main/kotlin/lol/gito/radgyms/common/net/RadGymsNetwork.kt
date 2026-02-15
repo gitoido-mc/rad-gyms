@@ -23,15 +23,18 @@ import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import net.minecraft.server.level.ServerPlayer
 
 object RadGymsNetwork {
+    @Suppress("unused")
     fun ServerPlayer.sendPacket(packet: NetworkPacket<*>) {
         sendPacketToPlayer(this, packet)
     }
 
+    @Suppress("unused")
     @JvmStatic
     fun sendToServer(packet: NetworkPacket<*>) {
         RadGyms.implementation.networkManager.sendToServer(packet)
     }
 
+    @Suppress("unused")
     @JvmStatic
     fun sendToAllPlayers(packet: NetworkPacket<*>) =
         sendPacketToPlayers(RadGyms.implementation.server()!!.playerList.players, packet)

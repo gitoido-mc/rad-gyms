@@ -49,7 +49,7 @@ class GymExitBlock(properties: Properties) : BaseEntityBlock(properties) {
                 (player as ServerPlayer).also {
                     debug("Gym exit block used by player ${it.uuid} at $pos in ${level.dimension()}")
 
-                    if (level.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+                    if (level.dimension() == RadGymsDimensions.GYM_DIMENSION) {
                         debug("Client: Opening gym exit screen for ${it.uuid} at $pos in ${level.dimension()}")
                         OpenGymLeaveScreenS2C().sendToPlayer(it)
                     } else {

@@ -1,0 +1,20 @@
+package lol.gito.radgyms.common.command
+
+import com.mojang.brigadier.CommandDispatcher
+import net.minecraft.commands.CommandBuildContext
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
+
+object RadGymsCommands {
+    @Suppress("unused")
+    fun register(
+        dispatcher: CommandDispatcher<CommandSourceStack>,
+        registry: CommandBuildContext,
+        selection: Commands.CommandSelection
+    ) {
+        KickCommand.register(dispatcher)
+        ReloadCommand.register(dispatcher)
+        GiveCache.register(dispatcher)
+        GiveReward.register(dispatcher)
+    }
+}
