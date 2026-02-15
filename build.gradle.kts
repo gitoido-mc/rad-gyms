@@ -30,6 +30,11 @@ scmVersion {
     releaseBranchNames = listOf("main")
     versionCreator("simple")
 
+    tag {
+        prefix = "${project.property("cobblemon_version")}+"
+        fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+")
+    }
+
     branchVersionCreator.put("bugfix/.*", "simple")
     branchVersionCreator.put(
         "feature/.*",
@@ -37,11 +42,6 @@ scmVersion {
             "$version-${position.branch.split("/").last()}"
         }
     )
-
-    tag {
-        prefix = "${project.property("cobblemon_version")}+"
-        fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+")
-    }
 
     branchVersionIncrementer.putAll(
         mapOf(

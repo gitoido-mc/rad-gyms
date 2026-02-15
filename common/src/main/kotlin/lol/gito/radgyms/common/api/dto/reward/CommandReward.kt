@@ -17,7 +17,9 @@ import lol.gito.radgyms.common.api.serialization.GymRewardTypes
 @SerialName(REGISTRY_REWARD_TYPE_COMMAND)
 data class CommandReward(
     val execute: String,
+    @SerialName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
+    @SerialName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     override val type: GymReward = GymReward.COMMAND,
 ) : RewardInterface {

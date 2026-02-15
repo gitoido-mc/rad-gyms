@@ -14,10 +14,14 @@ import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.api.data.DataProvider
+import lol.gito.radgyms.common.command.argument.ElementalTypeArgumentType
+import lol.gito.radgyms.common.command.argument.GymTemplateArgumentType
+import lol.gito.radgyms.common.command.argument.RarityArgumentType
 import lol.gito.radgyms.common.config.RadGymsConfig
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymInitializer
 import lol.gito.radgyms.common.gym.SpeciesManager
+import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.border.WorldBorder
 import org.slf4j.Logger
@@ -52,6 +56,7 @@ object RadGyms {
         implementation.registerEntityAttributes()
         implementation.registerBlockEntityTypes()
         loadConfig()
+        registerArgumentTypes()
     }
 
     fun initialize() {
@@ -112,5 +117,23 @@ object RadGyms {
             prettify.encodeToStream(config, it)
             debug("Saving config")
         }
+    }
+
+    private fun registerArgumentTypes() {
+        this.implementation.registerCommandArgument(
+            modId("rarity"),
+            RarityArgumentType::class,
+            SingletonArgumentInfo.contextFree(RarityArgumentType::rarity)
+        )
+        this.implementation.registerCommandArgument(
+            modId("elemental_type"),
+            ElementalTypeArgumentType::class,
+            SingletonArgumentInfo.contextFree(ElementalTypeArgumentType::type)
+        )
+        this.implementation.registerCommandArgument(
+            modId("template"),
+            GymTemplateArgumentType::class,
+            SingletonArgumentInfo.contextFree(GymTemplateArgumentType::templates)
+        )
     }
 }

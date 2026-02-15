@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.CommandSyntaxException
+import lol.gito.radgyms.common.COMMANDS_PREFIX
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.enumeration.GymLeaveReason
@@ -16,6 +17,7 @@ import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.Commands.argument
+import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.selector.EntitySelector
 import net.minecraft.network.chat.Component.translatable
@@ -25,10 +27,11 @@ object KickCommand : CommandInterface {
     private const val PLAYER_ARG = "player"
 
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val command = root(NAME)
-            .requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }
-            .then(argument(PLAYER_ARG, EntityArgument.player()))
-            .executes(::execute)
+        val command = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                argument(PLAYER_ARG, EntityArgument.player()).executes(::execute)
+            )
+        )
 
         dispatcher.register(command)
     }

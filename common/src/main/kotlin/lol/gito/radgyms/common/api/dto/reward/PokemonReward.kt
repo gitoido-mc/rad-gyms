@@ -19,7 +19,9 @@ import lol.gito.radgyms.common.api.serialization.PokemonPropertiesSerializer
 data class PokemonReward(
     @Serializable(PokemonPropertiesSerializer::class)
     val pokemon: PokemonProperties,
+    @SerialName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
+    @SerialName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     override val type: GymReward = GymReward.POKEMON
 ) : RewardInterface {

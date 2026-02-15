@@ -5,7 +5,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.exceptions.CommandSyntaxException
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import lol.gito.radgyms.common.helper.tl
@@ -13,10 +13,13 @@ import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
 
 class ElementalTypeArgumentType : ArgumentType<ElementalType> {
-    @Throws(CommandSyntaxException::class)
     override fun parse(reader: StringReader): ElementalType {
-        val cacheToken = reader.readString()
-        return ElementalTypes.getOrException(cacheToken)
+        try {
+            val cacheToken = reader.readString()
+            return ElementalTypes.getOrException(cacheToken)
+        } catch (_: Exception) {
+            throw SimpleCommandExceptionType(INVALID_TYPE).createWithContext(reader)
+        }
     }
 
     override fun <S : Any> listSuggestions(
@@ -24,15 +27,15 @@ class ElementalTypeArgumentType : ArgumentType<ElementalType> {
         builder: SuggestionsBuilder
     ): CompletableFuture<Suggestions> {
         return SharedSuggestionProvider.suggest(
-            ElementalTypes.all().map { it.name.lowercase() },
+            ElementalTypes.all().map { it.showdownId },
             builder
         )
     }
 
     override fun getExamples(): Collection<String> = listOf(
-        ElementalTypes.WATER.name,
-        ElementalTypes.FIRE.name,
-        ElementalTypes.GRASS.name
+        ElementalTypes.WATER.showdownId,
+        ElementalTypes.FIRE.showdownId,
+        ElementalTypes.GRASS.showdownId
     )
 
     companion object {
@@ -40,8 +43,7 @@ class ElementalTypeArgumentType : ArgumentType<ElementalType> {
 
         fun type() = ElementalTypeArgumentType()
 
-        fun <S> getType(context: CommandContext<S>, name: String): ElementalType {
-            return context.getArgument(name, ElementalType::class.java)
-        }
+        fun <S> getType(context: CommandContext<S>, name: String): ElementalType =
+            context.getArgument(name, ElementalType::class.java)
     }
 }

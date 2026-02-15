@@ -9,6 +9,7 @@ package lol.gito.radgyms.fabric
 
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
+import com.mojang.brigadier.arguments.ArgumentType
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
@@ -18,6 +19,7 @@ import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
 import net.fabricmc.api.EnvType
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
@@ -27,6 +29,7 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
+import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
@@ -43,6 +46,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
+import kotlin.reflect.KClass
 
 @Suppress("TooManyFunctions")
 object RadGymsFabric : RadGymsImplementation {
@@ -122,6 +126,14 @@ object RadGymsFabric : RadGymsImplementation {
     ) = ResourceManagerHelper.get(type).registerReloadListener(
         RadGymsReloadListener(identifier, reloader, dependencies)
     )
+
+    override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(
+        identifier: ResourceLocation,
+        argumentClass: KClass<A>,
+        serializer: ArgumentTypeInfo<A, T>
+    ) {
+        ArgumentTypeRegistry.registerArgumentType(identifier, argumentClass.java, serializer)
+    }
 
     override fun server(): MinecraftServer? = when (this.environment()) {
         Environment.CLIENT -> Minecraft.getInstance().singleplayerServer

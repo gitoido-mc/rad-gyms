@@ -7,13 +7,13 @@ import com.cobblemon.mod.common.util.player
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
+import lol.gito.radgyms.common.COMMANDS_PREFIX
 import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.cache.CacheHandler
 import lol.gito.radgyms.common.command.argument.ElementalTypeArgumentType
 import lol.gito.radgyms.common.command.argument.RarityArgumentType
-import lol.gito.radgyms.common.helper.root
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.Commands.argument
@@ -31,10 +31,10 @@ object GiveCache : CommandInterface {
     private const val BOOST = "boost"
     private const val PLAYER = "player"
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "CheckedExceptionsKotlin")
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val selfCommand = root(NAME)
-            .requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+        val selfCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
                 literal(SUB).then(
                     argument(TYPE, ElementalTypeArgumentType.type()).then(
                         argument(RARITY, RarityArgumentType.rarity())
@@ -49,9 +49,10 @@ object GiveCache : CommandInterface {
                     )
                 )
             )
+        )
 
-        val selfBoostCommand = root(NAME)
-            .requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+        val selfBoostCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
                 literal(SUB).then(
                     argument(TYPE, ElementalTypeArgumentType.type()).then(
                         argument(RARITY, RarityArgumentType.rarity()).then(
@@ -71,9 +72,10 @@ object GiveCache : CommandInterface {
                     )
                 )
             )
+        )
 
-        val otherCommand = root(NAME)
-            .requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+        val otherCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
                 literal(SUB).then(
                     argument(TYPE, ElementalTypeArgumentType.type()).then(
                         argument(RARITY, RarityArgumentType.rarity()).then(
@@ -82,18 +84,17 @@ object GiveCache : CommandInterface {
                                     it,
                                     it.player(),
                                     ElementalTypeArgumentType.getType(it, TYPE),
-                                    RarityArgumentType.getRarity(it, RARITY),
-                                    IntegerArgumentType.getInteger(it, BOOST)
+                                    RarityArgumentType.getRarity(it, RARITY)
                                 )
                             }
                         )
                     )
                 )
             )
+        )
 
-
-        val otherBoostCommand = root(NAME)
-            .requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+        val otherBoostCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
                 literal(SUB).then(
                     argument(TYPE, ElementalTypeArgumentType.type()).then(
                         argument(RARITY, RarityArgumentType.rarity()).then(
@@ -104,7 +105,7 @@ object GiveCache : CommandInterface {
                                 argument(PLAYER, EntityArgument.player()).executes {
                                     execute(
                                         it,
-                                        it.player(),
+                                        EntityArgument.getPlayer(it, PLAYER),
                                         ElementalTypeArgumentType.getType(it, TYPE),
                                         RarityArgumentType.getRarity(it, RARITY),
                                         IntegerArgumentType.getInteger(it, BOOST)
@@ -115,6 +116,7 @@ object GiveCache : CommandInterface {
                     )
                 )
             )
+        )
 
 
         dispatcher.register(selfCommand)
@@ -123,7 +125,7 @@ object GiveCache : CommandInterface {
         dispatcher.register(otherBoostCommand)
     }
 
-    override fun execute(context: CommandContext<CommandSourceStack>): Int = 0
+    override fun execute(context: CommandContext<CommandSourceStack>): Int = -1
 
     fun execute(
         context: CommandContext<CommandSourceStack>,
@@ -133,7 +135,6 @@ object GiveCache : CommandInterface {
         boost: Int = 0
     ): Int {
         try {
-
             val poke: Pokemon = CacheHandler.getPoke(
                 type,
                 rarity,
@@ -157,7 +158,6 @@ object GiveCache : CommandInterface {
             )
             return -1
         }
-
 
         return 1
     }

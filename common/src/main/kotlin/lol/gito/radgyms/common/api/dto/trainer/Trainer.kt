@@ -35,7 +35,7 @@ data class Trainer(
     val possibleElementalTypes: ElementalListType = listOf(
         ElementalTypes.getRandomType()
     ),
-    @SerialName("possible_formats")
+    @SerialName("formats")
     val possibleFormats: List<GymBattleFormat> = listOf(GymBattleFormat.SINGLES),
     val ai: BattleAI = BattleAI(),
     val bag: List<TrainerBag> = listOf(

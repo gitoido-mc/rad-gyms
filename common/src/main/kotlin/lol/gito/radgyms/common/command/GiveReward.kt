@@ -1,9 +1,27 @@
 package lol.gito.radgyms.common.command
 
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.util.player
 import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
+import lol.gito.radgyms.common.COMMANDS_PREFIX
 import lol.gito.radgyms.common.api.command.CommandInterface
+import lol.gito.radgyms.common.api.dto.gym.GymJson
+import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
+import lol.gito.radgyms.common.command.argument.ElementalTypeArgumentType
+import lol.gito.radgyms.common.command.argument.GymTemplateArgumentType
+import lol.gito.radgyms.common.gym.GymTemplate
+import lol.gito.radgyms.common.helper.tl
+import lol.gito.radgyms.common.helper.tlc
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
+import net.minecraft.commands.Commands.argument
+import net.minecraft.commands.Commands.literal
+import net.minecraft.commands.arguments.EntityArgument
+import net.minecraft.server.level.ServerPlayer
 
 object GiveReward : CommandInterface {
     private const val NAME = "give"
@@ -13,67 +31,74 @@ object GiveReward : CommandInterface {
     private const val TYPE = "type"
     private const val PLAYER = "player"
 
+    @Suppress("CheckedExceptionsKotlin")
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        TODO("Not yet implemented")
+        val selfCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                literal(SUB).then(
+                    argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
+                        argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
+                            argument(TYPE, ElementalTypeArgumentType.type()).executes {
+                                execute(
+                                    it,
+                                    it.player(),
+                                    GymTemplateArgumentType.getTemplate(it, TEMPLATE),
+                                    IntegerArgumentType.getInteger(it, LEVEL),
+                                    ElementalTypeArgumentType.getType(it, TYPE)
+                                )
+                            }
+                        )
+                    )
+                )
+            )
+        )
+
+        val otherCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                literal(SUB).then(
+                    argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
+                        argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
+                            argument(TYPE, ElementalTypeArgumentType.type()).then(
+                                argument(PLAYER, EntityArgument.player()).executes {
+                                    execute(
+                                        it,
+                                        EntityArgument.getPlayer(it, PLAYER),
+                                        GymTemplateArgumentType.getTemplate(it, TEMPLATE),
+                                        IntegerArgumentType.getInteger(it, LEVEL),
+                                        ElementalTypeArgumentType.getType(it, TYPE)
+                                    )
+                                }
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        dispatcher.register(selfCommand)
+        dispatcher.register(otherCommand)
     }
 
-    override fun execute(context: CommandContext<CommandSourceStack>): Int {
+    override fun execute(context: CommandContext<CommandSourceStack>): Int = -1
 
-//
-//    @Suppress("unused")
-//    @Command("debug:reward")
-//    @RequiresPermissionLevel(4)
-//    fun debugReward(
-//        context: CommandContext<CommandSourceStack>,
-//        @Name("template") template: String,
-//        @Name("level") @MinMax(min = "1", max = "100") level: Int,
-//        @Name("type") type: String?
-//    ): Int {
-//        if (context.source.player != null) {
-//            val gymDto = RadGyms.gymTemplateRegistry.getTemplateOrDefault(template)
-//
-//            if (gymDto == null) {
-//                context.source.sendFailure(
-//                    translatable(
-//                        modId("message.error.command.debug_reward.no_template").toLanguageKey(), template
-//                    )
-//                )
-//                return -1
-//            }
-//
-//            level.apply {
-//                this.coerceIn(1..100)
-//            }
-//
-//            val gymType = when (type) {
-//                null -> ElementalTypes.all().random().showdownId
-//                else -> type
-//            }
-//
-//            GENERATE_REWARD.emit(
-//                GymEvents.GenerateRewardEvent(
-//                    context.source.playerOrException,
-//                    GymTemplate.fromDto(context.source.playerOrException, gymDto, level, type),
-//                    level,
-//                    gymType
-//                )
-//            )
-//
-//            context.source.sendSystemMessage(
-//                translatable(
-//                    modId("message.info.command.debug_reward").toLanguageKey(), template, translatable(
-//                        cobblemonResource("type.${type}").toLanguageKey()
-//                    ), level
-//                )
-//            )
-//        } else {
-//            context.source.sendFailure(
-//                translatable(modId("message.error.command.debug_reward.no_player").toLanguageKey())
-//            )
-//            return -1
-//        }
-//    }
-//
+    fun execute(
+        context: CommandContext<CommandSourceStack>,
+        player: ServerPlayer,
+        template: GymJson,
+        level: Int,
+        type: ElementalType
+    ): Int {
+        GENERATE_REWARD.emit(
+            GymEvents.GenerateRewardEvent(
+                player,
+                GymTemplate.fromDto(player, template, level, type.showdownId),
+                level,
+                template.id
+            )
+        )
+
+        context.source.sendSystemMessage(tl("message.info.command.debug_reward", template, tlc("type.${type}"), level))
+
         return 1
     }
 }

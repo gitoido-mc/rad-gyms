@@ -94,11 +94,11 @@ object RadGymsCodec {
             Codec.STRING.fieldOf("id").forGetter(Trainer::id),
             Codec.STRING.fieldOf("name").forGetter(Trainer::name),
             ENTITY_COORDS_YAW.fieldOf("spawn_relative").forGetter(Trainer::spawnRelative),
-            GymTeamType.CODEC.fieldOf("team_type").forGetter(Trainer::teamType),
-            GymTeamGeneratorType.CODEC.fieldOf("team_generator").forGetter(Trainer::teamGenerator),
-            Codec.list(ElementalType.BY_STRING_CODEC).fieldOf("possible_elemental_types")
+            GymTeamType.CODEC.fieldOf("type").forGetter(Trainer::teamType),
+            GymTeamGeneratorType.CODEC.fieldOf("generator").forGetter(Trainer::teamGenerator),
+            Codec.list(ElementalType.BY_STRING_CODEC).fieldOf("elemental_types")
                 .forGetter(Trainer::possibleElementalTypes),
-            Codec.list(GymBattleFormat.CODEC).fieldOf("possible_formats").forGetter(Trainer::possibleFormats),
+            Codec.list(GymBattleFormat.CODEC).fieldOf("formats").forGetter(Trainer::possibleFormats),
             TRAINER_AI.fieldOf("ai").forGetter(Trainer::ai),
             Codec.list(BAG).fieldOf("bag").forGetter(Trainer::bag),
             Codec.list(THRESHOLD).fieldOf("level_thresholds").forGetter(Trainer::countPerLevelThreshold),

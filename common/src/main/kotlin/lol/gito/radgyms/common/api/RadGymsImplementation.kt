@@ -3,10 +3,13 @@ package lol.gito.radgyms.common.api
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
 import com.cobblemon.mod.common.NetworkManager
+import com.mojang.brigadier.arguments.ArgumentType
+import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
+import kotlin.reflect.KClass
 
 @Suppress("TooManyFunctions")
 interface RadGymsImplementation {
@@ -40,6 +43,14 @@ interface RadGymsImplementation {
         type: PackType,
         dependencies: Collection<ResourceLocation>
     )
+
+    fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(
+        identifier: ResourceLocation,
+        argumentClass: KClass<A>,
+        serializer: ArgumentTypeInfo<A, T>
+    )
+
+
 
     fun server(): MinecraftServer?
 

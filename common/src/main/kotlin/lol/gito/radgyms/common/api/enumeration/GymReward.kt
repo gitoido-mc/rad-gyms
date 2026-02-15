@@ -8,7 +8,7 @@ import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_POKEMON
 import lol.gito.radgyms.common.api.serialization.GymRewardSerializer
 import net.minecraft.util.StringRepresentable
 
-@Serializable(GymRewardSerializer::class)
+@Serializable
 enum class GymReward : StringRepresentable {
     @JvmField
     @SerialName(REGISTRY_REWARD_TYPE_LOOT_TABLE)
