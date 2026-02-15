@@ -39,7 +39,7 @@ jobs:
           echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
           echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
       - name: build
-        run: ./gradlew build
+        run: ./gradlew buildMod
       - name: capture build artifacts
         if: ${{ matrix.java == '21' }}
         uses: actions/upload-artifact@v4
