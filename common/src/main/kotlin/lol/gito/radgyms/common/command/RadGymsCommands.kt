@@ -14,5 +14,6 @@ object RadGymsCommands {
     ) {
         KickCommand.register(dispatcher)
         ReloadCommand.register(dispatcher)
+        GiveCache.register(dispatcher)
     }
 }

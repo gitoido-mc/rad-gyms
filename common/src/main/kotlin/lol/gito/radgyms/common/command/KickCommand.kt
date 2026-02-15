@@ -5,12 +5,13 @@ import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
 import lol.gito.radgyms.common.extension.displayClientMessage
-import lol.gito.radgyms.common.helper.getRootCommand
-import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.helper.root
+import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -24,7 +25,7 @@ object KickCommand : CommandInterface {
     private const val PLAYER_ARG = "player"
 
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val command = getRootCommand(NAME)
+        val command = root(NAME)
             .requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }
             .then(argument(PLAYER_ARG, EntityArgument.player()))
             .executes(::execute)
@@ -44,7 +45,7 @@ object KickCommand : CommandInterface {
             return -1
         }
 
-        if (player.level().dimension() != RADGYMS_LEVEL_KEY) {
+        if (player.level().dimension() != GYM_DIMENSION) {
             if (context.source.isPlayer) {
                 context.source.sendFailure(
                     translatable(
