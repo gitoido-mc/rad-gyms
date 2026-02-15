@@ -10,7 +10,6 @@ package lol.gito.radgyms.common.event.gyms
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.party
-import com.mojang.brigadier.CommandDispatcher
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.debug
@@ -24,6 +23,7 @@ import lol.gito.radgyms.common.extension.rainbow
 import lol.gito.radgyms.common.item.PokeShardBase
 import lol.gito.radgyms.common.registry.RadGymsItems
 import net.minecraft.ChatFormatting
+import net.minecraft.commands.Commands
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -37,8 +37,6 @@ import net.minecraft.world.item.component.BundleContents
 import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams
-import kotlin.collections.chunked
-import kotlin.collections.forEach
 
 class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
     init {
@@ -64,8 +62,11 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
     }
 
     private fun handleCommandRewards(rewards: List<CommandReward>) {
+        val source = event.player.createCommandSourceStack().withPermission(Commands.LEVEL_GAMEMASTERS)
+        val handler = event.player.server.commands
+
         rewards.forEach {
-            event.player.server.sendSystemMessage(Component.literal(it.execute))
+            handler.performPrefixedCommand(source, it.execute.trim())
         }
     }
 
