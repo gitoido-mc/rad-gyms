@@ -11,7 +11,6 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.mojang.serialization.codecs.UnboundedMapCodec
-import lol.gito.radgyms.common.api.dto.*
 import lol.gito.radgyms.common.api.dto.battle.BattleAI
 import lol.gito.radgyms.common.api.dto.battle.BattleAIConfig
 import lol.gito.radgyms.common.api.dto.battle.BattleRules

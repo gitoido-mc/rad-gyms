@@ -29,7 +29,7 @@ public class LivingEntityMixin {
     )
     private WorldBorder modifyContains(WorldBorder defaultBorder, AABB box) {
         LivingEntity entity = ((LivingEntity)(Object)this);
-        if (entity.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) return RadGyms.dimensionWorldBorder;
+        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return defaultBorder;
     }
 
@@ -41,7 +41,7 @@ public class LivingEntityMixin {
         )
     )
     private WorldBorder modifyDistanceInsideBorder(WorldBorder defaultBorder, Entity entity) {
-        if (entity.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) return RadGyms.dimensionWorldBorder;
+        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return defaultBorder;
     }
 
@@ -54,7 +54,7 @@ public class LivingEntityMixin {
     )
     private WorldBorder modifySafeZone(WorldBorder defaultBorder) {
         LivingEntity entity = ((LivingEntity)(Object)this);
-        if (entity.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) return RadGyms.dimensionWorldBorder;
+        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return defaultBorder;
     }
 
@@ -67,7 +67,7 @@ public class LivingEntityMixin {
     )
     private WorldBorder modifyDamagePerBlock(WorldBorder defaultBorder) {
         LivingEntity entity = ((LivingEntity)(Object)this);
-        if (entity.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) return RadGyms.dimensionWorldBorder;
+        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return defaultBorder;
     }
 }

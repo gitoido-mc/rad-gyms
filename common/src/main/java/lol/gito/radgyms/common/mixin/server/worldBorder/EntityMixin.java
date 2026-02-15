@@ -27,7 +27,7 @@ public class EntityMixin {
         )
     )
     private static WorldBorder sendModifiedBorder(Level instance, Operation<WorldBorder> original, Entity entity, Level level) {
-        if (level.dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) return RadGyms.dimensionWorldBorder;
+        if (level.dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return original.call(level);
     }
 }

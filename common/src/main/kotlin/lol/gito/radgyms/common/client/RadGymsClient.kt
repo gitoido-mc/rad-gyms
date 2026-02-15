@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.client
 
 import com.cobblemon.mod.common.api.Priority
+import lol.gito.radgyms.common.api.client.RadGymsClientImplementation
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.client.render.entity.TrainerEntityRenderer

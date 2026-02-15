@@ -1,4 +1,4 @@
-package lol.gito.radgyms.common.command
+package lol.gito.radgyms.common.api.command
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext

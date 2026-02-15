@@ -12,8 +12,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.resources.ResourceLocation
 
 
-fun radGymsResource(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
+fun modResource(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
 
 @Suppress("unused")
-fun radGymsModel(path: String, variant: String): ModelResourceLocation =
-    ModelResourceLocation(radGymsResource(path), variant)
+fun modModel(path: String, variant: String): ModelResourceLocation =
+    ModelResourceLocation(modResource(path), variant)

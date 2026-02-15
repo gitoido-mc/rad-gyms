@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.ModAPI
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.RadGymsImplementation
+import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.extension.displayClientMessage

@@ -54,6 +54,18 @@ data class Trainer(
     val leader: Boolean = false,
     val requires: String? = null
 ) {
+    companion object {
+        const val T1_TEAM_SIZE = 3
+        const val T2_TEAM_SIZE = 4
+        const val T3_TEAM_SIZE = 5
+        const val T4_TEAM_SIZE = 6
+
+        const val T1_TEAM_LEVEL_THRESHOLD = 25
+        const val T2_TEAM_LEVEL_THRESHOLD = 50
+        const val T3_TEAM_LEVEL_THRESHOLD = 75
+        const val T4_TEAM_LEVEL_THRESHOLD = 100
+    }
+
     init {
         teamType.let {
             when (teamType) {

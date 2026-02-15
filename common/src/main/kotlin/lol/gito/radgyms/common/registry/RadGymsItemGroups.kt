@@ -124,6 +124,7 @@ object RadGymsItemGroups {
         INJECTORS[tabKey]?.invoke(injector)
     }
 
+    @Suppress("unused")
     fun injectorKeys(): Collection<ResourceKey<CreativeModeTab>> = this.INJECTORS.keys
 
 
@@ -146,6 +147,7 @@ object RadGymsItemGroups {
         return key
     }
 
+    @Suppress("unused")
     private fun inject(
         key: ResourceKey<CreativeModeTab>,
         consumer: (injector: Injector) -> Unit

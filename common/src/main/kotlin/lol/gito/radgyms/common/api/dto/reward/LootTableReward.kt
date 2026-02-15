@@ -3,16 +3,21 @@ package lol.gito.radgyms.common.api.dto.reward
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import lol.gito.radgyms.common.MAX_POKE_LEVEL
+import lol.gito.radgyms.common.MIN_POKE_LEVEL
+import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_LOOT_TABLE
 import lol.gito.radgyms.common.api.enumeration.GymReward
 import lol.gito.radgyms.common.api.serialization.GymRewardType
 import lol.gito.radgyms.common.api.serialization.GymRewardTypes
 
 @Serializable
+@SerialName(REGISTRY_REWARD_TYPE_LOOT_TABLE)
 data class LootTableReward(
     val id: String,
-    override val minLevel: Int = 1,
-    override val maxLevel: Int = 100,
+    override val minLevel: Int = MIN_POKE_LEVEL,
+    override val maxLevel: Int = MAX_POKE_LEVEL,
     override val type: GymReward = GymReward.LOOT_TABLE,
 ) : RewardInterface {
     override fun getRewardType(): GymRewardType<*> = GymRewardTypes.LOOT_TABLE

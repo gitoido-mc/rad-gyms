@@ -14,54 +14,49 @@ import lol.gito.radgyms.common.RadGyms.modId
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Component.translatable
+import net.minecraft.network.chat.MutableComponent
 
-@Suppress("unused")
+fun tl(key: String, vararg args: Any?): MutableComponent = translatable(modId(key).toLanguageKey(), *args)
+fun tlc(key: String, vararg args: Any?): MutableComponent = translatable(cobblemonResource(key).toLanguageKey(), *args)
+
 object ElementalTypeTranslationHelper {
+    @Suppress("unused")
     fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): Component =
         buildPrefixedSuffixedTypeText(elementalType?.showdownId)
 
-    fun buildPrefixedSuffixedTypeText(elementalType: String? = null): Component = translatable(
-        modId("item.component.gym_type").toLanguageKey(),
+    fun buildPrefixedSuffixedTypeText(elementalType: String? = null): Component = tl(
+        "item.component.gym_type",
         buildSuffixedTypeText(elementalType)
     )
 
+    @Suppress("unused")
     fun buildSuffixedTypeText(elementalType: ElementalType? = null): Component =
         buildSuffixedTypeText(elementalType?.showdownId)
 
-    fun buildSuffixedTypeText(elementalType: String? = null): Component = translatable(
-        cobblemonResource("type.suffix").toLanguageKey(),
+    fun buildSuffixedTypeText(elementalType: String? = null): Component = tlc(
+        "type.suffix",
         buildTypeText(elementalType)
     )
 
+    @Suppress("unused")
     fun buildTypeText(elementalType: ElementalType? = null): Component =
         buildTypeText(elementalType?.showdownId)
 
     fun buildTypeText(elementalType: String? = null): Component = when {
-        (elementalType == null) -> {
-            translatable(modId("item.component.type.chaos").toLanguageKey())
-                .withStyle {
-                    it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
-                }
+        (elementalType == null) -> tl("item.component.type.chaos").withStyle {
+            it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
         }
 
-        (ElementalTypes.get(elementalType) != null) -> {
-            translatable(cobblemonResource("type.$elementalType").toLanguageKey())
-                .withStyle {
-                    it.applyFormat(ChatFormatting.DARK_PURPLE)
-                }
+        (ElementalTypes.get(elementalType) != null) -> tlc("type.$elementalType").withStyle {
+            it.applyFormat(ChatFormatting.DARK_PURPLE)
         }
 
-        (elementalType == "chaos") -> {
-            translatable(modId("item.component.type.chaos").toLanguageKey())
-                .withStyle {
-                    it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
-                }
+        (elementalType == "chaos") -> tl("item.component.type.chaos").withStyle {
+            it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
         }
 
-        else -> {
-            translatable(modId("item.component.type.$elementalType").toLanguageKey()).withStyle {
-                it.applyFormat(ChatFormatting.GOLD)
-            }
+        else -> tl("item.component.type.$elementalType").withStyle {
+            it.applyFormat(ChatFormatting.GOLD)
         }
     }
 }

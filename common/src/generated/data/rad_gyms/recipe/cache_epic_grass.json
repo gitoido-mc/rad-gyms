@@ -12,7 +12,7 @@
   ],
   "result": {
     "components": {
-      "rad_gyms:gym_type_component": "grass"
+      "rad_gyms:gym_type": "grass"
     },
     "count": 1,
     "id": "rad_gyms:cache_epic"

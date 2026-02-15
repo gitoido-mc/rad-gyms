@@ -1,5 +1,6 @@
 package lol.gito.radgyms.common.api.dto.gym
 
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.RadGyms
@@ -22,7 +23,7 @@ data class GymJson(
     @SerialName("trainers")
     val trainers: List<Trainer>,
     @SerialName("rewards")
-    val rewards: List<RewardInterface>? = listOf(
+    val rewards: List<@Polymorphic RewardInterface> = listOf(
         CommandReward(
             execute = "/say Congratulations on beating the gym!"
         ),

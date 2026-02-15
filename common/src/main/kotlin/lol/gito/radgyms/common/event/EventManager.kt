@@ -44,7 +44,7 @@ import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
 import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
 import lol.gito.radgyms.common.gym.TrainerFactory
 import lol.gito.radgyms.common.gym.TrainerSpawner
-import lol.gito.radgyms.common.helper.hasRadGymsTrainers
+import lol.gito.radgyms.common.helper.hasGymTrainers
 import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsCaches
@@ -169,7 +169,7 @@ object EventManager {
 
     private fun onBattleStart(event: BattleStartedEvent.Pre) {
         // Early bail if not gym related
-        if (!hasRadGymsTrainers(event)) return
+        if (!hasGymTrainers(event)) return
 
         val players = event.battle.players
         val trainers = event.battle.actors
@@ -190,7 +190,7 @@ object EventManager {
         // Early bail if it was wild poke battle
         if (event.wasWildCapture)
         // Early bail if not gym related
-            if (!hasRadGymsTrainers(event)) return
+            if (!hasGymTrainers(event)) return
         if (event.losers.none { it.type == ActorType.NPC }) return
         if (event.winners.none { it.type == ActorType.PLAYER }) return
 
@@ -206,7 +206,7 @@ object EventManager {
 
     private fun onBattleFled(event: BattleFledEvent) {
         // Early bail if not gym related
-        if (!hasRadGymsTrainers(event)) return
+        if (!hasGymTrainers(event)) return
 
         TRAINER_BATTLE_END.emit(
             GymEvents.TrainerBattleEndEvent(
@@ -221,7 +221,7 @@ object EventManager {
     @Suppress("ReturnCount")
     private fun onBattleFainted(event: BattleFaintedEvent) {
         // Early bail if not gym related
-        if (!hasRadGymsTrainers(event)) return
+        if (!hasGymTrainers(event)) return
 
         // Kudos Tim for whiteout mod
         val killed = event.killed

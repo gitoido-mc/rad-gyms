@@ -25,7 +25,7 @@ object RadGymsDataComponents : PlatformRegistry<DCTRegistry, DCTRegistryKey, Dat
 
     @JvmField
     val RG_GYM_TYPE_COMPONENT: DataComponentType<String> = this.create(
-        RadGyms.modId("gym_type_component"),
+        RadGyms.modId("gym_type"),
         DataComponentType.builder<String>().persistent(Codec.STRING).build()
     )
 

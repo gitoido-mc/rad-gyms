@@ -12,6 +12,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
+import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.api.data.DataProvider
 import lol.gito.radgyms.common.config.RadGymsConfig
 import lol.gito.radgyms.common.event.EventManager

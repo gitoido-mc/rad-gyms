@@ -13,10 +13,10 @@ import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.RadGymsImplementation
+import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.registry.*
-import lol.gito.radgyms.common.registry.RadGymsDimensions.RADGYMS_LEVEL_KEY
+import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
 import lol.gito.radgyms.neoforge.net.RadGymsNeoForgeNetworkManager

@@ -33,7 +33,7 @@ public interface CollisionGetterMixin {
         )
     )
     private WorldBorder sendModifiedBorder(CollisionGetter instance, Operation<WorldBorder> original, @Local(argsOnly = true) Entity entity) {
-        if (entity.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) return RadGyms.dimensionWorldBorder;
+        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return original.call(instance);
     }
 
@@ -46,7 +46,7 @@ public interface CollisionGetterMixin {
         )
     )
     private Stream sendModifiedBorder(Stream instance, Predicate predicate, Operation<Stream> original, @Local(argsOnly = true) Entity entity) {
-        if (entity.level().dimension() == RadGymsDimensions.RADGYMS_LEVEL_KEY) {
+        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) {
             Predicate newPredicate = voxelShape -> RadGyms
                 .dimensionWorldBorder
                 .isWithinBounds(((VoxelShape)voxelShape).bounds());

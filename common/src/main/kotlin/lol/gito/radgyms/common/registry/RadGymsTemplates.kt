@@ -11,10 +11,17 @@ import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.data.JsonDataRegistry
 import lol.gito.radgyms.common.api.dto.gym.GymJson
+import lol.gito.radgyms.common.api.dto.reward.CommandReward
+import lol.gito.radgyms.common.api.dto.reward.LootTableReward
+import lol.gito.radgyms.common.api.dto.reward.PokemonReward
+import lol.gito.radgyms.common.api.dto.reward.RewardInterface
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -35,7 +42,19 @@ object RadGymsTemplates : JsonDataRegistry<GymJson> {
     override fun parse(
         stream: InputStream,
         identifier: ResourceLocation
-    ): GymJson = Json.decodeFromStream<GymJson>(stream)
+    ): GymJson {
+        val module = SerializersModule {
+            polymorphic(RewardInterface::class) {
+                subclass(CommandReward::class)
+                subclass(LootTableReward::class)
+                subclass(PokemonReward::class)
+            }
+        }
+
+        val format = Json { serializersModule = module }
+
+        return format.decodeFromStream<GymJson>(stream)
+    }
 
     override fun reload(data: Map<ResourceLocation, GymJson>) {
         templates.clear()
