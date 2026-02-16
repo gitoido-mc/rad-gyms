@@ -82,16 +82,15 @@ object GymTeardownService {
     }
 
     fun spawnExitBlock(server: MinecraftServer, gym: Gym) {
-        val exitPos = BlockPos(
+        val pos = BlockPos(
             (gym.coords.x + gym.template.relativeExitBlockSpawn.x).toInt(),
             (gym.coords.y + gym.template.relativeExitBlockSpawn.y).toInt(),
             (gym.coords.z + gym.template.relativeExitBlockSpawn.z).toInt(),
         )
 
-        val world = server.getLevel(RadGymsDimensions.GYM_DIMENSION)!!
-
-        world.setBlockAndUpdate(
-            exitPos,
+        debug("Derived exit block: $pos")
+        server.getLevel(RadGymsDimensions.GYM_DIMENSION)?.setBlockAndUpdate(
+            pos,
             RadGymsBlocks.GYM_EXIT.defaultBlockState()
         )
     }
