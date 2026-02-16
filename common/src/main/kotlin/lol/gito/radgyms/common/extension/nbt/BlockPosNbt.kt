@@ -18,7 +18,7 @@ fun CompoundTag.putBlockPos(key: String, value: BlockPos) {
 
     nbt.putInt("x", value.x)
     nbt.putInt("y", value.y)
-    nbt.putInt("z", value.y)
+    nbt.putInt("z", value.z)
 
     this.put(key, nbt)
 }
