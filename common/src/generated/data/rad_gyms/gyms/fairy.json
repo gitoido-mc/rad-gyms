@@ -16,12 +16,6 @@
   },
   "rewards": [
     {
-      "type": "rad_gyms:command",
-      "execute": "/say Congratulations on beating the gym!",
-      "max_level": 100,
-      "min_level": 1
-    },
-    {
       "type": "rad_gyms:loot_table",
       "id": "rad_gyms:gyms/default/shared_loot_table",
       "max_level": 100,
