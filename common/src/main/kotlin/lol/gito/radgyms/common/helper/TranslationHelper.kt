@@ -32,7 +32,6 @@ fun tl(prefix: String, key: String, vararg args: Any?): MutableComponent = trans
 )
 
 fun tlk(key: String): String = modId(key).toLanguageKey()
-fun tlk(key: ResourceLocation): String = key.toLanguageKey()
 
 fun tlk(prefix: String, key: ResourceLocation): String = key.toLanguageKey(prefix)
 fun tlk(prefix: String, key: String): String = modId(key).toLanguageKey(prefix)

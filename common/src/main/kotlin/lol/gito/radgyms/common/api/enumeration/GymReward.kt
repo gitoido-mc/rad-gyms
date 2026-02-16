@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_COMMAND
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_LOOT_TABLE
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_POKEMON
-import lol.gito.radgyms.common.api.serialization.GymRewardSerializer
 import net.minecraft.util.StringRepresentable
 
 @Serializable

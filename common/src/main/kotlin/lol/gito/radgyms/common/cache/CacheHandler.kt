@@ -11,8 +11,8 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_RARITY
 import lol.gito.radgyms.common.extension.shinyRoll
+import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_RARITY
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Rarity
 

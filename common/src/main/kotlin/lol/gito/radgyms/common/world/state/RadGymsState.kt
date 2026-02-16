@@ -11,10 +11,10 @@ import lol.gito.radgyms.common.RadGyms.MOD_ID
 import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.exception.RadGymsLevelNotFoundException
 import lol.gito.radgyms.common.extension.nbt.getRadGymsInstanceData
-import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.extension.nbt.getRadGymsPlayerData
 import lol.gito.radgyms.common.extension.nbt.putRadGymsInstanceData
 import lol.gito.radgyms.common.extension.nbt.putRadGymsPlayerData
+import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.world.state.dto.PlayerData
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -57,7 +57,6 @@ class RadGymsState : SavedData() {
                 val uuid = UUID.fromString(uuidString)
                 state.playerDataMap.putIfAbsent(uuid, playersCompound.getRadGymsPlayerData(uuidString)!!)
             }
-
             gymsCompound.allKeys.forEach { uuidString ->
                 val uuid = UUID.fromString(uuidString)
                 state.gymInstanceMap.putIfAbsent(uuid, gymsCompound.getRadGymsInstanceData(uuidString)!!)
@@ -131,11 +130,11 @@ class RadGymsState : SavedData() {
         registryLookup: HolderLookup.Provider
     ): CompoundTag {
         val playerDataNbt = CompoundTag()
+        val gymDataNbt = CompoundTag()
+
         playerDataMap.forEach { (uuid, data) ->
             playerDataNbt.putRadGymsPlayerData(uuid.toString(), data)
         }
-
-        val gymDataNbt = CompoundTag()
         gymInstanceMap.forEach { (uuid, data) ->
             gymDataNbt.putRadGymsInstanceData(uuid.toString(), data)
         }

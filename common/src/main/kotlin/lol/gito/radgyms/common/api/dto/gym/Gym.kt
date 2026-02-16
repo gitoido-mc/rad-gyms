@@ -2,7 +2,7 @@ package lol.gito.radgyms.common.api.dto.gym
 
 import lol.gito.radgyms.common.gym.GymTemplate
 import net.minecraft.core.BlockPos
-import java.util.UUID
+import java.util.*
 
 data class Gym(
     val template: GymTemplate,

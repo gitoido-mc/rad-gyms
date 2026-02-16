@@ -12,7 +12,6 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.extension.rainbow
-import net.minecraft.network.chat.Component.translatable
 import lol.gito.radgyms.common.helper.tl
 
 class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {

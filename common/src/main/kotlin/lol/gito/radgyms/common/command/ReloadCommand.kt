@@ -6,7 +6,6 @@ import com.mojang.brigadier.context.CommandContext
 import lol.gito.radgyms.common.COMMANDS_PREFIX
 import lol.gito.radgyms.common.RadGyms.loadConfig
 import lol.gito.radgyms.common.api.command.CommandInterface
-import lol.gito.radgyms.common.helper.root
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.Commands.literal
