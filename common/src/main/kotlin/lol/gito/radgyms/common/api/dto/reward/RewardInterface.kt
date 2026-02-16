@@ -8,7 +8,6 @@ interface RewardInterface {
     val minLevel: Int
     @SerialName("max_level")
     val maxLevel: Int
-    val type: GymReward
 
     fun getRewardType(): MGymRewardType<*>
 }

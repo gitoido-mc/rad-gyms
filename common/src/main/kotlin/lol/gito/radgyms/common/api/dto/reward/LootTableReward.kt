@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_LOOT_TABLE
@@ -22,7 +23,8 @@ data class LootTableReward(
     override val minLevel: Int = MIN_POKE_LEVEL,
     @SerialName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
-    override val type: GymReward = GymReward.LOOT_TABLE,
+    @Transient
+    val type: GymReward = GymReward.LOOT_TABLE
 ) : RewardInterface {
     override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.LOOT_TABLE
 
@@ -34,7 +36,7 @@ data class LootTableReward(
                 Codec.INT.lenientOptionalFieldOf("max_items", null).forGetter(LootTableReward::maxItems),
                 Codec.INT.fieldOf("min_level").forGetter(LootTableReward::minLevel),
                 Codec.INT.fieldOf("max_level").forGetter(LootTableReward::maxLevel),
-                GymReward.CODEC.fieldOf("type").forGetter(LootTableReward::type),
+                GymReward.CODEC.fieldOf("type").forGetter(LootTableReward::type)
             ).apply(it, ::LootTableReward)
         }
     }

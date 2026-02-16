@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_ADVANCEMENT
@@ -20,7 +21,8 @@ data class AdvancementReward(
     override val minLevel: Int = MIN_POKE_LEVEL,
     @SerialName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
-    override val type: GymReward = GymReward.ADVANCEMENT,
+    @Transient
+    val type: GymReward = GymReward.ADVANCEMENT
 ) : RewardInterface {
     override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.ADVANCEMENT
 
@@ -31,7 +33,7 @@ data class AdvancementReward(
                 Codec.STRING.fieldOf("id").forGetter(AdvancementReward::id),
                 Codec.INT.fieldOf("min_level").forGetter(AdvancementReward::minLevel),
                 Codec.INT.fieldOf("max_level").forGetter(AdvancementReward::maxLevel),
-                GymReward.CODEC.fieldOf("type").forGetter(AdvancementReward::type),
+                GymReward.CODEC.fieldOf("type").forGetter(AdvancementReward::type)
             ).apply(it, ::AdvancementReward)
         }
     }
