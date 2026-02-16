@@ -15,8 +15,8 @@ import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
-import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
@@ -39,6 +39,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.stats.Stats
 import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
@@ -66,16 +67,16 @@ object RadGymsFabric : RadGymsImplementation {
 
     override fun initialize() {
         RadGyms.preInitialize(this)
+        RadGyms.statistics.registerStats()
         RadGyms.initialize()
+
         networkManager.registerMessages()
         networkManager.registerServerHandlers()
-//        CommandRegistry.register()
-        PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
 
+        PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register { player, isLogin ->
             if (isLogin) RadGyms.dataProvider.sync(player)
         }
-
         ServerLifecycleEvents.SERVER_STARTING.register {
             this.server = it
         }
@@ -107,6 +108,13 @@ object RadGymsFabric : RadGymsImplementation {
     override fun registerBlockEntityTypes() {
         RadGymsBlockEntities.register { identifier, entry ->
             Registry.register(RadGymsBlockEntities.registry, identifier, entry)
+        }
+    }
+
+    override fun registerScoreboardObjectives() {
+        RadGyms.statistics.store.values.forEach {
+            Registry.register(BuiltInRegistries.CUSTOM_STAT, it.resourceLocation, it.resourceLocation)
+            Stats.CUSTOM.get(it.resourceLocation, it.formatter)
         }
     }
 

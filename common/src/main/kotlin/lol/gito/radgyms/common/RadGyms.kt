@@ -21,6 +21,7 @@ import lol.gito.radgyms.common.config.RadGymsConfig
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymInitializer
 import lol.gito.radgyms.common.gym.SpeciesManager
+import lol.gito.radgyms.common.stats.RadGymsStats
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.border.WorldBorder
@@ -41,6 +42,8 @@ object RadGyms {
     @JvmField
     val dimensionWorldBorder: WorldBorder = WorldBorder()
 
+    val statistics: RadGymsStats = RadGymsStats
+
     val dataProvider: DataProvider = RadGymsDataProvider
 
     lateinit var CONFIG: RadGymsConfig
@@ -55,6 +58,7 @@ object RadGyms {
         implementation.registerEntityTypes()
         implementation.registerEntityAttributes()
         implementation.registerBlockEntityTypes()
+        implementation.registerScoreboardObjectives()
         loadConfig()
         registerArgumentTypes()
     }

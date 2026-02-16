@@ -56,6 +56,7 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
                 )
 
                 stack.consume(1, player)
+                player.awardStat(getStat(RadGyms.statistics.KEYS_USED))
             } else {
                 player.displayClientMessage(
                     translatable(
@@ -68,6 +69,7 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
         if (packet.pos != null) {
             val gymEntrance: GymEntranceEntity = player.serverLevel().getBlockEntity(packet.pos) as GymEntranceEntity
             gymEntrance.incrementPlayerUseCount(player)
+            player.awardStat(getStat(RadGyms.statistics.ENTRANCES_USED))
         }
 
         player.displayClientMessage(message)
