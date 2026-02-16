@@ -3,7 +3,6 @@ on:
   pull_request:
     types:
       - ready_for_review
-      - synchronize
 
 jobs:
   build:
@@ -30,12 +29,12 @@ jobs:
       - name: Run detekt checks
         uses: burrunan/gradle-cache-action@v3
         with:
-          read-only: false
+          read-only: true
           arguments: detekt
       - name: Build
         uses: burrunan/gradle-cache-action@v3
         with:
-          read-only: false
+          read-only: true
           arguments: buildMod
       - name: Save version output
         id: version
