@@ -124,6 +124,7 @@ class EnUSLocaleProvider(
         tlk("stat", ENTRANCES_USED.resourceLocation) to "Gym entrances used",
         tlk("stat", ROPES_USED.resourceLocation) to "Gym escape ropes used",
         tlk("stat", CACHES_OPENED.resourceLocation) to "Poke caches opened",
+        tlk("biome", "gym_biome") to "Gym Trials"
     )
 
 
