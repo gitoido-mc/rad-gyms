@@ -9,9 +9,8 @@ import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_ADVANCEMENT
 import lol.gito.radgyms.common.api.enumeration.GymReward
-import lol.gito.radgyms.common.api.serialization.GymRewardType
-import lol.gito.radgyms.common.api.serialization.GymRewardTypes
-
+import lol.gito.radgyms.common.api.serialization.MGymRewardType
+import lol.gito.radgyms.common.api.serialization.MGymRewardTypes
 
 @Serializable
 @SerialName(REGISTRY_REWARD_TYPE_ADVANCEMENT)
@@ -23,7 +22,7 @@ data class AdvancementReward(
     override val maxLevel: Int = MAX_POKE_LEVEL,
     override val type: GymReward = GymReward.ADVANCEMENT,
 ) : RewardInterface {
-    override fun getRewardType(): GymRewardType<*> = GymRewardTypes.ADVANCEMENT
+    override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.ADVANCEMENT
 
     companion object {
         @JvmStatic

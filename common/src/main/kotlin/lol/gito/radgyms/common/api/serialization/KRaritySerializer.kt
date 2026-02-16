@@ -13,19 +13,19 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import lol.gito.radgyms.common.api.enumeration.GymReward
+import net.minecraft.world.item.Rarity
 
-object GymRewardSerializer : KSerializer<GymReward> {
+object KRaritySerializer : KSerializer<Rarity> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
-        "lol.gito.radgyms.common.api.enumeration.GymReward",
+        "net.minecraft.world.item.Rarity",
         PrimitiveKind.STRING
     )
 
     override fun serialize(
         encoder: Encoder,
-        value: GymReward
-    ) = encoder.encodeString(value.name)
+        value: Rarity
+    ) = encoder.encodeString(value.serializedName)
 
-    override fun deserialize(decoder: Decoder): GymReward =
-        GymReward.valueOf(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): Rarity =
+        Rarity.valueOf(decoder.decodeString().uppercase())
 }

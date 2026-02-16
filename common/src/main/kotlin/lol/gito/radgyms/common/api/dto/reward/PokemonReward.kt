@@ -10,14 +10,14 @@ import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_POKEMON
 import lol.gito.radgyms.common.api.enumeration.GymReward
-import lol.gito.radgyms.common.api.serialization.GymRewardType
-import lol.gito.radgyms.common.api.serialization.GymRewardTypes
-import lol.gito.radgyms.common.api.serialization.PokemonPropertiesSerializer
+import lol.gito.radgyms.common.api.serialization.KPokemonPropertiesSerializer
+import lol.gito.radgyms.common.api.serialization.MGymRewardType
+import lol.gito.radgyms.common.api.serialization.MGymRewardTypes
 
 @Serializable
 @SerialName(REGISTRY_REWARD_TYPE_POKEMON)
 data class PokemonReward(
-    @Serializable(PokemonPropertiesSerializer::class)
+    @Serializable(KPokemonPropertiesSerializer::class)
     val pokemon: PokemonProperties,
     @SerialName("min_perfect_ivs")
     val minPerfectIvs: Int? = null,
@@ -27,7 +27,7 @@ data class PokemonReward(
     override val maxLevel: Int = MAX_POKE_LEVEL,
     override val type: GymReward = GymReward.POKEMON
 ) : RewardInterface {
-    override fun getRewardType(): GymRewardType<*> = GymRewardTypes.POKEMON
+    override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.POKEMON
 
     companion object {
         @JvmStatic

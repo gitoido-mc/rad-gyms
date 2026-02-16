@@ -9,8 +9,8 @@ import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_LOOT_TABLE
 import lol.gito.radgyms.common.api.enumeration.GymReward
-import lol.gito.radgyms.common.api.serialization.GymRewardType
-import lol.gito.radgyms.common.api.serialization.GymRewardTypes
+import lol.gito.radgyms.common.api.serialization.MGymRewardType
+import lol.gito.radgyms.common.api.serialization.MGymRewardTypes
 
 @Serializable
 @SerialName(REGISTRY_REWARD_TYPE_LOOT_TABLE)
@@ -24,7 +24,7 @@ data class LootTableReward(
     override val maxLevel: Int = MAX_POKE_LEVEL,
     override val type: GymReward = GymReward.LOOT_TABLE,
 ) : RewardInterface {
-    override fun getRewardType(): GymRewardType<*> = GymRewardTypes.LOOT_TABLE
+    override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.LOOT_TABLE
 
     companion object {
         @JvmStatic

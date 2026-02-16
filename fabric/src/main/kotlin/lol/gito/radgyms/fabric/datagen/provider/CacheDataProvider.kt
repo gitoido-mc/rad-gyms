@@ -10,7 +10,7 @@ package lol.gito.radgyms.fabric.datagen.provider
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.*
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.api.serialization.RadGymsCodec
+import lol.gito.radgyms.common.api.serialization.MRadGymsCodec
 import lol.gito.radgyms.common.cache.CacheDTO
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider
@@ -28,7 +28,7 @@ class CacheDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Hold
         lookup,
         PackOutput.Target.DATA_PACK,
         "caches",
-        RadGymsCodec.CACHE
+        MRadGymsCodec.CACHE
     ) {
     override fun getName(): String = "Pokemon Caches"
 

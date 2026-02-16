@@ -1,8 +1,7 @@
 package lol.gito.radgyms.common.api.dto.reward
 
 import kotlinx.serialization.SerialName
-import lol.gito.radgyms.common.api.enumeration.GymReward
-import lol.gito.radgyms.common.api.serialization.GymRewardType
+import lol.gito.radgyms.common.api.serialization.MGymRewardType
 
 interface RewardInterface {
     @SerialName("min_level")
@@ -11,5 +10,5 @@ interface RewardInterface {
     val maxLevel: Int
     val type: GymReward
 
-    fun getRewardType(): GymRewardType<*>
+    fun getRewardType(): MGymRewardType<*>
 }

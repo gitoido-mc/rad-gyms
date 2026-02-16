@@ -9,9 +9,9 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 
 
-data class GymRewardType<T : RewardInterface>(val codec: MapCodec<T>?) {
+data class MGymRewardType<T : RewardInterface>(val codec: MapCodec<T>?) {
     companion object {
-        val REGISTRY: Registry<GymRewardType<*>> = MappedRegistry(
+        val REGISTRY: Registry<MGymRewardType<*>> = MappedRegistry(
             ResourceKey.createRegistryKey(modId("gym_reward")),
             Lifecycle.stable()
         )
