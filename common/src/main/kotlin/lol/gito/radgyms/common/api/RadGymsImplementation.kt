@@ -37,6 +37,8 @@ interface RadGymsImplementation {
 
     fun registerBlockEntityTypes()
 
+    fun registerScoreboardObjectives()
+
     fun registerResourceReloader(
         identifier: ResourceLocation,
         reloader: PreparableReloadListener,
@@ -49,8 +51,6 @@ interface RadGymsImplementation {
         argumentClass: KClass<A>,
         serializer: ArgumentTypeInfo<A, T>
     )
-
-
 
     fun server(): MinecraftServer?
 

@@ -12,8 +12,11 @@ import lol.gito.radgyms.common.DEFAULT_GYM_TYPE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.TELEPORT_PRELOAD_CHUNKS
 import lol.gito.radgyms.common.api.dto.gym.Gym
+import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.api.event.GymEvents.GYM_ENTER
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsTemplates
+import lol.gito.radgyms.common.stats.RadGymsStats.getStat
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructurePlacer
 import lol.gito.radgyms.common.world.state.RadGymsState
@@ -30,7 +33,13 @@ class GymInitializer(
     private val structureManager: StructurePlacer,
     private val trainerFactory: TrainerFactory
 ) {
-    fun initInstance(serverPlayer: ServerPlayer, serverWorld: ServerLevel, level: Int, type: String?) {
+    fun initInstance(
+        serverPlayer: ServerPlayer,
+        serverWorld: ServerLevel,
+        level: Int,
+        type: String = DEFAULT_GYM_TYPE,
+        usedKey: Boolean = false
+    ) {
         val dto = templateRegistry.templates[type]
         val gymDimension = serverPlayer.server.getLevel(RadGymsDimensions.GYM_DIMENSION)
 
@@ -66,8 +75,6 @@ class GymInitializer(
             dest
         )
 
-        PlayerSpawnHelper.teleportPlayer(serverPlayer, gymDimension, dest, gymTemplate.playerYaw, 0.0F)
-
         val trainers = trainerSpawner.spawnAll(gymTemplate, gymDimension, playerGymCoords)
 
         val gymInstance = Gym(
@@ -75,9 +82,23 @@ class GymInitializer(
             trainers.keys.toList(),
             playerGymCoords,
             gymLevel,
-            type ?: DEFAULT_GYM_TYPE
+            type
         )
 
         RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
+
+        GYM_ENTER.emit(
+            GymEvents.GymEnterEvent(
+                serverPlayer,
+                gymInstance,
+                type,
+                gymLevel,
+                usedKey
+            )
+        )
+
+        serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))
+
+        PlayerSpawnHelper.teleportPlayer(serverPlayer, gymDimension, dest, gymTemplate.playerYaw, 0.0F)
     }
 }

@@ -17,9 +17,9 @@ import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
+import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
-import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
 import lol.gito.radgyms.neoforge.net.RadGymsNeoForgeNetworkManager
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
@@ -31,6 +31,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
+import net.minecraft.stats.Stats
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
@@ -162,6 +163,20 @@ class RadGymsNeoForge : RadGymsImplementation {
         MOD_BUS.addListener<EntityAttributeCreationEvent> { event ->
             RadGymsEntities.registerAttributes { type, builder ->
                 event.put(type, builder.build())
+            }
+        }
+    }
+
+    override fun registerScoreboardObjectives() {
+        with(MOD_BUS) {
+            addListener<RegisterEvent> { event ->
+                event.register(Registries.CUSTOM_STAT) { registry ->
+                    RadGyms.statistics.registerStats()
+                    RadGyms.statistics.store.values.forEach {
+                        registry.register(it.resourceLocation, it.resourceLocation)
+                        Stats.CUSTOM.get(it.resourceLocation, it.formatter)
+                    }
+                }
             }
         }
     }

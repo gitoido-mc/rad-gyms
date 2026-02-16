@@ -7,11 +7,13 @@
 
 package lol.gito.radgyms.common.event.gyms
 
+import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.GymTeleportScheduler
+import lol.gito.radgyms.common.stats.RadGymsStats.getStat
 import net.minecraft.world.level.levelgen.structure.BoundingBox
 import net.minecraft.world.phys.AABB
 
@@ -37,6 +39,12 @@ object GymLeaveHandler {
 
         if (event.completed == false) {
             GymTeardownService.destructGym(event.player, removeCoords = false)
+            event.player.awardStat(getStat(RadGyms.statistics.GYMS_FAILED))
+            if (event.usedRope == true) {
+                event.player.awardStat(getStat(RadGyms.statistics.ROPES_USED))
+            }
+        } else {
+            event.player.awardStat(getStat(RadGyms.statistics.GYMS_BEATEN))
         }
 
         GymTeardownService

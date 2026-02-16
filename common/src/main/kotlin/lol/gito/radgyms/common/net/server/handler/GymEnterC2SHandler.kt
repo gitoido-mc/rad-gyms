@@ -16,6 +16,7 @@ import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsItems
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper
 import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.stats.RadGymsStats.getStat
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -56,6 +57,7 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
                 )
 
                 stack.consume(1, player)
+                player.awardStat(getStat(RadGyms.statistics.KEYS_USED))
             } else {
                 player.displayClientMessage(
                     translatable(
@@ -68,6 +70,7 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
         if (packet.pos != null) {
             val gymEntrance: GymEntranceEntity = player.serverLevel().getBlockEntity(packet.pos) as GymEntranceEntity
             gymEntrance.incrementPlayerUseCount(player)
+            player.awardStat(getStat(RadGyms.statistics.ENTRANCES_USED))
         }
 
         player.displayClientMessage(message)
