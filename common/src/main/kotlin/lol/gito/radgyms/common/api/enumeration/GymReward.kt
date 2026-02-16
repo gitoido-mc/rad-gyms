@@ -6,6 +6,7 @@ import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_ADVANCEMENT
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_COMMAND
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_LOOT_TABLE
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_POKEMON
+import lol.gito.radgyms.common.RadGyms.modId
 import net.minecraft.util.StringRepresentable
 
 @Serializable
@@ -27,6 +28,8 @@ enum class GymReward : StringRepresentable {
     ADVANCEMENT;
 
     override fun getSerializedName(): String = this.name.lowercase()
+
+    override fun toString(): String = modId(this.name.lowercase()).toString()
 
     companion object {
         @JvmField

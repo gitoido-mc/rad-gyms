@@ -14,7 +14,7 @@ fun CompoundTag.getRadGymsTrainerModel(key: String): TrainerModel {
         requires = tag.getString("Requires"),
         npc = tag.getRadGymsTrainerEntityData("EntityData")!!,
         trainer = tag.getRctTrainerModel("Trainer")!!,
-        battleRules = tag.getRadGymsBattleRules("BattleRules")!!
+        battleRules = tag.getRadGymsBattleRules("BattleRules")
     )
 }
 

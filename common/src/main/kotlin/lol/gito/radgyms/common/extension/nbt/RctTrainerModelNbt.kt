@@ -12,8 +12,8 @@ fun CompoundTag.getRctTrainerModel(key: String): TrainerModel? {
     return TrainerModel(
         tag.getString("Name"),
         JTO.of { RCTBattleAI() },
-        tag.getRadGymsTrainerBag("Bag") ?: mutableListOf(),
-        tag.getRadGymsTrainerTeam("Team") ?: mutableListOf(),
+        tag.getRadGymsTrainerBag("Bag"),
+        tag.getRadGymsTrainerTeam("Team"),
     )
 }
 

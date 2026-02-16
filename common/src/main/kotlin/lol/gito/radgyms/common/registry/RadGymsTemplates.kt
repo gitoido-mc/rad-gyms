@@ -18,11 +18,7 @@ import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.data.JsonDataRegistry
 import lol.gito.radgyms.common.api.dto.gym.GymJson
-import lol.gito.radgyms.common.api.dto.reward.AdvancementReward
-import lol.gito.radgyms.common.api.dto.reward.CommandReward
-import lol.gito.radgyms.common.api.dto.reward.LootTableReward
-import lol.gito.radgyms.common.api.dto.reward.PokemonReward
-import lol.gito.radgyms.common.api.dto.reward.RewardInterface
+import lol.gito.radgyms.common.api.dto.reward.*
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -53,7 +49,9 @@ object RadGymsTemplates : JsonDataRegistry<GymJson> {
             }
         }
 
-        val format = Json { serializersModule = module }
+        val format = Json {
+            serializersModule = module
+        }
 
         return format.decodeFromStream<GymJson>(stream)
     }
