@@ -54,10 +54,17 @@
   "rad_gyms.message.info.gym_init": "Mysterious forces are teleporting you to %s trial",
   "rad_gyms.message.info.leader_defeated": "Congratulations on beating the gym!",
   "rad_gyms.message.info.poke_cache.reward": "You got %s %s from cache!",
-  "rad_gyms.message.info.poke_cache.shiny": "SHINY! ",
+  "rad_gyms.message.info.poke_cache.shiny": "SHINY ",
   "rad_gyms.message.info.trainer_defeated": "You won! Go challenge next trainer.",
   "rad_gyms.message.info.trainer_required": "Go fight %s before challenging me.",
   "rad_gyms.npc.leader": "Gym Leader",
   "rad_gyms.npc.trainer_junior": "Junior gym trainer",
-  "rad_gyms.npc.trainer_senior": "Senior gym trainer"
+  "rad_gyms.npc.trainer_senior": "Senior gym trainer",
+  "stat.rad_gyms.caches_opened": "Poke caches opened",
+  "stat.rad_gyms.entrances_used": "Gym entrances used",
+  "stat.rad_gyms.gyms_beaten": "Gyms beaten",
+  "stat.rad_gyms.gyms_failed": "Gyms failed",
+  "stat.rad_gyms.gyms_visited": "Gyms visited",
+  "stat.rad_gyms.keys_used": "Gym keys used",
+  "stat.rad_gyms.ropes_used": "Gym escape ropes used"
 }
