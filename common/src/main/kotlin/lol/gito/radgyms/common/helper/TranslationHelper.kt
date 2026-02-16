@@ -15,9 +15,27 @@ import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Component.translatable
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 
-fun tl(key: String, vararg args: Any?): MutableComponent = translatable(modId(key).toLanguageKey(), *args)
-fun tlc(key: String, vararg args: Any?): MutableComponent = translatable(cobblemonResource(key).toLanguageKey(), *args)
+fun tlc(key: String, vararg args: Any?): MutableComponent = translatable(
+    cobblemonResource(key).toLanguageKey(),
+    *args
+)
+
+fun tl(key: String, vararg args: Any?): MutableComponent = translatable(
+    modId(key).toLanguageKey(),
+    *args
+)
+fun tl(prefix: String, key: String, vararg args: Any?): MutableComponent = translatable(
+    modId(key).toLanguageKey(prefix),
+    *args
+)
+
+fun tlk(key: String): String = modId(key).toLanguageKey()
+fun tlk(key: ResourceLocation): String = key.toLanguageKey()
+
+fun tlk(prefix: String, key: ResourceLocation): String = key.toLanguageKey(prefix)
+fun tlk(prefix: String, key: String): String = modId(key).toLanguageKey(prefix)
 
 object ElementalTypeTranslationHelper {
     @Suppress("unused")

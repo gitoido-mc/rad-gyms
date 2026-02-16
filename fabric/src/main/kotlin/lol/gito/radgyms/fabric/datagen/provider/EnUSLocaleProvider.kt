@@ -7,7 +7,7 @@
 
 package lol.gito.radgyms.fabric.datagen.provider
 
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.helper.tlk
 import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
 import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_EXIT
 import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_COMMON
@@ -27,6 +27,13 @@ import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_COMMON
 import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_EPIC
 import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_RARE
 import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_UNCOMMON
+import lol.gito.radgyms.common.stats.RadGymsStats.CACHES_OPENED
+import lol.gito.radgyms.common.stats.RadGymsStats.ENTRANCES_USED
+import lol.gito.radgyms.common.stats.RadGymsStats.GYMS_BEATEN
+import lol.gito.radgyms.common.stats.RadGymsStats.GYMS_FAILED
+import lol.gito.radgyms.common.stats.RadGymsStats.GYMS_VISITED
+import lol.gito.radgyms.common.stats.RadGymsStats.KEYS_USED
+import lol.gito.radgyms.common.stats.RadGymsStats.ROPES_USED
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.core.HolderLookup
@@ -42,129 +49,82 @@ class EnUSLocaleProvider(
     registryLookup
 ) {
     @Suppress("LongMethod")
-    private fun provideTranslations(): MutableMap<String, String> {
-        return mutableMapOf(
-            GENERAL_GROUP!!.displayName.string to
-                    "Rad Gyms: General",
-            KEYS_GROUP!!.displayName.string to
-                    "Rad Gyms: Keys",
-            CACHES_GROUP!!.displayName.string to
-                    "Rad Gyms: Pokémon caches",
-            EXIT_ROPE.descriptionId to
-                    "Exit rope",
-            EXIT_ROPE.descriptionId.plus(".tooltip") to
-                    "Single-use rope to escape the gym trial",
-            EXIT_ROPE.descriptionId.plus(".failed") to
-                    "It cannot be used here",
-            GYM_KEY.descriptionId to
-                    "Gym key",
-            GYM_KEY.descriptionId.plus(".attuned") to
-                    "Attuned to %s",
-            CACHE_COMMON.descriptionId to
-                    "Common Pokemon cache",
-            CACHE_UNCOMMON.descriptionId to
-                    "Uncommon Pokemon cache",
-            CACHE_RARE.descriptionId to
-                    "Rare Pokemon cache",
-            CACHE_EPIC.descriptionId to
-                    "Epic Pokemon cache",
-            SHARD_COMMON.descriptionId to
-                    "Common cache shard",
-            SHARD_UNCOMMON.descriptionId to
-                    "Uncommon cache shard",
-            SHARD_RARE.descriptionId to
-                    "Rare cache shard",
-            SHARD_EPIC.descriptionId to
-                    "Epic cache shard",
-            GYM_ENTRANCE.descriptionId to
-                    "Gym Entrance",
-            GYM_ENTRANCE.descriptionId.plus(".tooltip") to
-                    "Type can be changed by using Debug Stick on the block.",
-            GYM_ENTRANCE.descriptionId.plus(".tooltip2") to
-                    "All players entry count can be reset by using Debug Stick on it while crouching.",
-            GYM_EXIT.descriptionId to
-                    "Gym Exit",
-            SHARD_BLOCK_COMMON.descriptionId to
-                    "Common shard block",
-            SHARD_BLOCK_UNCOMMON.descriptionId to
-                    "Uncommon shard block",
-            SHARD_BLOCK_RARE.descriptionId to
-                    "Rare shard block",
-            SHARD_BLOCK_EPIC.descriptionId to
-                    "Epic shard block",
-            modId("item.component.type.chaos").toLanguageKey() to
-                    "Chaos",
-            modId("item.component.gym_type").toLanguageKey() to
-                    "Attuned to %s",
-            modId("item.component.shiny_boost").toLanguageKey() to
-                    "Shiny chance boosted x%s time(s)",
-            modId("gym_reward").toLanguageKey("item") to
-                    "Level %s %s gym reward cache",
-            modId("gui.common.set-gym-level").toLanguageKey() to
-                    "Select desirable %s gym level",
-            modId("gui.common.set-gym-level-entry").toLanguageKey() to
-                    "Select desirable %s gym level (Uses left: %s)",
-            modId("gui.common.leave-gym").toLanguageKey() to
-                    "You want to leave?",
-            modId("gui.common.leave-gym-reward").toLanguageKey() to
-                    "Rewards will be lost if leader is not defeated.",
-            modId("gui.common.leave").toLanguageKey() to
-                    "Leave Gym",
-            modId("gui.common.uses_left").toLanguageKey() to
-                    "Entrance uses left: %s",
-            modId("npc.trainer_junior").toLanguageKey() to
-                    "Junior gym trainer",
-            modId("npc.trainer_senior").toLanguageKey() to
-                    "Senior gym trainer",
-            modId("npc.leader").toLanguageKey() to
-                    "Gym Leader",
-            modId("message.info.gym_entrance_breaking").toLanguageKey() to
-                    "Gym entrances do not drop when broken."
-                        .plus(" If you break it, all players will lose access to this entrance"),
-            modId("message.info.gym_entrance_exhausted").toLanguageKey() to
-                    "This gym entrance lost all his energies, look for another one",
-            modId("message.info.gym_entrance_party_empty").toLanguageKey() to
-                    "Your Pokemon party is not enough. Bring at least 3 Pokemon",
-            modId("message.info.gym_entrance_party_fainted").toLanguageKey() to
-                    "Your pokemon party requires healing",
-            modId("message.info.trainer_required").toLanguageKey() to
-                    "Go fight %s before challenging me.",
-            modId("message.info.trainer_defeated").toLanguageKey() to
-                    "You won! Go challenge next trainer.",
-            modId("message.info.leader_defeated").toLanguageKey() to
-                    "Congratulations on beating the gym!",
-            modId("message.info.gym_failed").toLanguageKey() to
-                    "Mysterious forces are teleporting you away from the trial",
-            modId("message.info.gym_init").toLanguageKey() to
-                    "Mysterious forces are teleporting you to %s trial",
-            modId("message.info.gym_complete").toLanguageKey() to
-                    "An exit appeared somewhere in gym",
-            modId("message.info.command.op_kick").toLanguageKey() to
-                    "Mysterious forces are forcibly extracting you out from trial",
-            modId("message.info.command.debug_reward").toLanguageKey() to
-                    "Generated rewards for gym template %s with poke typing %s with level %s",
-            modId("message.info.poke_cache.shiny").toLanguageKey() to
-                    "SHINY! ",
-            modId("message.info.poke_cache.reward").toLanguageKey() to
-                    "You got %s %s from cache!",
-            modId("message.error.common.no-response").toLanguageKey() to
-                    "Cannot acquire server response, try again",
-            modId("message.error.key.not-in-main-hand").toLanguageKey() to
-                    "Gym key must be in your main hand",
-            modId("message.error.gym_entrance.not-sneaking").toLanguageKey() to
-                    "You need to sneak to break gym entrance",
-            modId("message.error.command.op_kick").toLanguageKey() to
-                    "Cannot kick player %s from gym",
-            modId("message.error.command.debug_reward.no_template").toLanguageKey() to
-                    "Cannot find template provided",
-            modId("message.error.command.debug_reward.no_player").toLanguageKey() to
-                    "Command was not executed by player",
-            modId("label.rarity.${Rarity.COMMON.name.lowercase()}").toLanguageKey() to "Common",
-            modId("label.rarity.${Rarity.UNCOMMON.name.lowercase()}").toLanguageKey() to "Uncommon",
-            modId("label.rarity.${Rarity.RARE.name.lowercase()}").toLanguageKey() to "Rare",
-            modId("label.rarity.${Rarity.EPIC.name.lowercase()}").toLanguageKey() to "Epic",
-        )
-    }
+    private fun provideTranslations(): Map<String, String> = mapOf(
+        GENERAL_GROUP!!.displayName.string to "Rad Gyms: General",
+        KEYS_GROUP!!.displayName.string to "Rad Gyms: Keys",
+        CACHES_GROUP!!.displayName.string to "Rad Gyms: Pokémon caches",
+        EXIT_ROPE.descriptionId to "Exit rope",
+        EXIT_ROPE.descriptionId.plus(".tooltip") to "Single-use rope to escape the gym trial",
+        EXIT_ROPE.descriptionId.plus(".failed") to "It cannot be used here",
+        GYM_KEY.descriptionId to "Gym key",
+        GYM_KEY.descriptionId.plus(".attuned") to "Attuned to %s",
+        CACHE_COMMON.descriptionId to "Common Pokemon cache",
+        CACHE_UNCOMMON.descriptionId to "Uncommon Pokemon cache",
+        CACHE_RARE.descriptionId to "Rare Pokemon cache",
+        CACHE_EPIC.descriptionId to "Epic Pokemon cache",
+        SHARD_COMMON.descriptionId to "Common cache shard",
+        SHARD_UNCOMMON.descriptionId to "Uncommon cache shard",
+        SHARD_RARE.descriptionId to "Rare cache shard",
+        SHARD_EPIC.descriptionId to "Epic cache shard",
+        GYM_ENTRANCE.descriptionId to "Gym Entrance",
+        GYM_ENTRANCE.descriptionId.plus(".tooltip") to "Type can be changed by using Debug Stick on the block.",
+        GYM_ENTRANCE.descriptionId.plus(".tooltip2") to
+                "All players entry count can be reset by using Debug Stick on it while crouching.",
+        GYM_EXIT.descriptionId to "Gym Exit",
+        SHARD_BLOCK_COMMON.descriptionId to "Common shard block",
+        SHARD_BLOCK_UNCOMMON.descriptionId to "Uncommon shard block",
+        SHARD_BLOCK_RARE.descriptionId to "Rare shard block",
+        SHARD_BLOCK_EPIC.descriptionId to "Epic shard block",
+        tlk("item.component.type.chaos") to "Chaos",
+        tlk("item.component.gym_type") to "Attuned to %s",
+        tlk("item.component.shiny_boost") to "Shiny chance boosted x%s time(s)",
+        tlk("item", "gym_reward") to "Level %s %s gym reward cache",
+        tlk("gui.common.set-gym-level") to "Select desirable %s gym level",
+        tlk("gui.common.set-gym-level-entry") to "Select desirable %s gym level (Uses left: %s)",
+        tlk("gui.common.leave-gym") to "You want to leave?",
+        tlk("gui.common.leave-gym-reward") to "Rewards will be lost if leader is not defeated.",
+        tlk("gui.common.leave") to "Leave Gym",
+        tlk("gui.common.uses_left") to "Entrance uses left: %s",
+        tlk("npc.trainer_junior") to "Junior gym trainer",
+        tlk("npc.trainer_senior") to "Senior gym trainer",
+        tlk("npc.leader") to "Gym Leader",
+        tlk("message.info.gym_entrance_breaking") to "Gym entrances do not drop when broken."
+            .plus(" If you break it, all players will lose access to this entrance"),
+        tlk("message.info.gym_entrance_exhausted") to
+                "This gym entrance lost all his energies, look for another one",
+        tlk("message.info.gym_entrance_party_empty") to
+                "Your Pokemon party is not enough. Bring at least 3 Pokemon",
+        tlk("message.info.gym_entrance_party_fainted") to "Your pokemon party requires healing",
+        tlk("message.info.trainer_required") to "Go fight %s before challenging me.",
+        tlk("message.info.trainer_defeated") to "You won! Go challenge next trainer.",
+        tlk("message.info.leader_defeated") to "Congratulations on beating the gym!",
+        tlk("message.info.gym_failed") to "Mysterious forces are teleporting you away from the trial",
+        tlk("message.info.gym_init") to "Mysterious forces are teleporting you to %s trial",
+        tlk("message.info.gym_complete") to "An exit appeared somewhere in gym",
+        tlk("message.info.command.op_kick") to "Mysterious forces are forcibly extracting you out from trial",
+        tlk("message.info.command.debug_reward") to
+                "Generated rewards for gym template %s with poke typing %s with level %s",
+        tlk("message.info.poke_cache.shiny") to "SHINY ",
+        tlk("message.info.poke_cache.reward") to "You got %s %s from cache!",
+        tlk("message.error.common.no-response") to "Cannot acquire server response, try again",
+        tlk("message.error.key.not-in-main-hand") to "Gym key must be in your main hand",
+        tlk("message.error.gym_entrance.not-sneaking") to "You need to sneak to break gym entrance",
+        tlk("message.error.command.op_kick") to "Cannot kick player %s from gym",
+        tlk("message.error.command.debug_reward.no_template") to "Cannot find template provided",
+        tlk("message.error.command.debug_reward.no_player") to "Command was not executed by player",
+        tlk("label.rarity.${Rarity.COMMON.name.lowercase()}") to "Common",
+        tlk("label.rarity.${Rarity.UNCOMMON.name.lowercase()}") to "Uncommon",
+        tlk("label.rarity.${Rarity.RARE.name.lowercase()}") to "Rare",
+        tlk("label.rarity.${Rarity.EPIC.name.lowercase()}") to "Epic",
+
+        tlk("stat", GYMS_VISITED.resourceLocation) to "Gyms visited",
+        tlk("stat", GYMS_BEATEN.resourceLocation) to "Gyms beaten",
+        tlk("stat", GYMS_FAILED.resourceLocation) to "Gyms failed",
+        tlk("stat", KEYS_USED.resourceLocation) to "Gym keys used",
+        tlk("stat", ENTRANCES_USED.resourceLocation) to "Gym entrances used",
+        tlk("stat", ROPES_USED.resourceLocation) to "Gym escape ropes used",
+        tlk("stat", CACHES_OPENED.resourceLocation) to "Poke caches opened",
+    )
 
 
     override fun generateTranslations(

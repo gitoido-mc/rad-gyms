@@ -7,19 +7,19 @@
 
 package lol.gito.radgyms.common.event.gyms
 
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.reward.CommandReward
 import lol.gito.radgyms.common.api.dto.reward.LootTableReward
 import lol.gito.radgyms.common.api.dto.reward.PokemonReward
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.extension.rainbow
+import lol.gito.radgyms.common.helper.tl
+import lol.gito.radgyms.common.helper.tlc
 import lol.gito.radgyms.common.item.PokeShardBase
 import lol.gito.radgyms.common.registry.RadGymsItems
 import net.minecraft.ChatFormatting
@@ -27,7 +27,6 @@ import net.minecraft.commands.Commands
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Component.translatable
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -76,8 +75,8 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
             event.player.party().add(poke)
 
             event.player.displayClientMessage(
-                translatable(
-                    modId("message.info.gym_complete.reward_poke").toLanguageKey(),
+                tl(
+                    "message.info.gym_complete.reward_poke",
                     when (poke.shiny) {
                         true -> poke.species.translatedName.rainbow()
                         false -> poke.species.translatedName
@@ -139,17 +138,14 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
         rewards.forEach { bundleContents.tryInsert(it) }
 
         val styledLevel = Component.literal(event.level.toString()).withStyle(ChatFormatting.GOLD)
-        val styledType = translatable(cobblemonResource("type.${event.type.lowercase()}").toLanguageKey())
+        val styledType = tlc("type.${event.type.lowercase()}")
             .setStyle(
                 Style.EMPTY.withColor(ChatFormatting.GREEN).withItalic(true)
             )
 
         bundle.set(
             DataComponents.CUSTOM_NAME,
-            translatable(
-                modId("gym_reward").toLanguageKey("item"),
-                styledLevel, styledType
-            )
+            tl(prefix = "item", key = "gym_reward", styledLevel, styledType)
         )
         bundle.set(DataComponents.BUNDLE_CONTENTS, bundleContents.toImmutable())
         event.player.giveOrDropItemStack(bundle, true)

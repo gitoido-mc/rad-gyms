@@ -13,15 +13,16 @@ import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.extension.rainbow
 import net.minecraft.network.chat.Component.translatable
+import lol.gito.radgyms.common.helper.tl
 
 class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
     init {
         event.player.party().add(event.poke)
 
         event.player.displayClientMessage(
-            translatable(
-                modId("message.info.poke_cache.reward").toLanguageKey(),
-                translatable(modId("label.rarity.${event.rarity.toString().lowercase()}").toLanguageKey()).withStyle(
+            tl(
+                "message.info.poke_cache.reward",
+                tl("label.rarity.${event.rarity.toString().lowercase()}").withStyle(
                     event.rarity.color()
                 ),
                 when (event.poke.shiny) {

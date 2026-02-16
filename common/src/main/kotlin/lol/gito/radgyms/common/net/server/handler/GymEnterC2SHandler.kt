@@ -11,13 +11,13 @@ import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
+import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper
+import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.net.client.payload.GymEnterC2S
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsItems
-import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper
-import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.stats.RadGymsStats.getStat
-import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
@@ -28,8 +28,8 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
         player: ServerPlayer
     ) {
         RadGyms.debug("Using key? : ${packet.key}")
-        var message = translatable(
-            RadGyms.modId("message.info.gym_init").toLanguageKey(),
+        var message = tl(
+            "message.info.gym_init",
             ElementalTypeTranslationHelper.buildTypeText(packet.type)
         )
 
@@ -51,19 +51,15 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
                         .let { it ?: packet.type }
                 RadGyms.debug("Gym key type : $stackType")
 
-                message = translatable(
-                    RadGyms.modId("message.info.gym_init").toLanguageKey(),
+                message = tl(
+                    "message.info.gym_init",
                     ElementalTypeTranslationHelper.buildTypeText(stackType)
                 )
 
                 stack.consume(1, player)
                 player.awardStat(getStat(RadGyms.statistics.KEYS_USED))
             } else {
-                player.displayClientMessage(
-                    translatable(
-                        RadGyms.modId("message.error.key.not-in-main-hand").toLanguageKey()
-                    )
-                )
+                player.displayClientMessage(tl("message.error.key.not-in-main-hand"))
             }
         }
 
@@ -74,6 +70,6 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
         }
 
         player.displayClientMessage(message)
-        RadGyms.gymInitializer.initInstance(player, player.serverLevel(), packet.level, type)
+        RadGyms.gymInitializer.initInstance(player, player.serverLevel(), packet.level, type, packet.key)
     }
 }

@@ -12,16 +12,15 @@ import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
-import lol.gito.radgyms.common.registry.RadGymsDataComponents
-import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
+import lol.gito.radgyms.common.helper.tl
+import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
+import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -40,24 +39,18 @@ class GymKey : CobblemonItem(
         val party = (player as ServerPlayer).party()
         return when {
             (level.dimension() == RadGymsDimensions.GYM_DIMENSION) -> {
-                player.displayClientMessage(
-                    translatable(modId("message.info.gym_key_wrong_place").toLanguageKey())
-                )
+                player.displayClientMessage(tl("message.info.gym_key_wrong_place"))
                 InteractionResultHolder.fail(player.getItemInHand(hand))
             }
 
             (party.occupied() < MIN_PLAYER_TEAM_SIZE) -> {
-                player.displayClientMessage(
-                    translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey())
-                )
+                player.displayClientMessage(tl("message.info.gym_entrance_party_empty"))
                 debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
                 InteractionResultHolder.fail(player.getItemInHand(hand))
             }
 
             (party.all { it.isFainted() }) -> {
-                player.displayClientMessage(
-                    translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey())
-                )
+                player.displayClientMessage(tl("message.info.gym_entrance_party_fainted"))
                 debug("Player ${player.uuid} tried to use gym key with party fainted, denying...")
                 InteractionResultHolder.fail(player.getItemInHand(hand))
             }
