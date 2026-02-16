@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.types.tera.TeraTypes
 import com.cobblemon.mod.common.pokemon.EVs
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.IVs
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.gitlab.srcmc.rctapi.api.errors.RCTError
 import com.gitlab.srcmc.rctapi.api.errors.RCTErrors
 import com.gitlab.srcmc.rctapi.api.errors.RCTException
