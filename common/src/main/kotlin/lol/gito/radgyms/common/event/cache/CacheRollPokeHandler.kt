@@ -14,7 +14,7 @@ import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.extension.rainbow
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.item.PokeCache
-import lol.gito.radgyms.common.stats.RadGymsStats.getStat
+import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 
 class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
     init {

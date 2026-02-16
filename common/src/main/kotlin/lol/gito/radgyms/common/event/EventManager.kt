@@ -38,9 +38,9 @@ import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.common.event.gyms.*
 import lol.gito.radgyms.common.gym.GymInitializer
-import lol.gito.radgyms.common.gym.SpeciesManager
-import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
-import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.SPECIES_BY_TYPE
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesOfType
 import lol.gito.radgyms.common.gym.TrainerFactory
 import lol.gito.radgyms.common.gym.TrainerSpawner
 import lol.gito.radgyms.common.helper.hasGymTrainers
@@ -86,7 +86,7 @@ object EventManager {
         }
 
         RadGymsCaches.observable.subscribe(Priority.NORMAL) { registry ->
-            SpeciesManager.SPECIES_BY_RARITY = registry.caches.mapKeys { (key, _) ->
+            RadGymsSpeciesRegistry.SPECIES_BY_RARITY = registry.caches.mapKeys { (key, _) ->
                 debug("cache key ${key.path}")
                 key.path
             }

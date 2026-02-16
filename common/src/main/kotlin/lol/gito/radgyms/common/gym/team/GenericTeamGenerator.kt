@@ -20,7 +20,7 @@ import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import lol.gito.radgyms.common.api.team.TeamGeneratorInterface
-import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.SPECIES_BY_TYPE
 import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
 

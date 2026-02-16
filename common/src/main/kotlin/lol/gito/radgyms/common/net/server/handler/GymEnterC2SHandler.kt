@@ -17,7 +17,7 @@ import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.net.client.payload.GymEnterC2S
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsItems
-import lol.gito.radgyms.common.stats.RadGymsStats.getStat
+import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 

@@ -13,7 +13,7 @@ import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.GymTeleportScheduler
-import lol.gito.radgyms.common.stats.RadGymsStats.getStat
+import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 import net.minecraft.world.level.levelgen.structure.BoundingBox
 import net.minecraft.world.phys.AABB
 

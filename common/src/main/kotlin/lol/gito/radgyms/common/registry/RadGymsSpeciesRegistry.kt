@@ -5,12 +5,13 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.gym
+package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.debug
@@ -19,6 +20,10 @@ import lol.gito.radgyms.common.cache.CacheDTO
 import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 
 private typealias SpeciesWithForms = List<SpeciesWithForm>
+
+private fun Pokemon.matchesSimplified(other: Pokemon): Boolean = this.species == other.species &&
+        this.form == other.form &&
+        this.aspects.containsAll(other.aspects)
 
 private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null): SpeciesWithForms = this
     .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
@@ -44,7 +49,7 @@ private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null)
         poke.forcedAspects = speciesPair.form.aspects.toSet()
         poke.updateAspects()
 
-        if (CONFIG.ignoredSpeciesProps().any { it.matches(poke) }) {
+        if (CONFIG.ignoredSpeciesProps().any { it.matchesSimplified(poke) }) {
             debug("Excluding {} with {} form", poke.species.name, poke.form.name)
             return@filter false
         }
@@ -56,7 +61,7 @@ private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null)
     }
     .toList()
 
-object SpeciesManager {
+object RadGymsSpeciesRegistry {
     var SPECIES_BY_TYPE: HashMap<String, SpeciesWithForms> = HashMap(ElementalTypes.count())
     var SPECIES_BY_RARITY: Map<String, CacheDTO> = mutableMapOf()
 
