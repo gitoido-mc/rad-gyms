@@ -17,6 +17,10 @@ import lol.gito.radgyms.common.api.serialization.GymRewardTypes
 @SerialName(REGISTRY_REWARD_TYPE_COMMAND)
 data class CommandReward(
     val execute: String,
+    @SerialName("as_server")
+    val asServer: Boolean = false,
+    @SerialName("op_level")
+    val opLevel: Int = 2,
     @SerialName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
     @SerialName("max_level")
@@ -30,6 +34,8 @@ data class CommandReward(
         val CODEC: MapCodec<CommandReward> = RecordCodecBuilder.mapCodec {
             it.group(
                 Codec.STRING.fieldOf("execute").forGetter(CommandReward::execute),
+                Codec.BOOL.fieldOf("as_server").forGetter(CommandReward::asServer),
+                Codec.INT.fieldOf("op_level").forGetter(CommandReward::opLevel),
                 Codec.INT.fieldOf("min_level").forGetter(CommandReward::minLevel),
                 Codec.INT.fieldOf("max_level").forGetter(CommandReward::maxLevel),
                 GymReward.CODEC.fieldOf("type").forGetter(CommandReward::type),

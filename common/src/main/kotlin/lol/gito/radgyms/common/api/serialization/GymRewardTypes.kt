@@ -1,6 +1,7 @@
 package lol.gito.radgyms.common.api.serialization
 
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.api.dto.reward.AdvancementReward
 import lol.gito.radgyms.common.api.dto.reward.CommandReward
 import lol.gito.radgyms.common.api.dto.reward.LootTableReward
 import lol.gito.radgyms.common.api.dto.reward.PokemonReward
@@ -22,6 +23,11 @@ object GymRewardTypes {
     val POKEMON: GymRewardType<PokemonReward> = register(
         GymReward.POKEMON,
         GymRewardType(PokemonReward.CODEC)
+    )
+
+    val ADVANCEMENT: GymRewardType<AdvancementReward> = register(
+        GymReward.ADVANCEMENT,
+        GymRewardType(AdvancementReward.CODEC)
     )
 
     fun <T : RewardInterface> register(type: GymReward, item: GymRewardType<T>): GymRewardType<T> = Registry.register(

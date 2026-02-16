@@ -19,6 +19,8 @@ import lol.gito.radgyms.common.api.serialization.PokemonPropertiesSerializer
 data class PokemonReward(
     @Serializable(PokemonPropertiesSerializer::class)
     val pokemon: PokemonProperties,
+    @SerialName("min_perfect_ivs")
+    val minPerfectIvs: Int? = null,
     @SerialName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
     @SerialName("max_level")
@@ -32,6 +34,7 @@ data class PokemonReward(
         val CODEC: MapCodec<PokemonReward> = RecordCodecBuilder.mapCodec {
             it.group(
                 PokemonProperties.CODEC.fieldOf("pokemon").forGetter(PokemonReward::pokemon),
+                Codec.INT.lenientOptionalFieldOf("min_perfect_ivs", null).forGetter(PokemonReward::minPerfectIvs),
                 Codec.INT.fieldOf("min_level").forGetter(PokemonReward::minLevel),
                 Codec.INT.fieldOf("max_level").forGetter(PokemonReward::maxLevel),
                 GymReward.CODEC.fieldOf("type").forGetter(PokemonReward::type),

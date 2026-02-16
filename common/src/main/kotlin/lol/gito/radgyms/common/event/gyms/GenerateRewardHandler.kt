@@ -9,9 +9,11 @@ package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.party
+import lol.gito.radgyms.common.MAX_PERFECT_IVS
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.api.dto.reward.AdvancementReward
 import lol.gito.radgyms.common.api.dto.reward.CommandReward
 import lol.gito.radgyms.common.api.dto.reward.LootTableReward
 import lol.gito.radgyms.common.api.dto.reward.PokemonReward
@@ -23,7 +25,6 @@ import lol.gito.radgyms.common.helper.tlc
 import lol.gito.radgyms.common.item.PokeShardBase
 import lol.gito.radgyms.common.registry.RadGymsItems
 import net.minecraft.ChatFormatting
-import net.minecraft.commands.Commands
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -58,19 +59,47 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
         handleLootRewards(currentLevelRewards.filterIsInstance<LootTableReward>())
         handlePokemonRewards(currentLevelRewards.filterIsInstance<PokemonReward>())
         handleCommandRewards(currentLevelRewards.filterIsInstance<CommandReward>())
+        handleAdvancementRewards(currentLevelRewards.filterIsInstance<AdvancementReward>())
+    }
+
+    private fun handleAdvancementRewards(rewards: List<AdvancementReward>) {
+        val advancements = event.player.server.advancements.allAdvancements
+
+        rewards.forEach { reward ->
+            val advancement = advancements.firstNotNullOfOrNull {
+                if (it.id == ResourceLocation.parse(reward.id)) return@firstNotNullOfOrNull it
+                return@firstNotNullOfOrNull null
+            }
+
+            advancement?.let { holder ->
+                val progress = event.player.advancements.getOrStartProgress(holder)
+                if (progress.isDone) return@let
+
+                progress.remainingCriteria.forEach { criteria ->
+                    event.player.advancements.award(holder, criteria)
+                }
+            }
+        }
     }
 
     private fun handleCommandRewards(rewards: List<CommandReward>) {
-        val source = event.player.createCommandSourceStack().withPermission(Commands.LEVEL_GAMEMASTERS)
         val handler = event.player.server.commands
 
         rewards.forEach {
+            val source = when (it.asServer) {
+                true -> event.player.server.createCommandSourceStack().withPermission(it.opLevel)
+                false -> event.player.createCommandSourceStack().withPermission(it.opLevel)
+            }
+
             handler.performPrefixedCommand(source, it.execute.trim())
         }
     }
 
     private fun handlePokemonRewards(rewards: List<PokemonReward>) {
         rewards.forEach {
+            if (it.minPerfectIvs != null) {
+                it.pokemon.minPerfectIVs = it.minPerfectIvs.coerceIn(0, MAX_PERFECT_IVS)
+            }
             val poke = it.pokemon.create(event.player)
             event.player.party().add(poke)
 
@@ -104,14 +133,13 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
                 .create(LootContextParamSets.GIFT)
 
             registryLootTable.getRandomItems(lootContextParameterSet).let { loot ->
-                if (RadGyms.CONFIG.shardRewards == true) {
-                    event.rewards.addAll(loot)
-                } else {
-                    event.rewards.addAll(loot.filter { it.item !is PokeShardBase })
+                if (table.maxItems != null && loot.count() > table.maxItems) {
+                    addRewards(loot.shuffled().take(table.maxItems))
+                    return@let
                 }
+                addRewards(loot)
             }
         }
-
 
         if (event.rewards.count() > BundleItem.DEFAULT_MAX_STACK_SIZE) {
             LOGGER.warn(
@@ -122,15 +150,14 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
             )
 
             event.rewards.chunked(BundleItem.DEFAULT_MAX_STACK_SIZE).forEach {
-                createBundle(event, bundle, bundleContents, it)
+                createBundle(bundle, bundleContents, it)
             }
         } else {
-            createBundle(event, bundle, bundleContents, event.rewards)
+            createBundle(bundle, bundleContents, event.rewards)
         }
     }
 
     private fun createBundle(
-        event: GymEvents.GenerateRewardEvent,
         bundle: ItemStack,
         bundleContents: BundleContents.Mutable,
         rewards: List<ItemStack>
@@ -149,5 +176,13 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
         )
         bundle.set(DataComponents.BUNDLE_CONTENTS, bundleContents.toImmutable())
         event.player.giveOrDropItemStack(bundle, true)
+    }
+
+    private fun addRewards(loot: List<ItemStack>) {
+        if (RadGyms.CONFIG.shardRewards == true) {
+            event.rewards.addAll(loot)
+        } else {
+            event.rewards.addAll(loot.filter { it.item !is PokeShardBase })
+        }
     }
 }

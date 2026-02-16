@@ -16,6 +16,8 @@ import lol.gito.radgyms.common.api.serialization.GymRewardTypes
 @SerialName(REGISTRY_REWARD_TYPE_LOOT_TABLE)
 data class LootTableReward(
     val id: String,
+    @SerialName("max_items")
+    val maxItems: Int? = null,
     @SerialName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
     @SerialName("max_level")
@@ -29,6 +31,7 @@ data class LootTableReward(
         val CODEC: MapCodec<LootTableReward> = RecordCodecBuilder.mapCodec {
             it.group(
                 Codec.STRING.fieldOf("id").forGetter(LootTableReward::id),
+                Codec.INT.lenientOptionalFieldOf("max_items", null).forGetter(LootTableReward::maxItems),
                 Codec.INT.fieldOf("min_level").forGetter(LootTableReward::minLevel),
                 Codec.INT.fieldOf("max_level").forGetter(LootTableReward::maxLevel),
                 GymReward.CODEC.fieldOf("type").forGetter(LootTableReward::type),

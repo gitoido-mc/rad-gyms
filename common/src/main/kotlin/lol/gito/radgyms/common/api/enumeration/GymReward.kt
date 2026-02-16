@@ -2,6 +2,7 @@ package lol.gito.radgyms.common.api.enumeration
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_ADVANCEMENT
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_COMMAND
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_LOOT_TABLE
 import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_POKEMON
@@ -19,7 +20,11 @@ enum class GymReward : StringRepresentable {
 
     @JvmField
     @SerialName(REGISTRY_REWARD_TYPE_POKEMON)
-    POKEMON;
+    POKEMON,
+
+    @JvmField
+    @SerialName(REGISTRY_REWARD_TYPE_ADVANCEMENT)
+    ADVANCEMENT;
 
     override fun getSerializedName(): String = this.name.lowercase()
 
