@@ -69,6 +69,7 @@ class RadGymsNeoForge : RadGymsImplementation {
 
     init {
         with(MOD_BUS) {
+            this@RadGymsNeoForge.commandArgumentTypes.register(this)
             addListener(this@RadGymsNeoForge::initialize)
             RadGyms.preInitialize(this@RadGymsNeoForge)
             addListener(EventPriority.HIGH, ::onBuildContents)
