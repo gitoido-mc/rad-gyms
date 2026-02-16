@@ -49,7 +49,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 21
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
