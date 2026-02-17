@@ -118,7 +118,6 @@ object GiveCache : CommandInterface {
             )
         )
 
-
         dispatcher.register(selfCommand)
         dispatcher.register(selfBoostCommand)
         dispatcher.register(otherCommand)
@@ -151,7 +150,6 @@ object GiveCache : CommandInterface {
                     boost
                 )
             )
-
         } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
             context.player().sendSystemMessage(
                 Component.literal("Cannot generate $rarity $type poke, caught error: ${e.message}")

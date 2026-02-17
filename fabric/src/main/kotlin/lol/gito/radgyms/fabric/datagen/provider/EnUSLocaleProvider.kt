@@ -101,6 +101,7 @@ class EnUSLocaleProvider(
         tlk("message.info.gym_failed") to "Mysterious forces are teleporting you away from the trial",
         tlk("message.info.gym_init") to "Mysterious forces are teleporting you to %s trial",
         tlk("message.info.gym_complete") to "An exit appeared somewhere in gym",
+        tlk("message.info.command.config_reloaded") to "Rad Gyms config reloaded!",
         tlk("message.info.command.op_kick") to "Mysterious forces are forcibly extracting you out from trial",
         tlk("message.info.command.debug_reward") to
                 "Generated rewards for gym template %s with poke typing %s with level %s",
@@ -110,6 +111,8 @@ class EnUSLocaleProvider(
         tlk("message.error.key.not-in-main-hand") to "Gym key must be in your main hand",
         tlk("message.error.gym_entrance.not-sneaking") to "You need to sneak to break gym entrance",
         tlk("message.error.command.op_kick") to "Cannot kick player %s from gym",
+        tlk("message.error.command.kick.wrong_dim") to "Target is not in the gym dimension",
+        tlk("message.error.command.kick.no_player") to "There is no such player currently online",
         tlk("message.error.command.debug_reward.no_template") to "Cannot find template provided",
         tlk("message.error.command.debug_reward.no_player") to "Command was not executed by player",
         tlk("label.rarity.${Rarity.COMMON.name.lowercase()}") to "Common",

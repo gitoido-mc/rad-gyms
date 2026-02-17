@@ -20,6 +20,7 @@ import lol.gito.radgyms.common.command.argument.RarityArgumentType
 import lol.gito.radgyms.common.config.RadGymsConfig
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymInitializer
+import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry
 import lol.gito.radgyms.common.registry.RadGymsStats
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
@@ -101,6 +102,17 @@ object RadGyms {
             LOGGER.info("No config found, creating new")
             CONFIG = RadGymsConfig.DEFAULT
             saveConfig(new = true)
+        }
+
+        if (this.implementation.server() != null) {
+            ServerSettingsS2C(
+                CONFIG.maxEntranceUses!!,
+                CONFIG.shardRewards!!,
+                CONFIG.lapisBoostAmount!!,
+                CONFIG.ignoredSpecies!!,
+                CONFIG.minLevel!!,
+                CONFIG.maxLevel!!
+            ).sendToAllPlayers()
         }
     }
 
