@@ -45,7 +45,6 @@ jobs:
       - name: build
         run: ./gradlew buildMod
       - name: capture build artifacts
-        if: ${{ matrix.java == '21' }}
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
@@ -63,6 +62,11 @@ jobs:
           neoforge,
         ]
     steps:
+      - name: capture build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: Artifacts
+          path: build/libs/
       - name: Publish Fabric (CurseForge/GitHub)
         uses: Kira-NT/mc-publish@v3.3
         with:
