@@ -63,10 +63,9 @@ object EventManager {
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
 
         // Cobblemon events
-        PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
+        PokemonSpecies.observable.subscribe(Priority.NORMAL) { species ->
             debug("Cobblemon species observable triggered, updating elemental gyms species map")
-            CONFIG.initializeIgnoredSpecies()
-            onSpeciesUpdate()
+            onSpeciesUpdate(species)
         }
 
         // Cobblemon battle events
@@ -149,11 +148,11 @@ object EventManager {
         if (RadGymsState.getGymForPlayer(event.player) == null) return
     }
 
-    private fun onSpeciesUpdate() {
+    private fun onSpeciesUpdate(species: PokemonSpecies) {
         SPECIES_BY_TYPE.clear()
 
         ElementalTypes.all().forEach {
-            SPECIES_BY_TYPE[it.showdownId] = speciesOfType(it)
+            SPECIES_BY_TYPE[it.showdownId] = speciesOfType(species.implemented.toList(), it)
             debug("Added ${SPECIES_BY_TYPE[it.showdownId]?.size} ${it.showdownId} entries to species map")
         }
     }

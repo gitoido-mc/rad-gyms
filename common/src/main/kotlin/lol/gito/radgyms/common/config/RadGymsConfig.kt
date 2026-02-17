@@ -85,9 +85,4 @@ data class RadGymsConfig(
             pokeCachePools = other.pokeCachePools ?: pokeCachePools
         )
     }
-
-
-    fun initializeIgnoredSpecies() {
-        ignoredPokemon = this.ignoredSpecies?.map { PokemonProperties.parse(it) } ?: emptyList()
-    }
 }
