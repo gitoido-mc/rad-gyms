@@ -23,38 +23,35 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.MOD_VERSION }}
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: validate gradle wrapper
+      - name: Validate gradle wrapper
         uses: gradle/actions/wrapper-validation@v4
-      - name: setup jdk ${{ matrix.java }}
+      - name: Setup jdk ${{ matrix.java }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'microsoft'
-      - name: make gradle wrapper executable
-        run: chmod +x ./gradlew
-      - name: Restore gradle.properties
-        env:
-          GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
-        shell: bash
-        run: |
-          mkdir -p ~/.gradle/
-          echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
-          echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
-      - name: build
-        run: ./gradlew buildMod
-      - name: capture build artifacts
+          distribution: 'temurin'
+      - name: Build
+        uses: burrunan/gradle-cache-action@v3
+        with:
+          read-only: true
+          arguments: buildMod
+      - name: Capture build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Artifacts
+          name: artifacts
           path: build/libs/
       - name: Save version output
         id: version
         run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
+
   publish:
     needs: build
     runs-on: ubuntu-22.04
+    env:
+      curseforge_id: 1196570
+      modrinth_id: eF8kqlHd
     strategy:
       matrix:
         loader: [
@@ -62,26 +59,29 @@ jobs:
           neoforge,
         ]
     steps:
-      - name: capture build artifacts
+      - name: Retrieve build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: Artifacts
+          name: artifacts
           path: build/libs/
-      - name: Publish Fabric (CurseForge/GitHub)
+      - name: Publish ${{ matrix.loader }} version (CurseForge/Modrinth)
         uses: Kira-NT/mc-publish@v3.3
         with:
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
           name: "Rad Gyms ${{ needs.build.outputs.version }} for Cobblemon ${{ env.cobblemon }}"
           version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
           version-type: release
+
+          curseforge-id: ${{ env.curseforge_id }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          modrinth-id: ${{ env.curseforge_id }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           files: |
             build/libs/rad-gyms-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
             build/libs/rad-gyms-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar 
 
-          loaders: | 
-            ${{ matrix.loader }}
+          loaders: ${{ matrix.loader }}
+
           game-versions: 1.21.1
           java: 21
