@@ -12,17 +12,16 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.RadGyms.CONFIG
-import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.cache.CacheHandler
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
+import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsDataComponents.RG_CACHE_SHINY_BOOST_COMPONENT
 import lol.gito.radgyms.common.registry.RadGymsDataComponents.RG_GYM_TYPE_COMPONENT
-import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponents.RARITY
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -95,8 +94,8 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
         val shinyBoost = stack.get(RG_CACHE_SHINY_BOOST_COMPONENT)
         val cacheType = stack.get(RG_GYM_TYPE_COMPONENT)
         if (shinyBoost != null && shinyBoost > 0) {
-            val tooltipText = translatable(
-                modId("item.component.shiny_boost").toLanguageKey(),
+            val tooltipText = tl(
+                "item.component.shiny_boost",
                 "1/${(Cobblemon.config.shinyRate.toInt() - shinyBoost).coerceAtLeast(1)}"
             )
 

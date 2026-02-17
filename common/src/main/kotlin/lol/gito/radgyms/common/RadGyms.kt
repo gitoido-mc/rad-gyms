@@ -20,8 +20,9 @@ import lol.gito.radgyms.common.command.argument.RarityArgumentType
 import lol.gito.radgyms.common.config.RadGymsConfig
 import lol.gito.radgyms.common.event.EventManager
 import lol.gito.radgyms.common.gym.GymInitializer
-import lol.gito.radgyms.common.gym.SpeciesManager
-import lol.gito.radgyms.common.stats.RadGymsStats
+import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry
+import lol.gito.radgyms.common.registry.RadGymsStats
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.border.WorldBorder
@@ -66,7 +67,7 @@ object RadGyms {
     fun initialize() {
         LOGGER.info("Initializing the mod")
         // Species
-        SpeciesManager.register()
+        RadGymsSpeciesRegistry.register()
         // Data
         RadGymsDataProvider.registerDefaults()
         // Events
@@ -84,9 +85,7 @@ object RadGyms {
 
     @JvmStatic
     fun debug(message: String, vararg params: Any) {
-//        if (CONFIG.debug == true)
-
-        LOGGER.info(message, *params)
+        if (CONFIG.debug == true) LOGGER.info(message, *params)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -103,6 +102,17 @@ object RadGyms {
             LOGGER.info("No config found, creating new")
             CONFIG = RadGymsConfig.DEFAULT
             saveConfig(new = true)
+        }
+
+        if (this.implementation.server() != null) {
+            ServerSettingsS2C(
+                CONFIG.maxEntranceUses!!,
+                CONFIG.shardRewards!!,
+                CONFIG.lapisBoostAmount!!,
+                CONFIG.ignoredSpecies!!,
+                CONFIG.minLevel!!,
+                CONFIG.maxLevel!!
+            ).sendToAllPlayers()
         }
     }
 

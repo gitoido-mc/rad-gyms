@@ -11,7 +11,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import lol.gito.radgyms.common.*
+import lol.gito.radgyms.common.MAX_PARTY_SIZE
 import lol.gito.radgyms.common.api.dto.battle.BattleAI
 import lol.gito.radgyms.common.api.dto.battle.BattleRules
 import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw

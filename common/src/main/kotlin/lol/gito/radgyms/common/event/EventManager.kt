@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
-import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.platform.events.PlatformEvents
@@ -39,9 +38,9 @@ import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.common.event.gyms.*
 import lol.gito.radgyms.common.gym.GymInitializer
-import lol.gito.radgyms.common.gym.SpeciesManager
-import lol.gito.radgyms.common.gym.SpeciesManager.SPECIES_BY_TYPE
-import lol.gito.radgyms.common.gym.SpeciesManager.speciesOfType
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.SPECIES_BY_TYPE
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesOfType
 import lol.gito.radgyms.common.gym.TrainerFactory
 import lol.gito.radgyms.common.gym.TrainerSpawner
 import lol.gito.radgyms.common.helper.hasGymTrainers
@@ -56,14 +55,9 @@ import lol.gito.radgyms.common.world.state.RadGymsState
 @Suppress("TooManyFunctions")
 object EventManager {
     fun register() {
-        PokeBalls.SLATE_BALL.let {
-            // do stuff
-        }
-
         debug("Registering event handlers")
         // Minecraft events
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStarting)
-        PlatformEvents.SERVER_STARTED.subscribe(Priority.NORMAL, ::onServerStarted)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
@@ -71,6 +65,7 @@ object EventManager {
         // Cobblemon events
         PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
             debug("Cobblemon species observable triggered, updating elemental gyms species map")
+            CONFIG.initializeIgnoredSpecies()
             onSpeciesUpdate()
         }
 
@@ -92,7 +87,7 @@ object EventManager {
         }
 
         RadGymsCaches.observable.subscribe(Priority.NORMAL) { registry ->
-            SpeciesManager.SPECIES_BY_RARITY = registry.caches.mapKeys { (key, _) ->
+            RadGymsSpeciesRegistry.SPECIES_BY_RARITY = registry.caches.mapKeys { (key, _) ->
                 debug("cache key ${key.path}")
                 key.path
             }
@@ -124,10 +119,6 @@ object EventManager {
         val trainerRegistry = RCT.trainerRegistry
         debug("initializing RCT trainer mod registry")
         trainerRegistry.init(event.server)
-    }
-
-    private fun onServerStarted(event: ServerEvent.Started) {
-        RadGymsState.getServerState(event.server)
     }
 
     private fun onPlayerJoin(event: ServerPlayerEvent) {

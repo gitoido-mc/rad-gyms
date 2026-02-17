@@ -8,20 +8,22 @@
 package lol.gito.radgyms.common.event.cache
 
 import com.cobblemon.mod.common.util.party
-import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.extension.rainbow
-import net.minecraft.network.chat.Component.translatable
+import lol.gito.radgyms.common.helper.tl
+import lol.gito.radgyms.common.item.PokeCache
+import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 
 class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
     init {
         event.player.party().add(event.poke)
 
         event.player.displayClientMessage(
-            translatable(
-                modId("message.info.poke_cache.reward").toLanguageKey(),
-                translatable(modId("label.rarity.${event.rarity.toString().lowercase()}").toLanguageKey()).withStyle(
+            tl(
+                "message.info.poke_cache.reward",
+                tl("label.rarity.${event.rarity.toString().lowercase()}").withStyle(
                     event.rarity.color()
                 ),
                 when (event.poke.shiny) {
@@ -30,6 +32,10 @@ class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
                 }
             )
         )
-        event.player.mainHandItem.consume(1, event.player)
+
+        if (event.player.mainHandItem.item is PokeCache) {
+            event.player.mainHandItem.consume(1, event.player)
+        }
+        event.player.awardStat(getStat(RadGyms.statistics.CACHES_OPENED))
     }
 }

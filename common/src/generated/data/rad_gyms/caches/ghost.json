@@ -1,26 +1,26 @@
 {
   "pools": {
     "common": {
-      "corsola aspect=galarian": 400,
+      "corsola galarian": 400,
       "duskull": 400,
       "greavard": 400,
       "litwick": 400,
       "shuppet": 400,
-      "typhlosion aspect=hisuian": 400
+      "typhlosion hisuian": 400
     },
     "epic": {
-      "arceus aspect=ghost-plate": 100,
-      "calyrex aspect=shadow-rider": 100,
+      "arceus multitype=ghost": 100,
+      "calyrex king_steed=shadow": 100,
       "fluttermane": 100,
       "giratina": 100,
-      "necrozma aspect=dawn-fusion": 100,
-      "silvally aspect=ghost-memory": 100,
+      "necrozma prism_fusion=dawn": 100,
+      "silvally rks_memory=ghost": 100,
       "spectrier": 100
     },
     "rare": {
-      "aegislash aspect=blade-forme": 200,
+      "aegislash": 200,
       "banette": 200,
-      "basculegion aspect=female": 200,
+      "basculegion female": 200,
       "chandelure": 200,
       "cofagrigus": 200,
       "cursola": 200,
@@ -33,11 +33,14 @@
       "houndstone": 200,
       "mimikyu": 200,
       "mismagius": 200,
-      "oricorio aspect=sensu-style": 200,
+      "oricorio dance_style=sensu": 200,
       "palossand": 200,
       "polteageist": 200,
-      "polteageist aspect=antique": 200,
-      "sinistcha aspect=masterpiece": 200,
+      "polteageist tea_authencity=antique": 200,
+      "sinistcha matcha_authenticity=artisan": 200,
+      "sinistcha matcha_authenticity=counterfeit": 200,
+      "sinistcha matcha_authenticity=masterpiece": 200,
+      "sinistcha matcha_authenticity=unremarkable": 200,
       "spiritomb": 200,
       "trevenant": 200
     },
@@ -45,16 +48,19 @@
       "drifloon": 300,
       "gastly": 300,
       "gimmighoul": 300,
-      "gimmighoul aspect=roaming": 300,
+      "gimmighoul roaming": 300,
       "haunter": 300,
       "lampent": 300,
       "misdreavus": 300,
       "phantump": 300,
-      "poltchageist aspect=artisan": 300,
+      "poltchageist matcha_authenticity=artisan": 300,
+      "poltchageist matcha_authenticity=counterfeit": 300,
+      "poltchageist matcha_authenticity=masterpiece": 300,
+      "poltchageist matcha_authenticity=unremarkable": 300,
       "pumpkaboo": 300,
       "sandygast": 300,
       "sinistea": 300,
-      "sinistea aspect=antique": 300,
+      "sinistea tea_authencity=antique": 300,
       "yamask": 300
     }
   }

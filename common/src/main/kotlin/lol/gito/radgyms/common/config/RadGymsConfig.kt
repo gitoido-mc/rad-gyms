@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.config
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.pokemon.Pokemon
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -28,6 +29,9 @@ data class RadGymsConfig(
     val deriveAverageGymLevel: Boolean? = null,
     val pokeCachePools: Map<String, Set<String>>? = null
 ) {
+    @Transient
+    lateinit var ignoredPokemon: List<PokemonProperties>
+
     companion object {
         @Transient
         @JvmField
@@ -45,7 +49,11 @@ data class RadGymsConfig(
             // Add shard rewards
             shardRewards = true,
             // Ignored species
-            ignoredSpecies = emptyList(),
+            ignoredSpecies = listOf(
+                "mega-x",
+                "mega-y",
+                "gmax"
+            ),
             pokeCachePools = mutableMapOf(
                 Rarity.COMMON.serializedName to mutableSetOf(
                     Rarity.COMMON.serializedName
@@ -78,6 +86,7 @@ data class RadGymsConfig(
     }
 
 
-    fun ignoredSpeciesProps(): List<PokemonProperties> = this
-        .ignoredSpecies?.map { PokemonProperties.parse(it) } ?: emptyList()
+    fun initializeIgnoredSpecies() {
+        ignoredPokemon = this.ignoredSpecies?.map { PokemonProperties.parse(it) } ?: emptyList()
+    }
 }

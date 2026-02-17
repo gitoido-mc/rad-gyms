@@ -43,7 +43,7 @@ data class GymTemplate(
                 playerYaw = dto.playerSpawnRelative.yaw.toFloat(),
                 trainers = trainers,
                 type = type,
-                rewards = dto.rewards!!
+                rewards = dto.rewards
             )
         }
     }

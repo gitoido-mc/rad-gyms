@@ -8,8 +8,8 @@
 package lol.gito.radgyms.common.api.dto.trainer
 
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
-import com.gitlab.srcmc.rctapi.api.models.TrainerModel as RctTrainerModel
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
+import com.gitlab.srcmc.rctapi.api.models.TrainerModel as RctTrainerModel
 
 data class TrainerModel(
     val id: String,

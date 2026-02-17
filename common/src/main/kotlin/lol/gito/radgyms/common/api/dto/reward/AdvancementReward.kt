@@ -8,36 +8,33 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
-import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_LOOT_TABLE
+import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_ADVANCEMENT
 import lol.gito.radgyms.common.api.enumeration.GymReward
 import lol.gito.radgyms.common.api.serialization.MGymRewardType
 import lol.gito.radgyms.common.api.serialization.MGymRewardTypes
 
 @Serializable
-@SerialName(REGISTRY_REWARD_TYPE_LOOT_TABLE)
-data class LootTableReward(
+@SerialName(REGISTRY_REWARD_TYPE_ADVANCEMENT)
+data class AdvancementReward(
     val id: String,
-    @SerialName("max_items")
-    val maxItems: Int? = null,
     @SerialName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
     @SerialName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     @Transient
-    val type: GymReward = GymReward.LOOT_TABLE
+    val type: GymReward = GymReward.ADVANCEMENT
 ) : RewardInterface {
-    override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.LOOT_TABLE
+    override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.ADVANCEMENT
 
     companion object {
         @JvmStatic
-        val CODEC: MapCodec<LootTableReward> = RecordCodecBuilder.mapCodec {
+        val CODEC: MapCodec<AdvancementReward> = RecordCodecBuilder.mapCodec {
             it.group(
-                Codec.STRING.fieldOf("id").forGetter(LootTableReward::id),
-                Codec.INT.lenientOptionalFieldOf("max_items", null).forGetter(LootTableReward::maxItems),
-                Codec.INT.fieldOf("min_level").forGetter(LootTableReward::minLevel),
-                Codec.INT.fieldOf("max_level").forGetter(LootTableReward::maxLevel),
-                GymReward.CODEC.fieldOf("type").forGetter(LootTableReward::type)
-            ).apply(it, ::LootTableReward)
+                Codec.STRING.fieldOf("id").forGetter(AdvancementReward::id),
+                Codec.INT.fieldOf("min_level").forGetter(AdvancementReward::minLevel),
+                Codec.INT.fieldOf("max_level").forGetter(AdvancementReward::maxLevel),
+                GymReward.CODEC.fieldOf("type").forGetter(AdvancementReward::type)
+            ).apply(it, ::AdvancementReward)
         }
     }
 }

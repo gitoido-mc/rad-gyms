@@ -3,22 +3,23 @@
     "common": {
       "charcadet": 400,
       "magby": 400,
-      "marowak aspect=alolan": 400,
+      "marowak alolan": 400,
       "slugma": 400,
       "vulpix": 400
     },
     "epic": {
-      "arceus aspect=fire-plate": 100,
+      "arceus multitype=fire": 100,
       "entei": 100,
       "gougingfire": 100,
-      "groudon aspect=primal": 100,
+      "groudon": 100,
+      "groudon reversion_state=primal": 100,
       "heatran": 100,
       "hooh": 100,
       "ironmoth": 100,
       "moltres": 100,
-      "ogerpon aspect=embody-aspect aspect=hearthflame-mask": 100,
-      "ogerpon aspect=hearthflame-mask": 100,
-      "silvally aspect=fire-memory": 100,
+      "ogerpon embody_aspect ogre_mask=hearthflame": 100,
+      "ogerpon ogre_mask=hearthflame": 100,
+      "silvally rks_memory=fire": 100,
       "volcanion": 100
     },
     "rare": {
@@ -31,7 +32,7 @@
       "charmander": 150,
       "chimchar": 150,
       "cyndaquil": 150,
-      "cyndaquil aspect=region-bias-hisui": 150,
+      "cyndaquil region_bias=hisui": 150,
       "darmanitan": 200,
       "fennekin": 150,
       "flareon": 200,
@@ -44,7 +45,7 @@
       "oricorio": 200,
       "pyroar": 200,
       "rapidash": 200,
-      "rotom aspect=heat-appliance": 200,
+      "rotom appliance=heat": 200,
       "scorbunny": 150,
       "simisear": 200,
       "talonflame": 200,
@@ -54,7 +55,7 @@
       "turtonator": 200
     },
     "uncommon": {
-      "castform aspect=sunny-form": 300,
+      "castform forecast_form=sunny": 300,
       "darumaka": 300,
       "fletchinder": 300,
       "growlithe": 300,

@@ -21,7 +21,7 @@ fun shinyRoll(poke: Pokemon, player: ServerPlayer, shinyBoost: Int? = 0) {
 
     // adding negative modifier increases the chances by lowering the base chance
     // adding positive modifier decreases the chances instead
-    event.addModifier(-(shinyBoost ?: 0).toFloat())
+    event.addModifier(-(shinyBoost!!.coerceIn(0, (shinyRate - 1).toInt())).toFloat())
     CobblemonEvents.SHINY_CHANCE_CALCULATION.post(event) {
         RadGyms.LOGGER.info("Checking shiny for cache used by ${player.uuid}")
         shinyRate = event.calculate(player)

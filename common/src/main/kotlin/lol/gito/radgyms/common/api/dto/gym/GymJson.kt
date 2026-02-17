@@ -3,10 +3,8 @@ package lol.gito.radgyms.common.api.dto.gym
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.dto.geospatial.Coords
 import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
-import lol.gito.radgyms.common.api.dto.reward.CommandReward
 import lol.gito.radgyms.common.api.dto.reward.LootTableReward
 import lol.gito.radgyms.common.api.dto.reward.RewardInterface
 import lol.gito.radgyms.common.api.dto.trainer.Trainer
@@ -24,12 +22,8 @@ data class GymJson(
     val trainers: List<Trainer>,
     @SerialName("rewards")
     val rewards: List<@Polymorphic RewardInterface> = listOf(
-        CommandReward(
-            execute = "/say Congratulations on beating the gym!"
-        ),
         LootTableReward(
-            id = "rad_gyms:gyms/default/shared_loot_table",
-            maxLevel = RadGyms.CONFIG.maxLevel!!
+            id = "rad_gyms:gyms/default/shared_loot_table"
         ),
         LootTableReward(
             id = "rad_gyms:gyms/default/common_loot_table",

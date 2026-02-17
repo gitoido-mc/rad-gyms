@@ -12,17 +12,16 @@ import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
-import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
-import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.helper.tl
+import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
+import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
@@ -108,7 +107,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                 (player as ServerPlayer).let { player ->
                     if (player.party().occupied() < MIN_PLAYER_TEAM_SIZE) {
                         @Suppress("MaxLineLength")
-                        player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_empty").toLanguageKey()))
+                        player.displayClientMessage(tl("message.info.gym_entrance_party_empty"))
                         debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
                         result = InteractionResult.FAIL
                         return@let
@@ -116,7 +115,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
 
                     if (player.party().all { it.isFainted() }) {
                         @Suppress("MaxLineLength")
-                        player.displayClientMessage(translatable(modId("message.info.gym_entrance_party_fainted").toLanguageKey()))
+                        player.displayClientMessage(tl("message.info.gym_entrance_party_fainted"))
                         debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
                         result = InteractionResult.FAIL
                         return@let
@@ -126,7 +125,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
 
                     if (gymEntrance.usesLeftForPlayer(player) == 0) {
                         @Suppress("MaxLineLength")
-                        player.displayClientMessage(translatable(modId("message.info.gym_entrance_exhausted").toLanguageKey()))
+                        player.displayClientMessage(tl("message.info.gym_entrance_exhausted"))
                         debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
                         result = InteractionResult.FAIL
                         return@let
@@ -157,8 +156,8 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         tooltip: MutableList<Component>,
         options: TooltipFlag
     ) {
-        tooltip.addLast(translatable(GYM_ENTRANCE.descriptionId.plus(".tooltip")).withStyle(ChatFormatting.GRAY))
-        tooltip.addLast(translatable(GYM_ENTRANCE.descriptionId.plus(".tooltip2")).withStyle(ChatFormatting.GRAY))
+        tooltip.addLast(tl("${GYM_ENTRANCE.descriptionId}.tooltip").withStyle(ChatFormatting.GRAY))
+        tooltip.addLast(tl("${GYM_ENTRANCE.descriptionId}.tooltip2").withStyle(ChatFormatting.GRAY))
     }
 
     override fun setPlacedBy(

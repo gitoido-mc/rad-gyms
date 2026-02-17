@@ -16,7 +16,7 @@ import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_ENTER
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsTemplates
-import lol.gito.radgyms.common.stats.RadGymsStats.getStat
+import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructurePlacer
 import lol.gito.radgyms.common.world.state.RadGymsState

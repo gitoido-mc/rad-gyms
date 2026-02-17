@@ -15,13 +15,13 @@ import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.ENTER_SCREEN_CLOSE
 import lol.gito.radgyms.common.client.render.gui.widget.LevelSliderWidget
-import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildTypeText
 import lol.gito.radgyms.common.extension.math.Vec2i
+import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildTypeText
+import lol.gito.radgyms.common.helper.tl
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Component.translatable
 import net.minecraft.util.CommonColors
 import org.lwjgl.glfw.GLFW
 
@@ -36,15 +36,10 @@ class GymEnterScreen(
     val usesLeft: Int? = null
 ) : AbstractGymScreen(
     when {
-        (type == null || ElementalTypes.get(type) != null || type == "chaos") -> translatable(
-            modId("gui.common.set-gym-level").toLanguageKey(),
-            buildTypeText(type)
-        )
+        (type == null || ElementalTypes.get(type) != null || type == "chaos") ->
+            tl("gui.common.set-gym-level", buildTypeText(type))
 
-        else -> translatable(
-            modId("gui.common.set-custom-gym-level").toLanguageKey(),
-            buildTypeText(type)
-        )
+        else -> tl("gui.common.set-custom-gym-level", buildTypeText(type))
     }
 ) {
     companion object {
@@ -217,14 +212,12 @@ class GymEnterScreen(
         super.preRender(context, panelResource)
 
         val message = when (pos) {
-            null -> translatable(modId("gui.common.set-gym-level").toLanguageKey(), buildTypeText(type))
-            else -> {
-                translatable(
-                    modId("gui.common.set-gym-level-entry").toLanguageKey(),
-                    buildTypeText(type),
-                    usesLeft
-                )
-            }
+            null -> tl("gui.common.set-gym-level", buildTypeText(type))
+            else -> tl(
+                "gui.common.set-gym-level-entry",
+                buildTypeText(type),
+                usesLeft
+            )
         }
 
         // Box Label

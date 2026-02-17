@@ -5,7 +5,7 @@ import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.registry.RadGymsTemplates
 import net.minecraft.nbt.CompoundTag
-import java.util.UUID
+import java.util.*
 
 fun CompoundTag.getRadGymsInstanceData(key: String): Gym? {
     val tag = this.getCompound(key) ?: return null

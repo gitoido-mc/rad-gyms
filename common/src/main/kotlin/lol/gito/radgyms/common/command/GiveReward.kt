@@ -97,7 +97,14 @@ object GiveReward : CommandInterface {
             )
         )
 
-        context.source.sendSystemMessage(tl("message.info.command.debug_reward", template, tlc("type.${type}"), level))
+        context.source.sendSystemMessage(
+            tl(
+                key = "message.info.command.debug_reward",
+                template.id,
+                tlc("type.${type.showdownId}"),
+                level
+            )
+        )
 
         return 1
     }

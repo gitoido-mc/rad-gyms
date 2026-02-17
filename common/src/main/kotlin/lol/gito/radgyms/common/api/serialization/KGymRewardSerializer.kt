@@ -7,30 +7,25 @@
 
 package lol.gito.radgyms.common.api.serialization
 
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.types.ElementalType
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import lol.gito.radgyms.common.api.enumeration.GymReward
 
-typealias PokemonPropertiesList = List<@Serializable(PokemonPropertiesSerializer::class) ElementalType>
-
-object PokemonPropertiesSerializer : KSerializer<PokemonProperties> {
+object KGymRewardSerializer : KSerializer<GymReward> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
-        "com.cobblemon.mod.common.api.pokemon.PokemonProperties",
+        "lol.gito.radgyms.common.api.enumeration.GymReward",
         PrimitiveKind.STRING
     )
 
     override fun serialize(
         encoder: Encoder,
-        value: PokemonProperties
-    ) = encoder.encodeString(value.asString())
+        value: GymReward
+    ) = encoder.encodeString(value.name)
 
-    override fun deserialize(decoder: Decoder): PokemonProperties =
-        PokemonProperties.parse(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): GymReward =
+        GymReward.valueOf(decoder.decodeString())
 }

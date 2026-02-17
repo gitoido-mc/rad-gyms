@@ -77,8 +77,15 @@ tasks {
         into(file("src/generated"))
     }
 
+    val copyMixin by registering(Copy::class) {
+        mustRunAfter(copyGenerated)
+        from(project(":common").file("src/resources/${project.property("mod_id")}.client.mixins.json"))
+        from(project(":common").file("src/resources/${project.property("mod_id")}.mixins.json"))
+        into(file("src/resources"))
+    }
+
     processResources {
-        dependsOn(copyGenerated)
+        dependsOn(copyMixin)
 
         inputs.property("version", project.version)
 

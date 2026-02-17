@@ -27,6 +27,7 @@ const val EXIT_ROPE_COOLDOWN = 100
 const val MIN_POKE_LEVEL = 1
 const val MAX_POKE_LEVEL = 100
 const val MAX_PARTY_SIZE = 6
+const val MAX_PERFECT_IVS = 6
 const val MIN_PLAYER_TEAM_SIZE = 3
 
 const val CACHE_STARTER_ENTRY_WEIGHT = 150
@@ -38,5 +39,6 @@ const val CACHE_DEFAULT_ENTRY_WEIGHT_EPIC = 100
 const val REGISTRY_REWARD_TYPE_LOOT_TABLE = "rad_gyms:loot_table"
 const val REGISTRY_REWARD_TYPE_POKEMON = "rad_gyms:pokemon"
 const val REGISTRY_REWARD_TYPE_COMMAND = "rad_gyms:command"
+const val REGISTRY_REWARD_TYPE_ADVANCEMENT = "rad_gyms:advancement"
 
 
