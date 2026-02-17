@@ -60,7 +60,9 @@ jobs:
           version-type: release
 
           files: |
-            build/libs/rad-gyms-@(fabric|neoforge)-*.jar
+            build/libs/rad-gyms-fabric-${{ steps.version.outputs.MOD_VERSION }}.jar
+            build/libs/rad-gyms-neoforge-${{ steps.version.outputs.MOD_VERSION }}.jar
+            
 
           loaders: | 
             fabric
