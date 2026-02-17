@@ -74,7 +74,7 @@ jobs:
           curseforge-id: ${{ env.curseforge_id }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-          modrinth-id: ${{ env.curseforge_id }}
+          modrinth-id: ${{ env.modrinth_id }}
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           files: |
@@ -85,3 +85,8 @@ jobs:
 
           game-versions: 1.21.1
           java: 21
+
+          dependencies: |
+            architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
+            cobblemon@1.7.0(required){curseforge:687131}{modrinth:MdwFAVRL}
+            radical-cobblemon-trainers-api@0.14.7-beta(required){curseforge:1152792}{modrinth:CBfM2yw7}
