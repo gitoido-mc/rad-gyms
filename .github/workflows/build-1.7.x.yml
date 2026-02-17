@@ -6,9 +6,12 @@ on:
       - published
   workflow_dispatch:
 
+env:
+  cobblemon: 1.7.3
 
 jobs:
   build:
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     strategy:
@@ -17,7 +20,8 @@ jobs:
         java: [
           21,    # Current Java LTS
         ]
-    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.version.outputs.MOD_VERSION }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
@@ -49,29 +53,31 @@ jobs:
       - name: Save version output
         id: version
         run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
-      - name: Publish (CurseForge/GitHub)
+  publish:
+    needs: build
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        loader: [
+          fabric,
+          neoforge,
+        ]
+    steps:
+      - name: Publish Fabric (CurseForge/GitHub)
         uses: Kira-NT/mc-publish@v3.3
         with:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-          name: "Rad Gyms ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon 1.7.0+"
-          version: "1.7.0_${{ steps.version.outputs.MOD_VERSION }}"
+          name: "Rad Gyms ${{ needs.build.outputs.version }} for Cobblemon ${{ env.cobblemon }}"
+          version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
           version-type: release
 
           files: |
-            build/libs/rad-gyms-fabric-${{ steps.version.outputs.MOD_VERSION }}.jar
-            build/libs/rad-gyms-neoforge-${{ steps.version.outputs.MOD_VERSION }}.jar
-            
+            build/libs/rad-gyms-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
+            build/libs/rad-gyms-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar 
 
           loaders: | 
-            fabric
-            neoforge
+            ${{ matrix.loader }}
           game-versions: 1.21.1
           java: 21
-
-          dependencies: |
-            fabric-api@0.116.6+1.21.1(required){curseforge:306612}{modrinth:P7dR8mSH}
-            architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
-            cobblemon@1.7.0(required){curseforge:687131}{modrinth:MdwFAVRL}
-            radical-cobblemon-trainers-api@0.14.7-beta(required){curseforge:1152792}{modrinth:CBfM2yw7}
