@@ -50,6 +50,7 @@ data class RadGymsConfig(
             shardRewards = true,
             // Ignored species
             ignoredSpecies = listOf(
+                "mega",
                 "mega-x",
                 "mega-y",
                 "gmax"
