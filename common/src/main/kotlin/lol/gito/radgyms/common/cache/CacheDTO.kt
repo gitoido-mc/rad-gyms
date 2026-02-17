@@ -8,18 +8,17 @@
 package lol.gito.radgyms.common.cache
 
 import kotlinx.serialization.Serializable
-import lol.gito.radgyms.common.api.serialization.KRaritySerializer
 import net.minecraft.world.entity.ai.behavior.ShufflingList
 import net.minecraft.world.item.Rarity
 
-typealias CachePoolMap = Map<@Serializable(KRaritySerializer::class) Rarity, Map<String, Int>>
+typealias CachePoolMap = Map<String, Map<String, Int>>
 
 @Serializable
 class CacheDTO(
     val pools: CachePoolMap
 ) {
     fun forRarity(rarity: Rarity): ShufflingList<String> {
-        val pokeList = pools[rarity]!!
+        val pokeList = pools[rarity.serializedName.lowercase()]!!
         val list = ShufflingList<String>()
 
         for (pokeItem in pokeList) {
