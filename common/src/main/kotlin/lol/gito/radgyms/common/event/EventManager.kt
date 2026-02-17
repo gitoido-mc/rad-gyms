@@ -65,6 +65,7 @@ object EventManager {
         // Cobblemon events
         PokemonSpecies.observable.subscribe(Priority.LOWEST) { _ ->
             debug("Cobblemon species observable triggered, updating elemental gyms species map")
+            CONFIG.initializeIgnoredSpecies()
             onSpeciesUpdate()
         }
 

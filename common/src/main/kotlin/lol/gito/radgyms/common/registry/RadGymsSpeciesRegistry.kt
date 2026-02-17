@@ -7,6 +7,7 @@
 
 package lol.gito.radgyms.common.registry
 
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -21,9 +22,17 @@ import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 
 private typealias SpeciesWithForms = List<SpeciesWithForm>
 
-private fun Pokemon.matchesSimplified(other: Pokemon): Boolean = this.species == other.species &&
-        this.form == other.form &&
-        this.aspects.containsAll(other.aspects)
+private fun PokemonProperties.matchesSimplified(other: Pokemon): Boolean {
+    if ((this.species != null && this.species != "random") && this.aspects.isNotEmpty()) {
+        return this.species == other.species.resourceIdentifier.path && other.aspects.containsAll(this.aspects)
+    }
+
+    if (this.species == null && this.aspects.isNotEmpty()) {
+        return other.aspects.containsAll(this.aspects)
+    }
+
+    return this.species == other.species.resourceIdentifier.path
+}
 
 private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null): SpeciesWithForms = this
     .filterNot { it.resourceIdentifier.path in CONFIG.ignoredSpecies!! }
@@ -49,8 +58,12 @@ private fun Sequence<Species>.mapToSpeciesWithForms(type: ElementalType? = null)
         poke.forcedAspects = speciesPair.form.aspects.toSet()
         poke.updateAspects()
 
-        if (CONFIG.ignoredSpeciesProps().any { it.matchesSimplified(poke) }) {
-            debug("Excluding {} with {} form", poke.species.name, poke.form.name)
+        if (CONFIG.ignoredPokemon.any { it.matchesSimplified(poke) }) {
+            debug(
+                "Excluding {} with aspects: {}",
+                poke.species.name,
+                poke.aspects.joinToString(" ")
+            )
             return@filter false
         }
 
