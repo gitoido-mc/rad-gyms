@@ -2,23 +2,23 @@
   "pools": {
     "common": {
       "ekans": 400,
-      "koffing aspect=region-bias-galar": 400,
+      "koffing region_bias=galar": 400,
       "nidoranf": 400,
       "nidoranm": 400,
       "shroodle": 400,
-      "slowbro aspect=galarian": 400,
-      "slowking aspect=galarian": 400,
-      "wooper aspect=paldean": 400,
+      "slowbro galarian": 400,
+      "slowking galarian": 400,
+      "wooper paldean": 400,
       "zubat": 400
     },
     "epic": {
-      "arceus aspect=poison-plate": 100,
+      "arceus multitype=poison": 100,
       "eternatus": 100,
       "fezandipiti": 100,
       "munkidori": 100,
       "okidogi": 100,
       "pecharunt": 100,
-      "silvally aspect=poison-memory": 100
+      "silvally rks_memory=poison": 100
     },
     "rare": {
       "crobat": 200,
@@ -38,7 +38,7 @@
       "swalot": 200,
       "toxapex": 200,
       "toxicroak": 200,
-      "toxtricity aspect=low_key-form": 200,
+      "toxtricity punk_form=low_key": 200,
       "weezing": 200
     },
     "uncommon": {

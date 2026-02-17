@@ -1,30 +1,30 @@
 {
   "pools": {
     "common": {
-      "decidueye aspect=hisuian": 400,
-      "farfetchd aspect=galarian": 400,
-      "lilligant aspect=hisuian": 400,
+      "decidueye hisuian": 400,
+      "farfetchd galarian": 400,
+      "lilligant hisuian": 400,
       "makuhita": 400,
       "meditite": 400,
       "riolu": 400,
-      "sneasel aspect=hisuian": 400,
-      "tauros aspect=blaze-breed aspect=paldean": 400,
-      "tauros aspect=paldean": 400,
-      "tauros aspect=paldean aspect=aqua-breed": 400,
+      "sneasel hisuian": 400,
+      "tauros paldean": 400,
+      "tauros paldean bull_breed=aqua": 400,
+      "tauros paldean bull_breed=blaze": 400,
       "tyrogue": 400
     },
     "epic": {
-      "arceus aspect=fighting-plate": 100,
+      "arceus multitype=fighting": 100,
       "ironhands": 100,
-      "keldeo aspect=resolute-form": 100,
+      "keldeo sword_form=resolute": 100,
       "koraidon": 100,
       "kubfu": 100,
       "marshadow": 100,
-      "meloetta aspect=pirouette-forme": 100,
-      "silvally aspect=fighting-memory": 100,
+      "meloetta song_forme=pirouette": 100,
+      "silvally rks_memory=fighting": 100,
       "urshifu": 100,
       "zamazenta": 100,
-      "zapdos aspect=galarian": 100
+      "zapdos galarian": 100
     },
     "rare": {
       "annihilape": 200,

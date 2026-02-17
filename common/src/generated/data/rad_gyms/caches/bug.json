@@ -3,8 +3,8 @@
     "common": {
       "blipbug": 400,
       "burmy": 400,
-      "burmy aspect=sandy-cloak": 400,
-      "burmy aspect=trash-cloak": 400,
+      "burmy bagworm_cloak=sandy": 400,
+      "burmy bagworm_cloak=trash": 400,
       "cascoon": 400,
       "caterpie": 400,
       "combee": 400,
@@ -30,9 +30,9 @@
       "wurmple": 400
     },
     "epic": {
-      "arceus aspect=bug-plate": 100,
+      "arceus multitype=bug": 100,
       "genesect": 100,
-      "silvally aspect=bug-memory": 100,
+      "silvally rks_memory=bug": 100,
       "slitherwing": 100
     },
     "rare": {

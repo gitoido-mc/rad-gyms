@@ -1,30 +1,30 @@
 {
   "pools": {
     "common": {
-      "cubone aspect=region-bias-alola": 400,
+      "cubone region_bias=alola": 400,
       "diglett": 400,
       "sandile": 400,
       "trapinch": 400,
-      "yamask aspect=galarian": 400
+      "yamask galarian": 400
     },
     "epic": {
-      "arceus aspect=ground-plate": 100,
+      "arceus multitype=ground": 100,
       "greattusk": 100,
       "groudon": 100,
       "irontreads": 100,
       "landorus": 100,
-      "silvally aspect=ground-memory": 100,
-      "zygarde aspect=10-percent": 100,
-      "zygarde aspect=complete-percent": 100,
-      "zygarde aspect=power-construct aspect=10-percent": 100,
-      "zygarde aspect=power-construct aspect=50-percent": 100
+      "silvally rks_memory=ground": 100,
+      "zygarde percent_cells=10": 100,
+      "zygarde percent_cells=complete": 100,
+      "zygarde power_construct percent_cells=10": 100,
+      "zygarde power_construct percent_cells=50": 100
     },
     "rare": {
       "claydol": 200,
       "donphan": 200,
       "excadrill": 200,
       "flygon": 200,
-      "gastrodon aspect=east-sea": 200,
+      "gastrodon sea=east": 200,
       "gliscor": 200,
       "golurk": 200,
       "hippowdon": 200,
@@ -56,7 +56,7 @@
       "silicobra": 300,
       "toedscool": 300,
       "vibrava": 300,
-      "wormadam aspect=sandy-cloak": 300
+      "wormadam bagworm_cloak=sandy": 300
     }
   }
 }
