@@ -5,6 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 @file:Suppress("WildcardImport")
+
 package lol.gito.radgyms.neoforge
 
 import com.cobblemon.mod.common.Environment
@@ -14,10 +15,10 @@ import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.MOD_ID
 import lol.gito.radgyms.common.RadGyms.info
-import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
@@ -25,7 +26,6 @@ import lol.gito.radgyms.neoforge.net.RadGymsNeoForgeNetworkManager
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
 import net.minecraft.core.registries.Registries
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
@@ -270,25 +270,22 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
-    @Suppress("ReturnCount")
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
-        if (e.level !is ServerLevel) return
-        if ((e.level as ServerLevel).dimension() == GYM_DIMENSION) {
-            if (CONFIG.debug == true) {
-                return
+        var canCancel: Boolean
+        canCancel = (e.level !is ServerLevel)
+        if (!canCancel && (e.level as ServerLevel).dimension() == GYM_DIMENSION) {
+            canCancel = (CONFIG.debug == true)
+            if (!canCancel) {
+                e.isCanceled = true
             }
-            e.isCanceled = true
-            return
         }
+
+        if (canCancel) return
 
         if (e.state.block == RadGymsBlocks.GYM_ENTRANCE) {
             if (!e.player.isShiftKeyDown) {
-                e.player.displayClientMessage(
-                    Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey())
-                )
-                e.player.displayClientMessage(
-                    Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey())
-                )
+                e.player.displayClientMessage(tl("message.info.gym_entrance_breaking"))
+                e.player.displayClientMessage(tl("message.error.gym_entrance.not-sneaking"))
                 e.isCanceled = false
             } else {
                 e.isCanceled = true

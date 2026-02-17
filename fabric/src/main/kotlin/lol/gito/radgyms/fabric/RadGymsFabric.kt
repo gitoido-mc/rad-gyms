@@ -5,6 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 @file:Suppress("WildcardImport")
+
 package lol.gito.radgyms.fabric
 
 import com.cobblemon.mod.common.Environment
@@ -12,10 +13,10 @@ import com.cobblemon.mod.common.ModAPI
 import com.mojang.brigadier.arguments.ArgumentType
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.CONFIG
-import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.extension.displayClientMessage
+import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.*
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
 import net.fabricmc.api.EnvType
@@ -33,7 +34,6 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.packs.PackType
@@ -166,12 +166,8 @@ object RadGymsFabric : RadGymsImplementation {
 
         if (state.block == RadGymsBlocks.GYM_ENTRANCE) {
             if (!player.isShiftKeyDown) {
-                player.displayClientMessage(
-                    Component.translatable(modId("message.info.gym_entrance_breaking").toLanguageKey())
-                )
-                player.displayClientMessage(
-                    Component.translatable(modId("message.error.gym_entrance.not-sneaking").toLanguageKey())
-                )
+                player.displayClientMessage(tl("message.info.gym_entrance_breaking"))
+                player.displayClientMessage(tl("message.error.gym_entrance.not-sneaking"))
                 allowBreak = false
             } else {
                 allowBreak = true
