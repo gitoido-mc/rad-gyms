@@ -130,8 +130,8 @@ object MRadGymsCodec {
     }
 
     @JvmStatic
-    val CACHE_POOL: UnboundedMapCodec<Rarity, Map<String, Int>> = Codec.unboundedMap(
-        Rarity.CODEC, Codec.unboundedMap(Codec.STRING, Codec.INT)
+    val CACHE_POOL: UnboundedMapCodec<String, Map<String, Int>> = Codec.unboundedMap(
+        Codec.STRING, Codec.unboundedMap(Codec.STRING, Codec.INT)
     )
 
     @JvmStatic
