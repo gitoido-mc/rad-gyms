@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026. gitoido-mc
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ */
+
 package lol.gito.radgyms.common.rct.converter
 
 import com.cobblemon.mod.common.Cobblemon
@@ -75,19 +82,17 @@ object PokemonPropertiesConverter : Converter<PokemonModel, PokemonProperties> {
         val moves = mutableListOf<String>()
         model.moveset.toList().take(MOVESET_SIZE).forEach { m: String? ->
             val move = getByName(Locations.withoutNamespace(m!!))
-            if (move != null) {
-                moves.add(move.name)
-            } else {
-                errors.add(RCTError.of("invalid move: $m"))
+            when (move != null) {
+                true -> moves.add(move.name)
+                false -> errors.add(RCTError.of("invalid move: $m"))
             }
-
         }
         props.moves = moves
 
         props.ivs = Cobblemon.statProvider.createEmptyIVs(0).apply {
             set(Stats.HP, model.iVs.hp.coerceIn(0, IVs.MAX_VALUE))
             set(Stats.ATTACK, model.iVs.atk.coerceIn(0, IVs.MAX_VALUE))
-            set(Stats.DEFENCE, model.iVs.def.coerceIn(0,IVs.MAX_VALUE ))
+            set(Stats.DEFENCE, model.iVs.def.coerceIn(0, IVs.MAX_VALUE))
             set(Stats.SPECIAL_ATTACK, model.iVs.spA.coerceIn(0, IVs.MAX_VALUE))
             set(Stats.SPECIAL_DEFENCE, model.iVs.spD.coerceIn(0, IVs.MAX_VALUE))
             set(Stats.SPEED, model.iVs.spe.coerceIn(0, IVs.MAX_VALUE))
