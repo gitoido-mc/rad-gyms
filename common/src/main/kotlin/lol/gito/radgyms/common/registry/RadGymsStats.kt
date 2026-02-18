@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026. gitoido-mc
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+ */
+
 package lol.gito.radgyms.common.registry
 
 import lol.gito.radgyms.common.RadGyms
@@ -44,12 +51,12 @@ object RadGymsStats {
         val resourceLocation = radGymsStat.resourceLocation
         val stat = BuiltInRegistries.CUSTOM_STAT.get(resourceLocation)
         if (stat == null) {
-            RadGyms.warn("Could not find stat with id ${resourceLocation}}")
+            RadGyms.warn("Could not find stat with id $resourceLocation")
         }
-        return stat ?: throw NullPointerException("Could not find stat with id ${resourceLocation}}")
+        return stat ?: throw NullPointerException("Could not find stat with id $resourceLocation")
     }
 
-    data class RadGymsStat(val path: String,  val formatter: StatFormatter = StatFormatter.DEFAULT) {
+    data class RadGymsStat(val path: String, val formatter: StatFormatter = StatFormatter.DEFAULT) {
         val resourceLocation: ResourceLocation = RadGyms.modId(path)
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -40,12 +40,9 @@ class ExitRope : CobblemonItem(Properties()) {
             else -> player.displayClientMessage(tl("${EXIT_ROPE.descriptionId}.failed"))
         }
 
-
         player.cooldowns.addCooldown(this, EXIT_ROPE_COOLDOWN)
         return super.use(level, player, hand)
     }
-
-
 
     override fun appendHoverText(
         stack: ItemStack,
