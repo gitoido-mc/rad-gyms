@@ -29,9 +29,6 @@ data class RadGymsConfig(
     val deriveAverageGymLevel: Boolean? = null,
     val pokeCachePools: Map<String, Set<String>>? = null
 ) {
-    @Transient
-    lateinit var ignoredPokemon: List<PokemonProperties>
-
     companion object {
         @Transient
         @JvmField
