@@ -9,7 +9,7 @@ package lol.gito.radgyms.fabric
 
 import net.fabricmc.api.ModInitializer
 
-class FabricBootstrap: ModInitializer {
+class FabricBootstrap : ModInitializer {
     override fun onInitialize() {
         RadGymsFabric.initialize()
     }

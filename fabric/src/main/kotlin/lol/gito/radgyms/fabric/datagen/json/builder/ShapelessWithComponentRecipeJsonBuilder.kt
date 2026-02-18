@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. gitoido-mc
+ * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
@@ -24,8 +24,6 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.ShapelessRecipe
 import net.minecraft.world.level.ItemLike
 
-
-@Suppress("unused", "MemberVisibilityCanBePrivate", "TooManyFunctions")
 class ShapelessWithComponentRecipeJsonBuilder(
     private val category: RecipeCategory,
     private val output: Item,
@@ -45,6 +43,7 @@ class ShapelessWithComponentRecipeJsonBuilder(
         group = string
     }
 
+    @Suppress("unused")
     fun define(tag: TagKey<Item>): ShapelessWithComponentRecipeJsonBuilder = this.define(Ingredient.of(tag))
 
     fun define(itemProvider: ItemLike): ShapelessWithComponentRecipeJsonBuilder = this.define(itemProvider, 1)
@@ -52,13 +51,13 @@ class ShapelessWithComponentRecipeJsonBuilder(
     fun define(ingredient: Ingredient): ShapelessWithComponentRecipeJsonBuilder = this.define(ingredient, 1)
 
     fun define(itemProvider: ItemLike?, size: Int): ShapelessWithComponentRecipeJsonBuilder = this.apply {
-        for (i in 0..<size) {
+        for (_ in 0..<size) {
             define(Ingredient.of(itemProvider))
         }
     }
 
     fun define(ingredient: Ingredient, size: Int): ShapelessWithComponentRecipeJsonBuilder = this.apply {
-        for (i in 0..<size) {
+        for (_ in 0..<size) {
             inputs.add(ingredient)
         }
     }
