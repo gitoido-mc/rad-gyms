@@ -72,6 +72,7 @@ class RadGymsNeoForge : RadGymsImplementation {
             this@RadGymsNeoForge.commandArgumentTypes.register(this)
             addListener(this@RadGymsNeoForge::initialize)
             RadGyms.preInitialize(this@RadGymsNeoForge)
+            addListener(this@RadGymsNeoForge::on)
             addListener(EventPriority.HIGH, ::onBuildContents)
             addListener(networkManager::registerMessages)
         }
@@ -168,16 +169,12 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
-    override fun registerScoreboardObjectives() {
-        with(MOD_BUS) {
-            addListener<RegisterEvent> { event ->
-                event.register(Registries.CUSTOM_STAT) { registry ->
-                    RadGyms.statistics.registerStats()
-                    RadGyms.statistics.store.values.forEach {
-                        registry.register(it.resourceLocation, it.resourceLocation)
-                        Stats.CUSTOM.get(it.resourceLocation, it.formatter)
-                    }
-                }
+    fun on(event: RegisterEvent) {
+        event.register(Registries.CUSTOM_STAT) { registry ->
+            RadGyms.statistics.registerStats()
+            RadGyms.statistics.store.values.forEach {
+                registry.register(it.resourceLocation, it.resourceLocation)
+                Stats.CUSTOM.get(it.resourceLocation, it.formatter)
             }
         }
     }

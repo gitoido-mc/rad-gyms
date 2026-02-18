@@ -59,7 +59,6 @@ object RadGyms {
         implementation.registerEntityTypes()
         implementation.registerEntityAttributes()
         implementation.registerBlockEntityTypes()
-        implementation.registerScoreboardObjectives()
         loadConfig()
         registerArgumentTypes()
     }

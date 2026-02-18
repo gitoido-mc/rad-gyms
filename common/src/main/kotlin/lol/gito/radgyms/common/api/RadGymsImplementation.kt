@@ -37,8 +37,6 @@ interface RadGymsImplementation {
 
     fun registerBlockEntityTypes()
 
-    fun registerScoreboardObjectives()
-
     fun registerResourceReloader(
         identifier: ResourceLocation,
         reloader: PreparableReloadListener,

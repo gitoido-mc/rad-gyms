@@ -67,7 +67,13 @@ object RadGymsFabric : RadGymsImplementation {
 
     override fun initialize() {
         RadGyms.preInitialize(this)
+
         RadGyms.statistics.registerStats()
+        RadGyms.statistics.store.values.forEach { stat ->
+            Registry.register(BuiltInRegistries.CUSTOM_STAT, stat.resourceLocation, stat.resourceLocation)
+            Stats.CUSTOM.get(stat.resourceLocation, stat.formatter)
+        }
+
         RadGyms.initialize()
 
         networkManager.registerMessages()
@@ -108,13 +114,6 @@ object RadGymsFabric : RadGymsImplementation {
     override fun registerBlockEntityTypes() {
         RadGymsBlockEntities.register { identifier, entry ->
             Registry.register(RadGymsBlockEntities.registry, identifier, entry)
-        }
-    }
-
-    override fun registerScoreboardObjectives() {
-        RadGyms.statistics.store.values.forEach {
-            Registry.register(BuiltInRegistries.CUSTOM_STAT, it.resourceLocation, it.resourceLocation)
-            Stats.CUSTOM.get(it.resourceLocation, it.formatter)
         }
     }
 
