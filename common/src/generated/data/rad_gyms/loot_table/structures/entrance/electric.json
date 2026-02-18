@@ -6,24 +6,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:electric_gem",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "components": {
-                "rad_gyms:gym_type": "electric"
-              },
-              "function": "minecraft:set_components"
-            }
-          ],
-          "name": "rad_gyms:gym_key",
-          "weight": 3
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:flint",
           "weight": 50
         },
@@ -51,6 +33,24 @@
           "type": "minecraft:item",
           "name": "rad_gyms:exit_rope",
           "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "rad_gyms:gym_type": "electric"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "rad_gyms:gym_key",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon:electric_gem",
+          "weight": 5
         }
       ],
       "rolls": 1.0

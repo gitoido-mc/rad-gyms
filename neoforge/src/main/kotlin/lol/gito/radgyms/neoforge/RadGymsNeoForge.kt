@@ -4,7 +4,6 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-@file:Suppress("WildcardImport")
 
 package lol.gito.radgyms.neoforge
 
@@ -57,7 +56,6 @@ import java.util.*
 import kotlin.reflect.KClass
 
 @Mod(MOD_ID)
-@Suppress("TooManyFunctions")
 class RadGymsNeoForge : RadGymsImplementation {
     override val modAPI: ModAPI = ModAPI.NEOFORGE
 
@@ -206,7 +204,6 @@ class RadGymsNeoForge : RadGymsImplementation {
 
     override fun initialize() = Unit
 
-
     fun initialize(event: FMLCommonSetupEvent) {
         info("Initializing Rad Gyms for NeoForge!")
         event.enqueueWork {
@@ -240,7 +237,6 @@ class RadGymsNeoForge : RadGymsImplementation {
         RadGymsItemGroups.inject(e.tabKey, forgeInject)
     }
 
-
     private class ForgeItemGroupInject(@Suppress("unused") private val entries: BuildCreativeModeTabContentsEvent) :
         RadGymsItemGroups.Injector {
 
@@ -251,14 +247,16 @@ class RadGymsNeoForge : RadGymsImplementation {
         override fun putBefore(item: ItemLike, target: ItemLike) {
             this.entries.insertBefore(
                 ItemStack(target),
-                ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+                ItemStack(item),
+                CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
             )
         }
 
         override fun putAfter(item: ItemLike, target: ItemLike) {
             this.entries.insertAfter(
                 ItemStack(target),
-                ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+                ItemStack(item),
+                CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
             )
         }
 

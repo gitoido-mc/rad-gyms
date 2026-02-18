@@ -4,7 +4,6 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-@file:Suppress("WildcardImport")
 
 package lol.gito.radgyms.fabric
 
@@ -31,7 +30,6 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
-import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
@@ -43,13 +41,11 @@ import net.minecraft.stats.Stats
 import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.reflect.KClass
 
-@Suppress("TooManyFunctions")
 object RadGymsFabric : RadGymsImplementation {
     override val modAPI: ModAPI = ModAPI.FABRIC
 
@@ -79,7 +75,9 @@ object RadGymsFabric : RadGymsImplementation {
         networkManager.registerMessages()
         networkManager.registerServerHandlers()
 
-        PlayerBlockBreakEvents.BEFORE.register(::onBeforeBlockBreak)
+        PlayerBlockBreakEvents.BEFORE.register { level, player, _, blockState, _ ->
+            onBeforeBlockBreak(level, player, blockState)
+        }
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register { player, isLogin ->
             if (isLogin) RadGyms.dataProvider.sync(player)
         }
@@ -98,7 +96,9 @@ object RadGymsFabric : RadGymsImplementation {
         RadGymsItems.register { identifier, item -> Registry.register(RadGymsItems.registry, identifier, item) }
         RadGymsItemGroups.register { provider ->
             Registry.register(
-                BuiltInRegistries.CREATIVE_MODE_TAB, provider.key, FabricItemGroup.builder()
+                BuiltInRegistries.CREATIVE_MODE_TAB,
+                provider.key,
+                FabricItemGroup.builder()
                     .title(provider.displayName)
                     .icon(provider.displayIconProvider)
                     .displayItems(provider.entryCollector)
@@ -147,13 +147,10 @@ object RadGymsFabric : RadGymsImplementation {
         Environment.SERVER -> this.server
     }
 
-    @Suppress("UNUSED_PARAMETER")
     fun onBeforeBlockBreak(
         world: Level,
         player: Player,
-        pos: BlockPos,
         state: BlockState,
-        entity: BlockEntity?
     ): Boolean {
         var allowBreak = true
 

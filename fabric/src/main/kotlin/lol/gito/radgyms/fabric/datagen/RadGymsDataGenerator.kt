@@ -5,8 +5,6 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-@file:Suppress("WildcardImport")
-
 package lol.gito.radgyms.fabric.datagen
 
 import lol.gito.radgyms.fabric.datagen.provider.*
@@ -14,7 +12,6 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator.Pack
 
-@Suppress("unused")
 object RadGymsDataGenerator : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         val pack: Pack = fabricDataGenerator.createPack()

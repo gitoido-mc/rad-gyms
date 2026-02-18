@@ -54,11 +54,17 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 
-@Suppress("MagicNumber")
 class GymLootDataProvider(
     output: FabricDataOutput,
     lookup: CompletableFuture<HolderLookup.Provider>,
 ) : SimpleFabricLootTableProvider(output, lookup, LootContextParamSets.ALL_PARAMS) {
+    companion object {
+        const val COMMON_ROLLS = 5f
+        const val COMMON_BONUS_ROLLS = .5f
+        const val SHARED_ROLLS = 2f
+        const val ITEM_BONUS_ROLLS = .25f
+    }
+
     override fun generate(lootTableBiConsumer: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
         lootTableBiConsumer.accept(
             SHARED_LOOT_TABLE,
@@ -85,16 +91,16 @@ class GymLootDataProvider(
     private fun generateSharedDefaultLootTable() = LootTable.Builder()
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(0f, 2f))
-                .setBonusRolls(ConstantValue.exactly(.25f))
+                .setRolls(UniformGenerator.between(0f, SHARED_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(ITEM_BONUS_ROLLS))
                 .add(TagEntry.expandTag(ANY_HELD_ITEM))
                 .add(TagEntry.expandTag(EVOLUTION_ITEMS))
                 .build()
         )
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(0f, 2f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(0f, SHARED_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(TagEntry.expandTag(TUMBLESTONES))
                 .add(TagEntry.expandTag(RESTORES))
                 .add(TagEntry.expandTag(VITAMINS))
@@ -102,8 +108,8 @@ class GymLootDataProvider(
         )
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(LootItem.lootTableItem(LAPIS_LAZULI))
                 .build()
         )
@@ -111,8 +117,8 @@ class GymLootDataProvider(
     private fun generateCommonLootTable() = LootTable.Builder()
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(0f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(0f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(TagEntry.expandTag(TIER_1_POKE_BALLS))
                 .add(TagEntry.expandTag(TIER_1_POKE_BALL_MATERIALS))
                 .add(LootItem.lootTableItem(POTION))
@@ -122,8 +128,8 @@ class GymLootDataProvider(
         )
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(0f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(0f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(LootItem.lootTableItem(RadGymsItems.SHARD_COMMON))
                 .build()
         )
@@ -131,8 +137,8 @@ class GymLootDataProvider(
     private fun generateUncommonLootTable() = LootTable.Builder()
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(TagEntry.expandTag(TIER_2_POKE_BALLS))
                 .add(TagEntry.expandTag(TIER_2_POKE_BALL_MATERIALS))
                 .add(LootItem.lootTableItem(SUPER_POTION))
@@ -142,8 +148,8 @@ class GymLootDataProvider(
         )
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(LootItem.lootTableItem(SHARD_UNCOMMON))
                 .build()
         )
@@ -151,8 +157,8 @@ class GymLootDataProvider(
     private fun generateRareLootTable() = LootTable.Builder()
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(TagEntry.expandTag(TIER_3_POKE_BALLS))
                 .add(TagEntry.expandTag(TIER_3_POKE_BALL_MATERIALS))
                 .add(LootItem.lootTableItem(HYPER_POTION))
@@ -162,8 +168,8 @@ class GymLootDataProvider(
         )
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(LootItem.lootTableItem(SHARD_RARE))
                 .build()
         )
@@ -171,8 +177,8 @@ class GymLootDataProvider(
     private fun generateEpicLootTable() = LootTable.Builder()
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(TagEntry.expandTag(TIER_4_POKE_BALLS))
                 .add(TagEntry.expandTag(TIER_4_POKE_BALL_MATERIALS))
                 .add(LootItem.lootTableItem(MAX_POTION))
@@ -182,8 +188,8 @@ class GymLootDataProvider(
         )
         .pool(
             LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, 5f))
-                .setBonusRolls(ConstantValue.exactly(.5f))
+                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
                 .add(LootItem.lootTableItem(SHARD_EPIC))
                 .build()
         )

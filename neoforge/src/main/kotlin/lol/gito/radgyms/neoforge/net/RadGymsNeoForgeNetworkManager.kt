@@ -37,8 +37,10 @@ object RadGymsNeoForgeNetworkManager : NetworkManager {
 
         RadGymsNetwork.s2cPayloads.map { NeoForgePacketInfo(it) }.forEach {
             val handleAsync = it.info.handler is DataRegistrySyncPacketHandler<*, *>
-            if (handleAsync) asyncPackets += it.info.id
-            else syncPackets += it.info.id
+            when (handleAsync) {
+                true -> asyncPackets += it.info.id
+                false -> syncPackets += it.info.id
+            }
 
             it.registerToClient(if (handleAsync) netRegistrar else registrar)
         }

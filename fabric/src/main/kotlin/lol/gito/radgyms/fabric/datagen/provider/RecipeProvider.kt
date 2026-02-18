@@ -88,20 +88,137 @@ class RecipeProvider(
     output: FabricDataOutput,
     lookup: CompletableFuture<HolderLookup.Provider>
 ) : FabricRecipeProvider(output, lookup) {
-    @Suppress("LongMethod", "MagicNumber")
-    override fun buildRecipes(recipeExporter: RecipeOutput) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, GYM_KEY, 1)
-            .pattern(" g")
-            .pattern("b ")
-            .define('g', GOLD_INGOT)
-            .define('b', POKE_BALL.item())
-            .group("multi_bench")
-            .unlockedBy(
-                getHasName(POKE_BALL.item()),
-                has(CRAFTING_TABLE)
-            )
-            .save(recipeExporter)
+    companion object {
+        const val BLOCK_TO_SHARD_AMOUNT = 9
+    }
 
+    override fun buildRecipes(recipeExporter: RecipeOutput) {
+        buildShapedGymKey(recipeExporter)
+        buildExitRope(recipeExporter)
+
+        ElementalTypes.all().forEach { type ->
+            buildAttunedGymKey(type, recipeExporter)
+            buildAttunedPokeCaches(type, recipeExporter)
+        }
+
+        Rarity.entries.forEach { rarity ->
+            buildShardRecipes(rarity, recipeExporter)
+            buildShapedPokeCaches(rarity, recipeExporter)
+        }
+    }
+
+    private fun buildShapedPokeCaches(
+        rarity: Rarity,
+        recipeExporter: RecipeOutput
+    ) {
+        val cachePair = cacheConfig(rarity)
+        val cacheParts = cachePair.first
+
+        if (cacheParts.d == AIR) {
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cachePair.second, 1)
+                .pattern("sss")
+                .pattern("s s")
+                .pattern("ici")
+                .define('s', cacheParts.a)
+                .define('i', cacheParts.b)
+                .define('c', cacheParts.c)
+                .group("multi_bench")
+                .unlockedBy(getHasName(cacheParts.a), has(CRAFTING_TABLE))
+                .save(recipeExporter, modId("cache_${rarity.serializedName}"))
+        } else {
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cachePair.second, 1)
+                .pattern("sss")
+                .pattern("sxs")
+                .pattern("ici")
+                .define('s', cacheParts.a)
+                .define('i', cacheParts.b)
+                .define('c', cacheParts.c)
+                .define('x', cacheParts.d)
+                .group("multi_bench")
+                .unlockedBy(getHasName(cacheParts.a), has(CRAFTING_TABLE))
+                .save(recipeExporter, modId("cache_${rarity.serializedName}"))
+        }
+    }
+
+    private fun buildShardRecipes(
+        rarity: Rarity,
+        recipeExporter: RecipeOutput
+    ) {
+        val shardPair = shardConfig(rarity)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, shardPair.second, 1)
+            .pattern("sss")
+            .pattern("sss")
+            .pattern("sss")
+            .define('s', shardPair.first)
+            .group("multi_bench")
+            .unlockedBy(getHasName(shardPair.first), has(CRAFTING_TABLE))
+            .save(recipeExporter, modId("shards_to_block_${rarity.serializedName}"))
+
+        ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, shardPair.first, BLOCK_TO_SHARD_AMOUNT)
+            .define(shardPair.second.asItem())
+            .group("multi_bench")
+            .unlockedBy(getHasName(shardPair.second), has(shardPair.first))
+            .save(recipeExporter, modId("block_to_shards_${rarity.serializedName}"))
+    }
+
+    private fun buildAttunedPokeCaches(
+        type: ElementalType,
+        recipeExporter: RecipeOutput
+    ) {
+        Rarity.entries.forEach { rarity ->
+            val cache = cacheForRarity(rarity)
+            val attunedCachePair = elementalTypeCacheConfig(cache, type)
+            val cacheComponents = DataComponentMap.builder()
+                .set(RARITY, rarity)
+                .set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
+
+            ShapelessWithComponentRecipeJsonBuilder(
+                RecipeCategory.MISC,
+                attunedCachePair.first,
+                1
+            )
+                .define(attunedCachePair.first.asItem())
+                .define(attunedCachePair.second.asItem())
+                .group("multi_bench")
+                .withComponentMap(cacheComponents.build())
+                .unlockedBy(
+                    getHasName(attunedCachePair.second),
+                    has(attunedCachePair.first)
+                )
+                .save(
+                    recipeExporter,
+                    modId("cache_${rarity.serializedName}_${type.showdownId}")
+                )
+        }
+    }
+
+    private fun buildAttunedGymKey(
+        type: ElementalType,
+        recipeExporter: RecipeOutput
+    ) {
+        try {
+            val pair = elementalTypeKeyConfig(type)
+
+            val keyComponents = DataComponentMap.builder()
+                .set(RARITY, Rarity.RARE)
+                .set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
+
+            ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, pair.first)
+                .define(GYM_KEY)
+                .define(pair.second)
+                .group("multi_bench")
+                .withComponentMap(keyComponents.build())
+                .unlockedBy(
+                    getHasName(pair.second),
+                    has(pair.first)
+                )
+                .save(recipeExporter, modId("gym_key_${type.showdownId}"))
+        } catch (_: NotImplementedError) {
+            debug("No keys found for $type")
+        }
+    }
+
+    private fun buildExitRope(recipeExporter: RecipeOutput) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, RadGymsItems.EXIT_ROPE, 1)
             .pattern("l")
             .pattern("b")
@@ -113,103 +230,20 @@ class RecipeProvider(
                 has(BINDING_BAND)
             )
             .save(recipeExporter)
+    }
 
-        ElementalTypes.all().forEach { type ->
-            try {
-                val pair = elementalTypeKeyConfig(type)
-
-                val keyComponents = DataComponentMap.builder()
-                    .set(RARITY, Rarity.RARE)
-                    .set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
-
-                ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, pair.first)
-                    .define(GYM_KEY)
-                    .define(pair.second)
-                    .group("multi_bench")
-                    .withComponentMap(keyComponents.build())
-                    .unlockedBy(
-                        getHasName(pair.second),
-                        has(pair.first)
-                    )
-                    .save(recipeExporter, modId("gym_key_${type.showdownId}"))
-            } catch (_: NotImplementedError) {
-                debug("No keys found for $type")
-            }
-
-            Rarity.entries.forEach { rarity ->
-                val cache = cacheForRarity(rarity)
-                val attunedCachePair = elementalTypeCacheConfig(cache, type)
-                val cacheComponents = DataComponentMap.builder()
-                    .set(RARITY, rarity)
-                    .set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
-
-                ShapelessWithComponentRecipeJsonBuilder(
-                    RecipeCategory.MISC,
-                    attunedCachePair.first,
-                    1
-                )
-                    .define(attunedCachePair.first.asItem())
-                    .define(attunedCachePair.second.asItem())
-                    .group("multi_bench")
-                    .withComponentMap(cacheComponents.build())
-                    .unlockedBy(
-                        getHasName(attunedCachePair.second),
-                        has(attunedCachePair.first)
-                    )
-                    .save(
-                        recipeExporter,
-                        modId("cache_${rarity.serializedName}_${type.showdownId}")
-                    )
-            }
-        }
-
-        Rarity.entries.forEach { rarity ->
-            val shardPair = shardConfig(rarity)
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, shardPair.second, 1)
-                .pattern("sss")
-                .pattern("sss")
-                .pattern("sss")
-                .define('s', shardPair.first)
-                .group("multi_bench")
-                .unlockedBy(getHasName(shardPair.first), has(CRAFTING_TABLE))
-                .save(recipeExporter, modId("shards_to_block_${rarity.serializedName}"))
-
-            ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, shardPair.first, 9)
-                .define(shardPair.second.asItem())
-                .group("multi_bench")
-                .unlockedBy(getHasName(shardPair.second), has(shardPair.first))
-                .save(recipeExporter, modId("block_to_shards_${rarity.serializedName}"))
-
-
-            val cachePair = cacheConfig(rarity)
-            val cacheParts = cachePair.first
-
-            if (cacheParts.d == AIR) {
-                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cachePair.second, 1)
-                    .pattern("sss")
-                    .pattern("s s")
-                    .pattern("ici")
-                    .define('s', cacheParts.a)
-                    .define('i', cacheParts.b)
-                    .define('c', cacheParts.c)
-                    .group("multi_bench")
-                    .unlockedBy(getHasName(cacheParts.a), has(CRAFTING_TABLE))
-                    .save(recipeExporter, modId("cache_${rarity.serializedName}"))
-            } else {
-                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cachePair.second, 1)
-                    .pattern("sss")
-                    .pattern("sxs")
-                    .pattern("ici")
-                    .define('s', cacheParts.a)
-                    .define('i', cacheParts.b)
-                    .define('c', cacheParts.c)
-                    .define('x', cacheParts.d)
-                    .group("multi_bench")
-                    .unlockedBy(getHasName(cacheParts.a), has(CRAFTING_TABLE))
-                    .save(recipeExporter, modId("cache_${rarity.serializedName}"))
-            }
-
-        }
+    private fun buildShapedGymKey(recipeExporter: RecipeOutput) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, GYM_KEY, 1)
+            .pattern(" g")
+            .pattern("b ")
+            .define('g', GOLD_INGOT)
+            .define('b', POKE_BALL.item())
+            .group("multi_bench")
+            .unlockedBy(
+                getHasName(POKE_BALL.item()),
+                has(CRAFTING_TABLE)
+            )
+            .save(recipeExporter)
     }
 
     private fun cacheForRarity(rarity: Rarity): PokeCache {
