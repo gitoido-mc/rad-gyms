@@ -28,9 +28,7 @@ import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
-class Trainer(entityType: EntityType<out Trainer>, level: Level) :
-    Villager(entityType, level) {
-
+class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(entityType, level) {
     companion object {
         fun createAttributes(): AttributeSupplier.Builder = Villager.createAttributes()
         val GYM_ID: EntityDataAccessor<String> =
@@ -121,9 +119,8 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) :
         if (!level().isClientSide) {
             var result: InteractionResult = InteractionResult.FAIL
             TRAINER_INTERACT.postThen(
-                GymEvents.TrainerInteractEvent(player as ServerPlayer, this),
-                {},
-                { _ -> result = InteractionResult.sidedSuccess(level().isClientSide) },
+                event = GymEvents.TrainerInteractEvent(player as ServerPlayer, this),
+                ifSucceeded = { _ -> result = InteractionResult.sidedSuccess(level().isClientSide) },
             )
 
             return result

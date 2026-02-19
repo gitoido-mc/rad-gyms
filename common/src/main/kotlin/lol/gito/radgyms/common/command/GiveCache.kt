@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.player
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
@@ -21,6 +22,7 @@ import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.cache.CacheHandler
 import lol.gito.radgyms.common.command.argument.ElementalTypeArgumentType
 import lol.gito.radgyms.common.command.argument.RarityArgumentType
+import lol.gito.radgyms.common.exception.RadGymsPoolNotDefinedException
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.Commands.argument
@@ -157,13 +159,13 @@ object GiveCache : CommandInterface {
                     boost
                 )
             )
-        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+        } catch (e: RadGymsPoolNotDefinedException) {
             context.player().sendSystemMessage(
                 Component.literal("Cannot generate $rarity $type poke, caught error: ${e.message}")
             )
             return -1
         }
 
-        return 1
+        return Command.SINGLE_SUCCESS
     }
 }
