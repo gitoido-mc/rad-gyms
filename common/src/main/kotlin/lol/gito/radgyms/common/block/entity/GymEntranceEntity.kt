@@ -87,8 +87,13 @@ class GymEntranceEntity(
             .getOrDefault(player.uuid.toString(), 0)
             .coerceIn(0, CONFIG.maxEntranceUses!!)
 
-        @Suppress("MaxLineLength")
-        debug("Uses left for $player for $pos gym entrance: ${CONFIG.maxEntranceUses!! - playerCounter} (config max: ${CONFIG.maxEntranceUses!!})")
+        debug(
+            "Uses left for {} for {} gym entrance: {} (config max: {})",
+            player,
+            pos,
+            CONFIG.maxEntranceUses!! - playerCounter,
+            CONFIG.maxEntranceUses!!
+        )
         return CONFIG.maxEntranceUses!! - playerCounter
     }
 }

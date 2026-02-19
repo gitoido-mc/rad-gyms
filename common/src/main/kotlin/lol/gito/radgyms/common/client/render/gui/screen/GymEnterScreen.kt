@@ -85,7 +85,6 @@ class GymEnterScreen(
         const val GUI_DEC10_OFFSET_Y = 25
         const val GUI_DEC10_AMOUNT = 10
 
-
         // Level select slider widget params
         const val GUI_LSS_OFFSET_X = 55
         const val GUI_LSS_OFFSET_Y = 25
@@ -229,7 +228,6 @@ class GymEnterScreen(
             centered = true,
             colour = CommonColors.BLACK
         )
-
 
         super.render(context, mouseX, mouseY, delta)
     }

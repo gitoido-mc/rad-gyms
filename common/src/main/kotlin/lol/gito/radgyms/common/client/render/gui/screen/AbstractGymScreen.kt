@@ -65,7 +65,8 @@ abstract class AbstractGymScreen(heading: Component) : CobblemonRenderable, Scre
         blitk(
             matrixStack = matrices,
             texture = panelResource,
-            x = (width - BASE_WIDTH) / 2, y = (height - BASE_HEIGHT) / 2,
+            x = (width - BASE_WIDTH) / 2,
+            y = (height - BASE_HEIGHT) / 2,
             width = BASE_WIDTH,
             height = BASE_HEIGHT
         )

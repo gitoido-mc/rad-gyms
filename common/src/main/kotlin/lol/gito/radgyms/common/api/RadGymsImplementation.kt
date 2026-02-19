@@ -18,7 +18,6 @@ import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import kotlin.reflect.KClass
 
-@Suppress("TooManyFunctions")
 interface RadGymsImplementation {
     /**
      * Returns enum corresponding to mod loader being used.

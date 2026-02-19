@@ -49,10 +49,9 @@ import net.minecraft.world.phys.shapes.VoxelShape
 private val gymEntranceHorizontalFacing: DirectionProperty = HORIZONTAL_FACING
 
 class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
+    @Suppress("MagicNumber")
     private val bounds = Shapes.or(
-        @Suppress("MagicNumber")
         box(3.75, 1.75, 3.75, 12.25, 10.25, 12.25),
-        @Suppress("MagicNumber")
         box(6.5, 10.0, 6.5, 9.5, 11.0, 9.5)
     )
 
@@ -106,7 +105,6 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
             false -> {
                 (player as ServerPlayer).let { player ->
                     if (player.party().occupied() < MIN_PLAYER_TEAM_SIZE) {
-                        @Suppress("MaxLineLength")
                         player.displayClientMessage(tl("message.info.gym_entrance_party_empty"))
                         debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
                         result = InteractionResult.FAIL
@@ -114,7 +112,6 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                     }
 
                     if (player.party().all { it.isFainted() }) {
-                        @Suppress("MaxLineLength")
                         player.displayClientMessage(tl("message.info.gym_entrance_party_fainted"))
                         debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
                         result = InteractionResult.FAIL
@@ -124,7 +121,6 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                     val gymEntrance: GymEntranceEntity = level.getBlockEntity(pos) as GymEntranceEntity
 
                     if (gymEntrance.usesLeftForPlayer(player) == 0) {
-                        @Suppress("MaxLineLength")
                         player.displayClientMessage(tl("message.info.gym_entrance_exhausted"))
                         debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
                         result = InteractionResult.FAIL

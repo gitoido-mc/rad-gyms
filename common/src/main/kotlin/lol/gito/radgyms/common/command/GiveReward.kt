@@ -10,10 +10,12 @@ package lol.gito.radgyms.common.command
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.util.player
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import lol.gito.radgyms.common.COMMANDS_PREFIX
+import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.dto.gym.GymJson
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -98,7 +100,12 @@ object GiveReward : CommandInterface {
         GENERATE_REWARD.emit(
             GymEvents.GenerateRewardEvent(
                 player,
-                GymTemplate.fromDto(player, template, level, type.showdownId),
+                GymTemplate.fromDto(
+                    player,
+                    template,
+                    level.coerceIn(CONFIG.minLevel!!, Cobblemon.config.maxPokemonLevel),
+                    type.showdownId
+                ),
                 level,
                 template.id
             )
@@ -113,6 +120,6 @@ object GiveReward : CommandInterface {
             )
         )
 
-        return 1
+        return Command.SINGLE_SUCCESS
     }
 }
