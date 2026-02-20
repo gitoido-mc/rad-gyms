@@ -22,7 +22,7 @@ fun tl(key: String, vararg args: Any?): MutableComponent = translatable(modId(ke
 fun tl(prefix: String, key: String, vararg args: Any?): MutableComponent =
     translatable(modId(key).toLanguageKey(prefix), *args)
 
-fun tlr(key: String, vararg  args: Any?): MutableComponent = translatable(key, *args)
+fun tlr(key: String, vararg args: Any?): MutableComponent = translatable(key, *args)
 
 fun tlk(key: String): String = modId(key).toLanguageKey()
 
