@@ -52,8 +52,8 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
             Vec2i(GUI_PROCEED_WIDTH, GUI_PROCEED_HEIGHT),
             Vec2i(
                 leftX + GUI_PROCEED_OFFSET_X,
-                topY + (BASE_HEIGHT - GUI_PROCEED_OFFSET_Y)
-            )
+                topY + (BASE_HEIGHT - GUI_PROCEED_OFFSET_Y),
+            ),
         ) {
             onClose(GuiScreenCloseChoice.PROCEED)
         }.also {
@@ -65,8 +65,8 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
             Vec2i(GUI_CANCEL_WIDTH, GUI_CANCEL_HEIGHT),
             Vec2i(
                 leftX + (BASE_WIDTH - GUI_CANCEL_OFFSET_X),
-                topY + (BASE_HEIGHT - GUI_CANCEL_OFFSET_Y)
-            )
+                topY + (BASE_HEIGHT - GUI_CANCEL_OFFSET_Y),
+            ),
         ) {
             onClose(GuiScreenCloseChoice.CANCEL)
         }.also {
@@ -76,13 +76,13 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
         super.init()
     }
 
-    override fun onClose() {
-        LEAVE_SCREEN_CLOSE.emit(
-            GymEvents.GymLeaveScreenCloseEvent(this.closeReason)
-        )
-    }
+    override fun onClose() = LEAVE_SCREEN_CLOSE.emit(GymEvents.GymLeaveScreenCloseEvent(this.closeReason))
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(
+        keyCode: Int,
+        scanCode: Int,
+        modifiers: Int,
+    ): Boolean {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
             this.onClose(GuiScreenCloseChoice.CANCEL)
             return true
@@ -90,7 +90,12 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(
+        context: GuiGraphics,
+        mouseX: Int,
+        mouseY: Int,
+        delta: Float,
+    ) {
         super.preRender(context, panelResource)
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
@@ -102,7 +107,7 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
             x = x + (BASE_WIDTH / 2),
             y = y + 10,
             centered = true,
-            colour = CommonColors.BLACK
+            colour = CommonColors.BLACK,
         )
         drawScaledText(
             context = context,
@@ -110,7 +115,7 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
             x = x + (BASE_WIDTH / 2),
             y = middleY - 16,
             centered = true,
-            colour = CommonColors.BLACK
+            colour = CommonColors.BLACK,
         )
         drawScaledText(
             context = context,
@@ -118,7 +123,7 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
             x = x + (BASE_WIDTH / 2),
             y = middleY - 4,
             centered = true,
-            colour = CommonColors.BLACK
+            colour = CommonColors.BLACK,
         )
 
         super.render(context, mouseX, mouseY, delta)

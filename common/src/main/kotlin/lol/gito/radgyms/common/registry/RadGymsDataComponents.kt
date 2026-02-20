@@ -24,14 +24,16 @@ object RadGymsDataComponents : PlatformRegistry<DCTRegistry, DCTRegistryKey, Dat
     override val resourceKey: DCTRegistryKey = Registries.DATA_COMPONENT_TYPE
 
     @JvmField
-    val RG_GYM_TYPE_COMPONENT: DataComponentType<String> = this.create(
-        RadGyms.modId("gym_type"),
-        DataComponentType.builder<String>().persistent(Codec.STRING).build()
-    )
+    val RG_GYM_TYPE_COMPONENT: DataComponentType<String> =
+        this.create(
+            RadGyms.modId("gym_type"),
+            DataComponentType.builder<String>().persistent(Codec.STRING).build(),
+        )
 
     @JvmField
-    val RG_CACHE_SHINY_BOOST_COMPONENT: DataComponentType<Int> = this.create(
-        RadGyms.modId("shiny_boost"),
-        DataComponentType.builder<Int>().persistent(Codec.INT).build()
-    )
+    val RG_CACHE_SHINY_BOOST_COMPONENT: DataComponentType<Int> =
+        this.create(
+            RadGyms.modId("shiny_boost"),
+            DataComponentType.builder<Int>().persistent(Codec.INT).build(),
+        )
 }

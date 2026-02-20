@@ -14,7 +14,6 @@ architectury {
     common("neoforge", "fabric")
 }
 
-
 val generatedResources = file("src/generated")
 
 sourceSets {
@@ -22,7 +21,6 @@ sourceSets {
         resources.srcDir(generatedResources)
     }
 }
-
 
 loom {
     silentMojangMappingsLicense()

@@ -32,7 +32,9 @@ enum class GymReward : StringRepresentable {
 
     @JvmField
     @SerialName(REGISTRY_REWARD_TYPE_ADVANCEMENT)
-    ADVANCEMENT;
+    ADVANCEMENT,
+
+    ;
 
     override fun getSerializedName(): String = this.name.lowercase()
 

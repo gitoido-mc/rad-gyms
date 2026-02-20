@@ -25,113 +25,59 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     override val resourceKey: ResourceKey<Registry<Item>> = Registries.ITEM
 
     @JvmField
-    val GYM_KEY: GymKey = this.create(
-        modId("gym_key"),
-        GymKey()
-    )
+    val GYM_KEY: GymKey = this.create(modId("gym_key"), GymKey())
 
     @JvmField
-    val GYM_REWARD: GymRewardBag = this.create(
-        modId("gym_reward"),
-        GymRewardBag()
-    )
+    val GYM_REWARD: GymRewardBag = this.create(modId("gym_reward"), GymRewardBag())
 
     @JvmField
-    val EXIT_ROPE: ExitRope = this.create(
-        modId("exit_rope"),
-        ExitRope()
-    )
+    val EXIT_ROPE: ExitRope = this.create(modId("exit_rope"), ExitRope())
 
     @JvmField
-    val SHARD_COMMON: CommonPokeShard = this.create(
-        modId("shard_common"),
-        CommonPokeShard()
-    )
+    val SHARD_COMMON: CommonPokeShard = this.create(modId("shard_common"), CommonPokeShard())
 
     @JvmField
-    val SHARD_UNCOMMON: UncommonPokeShard = this.create(
-        modId("shard_uncommon"),
-        UncommonPokeShard()
-    )
+    val SHARD_UNCOMMON: UncommonPokeShard = this.create(modId("shard_uncommon"), UncommonPokeShard())
 
     @JvmField
-    val SHARD_RARE: RarePokeShard = this.create(
-        modId("shard_rare"),
-        RarePokeShard()
-    )
+    val SHARD_RARE: RarePokeShard = this.create(modId("shard_rare"), RarePokeShard())
 
     @JvmField
-    val SHARD_EPIC: EpicPokeShard = this.create(
-        modId("shard_epic"),
-        EpicPokeShard()
-    )
+    val SHARD_EPIC: EpicPokeShard = this.create(modId("shard_epic"), EpicPokeShard())
 
     @JvmField
-    val CACHE_COMMON: CommonPokeCache = this.create(
-        modId("cache_common"),
-        CommonPokeCache()
-    )
+    val CACHE_COMMON: CommonPokeCache = this.create(modId("cache_common"), CommonPokeCache())
 
     @JvmField
-    val CACHE_UNCOMMON: UncommonPokeCache = this.create(
-        modId("cache_uncommon"),
-        UncommonPokeCache()
-    )
+    val CACHE_UNCOMMON: UncommonPokeCache = this.create(modId("cache_uncommon"), UncommonPokeCache())
 
     @JvmField
-    val CACHE_RARE: RarePokeCache = this.create(
-        modId("cache_rare"),
-        RarePokeCache()
-    )
+    val CACHE_RARE: RarePokeCache = this.create(modId("cache_rare"), RarePokeCache())
 
     @JvmField
-    val CACHE_EPIC: EpicPokeCache = this.create(
-        modId("cache_epic"),
-        EpicPokeCache()
-    )
+    val CACHE_EPIC: EpicPokeCache = this.create(modId("cache_epic"), EpicPokeCache())
 
     @JvmField
-    val GYM_ENTRANCE = blockItem(
-        modId("gym_entrance"),
-        RadGymsBlocks.GYM_ENTRANCE
-    )
+    val GYM_ENTRANCE = blockItem(modId("gym_entrance"), RadGymsBlocks.GYM_ENTRANCE)
 
     @JvmField
-    val GYM_EXIT = blockItem(
-        modId("gym_exit"),
-        RadGymsBlocks.GYM_ENTRANCE
-    )
+    val GYM_EXIT = blockItem(modId("gym_exit"), RadGymsBlocks.GYM_ENTRANCE)
 
     @JvmField
-    val SHARD_BLOCK_COMMON = blockItem(
-        modId("shard_block_common"),
-        RadGymsBlocks.SHARD_BLOCK_COMMON
-    )
+    val SHARD_BLOCK_COMMON = blockItem(modId("shard_block_common"), RadGymsBlocks.SHARD_BLOCK_COMMON)
 
     @JvmField
-    val SHARD_BLOCK_UNCOMMON = blockItem(
-        modId("shard_block_uncommon"),
-        RadGymsBlocks.SHARD_BLOCK_UNCOMMON
-    )
+    val SHARD_BLOCK_UNCOMMON = blockItem(modId("shard_block_uncommon"), RadGymsBlocks.SHARD_BLOCK_UNCOMMON)
 
     @JvmField
-    val SHARD_BLOCK_RARE = blockItem(
-        modId("shard_block_rare"),
-        RadGymsBlocks.SHARD_BLOCK_RARE
-    )
+    val SHARD_BLOCK_RARE = blockItem(modId("shard_block_rare"), RadGymsBlocks.SHARD_BLOCK_RARE)
 
     @JvmField
-    val SHARD_BLOCK_EPIC = blockItem(
-        modId("shard_block_epic"),
-        RadGymsBlocks.SHARD_BLOCK_EPIC
-    )
+    val SHARD_BLOCK_EPIC = blockItem(modId("shard_block_epic"), RadGymsBlocks.SHARD_BLOCK_EPIC)
 
     private fun blockItem(
         name: ResourceLocation,
         block: Block,
-        rarity: Rarity = Rarity.COMMON
-    ): BlockItem = this.create(
-        name,
-        BlockItem(block, Item.Properties().rarity(rarity))
-    )
+        rarity: Rarity = Rarity.COMMON,
+    ): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 }

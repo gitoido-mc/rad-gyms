@@ -13,7 +13,8 @@ import net.minecraft.nbt.CompoundTag
 fun CompoundTag.getRadGymsBattleRules(key: String): BattleRules {
     val nbt = this.getCompound(key)
 
-    return BattleRules.Builder()
+    return BattleRules
+        .Builder()
         .withMaxItemUses(nbt.getInt("MaxItemUses"))
         .withHealPlayers(nbt.getBoolean("HealPlayers"))
         .withAdjustPlayerLevels(nbt.getBoolean("AdjustPlayerLevels"))
@@ -21,7 +22,10 @@ fun CompoundTag.getRadGymsBattleRules(key: String): BattleRules {
         .build()
 }
 
-fun CompoundTag.putRadGymsBattleRules(key: String, value: BattleRules) {
+fun CompoundTag.putRadGymsBattleRules(
+    key: String,
+    value: BattleRules,
+) {
     val nbt = CompoundTag()
 
     nbt.putInt("MaxItemUses", value.maxItemUses)

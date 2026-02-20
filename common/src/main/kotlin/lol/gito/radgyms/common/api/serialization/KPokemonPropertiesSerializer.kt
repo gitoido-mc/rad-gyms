@@ -16,16 +16,16 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 object KPokemonPropertiesSerializer : KSerializer<PokemonProperties> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
-        "com.cobblemon.mod.common.api.pokemon.PokemonProperties",
-        PrimitiveKind.STRING
-    )
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(
+            "com.cobblemon.mod.common.api.pokemon.PokemonProperties",
+            PrimitiveKind.STRING,
+        )
 
     override fun serialize(
         encoder: Encoder,
-        value: PokemonProperties
+        value: PokemonProperties,
     ) = encoder.encodeString(value.asString())
 
-    override fun deserialize(decoder: Decoder): PokemonProperties =
-        PokemonProperties.parse(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): PokemonProperties = PokemonProperties.parse(decoder.decodeString())
 }

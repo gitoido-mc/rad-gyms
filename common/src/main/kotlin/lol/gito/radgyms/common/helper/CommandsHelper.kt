@@ -12,5 +12,6 @@ import lol.gito.radgyms.common.COMMANDS_PREFIX
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.literal
 
-fun root(name: String): LiteralArgumentBuilder<CommandSourceStack> = literal(COMMANDS_PREFIX)
-    .then(literal(name))
+fun root(name: String): LiteralArgumentBuilder<CommandSourceStack> =
+    literal(COMMANDS_PREFIX)
+        .then(literal(name))

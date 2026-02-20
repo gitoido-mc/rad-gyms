@@ -22,5 +22,5 @@ listOf(
     "common",
     "fabric",
     "neoforge",
-    "docs"
+    "docs",
 ).forEach { include(it) }

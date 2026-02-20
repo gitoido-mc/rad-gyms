@@ -30,7 +30,7 @@ object RadGymsDataProvider : DataProvider {
                 RadGyms.modId("client_resources"),
                 SimpleResourceReloader(PackType.CLIENT_RESOURCES),
                 PackType.CLIENT_RESOURCES,
-                emptyList()
+                emptyList(),
             )
         }
 
@@ -38,7 +38,7 @@ object RadGymsDataProvider : DataProvider {
             RadGyms.modId("data_resources"),
             SimpleResourceReloader(PackType.SERVER_DATA),
             PackType.SERVER_DATA,
-            emptyList()
+            emptyList(),
         )
     }
 
@@ -48,7 +48,7 @@ object RadGymsDataProvider : DataProvider {
         RadGyms.debug(
             "Registered the {} registry of class {}",
             registry.id.toString(),
-            registry::class.qualifiedName.toString()
+            registry::class.qualifiedName.toString(),
         )
 
         return registry

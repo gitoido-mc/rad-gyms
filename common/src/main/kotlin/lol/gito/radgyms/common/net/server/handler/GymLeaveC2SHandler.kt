@@ -22,7 +22,7 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
     override fun handle(
         packet: GymLeaveC2S,
         server: MinecraftServer,
-        player: ServerPlayer
+        player: ServerPlayer,
     ) {
         val stack = player.mainHandItem
         val gym = RadGymsState.getGymForPlayer(player)
@@ -34,36 +34,40 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
                     reason = GymLeaveReason.USED_ITEM,
                     player = player,
                     completed = false,
-                    usedRope = true
-                )
+                    usedRope = true,
+                ),
             )
             return
         }
 
-        if (stack.item == RadGymsItems.EXIT_ROPE) {
-            debug("Player used exit rope")
-            stack.consume(1, player)
+        when (stack.item) {
+            RadGymsItems.EXIT_ROPE -> {
+                debug("Player used exit rope")
+                stack.consume(1, player)
 
-            GYM_LEAVE.emit(
-                GymEvents.GymLeaveEvent(
-                    reason = GymLeaveReason.USED_ITEM,
-                    player = player,
-                    gym = gym,
-                    completed = false,
-                    usedRope = true
+                GYM_LEAVE.emit(
+                    GymEvents.GymLeaveEvent(
+                        reason = GymLeaveReason.USED_ITEM,
+                        player = player,
+                        gym = gym,
+                        completed = false,
+                        usedRope = true,
+                    ),
                 )
-            )
-        } else {
-            debug("Player used exit block")
-            GYM_LEAVE.emit(
-                GymEvents.GymLeaveEvent(
-                    reason = GymLeaveReason.USED_BLOCK,
-                    player = player,
-                    gym = gym,
-                    completed = true,
-                    usedRope = false
+            }
+
+            else -> {
+                debug("Player used exit block")
+                GYM_LEAVE.emit(
+                    GymEvents.GymLeaveEvent(
+                        reason = GymLeaveReason.USED_BLOCK,
+                        player = player,
+                        gym = gym,
+                        completed = true,
+                        usedRope = false,
+                    ),
                 )
-            )
+            }
         }
     }
 }

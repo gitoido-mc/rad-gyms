@@ -15,8 +15,8 @@ import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_ENTER
 import lol.gito.radgyms.common.registry.RadGymsDimensions
-import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.registry.RadGymsStats.getStat
+import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.world.PlayerSpawnHelper
 import lol.gito.radgyms.common.world.StructurePlacer
 import lol.gito.radgyms.common.world.state.RadGymsState
@@ -31,14 +31,14 @@ class GymInitializer(
     private val templateRegistry: RadGymsTemplates,
     private val trainerSpawner: TrainerSpawner,
     private val structureManager: StructurePlacer,
-    private val trainerFactory: TrainerFactory
+    private val trainerFactory: TrainerFactory,
 ) {
     fun initInstance(
         serverPlayer: ServerPlayer,
         serverWorld: ServerLevel,
         level: Int,
         type: String = DEFAULT_GYM_TYPE,
-        usedKey: Boolean = false
+        usedKey: Boolean = false,
     ) {
         val dto = templateRegistry.templates[type]
         val gymDimension = serverPlayer.server.getLevel(RadGymsDimensions.GYM_DIMENSION)
@@ -50,40 +50,42 @@ class GymInitializer(
             serverPlayer,
             PlayerData.ReturnCoords(
                 serverWorld.dimension().location(),
-                serverPlayer.position().toBlockPos()
-            )
+                serverPlayer.position().toBlockPos(),
+            ),
         )
         RadGymsState.markDirty(serverPlayer)
 
-        val gymLevel = level.coerceIn(RadGyms.CONFIG.minLevel!!..RadGyms.CONFIG.maxLevel!!)
+        val gymLevel = level.coerceIn(RadGyms.config.minLevel!!..RadGyms.config.maxLevel!!)
         val gymType = if (type in templateRegistry.templates.keys) type else DEFAULT_GYM_TYPE
 
         val gymTemplate = GymTemplate.fromDto(serverPlayer, dto, gymLevel, gymType, trainerFactory)
 
         val playerGymCoords = PlayerSpawnHelper.getUniquePlayerCoords(serverPlayer, gymDimension)
-        val dest = BlockPos.containing(
-            playerGymCoords.x + gymTemplate.relativePlayerSpawn.x,
-            playerGymCoords.y + gymTemplate.relativePlayerSpawn.y,
-            playerGymCoords.z + gymTemplate.relativePlayerSpawn.z
-        )
+        val dest =
+            BlockPos.containing(
+                playerGymCoords.x + gymTemplate.relativePlayerSpawn.x,
+                playerGymCoords.y + gymTemplate.relativePlayerSpawn.y,
+                playerGymCoords.z + gymTemplate.relativePlayerSpawn.z,
+            )
 
         structureManager.placeStructure(gymDimension, playerGymCoords, gymTemplate.structure)
         gymDimension.chunkSource.addRegionTicket(
             TicketType.PORTAL,
             ChunkPos(dest),
             TELEPORT_PRELOAD_CHUNKS,
-            dest
+            dest,
         )
 
         val trainers = trainerSpawner.spawnAll(gymTemplate, gymDimension, playerGymCoords)
 
-        val gymInstance = Gym(
-            gymTemplate,
-            trainers.keys.toList(),
-            playerGymCoords,
-            gymLevel,
-            type
-        )
+        val gymInstance =
+            Gym(
+                gymTemplate,
+                trainers.keys.toList(),
+                playerGymCoords,
+                gymLevel,
+                type,
+            )
 
         RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
 
@@ -93,8 +95,8 @@ class GymInitializer(
                 gymInstance,
                 type,
                 gymLevel,
-                usedKey
-            )
+                usedKey,
+            ),
         )
 
         serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))

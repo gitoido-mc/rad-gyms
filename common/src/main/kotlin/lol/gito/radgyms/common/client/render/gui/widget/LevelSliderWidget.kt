@@ -17,10 +17,10 @@ import net.minecraft.network.chat.Component
 class LevelSliderWidget(
     x: Int,
     y: Int,
-    private val initialLevel: Int = RadGyms.CONFIG.minLevel!!,
+    private val initialLevel: Int = RadGyms.config.minLevel!!,
     private val minLevel: Int,
     private val maxLevel: Int,
-    private val onChange: (Int) -> Unit
+    private val onChange: (Int) -> Unit,
 ) : AbstractSliderButton(x, y, SLIDER_WIDTH, SLIDER_HEIGHT, CommonComponents.EMPTY, 0.0) {
     companion object {
         const val SLIDER_WIDTH = 190
@@ -29,7 +29,12 @@ class LevelSliderWidget(
 
     var level: Int = this.initialLevel
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderWidget(
+        context: GuiGraphics,
+        mouseX: Int,
+        mouseY: Int,
+        delta: Float,
+    ) {
         updateLevel(this.level)
         updateMessage()
         super.renderWidget(context, mouseX, mouseY, delta)
@@ -46,16 +51,18 @@ class LevelSliderWidget(
 
     fun updateLevel(level: Int) {
         this.level = level
-        this.value = level
-            .toDouble()
-            .minus(this.minLevel)
-            .div(maxLevel.minus(minLevel))
+        this.value =
+            level
+                .toDouble()
+                .minus(this.minLevel)
+                .div(maxLevel.minus(minLevel))
     }
 
-    private fun fromSliderValue(): Int = (value - 0.0)
-        .times(maxLevel - minLevel)
-        .div(1.0 - 0.0)
-        .plus(minLevel)
-        .floor()
-        .toInt()
+    private fun fromSliderValue(): Int =
+        (value - 0.0)
+            .times(maxLevel - minLevel)
+            .div(1.0 - 0.0)
+            .plus(minLevel)
+            .floor()
+            .toInt()
 }

@@ -28,27 +28,28 @@ data class GymJson(
     @SerialName("trainers")
     val trainers: List<Trainer>,
     @SerialName("rewards")
-    val rewards: List<@Polymorphic RewardInterface> = listOf(
-        LootTableReward(
-            id = "rad_gyms:gyms/default/shared_loot_table"
+    val rewards: List<@Polymorphic RewardInterface> =
+        listOf(
+            LootTableReward(
+                id = "rad_gyms:gyms/default/shared_loot_table",
+            ),
+            LootTableReward(
+                id = "rad_gyms:gyms/default/common_loot_table",
+                maxLevel = 25,
+            ),
+            LootTableReward(
+                id = "rad_gyms:gyms/default/uncommon_loot_table",
+                minLevel = 26,
+                maxLevel = 50,
+            ),
+            LootTableReward(
+                id = "rad_gyms:gyms/default/rare_loot_table",
+                minLevel = 51,
+                maxLevel = 75,
+            ),
+            LootTableReward(
+                id = "rad_gyms:gyms/default/epic_loot_table",
+                minLevel = 76,
+            ),
         ),
-        LootTableReward(
-            id = "rad_gyms:gyms/default/common_loot_table",
-            maxLevel = 25
-        ),
-        LootTableReward(
-            id = "rad_gyms:gyms/default/uncommon_loot_table",
-            minLevel = 26,
-            maxLevel = 50
-        ),
-        LootTableReward(
-            id = "rad_gyms:gyms/default/rare_loot_table",
-            minLevel = 51,
-            maxLevel = 75
-        ),
-        LootTableReward(
-            id = "rad_gyms:gyms/default/epic_loot_table",
-            minLevel = 76
-        ),
-    )
 )

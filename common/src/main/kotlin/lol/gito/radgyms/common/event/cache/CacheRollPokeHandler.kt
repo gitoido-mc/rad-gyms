@@ -16,21 +16,23 @@ import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.item.PokeCache
 import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 
-class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
+class CacheRollPokeHandler(
+    event: GymEvents.CacheRollPokeEvent,
+) {
     init {
         event.player.party().add(event.poke)
 
         event.player.displayClientMessage(
             tl(
                 "message.info.poke_cache.reward",
-                tl("label.rarity.${event.rarity.toString().lowercase()}").withStyle(
-                    event.rarity.color()
-                ),
+                tl("label.rarity.${event.rarity.toString().lowercase()}").withStyle(event.rarity.color()),
                 when (event.poke.shiny) {
-                    true -> event.poke.species.translatedName.rainbow()
+                    true ->
+                        event.poke.species.translatedName
+                            .rainbow()
                     false -> event.poke.species.translatedName
-                }
-            )
+                },
+            ),
         )
 
         if (event.player.mainHandItem.item is PokeCache) {

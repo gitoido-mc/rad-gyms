@@ -26,51 +26,56 @@ import com.gitlab.srcmc.rctapi.api.models.TrainerModel as RCTTrainerModel
 import lol.gito.radgyms.common.api.dto.trainer.TrainerModel as RGTrainerModel
 
 class TrainerFactory(
-    private val battleConfigBuilder: BattleConfigFactory = BattleConfigFactory()
+    private val battleConfigBuilder: BattleConfigFactory = BattleConfigFactory(),
 ) {
     fun create(
-        trainer: Trainer, level: Int, player: ServerPlayer?
+        trainer: Trainer,
+        level: Int,
+        player: ServerPlayer?,
     ): RGTrainerModel {
-        val ai = when (trainer.ai.type) {
-            "rct" -> RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))
-            "cbl" -> StrongBattleAI(trainer.ai.data?.skillLevel ?: StrongBattleAIConfig().skill())
-            "sd5" -> SelfdotGen5AI()
-            else -> throw RadGymsUnknownBattleAIException(
-                "Unknown battle AI type for trainer {}, passed {}, supports only 'rct', 'cbl', 'sd5'"
-                    .format(trainer.id, trainer.ai.type)
-            )
-        }
+        val ai =
+            when (trainer.ai.type) {
+                "rct" -> RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))
+                "cbl" -> StrongBattleAI(trainer.ai.data?.skillLevel ?: StrongBattleAIConfig().skill())
+                "sd5" -> SelfdotGen5AI()
+                else -> throw RadGymsUnknownBattleAIException(
+                    "Unknown battle AI type for trainer {}, passed {}, supports only 'rct', 'cbl', 'sd5'"
+                        .format(trainer.id, trainer.ai.type),
+                )
+            }
 
         val possibleFormats = trainer.possibleFormats.toMutableList()
-        val team = when (trainer.teamType) {
-            GymTeamType.FIXED -> FixedTeamGenerator.generateTeam(player, trainer, level)
-            GymTeamType.POOL -> PoolTeamGenerator.generateTeam(player, trainer, level)
-            GymTeamType.GENERATED -> trainer.teamGenerator.instance.generateTeam(
-                trainer,
-                level,
-                player,
-                possibleFormats,
-                trainer.possibleElementalTypes,
-            )
-        }
+        val team =
+            when (trainer.teamType) {
+                GymTeamType.FIXED -> FixedTeamGenerator.generateTeam(player, trainer, level)
+                GymTeamType.POOL -> PoolTeamGenerator.generateTeam(player, trainer, level)
+                GymTeamType.GENERATED ->
+                    trainer.teamGenerator.instance.generateTeam(
+                        trainer,
+                        level,
+                        player,
+                        possibleFormats,
+                        trainer.possibleElementalTypes,
+                    )
+            }
 
         return RGTrainerModel(
             trainer.id,
             TrainerEntityData(
                 name = translatable(trainer.name),
                 relativePosition = trainer.spawnRelative.pos.toVec3D(),
-                yaw = trainer.spawnRelative.yaw.toFloat()
+                yaw = trainer.spawnRelative.yaw.toFloat(),
             ),
             RCTTrainerModel(
                 translatable(trainer.name).string,
                 JTO.of { ai },
                 trainer.bag.map { BagItemModel(it.item, it.quantity) },
-                team
+                team,
             ),
             BattleRules(),
             possibleFormats.random(),
             trainer.leader,
-            trainer.requires
+            trainer.requires,
         )
     }
 }

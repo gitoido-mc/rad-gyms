@@ -15,7 +15,9 @@ import net.minecraft.util.StringRepresentable
 import com.cobblemon.mod.common.battles.BattleFormat as CBattleFormat
 
 @Serializable
-enum class GymBattleFormat : BattleFormatProvider, StringRepresentable {
+enum class GymBattleFormat :
+    BattleFormatProvider,
+    StringRepresentable {
     @JvmField
     @SerialName("singles")
     SINGLES {
@@ -32,7 +34,7 @@ enum class GymBattleFormat : BattleFormatProvider, StringRepresentable {
     @SerialName("triples")
     TRIPLES {
         override val format: BattleFormat = BattleFormat.GEN_9_TRIPLES
-    };
+    }, ;
 
     override fun getSerializedName(): String = this.format.cobblemonBattleFormat.battleType.name
 

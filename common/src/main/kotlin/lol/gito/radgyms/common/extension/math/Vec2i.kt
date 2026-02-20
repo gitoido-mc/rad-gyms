@@ -12,7 +12,10 @@ import net.minecraft.world.phys.Vec2
 import kotlin.math.roundToInt
 
 @Suppress("unused")
-class Vec2i(val x: Int = 0, val y: Int = 0) {
+class Vec2i(
+    val x: Int = 0,
+    val y: Int = 0,
+) {
     companion object {
         const val MIN_NEG_FLOAT = 1.0E-4f
 
@@ -59,41 +62,27 @@ class Vec2i(val x: Int = 0, val y: Int = 0) {
             is Double -> y.roundToInt()
             is Float -> y.roundToInt()
             else -> throw TypeCastException("Cannot convert Y value $y to Int")
-        }
+        },
     )
 
-    fun scale(f: Float): Vec2i {
-        return Vec2i(x * f, y * f)
-    }
+    fun scale(f: Float): Vec2i = Vec2i(x * f, y * f)
 
-    fun dot(vec2: Vec2i): Int {
-        return x * vec2.x + y * vec2.y
-    }
+    fun dot(vec2: Vec2i): Int = x * vec2.x + y * vec2.y
 
-    fun add(vec2: Vec2): Vec2i {
-        return Vec2i(x + vec2.x, y + vec2.y)
-    }
+    fun add(vec2: Vec2): Vec2i = Vec2i(x + vec2.x, y + vec2.y)
 
-    fun add(f: Float): Vec2i {
-        return Vec2i(x + f, y + f)
-    }
+    fun add(f: Float): Vec2i = Vec2i(x + f, y + f)
 
-    fun equalToOther(vec2: Vec2i): Boolean {
-        return x == vec2.x && y == vec2.y
-    }
+    fun equalToOther(vec2: Vec2i): Boolean = x == vec2.x && y == vec2.y
 
     fun normalized(): Vec2i {
         val f = Mth.sqrt((x * x + y * y).toFloat())
         return if (f < MIN_NEG_FLOAT) ZERO else Vec2i(x / f, y / f)
     }
 
-    fun length(): Float {
-        return Mth.sqrt((x * x + y * y).toFloat())
-    }
+    fun length(): Float = Mth.sqrt((x * x + y * y).toFloat())
 
-    fun lengthSquared(): Int {
-        return x * x + y * y
-    }
+    fun lengthSquared(): Int = x * x + y * y
 
     fun distanceToSqr(vec2: Vec2): Float {
         val f: Float = vec2.x - x
@@ -101,7 +90,5 @@ class Vec2i(val x: Int = 0, val y: Int = 0) {
         return f * f + g * g
     }
 
-    fun negated(): Vec2i {
-        return Vec2i(-x, -y)
-    }
+    fun negated(): Vec2i = Vec2i(-x, -y)
 }

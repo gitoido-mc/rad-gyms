@@ -15,5 +15,5 @@ enum class GymBattleEndReason {
     BATTLE_FLED,
 
     @JvmField
-    BATTLE_LOST
+    BATTLE_LOST,
 }

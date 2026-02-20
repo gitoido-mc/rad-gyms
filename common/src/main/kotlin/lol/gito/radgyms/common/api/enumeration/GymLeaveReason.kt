@@ -18,5 +18,5 @@ enum class GymLeaveReason {
     KICK_COMMAND,
 
     @JvmField
-    PLAYER_DEATH
+    PLAYER_DEATH,
 }

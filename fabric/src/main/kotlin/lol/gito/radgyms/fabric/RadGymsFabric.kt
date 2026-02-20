@@ -11,7 +11,7 @@ import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
 import com.mojang.brigadier.arguments.ArgumentType
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.extension.displayClientMessage
@@ -24,6 +24,8 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
@@ -40,6 +42,8 @@ import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.stats.Stats
 import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import java.util.concurrent.CompletableFuture
@@ -53,11 +57,12 @@ object RadGymsFabric : RadGymsImplementation {
 
     override val networkManager = RadGymsFabricNetworkManager
 
-    override fun environment(): Environment = when (FabricLoader.getInstance().environmentType) {
-        EnvType.CLIENT -> Environment.CLIENT
-        EnvType.SERVER -> Environment.SERVER
-        else -> error("Fabric implementation cannot resolve environment yet")
-    }
+    override fun environment(): Environment =
+        when (FabricLoader.getInstance().environmentType) {
+            EnvType.CLIENT -> Environment.CLIENT
+            EnvType.SERVER -> Environment.SERVER
+            else -> error("Fabric implementation cannot resolve environment yet")
+        }
 
     override fun isModInstalled(id: String): Boolean = FabricLoader.getInstance().isModLoaded(id)
 
@@ -88,9 +93,10 @@ object RadGymsFabric : RadGymsImplementation {
         CommandRegistrationCallback.EVENT.register(RadGymsCommands::register)
     }
 
-    override fun registerDataComponents() = RadGymsDataComponents.register { identifier, component ->
-        Registry.register(RadGymsDataComponents.registry, identifier, component)
-    }
+    override fun registerDataComponents() =
+        RadGymsDataComponents.register { identifier, component ->
+            Registry.register(RadGymsDataComponents.registry, identifier, component)
+        }
 
     override fun registerItems() {
         RadGymsItems.register { identifier, item -> Registry.register(RadGymsItems.registry, identifier, item) }
@@ -98,18 +104,27 @@ object RadGymsFabric : RadGymsImplementation {
             Registry.register(
                 BuiltInRegistries.CREATIVE_MODE_TAB,
                 provider.key,
-                FabricItemGroup.builder()
+                FabricItemGroup
+                    .builder()
                     .title(provider.displayName)
                     .icon(provider.displayIconProvider)
                     .displayItems(provider.entryCollector)
-                    .build()
+                    .build(),
             )
+        }
+
+        RadGymsItemGroups.injectorKeys().forEach { key ->
+            ItemGroupEvents.modifyEntriesEvent(key).register { content ->
+                val injector = FabricItemGroupInjector(content)
+                RadGymsItemGroups.inject(key, injector)
+            }
         }
     }
 
-    override fun registerBlocks() = RadGymsBlocks.register { identifier, entry ->
-        Registry.register(RadGymsBlocks.registry, identifier, entry)
-    }
+    override fun registerBlocks() =
+        RadGymsBlocks.register { identifier, entry ->
+            Registry.register(RadGymsBlocks.registry, identifier, entry)
+        }
 
     override fun registerBlockEntityTypes() {
         RadGymsBlockEntities.register { identifier, entry ->
@@ -117,35 +132,38 @@ object RadGymsFabric : RadGymsImplementation {
         }
     }
 
-    override fun registerEntityTypes() = RadGymsEntities.register { identifier, entry ->
-        Registry.register(RadGymsEntities.registry, identifier, entry)
-    }
+    override fun registerEntityTypes() =
+        RadGymsEntities.register { identifier, entry ->
+            Registry.register(RadGymsEntities.registry, identifier, entry)
+        }
 
-    override fun registerEntityAttributes() = RadGymsEntities.registerAttributes { entityType, builder ->
-        FabricDefaultAttributeRegistry.register(entityType, builder)
-    }
+    override fun registerEntityAttributes() =
+        RadGymsEntities.registerAttributes { entityType, builder ->
+            FabricDefaultAttributeRegistry.register(entityType, builder)
+        }
 
     override fun registerResourceReloader(
         identifier: ResourceLocation,
         reloader: PreparableReloadListener,
         type: PackType,
-        dependencies: Collection<ResourceLocation>
-    ) = ResourceManagerHelper.get(type).registerReloadListener(
-        RadGymsReloadListener(identifier, reloader, dependencies)
-    )
+        dependencies: Collection<ResourceLocation>,
+    ) = ResourceManagerHelper
+        .get(type)
+        .registerReloadListener(RadGymsReloadListener(identifier, reloader, dependencies))
 
     override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(
         identifier: ResourceLocation,
         argumentClass: KClass<A>,
-        serializer: ArgumentTypeInfo<A, T>
+        serializer: ArgumentTypeInfo<A, T>,
     ) {
         ArgumentTypeRegistry.registerArgumentType(identifier, argumentClass.java, serializer)
     }
 
-    override fun server(): MinecraftServer? = when (this.environment()) {
-        Environment.CLIENT -> Minecraft.getInstance().singleplayerServer
-        Environment.SERVER -> this.server
-    }
+    override fun server(): MinecraftServer? =
+        when (this.environment()) {
+            Environment.CLIENT -> Minecraft.getInstance().singleplayerServer
+            Environment.SERVER -> this.server
+        }
 
     fun onBeforeBlockBreak(
         world: Level,
@@ -155,7 +173,7 @@ object RadGymsFabric : RadGymsImplementation {
         var allowBreak = true
 
         if (world.dimension() == RadGymsDimensions.GYM_DIMENSION) {
-            if (CONFIG.debug == true) return true
+            if (config.debug == true) return true
 
             allowBreak = false
         }
@@ -176,7 +194,7 @@ object RadGymsFabric : RadGymsImplementation {
     private class RadGymsReloadListener(
         private val identifier: ResourceLocation,
         private val reloader: PreparableReloadListener,
-        private val dependencies: Collection<ResourceLocation>
+        private val dependencies: Collection<ResourceLocation>,
     ) : IdentifiableResourceReloadListener {
         override fun reload(
             synchronizer: PreparableReloadListener.PreparationBarrier,
@@ -184,20 +202,51 @@ object RadGymsFabric : RadGymsImplementation {
             prepareProfiler: ProfilerFiller,
             applyProfiler: ProfilerFiller,
             prepareExecutor: Executor,
-            applyExecutor: Executor
-        ): CompletableFuture<Void> = this.reloader.reload(
-            synchronizer,
-            manager,
-            prepareProfiler,
-            applyProfiler,
-            prepareExecutor,
-            applyExecutor
-        )
+            applyExecutor: Executor,
+        ): CompletableFuture<Void> =
+            this.reloader.reload(
+                synchronizer,
+                manager,
+                prepareProfiler,
+                applyProfiler,
+                prepareExecutor,
+                applyExecutor,
+            )
 
         override fun getFabricId(): ResourceLocation = this.identifier
 
         override fun getName(): String = this.reloader.name
 
         override fun getFabricDependencies(): MutableCollection<ResourceLocation> = this.dependencies.toMutableList()
+    }
+
+    private class FabricItemGroupInjector(
+        private val fabricItemGroupEntries: FabricItemGroupEntries,
+    ) : RadGymsItemGroups.Injector {
+        override fun putFirst(item: ItemLike) {
+            this.fabricItemGroupEntries.prepend(item)
+        }
+
+        override fun putBefore(
+            item: ItemLike,
+            target: ItemLike,
+        ) {
+            this.fabricItemGroupEntries.addBefore(target, item)
+        }
+
+        override fun putAfter(
+            item: ItemLike,
+            target: ItemLike,
+        ) {
+            this.fabricItemGroupEntries.addAfter(target, item)
+        }
+
+        override fun putLast(item: ItemLike) {
+            this.fabricItemGroupEntries.accept(item)
+        }
+
+        override fun putLast(item: ItemStack) {
+            this.fabricItemGroupEntries.accept(item)
+        }
     }
 }

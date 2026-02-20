@@ -23,14 +23,16 @@ object RadGymsNeoForgeNetworkManager : NetworkManager {
     const val PROTOCOL_VERSION = "0.4.0"
 
     fun registerMessages(event: RegisterPayloadHandlersEvent) {
-        val registrar = event
-            .registrar(RadGyms.MOD_ID)
-            .versioned(PROTOCOL_VERSION)
+        val registrar =
+            event
+                .registrar(RadGyms.MOD_ID)
+                .versioned(PROTOCOL_VERSION)
 
-        val netRegistrar = event
-            .registrar(RadGyms.MOD_ID)
-            .versioned(PROTOCOL_VERSION)
-            .executesOn(HandlerThread.MAIN)
+        val netRegistrar =
+            event
+                .registrar(RadGyms.MOD_ID)
+                .versioned(PROTOCOL_VERSION)
+                .executesOn(HandlerThread.MAIN)
 
         val syncPackets = HashSet<ResourceLocation>()
         val asyncPackets = HashSet<ResourceLocation>()
@@ -50,10 +52,7 @@ object RadGymsNeoForgeNetworkManager : NetworkManager {
         }
     }
 
-    override fun sendPacketToPlayer(
-        player: ServerPlayer,
-        packet: NetworkPacket<*>
-    ) = player.connection.send(packet)
+    override fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) = player.connection.send(packet)
 
     override fun sendToServer(packet: NetworkPacket<*>) {
         Minecraft.getInstance().connection?.send(packet)

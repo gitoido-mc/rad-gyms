@@ -25,26 +25,33 @@ object GymLeaveHandler {
         debug("gym leave triggered")
 
         if (event.gym != null) {
-            @Suppress("USELESS_CAST")
-            event.player.level().getEntitiesOfClass(
-                Trainer::class.java,
-                AABB.of(
-                    BoundingBox.encapsulatingPositions(listOf(
-                        event.gym.coords,
-                        event.gym.coords.north(AABB_OFFSET).east(AABB_OFFSET).above(AABB_OFFSET),
-                    )).get()
-                )
-            ).forEach { it.discard() }
+            event.player
+                .level()
+                .getEntitiesOfClass(
+                    Trainer::class.java,
+                    AABB.of(
+                        BoundingBox
+                            .encapsulatingPositions(
+                                listOf(
+                                    event.gym.coords,
+                                    event.gym.coords
+                                        .north(AABB_OFFSET)
+                                        .east(AABB_OFFSET)
+                                        .above(AABB_OFFSET),
+                                ),
+                            ).get(),
+                    ),
+                ).forEach { it.discard() }
         }
 
-        if (event.completed == false) {
-            GymTeardownService.destructGym(event.player, removeCoords = false)
-            event.player.awardStat(getStat(RadGyms.statistics.GYMS_FAILED))
-            if (event.usedRope == true) {
-                event.player.awardStat(getStat(RadGyms.statistics.ROPES_USED))
+        when (event.completed) {
+            true -> event.player.awardStat(getStat(RadGyms.statistics.GYMS_BEATEN))
+            null -> Unit
+            false -> {
+                GymTeardownService.destructGym(event.player, removeCoords = false)
+                event.player.awardStat(getStat(RadGyms.statistics.GYMS_FAILED))
+                if (event.usedRope == true) event.player.awardStat(getStat(RadGyms.statistics.ROPES_USED))
             }
-        } else {
-            event.player.awardStat(getStat(RadGyms.statistics.GYMS_BEATEN))
         }
 
         GymTeardownService

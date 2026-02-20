@@ -24,20 +24,21 @@ class OpenGymEnterScreenS2C(
     val key: Boolean,
     val type: String,
     val pos: BlockPos? = null,
-    val usesLeft: Int? = null
+    val usesLeft: Int? = null,
 ) : NetworkPacket<OpenGymEnterScreenS2C> {
     override val id: ResourceLocation = ID
 
     companion object {
         val ID = modId("net.gym_enter_screen")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenGymEnterScreenS2C(
-            ByteBufCodecs.INT.decode(buffer),
-            ByteBufCodecs.BOOL.decode(buffer),
-            ByteBufCodecs.STRING_UTF8.decode(buffer),
-            ByteBufCodecs.optional(BlockPos.STREAM_CODEC).decode(buffer).getOrNull(),
-            ByteBufCodecs.optional(ByteBufCodecs.INT).decode(buffer).getOrNull()
-        )
+        fun decode(buffer: RegistryFriendlyByteBuf) =
+            OpenGymEnterScreenS2C(
+                ByteBufCodecs.INT.decode(buffer),
+                ByteBufCodecs.BOOL.decode(buffer),
+                ByteBufCodecs.STRING_UTF8.decode(buffer),
+                ByteBufCodecs.optional(BlockPos.STREAM_CODEC).decode(buffer).getOrNull(),
+                ByteBufCodecs.optional(ByteBufCodecs.INT).decode(buffer).getOrNull(),
+            )
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {

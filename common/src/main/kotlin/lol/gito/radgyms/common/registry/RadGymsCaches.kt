@@ -34,7 +34,7 @@ object RadGymsCaches : JsonDataRegistry<CacheDTO> {
     @Throws(ExecutionException::class)
     override fun parse(
         stream: InputStream,
-        identifier: ResourceLocation
+        identifier: ResourceLocation,
     ): CacheDTO = Json.decodeFromStream<CacheDTO>(stream)
 
     override fun reload(data: Map<ResourceLocation, CacheDTO>) {

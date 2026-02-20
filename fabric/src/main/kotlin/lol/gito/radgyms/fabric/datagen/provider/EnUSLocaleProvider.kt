@@ -40,14 +40,12 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.world.item.Rarity
 import java.util.concurrent.CompletableFuture
 
-class EnUSLocaleProvider(
-    dataOutput: FabricDataOutput,
-    registryLookup: CompletableFuture<HolderLookup.Provider>
-) : FabricLanguageProvider(
-    dataOutput,
-    "en_us",
-    registryLookup
-) {
+class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: CompletableFuture<HolderLookup.Provider>) :
+    FabricLanguageProvider(
+        dataOutput,
+        "en_us",
+        registryLookup,
+    ) {
     private fun provideTranslations(): Map<String, String> {
         val translations = mutableMapOf<String, String>()
 
@@ -82,8 +80,9 @@ class EnUSLocaleProvider(
     )
 
     private fun infoTranslations(): Map<String, String> = mapOf(
-        tlk("message.info.gym_entrance_breaking") to "Gym entrances do not drop when broken."
-            .plus(" If you break it, all players will lose access to this entrance"),
+        tlk("message.info.gym_entrance_breaking") to
+            "Gym entrances do not drop when broken."
+                .plus(" If you break it, all players will lose access to this entrance"),
         tlk("message.info.gym_entrance_exhausted") to
             "This gym entrance lost all his energies, look for another one",
         tlk("message.info.gym_entrance_party_empty") to
@@ -111,7 +110,7 @@ class EnUSLocaleProvider(
         tlk("message.error.command.kick.wrong_dim") to "Target is not in the gym dimension",
         tlk("message.error.command.kick.no_player") to "There is no such player currently online",
         tlk("message.error.command.debug_reward.no_template") to "Cannot find template provided",
-        tlk("message.error.command.debug_reward.no_player") to "Command was not executed by player"
+        tlk("message.error.command.debug_reward.no_player") to "Command was not executed by player",
     )
 
     private fun objectTranslations(): Map<String, String> = mapOf(
@@ -143,7 +142,8 @@ class EnUSLocaleProvider(
         tlk("label.rarity.${Rarity.COMMON.name.lowercase()}") to "Common",
         tlk("label.rarity.${Rarity.UNCOMMON.name.lowercase()}") to "Uncommon",
         tlk("label.rarity.${Rarity.RARE.name.lowercase()}") to "Rare",
-        tlk("label.rarity.${Rarity.EPIC.name.lowercase()}") to "Epic"
+        tlk("label.rarity.${Rarity.EPIC.name.lowercase()}") to "Epic",
+        tlk("label.rarity.${Rarity.EPIC.name.lowercase()}") to "Epic",
     )
 
     private fun statTranslations(): Map<String, String> = mapOf(
@@ -154,12 +154,10 @@ class EnUSLocaleProvider(
         tlk("stat", ENTRANCES_USED.resourceLocation) to "Gym entrances used",
         tlk("stat", ROPES_USED.resourceLocation) to "Gym escape ropes used",
         tlk("stat", CACHES_OPENED.resourceLocation) to "Poke caches opened",
+        tlk("biome", "gym_biome") to "Gym Trials",
     )
 
-    override fun generateTranslations(
-        wrapperLookup: HolderLookup.Provider,
-        translationBuilder: TranslationBuilder
-    ) {
+    override fun generateTranslations(wrapperLookup: HolderLookup.Provider, translationBuilder: TranslationBuilder) {
         for (item in provideTranslations()) {
             translationBuilder.add(item.key, item.value)
         }

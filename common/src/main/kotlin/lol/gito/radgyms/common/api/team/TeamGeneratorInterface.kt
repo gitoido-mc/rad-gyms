@@ -21,12 +21,12 @@ interface TeamGeneratorInterface {
         level: Int,
         player: ServerPlayer?,
         possibleFormats: MutableList<GymBattleFormat>? = mutableListOf(GymBattleFormat.SINGLES),
-        types: List<ElementalType>? = listOf(ElementalTypes.getRandomType())
+        types: List<ElementalType>? = listOf(ElementalTypes.getRandomType()),
     ): MutableList<PokemonModel>
 
     fun generatePokemon(
         level: Int,
-        thresholdAmount: Int,
+        amount: Int,
         type: ElementalType = ElementalTypes.getRandomType(),
     ): Pokemon
 }

@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.event.gyms
 
-import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
 import lol.gito.radgyms.common.RadGyms
@@ -24,7 +23,9 @@ import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.server.level.ServerPlayer
 
-class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
+class TrainerBattleEndHandler(
+    event: GymEvents.TrainerBattleEndEvent,
+) {
     init {
         debug("Trainer battle end triggered")
 
@@ -37,51 +38,44 @@ class TrainerBattleEndHandler(event: GymEvents.TrainerBattleEndEvent) {
     private fun handleGymWin(event: GymEvents.TrainerBattleEndEvent) {
         var defeatedLeader: Trainer? = null
 
-        event.losers.forEach { loser ->
-            if (loser.type == ActorType.NPC && loser is TrainerEntityBattleActor && loser.entity is Trainer) {
+        event.losers
+            .filterIsInstance<TrainerEntityBattleActor>()
+            .filter { it.entity is Trainer }
+            .forEach { loser ->
                 val trainer = loser.entity as Trainer
                 trainer.defeated = true
-                if (trainer.leader) {
-                    defeatedLeader = trainer
-                }
+                if (trainer.leader) defeatedLeader = trainer
                 RadGyms.RCT.trainerRegistry.unregisterById(trainer.stringUUID)
             }
-        }
 
         if (defeatedLeader != null) {
-            val winnerPlayers = event.winners
-                .filter { it.type == ActorType.PLAYER }
-                .map { (it as PlayerBattleActor).entity as ServerPlayer }
+            val winnerPlayers =
+                event.winners
+                    .filterIsInstance<PlayerBattleActor>()
+                    .map { it.entity as ServerPlayer }
 
             val firstPlayer = winnerPlayers.first()
-
-
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
-
             if (firstPlayer.level().dimension() == GYM_DIMENSION) {
                 debug("Trying to spawn exit block")
-                gym.let {
-                    GymTeardownService.spawnExitBlock(firstPlayer.server, it)
-                }
+                gym.let { GymTeardownService.spawnExitBlock(firstPlayer.server, it) }
             }
 
             winnerPlayers.forEach {
-                GENERATE_REWARD.emit(
-                    GymEvents.GenerateRewardEvent(it, gym.template, gym.level, gym.type)
-                )
-
+                GENERATE_REWARD.emit(GymEvents.GenerateRewardEvent(it, gym.template, gym.level, gym.type))
                 it.displayClientMessage(tl("message.info.gym_complete"))
             }
         }
     }
 
-    private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) = event
-        .battle
-        .players
-        .filter { it.level().dimension() == GYM_DIMENSION }
-        .forEach {
-            GymTeardownService
-                .withTeleportScheduler(GymTeleportScheduler())
-                .handleGymLeave(it)
-        }
+    private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) =
+        event
+            .battle
+            .players
+            .filter { it.level().dimension() == GYM_DIMENSION }
+            .forEach {
+                GymTeardownService
+                    .withTeleportScheduler(GymTeleportScheduler())
+                    .handleGymLeave(it)
+            }
 }

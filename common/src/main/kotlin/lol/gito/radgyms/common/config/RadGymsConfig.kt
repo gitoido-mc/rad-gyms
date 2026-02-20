@@ -25,7 +25,7 @@ data class RadGymsConfig(
     val minLevel: Int? = null,
     val maxLevel: Int? = null,
     val deriveAverageGymLevel: Boolean? = null,
-    val pokeCachePools: Map<String, Set<String>>? = null
+    val pokeCachePools: Map<String, Set<String>>? = null,
 ) {
     companion object {
         @Transient
@@ -48,36 +48,37 @@ data class RadGymsConfig(
                 "mega",
                 "mega-x",
                 "mega-y",
-                "gmax"
+                "gmax",
             ),
             pokeCachePools = mutableMapOf(
                 Rarity.COMMON.serializedName to mutableSetOf(
-                    Rarity.COMMON.serializedName
+                    Rarity.COMMON.serializedName,
                 ),
                 Rarity.UNCOMMON.serializedName to mutableSetOf(
-                    Rarity.UNCOMMON.serializedName, Rarity.COMMON.serializedName
+                    Rarity.UNCOMMON.serializedName,
+                    Rarity.COMMON.serializedName,
                 ),
                 Rarity.RARE.serializedName to mutableSetOf(
-                    Rarity.RARE.serializedName, Rarity.UNCOMMON.serializedName
+                    Rarity.RARE.serializedName,
+                    Rarity.UNCOMMON.serializedName,
                 ),
                 Rarity.EPIC.serializedName to mutableSetOf(
-                    Rarity.EPIC.serializedName, Rarity.RARE.serializedName
+                    Rarity.EPIC.serializedName,
+                    Rarity.RARE.serializedName,
                 ),
-            )
+            ),
         )
     }
 
-    fun combine(other: RadGymsConfig): RadGymsConfig {
-        return this.copy(
-            debug = other.debug ?: debug,
-            maxEntranceUses = other.maxEntranceUses ?: maxEntranceUses,
-            shardRewards = other.shardRewards ?: shardRewards,
-            lapisBoostAmount = other.lapisBoostAmount ?: lapisBoostAmount,
-            ignoredSpecies = other.ignoredSpecies ?: ignoredSpecies,
-            minLevel = other.minLevel ?: minLevel,
-            maxLevel = other.maxLevel ?: maxLevel,
-            deriveAverageGymLevel = other.deriveAverageGymLevel ?: deriveAverageGymLevel,
-            pokeCachePools = other.pokeCachePools ?: pokeCachePools
-        )
-    }
+    fun combine(other: RadGymsConfig): RadGymsConfig = this.copy(
+        debug = other.debug ?: debug,
+        maxEntranceUses = other.maxEntranceUses ?: maxEntranceUses,
+        shardRewards = other.shardRewards ?: shardRewards,
+        lapisBoostAmount = other.lapisBoostAmount ?: lapisBoostAmount,
+        ignoredSpecies = other.ignoredSpecies ?: ignoredSpecies,
+        minLevel = other.minLevel ?: minLevel,
+        maxLevel = other.maxLevel ?: maxLevel,
+        deriveAverageGymLevel = other.deriveAverageGymLevel ?: deriveAverageGymLevel,
+        pokeCachePools = other.pokeCachePools ?: pokeCachePools,
+    )
 }

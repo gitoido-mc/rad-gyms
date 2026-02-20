@@ -18,5 +18,5 @@ data class TrainerModel(
     val battleRules: BattleRules,
     val format: GymBattleFormat = GymBattleFormat.SINGLES,
     val leader: Boolean = false,
-    val requires: String? = null
+    val requires: String? = null,
 )

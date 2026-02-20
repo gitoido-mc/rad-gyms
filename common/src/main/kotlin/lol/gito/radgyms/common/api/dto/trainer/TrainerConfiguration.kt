@@ -16,16 +16,15 @@ import net.minecraft.nbt.CompoundTag
 data class TrainerConfiguration(
     val battleRules: BattleRules,
     val bag: MutableList<BagItemModel> = mutableListOf(),
-    val team: MutableList<PokemonModel> = mutableListOf()
+    val team: MutableList<PokemonModel> = mutableListOf(),
 ) {
     companion object {
-        fun fromCompoundTag(tag: CompoundTag): TrainerConfiguration {
-            return TrainerConfiguration(
+        fun fromCompoundTag(tag: CompoundTag): TrainerConfiguration =
+            TrainerConfiguration(
                 tag.getRadGymsBattleRules("BattleRules"),
                 tag.getRadGymsTrainerBag("Bag"),
-                tag.getRadGymsTrainerTeam("Team")
+                tag.getRadGymsTrainerTeam("Team"),
             )
-        }
     }
 
     fun toCompoundTag(): CompoundTag {

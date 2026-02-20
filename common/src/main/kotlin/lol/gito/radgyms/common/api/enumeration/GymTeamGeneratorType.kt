@@ -26,7 +26,7 @@ enum class GymTeamGeneratorType : StringRepresentable {
     @SerialName("chaotic")
     CHAOTIC {
         override val instance: GenericTeamGenerator = ChaoticTeamGenerator
-    };
+    }, ;
 
     override fun getSerializedName(): String = this.name.lowercase()
 

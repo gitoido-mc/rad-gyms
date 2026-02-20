@@ -19,7 +19,7 @@ import net.minecraft.client.Minecraft
 object OpenGymEnterScreenHandler : ClientNetworkPacketHandler<OpenGymEnterScreenS2C> {
     override fun handle(
         packet: OpenGymEnterScreenS2C,
-        client: Minecraft
+        client: Minecraft,
     ) {
         // Config or someone might be able to override some stuff via event
         GymEvents.ENTER_SCREEN_OPEN.emit(
@@ -27,11 +27,11 @@ object OpenGymEnterScreenHandler : ClientNetworkPacketHandler<OpenGymEnterScreen
                 packet.pos,
                 packet.key,
                 packet.type,
-                RadGyms.CONFIG.minLevel!!,
-                RadGyms.CONFIG.maxLevel!!,
+                RadGyms.config.minLevel!!,
+                RadGyms.config.maxLevel!!,
                 packet.derivedLevel,
-                packet.usesLeft
-            )
+                packet.usesLeft,
+            ),
         )
     }
 }

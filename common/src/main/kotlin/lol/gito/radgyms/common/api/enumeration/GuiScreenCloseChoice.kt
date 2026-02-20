@@ -12,5 +12,5 @@ enum class GuiScreenCloseChoice {
     PROCEED,
 
     @JvmField
-    CANCEL
+    CANCEL,
 }

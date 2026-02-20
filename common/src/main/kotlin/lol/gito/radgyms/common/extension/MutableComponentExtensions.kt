@@ -14,15 +14,16 @@ import net.minecraft.network.chat.MutableComponent
 
 fun MutableComponent.rainbow(): MutableComponent {
     val intermediate: String? = this.string
-    val colors: List<ChatFormatting> = listOf(
-        ChatFormatting.RED,
-        ChatFormatting.GOLD,
-        ChatFormatting.YELLOW,
-        ChatFormatting.GREEN,
-        ChatFormatting.AQUA,
-        ChatFormatting.BLUE,
-        ChatFormatting.DARK_PURPLE
-    )
+    val colors: List<ChatFormatting> =
+        listOf(
+            ChatFormatting.RED,
+            ChatFormatting.GOLD,
+            ChatFormatting.YELLOW,
+            ChatFormatting.GREEN,
+            ChatFormatting.AQUA,
+            ChatFormatting.BLUE,
+            ChatFormatting.DARK_PURPLE,
+        )
     val result = Component.empty()
     var colorIndex = 0
     intermediate?.forEach { c ->

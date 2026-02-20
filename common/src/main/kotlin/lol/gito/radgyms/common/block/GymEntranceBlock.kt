@@ -16,6 +16,7 @@ import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
+import lol.gito.radgyms.common.helper.tlr
 import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
 import net.minecraft.ChatFormatting
@@ -52,12 +53,12 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
     @Suppress("MagicNumber")
     private val bounds = Shapes.or(
         box(3.75, 1.75, 3.75, 12.25, 10.25, 12.25),
-        box(6.5, 10.0, 6.5, 9.5, 11.0, 9.5)
+        box(6.5, 10.0, 6.5, 9.5, 11.0, 9.5),
     )
 
     init {
         registerDefaultState(
-            defaultBlockState().setValue(gymEntranceHorizontalFacing, Direction.NORTH)
+            defaultBlockState().setValue(gymEntranceHorizontalFacing, Direction.NORTH),
         )
     }
 
@@ -65,21 +66,20 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
 
-    override fun codec(): MapCodec<out BaseEntityBlock> =
-        simpleCodec { properties: Properties -> GymEntranceBlock(properties) }
+    override fun codec(): MapCodec<out BaseEntityBlock> = simpleCodec { GymEntranceBlock(it) }
 
     override fun getShape(
         state: BlockState,
         blockGetter: BlockGetter,
         pos: BlockPos,
-        context: CollisionContext
+        context: CollisionContext,
     ): VoxelShape = bounds
 
     override fun getCollisionShape(
         state: BlockState,
         blockGetter: BlockGetter,
         pos: BlockPos,
-        context: CollisionContext
+        context: CollisionContext,
     ): VoxelShape = bounds
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -88,7 +88,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState = this.defaultBlockState().setValue(
         gymEntranceHorizontalFacing,
-        ctx.horizontalDirection.opposite
+        ctx.horizontalDirection.opposite,
     )
 
     override fun useWithoutItem(
@@ -96,7 +96,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         level: Level,
         pos: BlockPos,
         player: Player,
-        hit: BlockHitResult
+        hit: BlockHitResult,
     ): InteractionResult {
         if (level.getBlockEntity(pos) !is GymEntranceEntity) return super.useWithoutItem(state, level, pos, player, hit)
         var result: InteractionResult = InteractionResult.SUCCESS_NO_ITEM_USED
@@ -127,17 +127,18 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                         return@let
                     }
 
-                    val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
-                        true -> player.averagePokePartyLevel()
-                        false -> RadGyms.CONFIG.minLevel!!
-                    }
+                    val derivedLevel =
+                        when (RadGyms.config.deriveAverageGymLevel!!) {
+                            true -> player.averagePokePartyLevel()
+                            false -> RadGyms.config.minLevel!!
+                        }
 
                     OpenGymEnterScreenS2C(
                         derivedLevel,
                         false,
                         gymEntrance.gymType,
                         pos,
-                        gymEntrance.usesLeftForPlayer(player)
+                        gymEntrance.usesLeftForPlayer(player),
                     ).sendToPlayer(player)
                 }
             }
@@ -150,10 +151,10 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         stack: ItemStack,
         context: Item.TooltipContext,
         tooltip: MutableList<Component>,
-        options: TooltipFlag
+        options: TooltipFlag,
     ) {
-        tooltip.addLast(tl("${GYM_ENTRANCE.descriptionId}.tooltip").withStyle(ChatFormatting.GRAY))
-        tooltip.addLast(tl("${GYM_ENTRANCE.descriptionId}.tooltip2").withStyle(ChatFormatting.GRAY))
+        tooltip.addLast(tlr("${GYM_ENTRANCE.descriptionId}.tooltip").withStyle(ChatFormatting.GRAY))
+        tooltip.addLast(tlr("${GYM_ENTRANCE.descriptionId}.tooltip2").withStyle(ChatFormatting.GRAY))
     }
 
     override fun setPlacedBy(
@@ -161,7 +162,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         pos: BlockPos,
         state: BlockState,
         livingEntity: LivingEntity?,
-        itemStack: ItemStack
+        itemStack: ItemStack,
     ) {
         super.setPlacedBy(world, pos, state, livingEntity, itemStack)
 

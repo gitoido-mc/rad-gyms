@@ -17,9 +17,10 @@ import java.util.*
 fun CompoundTag.getRadGymsInstanceData(key: String): Gym? {
     val tag = this.getCompound(key) ?: return null
     val template = RadGymsTemplates.templates[tag.getString("Template")]!!
-    val player = RadGyms.implementation.server()!!.playerList.getPlayer(
-        UUID.fromString(key)
-    )
+    val player =
+        RadGyms.implementation.server()!!.playerList.getPlayer(
+            UUID.fromString(key),
+        )
 
     val npcList = mutableListOf<UUID>()
 
@@ -28,27 +29,26 @@ fun CompoundTag.getRadGymsInstanceData(key: String): Gym? {
     }
 
     return Gym(
-        template = GymTemplate.fromDto(
-            player,
-            template,
-            tag.getInt("Level"),
-            tag.getString("Type")
-        ),
+        template = GymTemplate.fromDto(player, template, tag.getInt("Level"), tag.getString("Type")),
         npcList = npcList,
         coords = tag.getBlockPos("Coords")!!,
         level = tag.getInt("Level"),
-        type = tag.getString("Type")
+        type = tag.getString("Type"),
     )
 }
 
-fun CompoundTag.putRadGymsInstanceData(key: String, value: Gym) {
+fun CompoundTag.putRadGymsInstanceData(
+    key: String,
+    value: Gym,
+) {
     val nbt = CompoundTag()
     val trainersNbt = CompoundTag()
 
-    val templateKey = RadGymsTemplates.templates.firstNotNullOf { (key, template) ->
-        if (value.template.id == template.id) return@firstNotNullOf key
-        return@firstNotNullOf null
-    }
+    val templateKey =
+        RadGymsTemplates.templates.firstNotNullOf { (key, template) ->
+            if (value.template.id == template.id) return@firstNotNullOf key
+            return@firstNotNullOf null
+        }
 
     nbt.putString("Template", templateKey)
     nbt.putBlockPos("Coords", value.coords)

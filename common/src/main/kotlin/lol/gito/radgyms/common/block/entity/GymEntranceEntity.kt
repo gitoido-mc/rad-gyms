@@ -8,7 +8,7 @@
 package lol.gito.radgyms.common.block.entity
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.registry.RadGymsBlockEntities
 import net.minecraft.core.BlockPos
@@ -21,13 +21,10 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
-class GymEntranceEntity(
-    val pos: BlockPos,
-    state: BlockState
-) : BlockEntity(
+class GymEntranceEntity(val pos: BlockPos, state: BlockState) : BlockEntity(
     RadGymsBlockEntities.GYM_ENTRANCE_ENTITY,
     pos,
-    state
+    state,
 ) {
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
@@ -38,11 +35,11 @@ class GymEntranceEntity(
         playerUseCounter[player.uuid.toString()] = playerUseCounter
             .getOrDefault(player.uuid.toString(), 0)
             .inc()
-            .coerceIn(0, CONFIG.maxEntranceUses!!)
+            .coerceIn(0, config.maxEntranceUses!!)
 
         setChanged()
         debug(
-            "Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance"
+            "Increased player ${player.uuid} tries (${playerUseCounter[player.uuid.toString()]}) for $pos gym entrance",
         )
     }
 
@@ -54,8 +51,7 @@ class GymEntranceEntity(
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener> = ClientboundBlockEntityDataPacket.create(this)
 
-    override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag =
-        saveWithoutMetadata(registryLookup)
+    override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag = saveWithoutMetadata(registryLookup)
 
     override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
         val playerEntries = nbt.getCompound(playerUsageDataKey)
@@ -85,15 +81,15 @@ class GymEntranceEntity(
     fun usesLeftForPlayer(player: Player): Int {
         val playerCounter = playerUseCounter
             .getOrDefault(player.uuid.toString(), 0)
-            .coerceIn(0, CONFIG.maxEntranceUses!!)
+            .coerceIn(0, config.maxEntranceUses!!)
 
         debug(
             "Uses left for {} for {} gym entrance: {} (config max: {})",
             player,
             pos,
-            CONFIG.maxEntranceUses!! - playerCounter,
-            CONFIG.maxEntranceUses!!
+            config.maxEntranceUses!! - playerCounter,
+            config.maxEntranceUses!!,
         )
-        return CONFIG.maxEntranceUses!! - playerCounter
+        return config.maxEntranceUses!! - playerCounter
     }
 }

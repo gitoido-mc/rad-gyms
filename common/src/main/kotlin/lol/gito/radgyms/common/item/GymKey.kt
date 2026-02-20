@@ -30,9 +30,8 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 
-class GymKey : CobblemonItem(
-    Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
-) {
+class GymKey :
+    CobblemonItem(Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)) {
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
@@ -56,13 +55,13 @@ class GymKey : CobblemonItem(
             }
 
             else -> {
-                val derivedLevel = when (RadGyms.CONFIG.deriveAverageGymLevel!!) {
+                val derivedLevel = when (RadGyms.config.deriveAverageGymLevel!!) {
                     true -> player.averagePokePartyLevel()
-                    false -> RadGyms.CONFIG.minLevel!!
+                    false -> RadGyms.config.minLevel!!
                 }
                 val type = player.getItemInHand(hand).getOrDefault(
                     RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,
-                    "chaos"
+                    "chaos",
                 )
 
                 OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(player)
@@ -76,7 +75,7 @@ class GymKey : CobblemonItem(
         itemStack: ItemStack,
         context: TooltipContext,
         tooltip: MutableList<Component>,
-        type: TooltipFlag
+        type: TooltipFlag,
     ) {
         val attuned = itemStack.get(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT)
         tooltip.add(buildPrefixedSuffixedTypeText(attuned))

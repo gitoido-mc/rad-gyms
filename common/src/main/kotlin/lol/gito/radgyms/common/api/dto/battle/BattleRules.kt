@@ -13,5 +13,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BattleRules(
     @SerialName("max_item_uses")
-    val maxItemUses: Int = 5
+    val maxItemUses: Int = 5,
 )

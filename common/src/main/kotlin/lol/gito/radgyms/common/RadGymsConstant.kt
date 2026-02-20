@@ -9,6 +9,8 @@
 
 package lol.gito.radgyms.common
 
+import com.cobblemon.mod.common.api.types.ElementalTypes
+
 /**
  * Purpose of this file is to collect all hardcoded simple values in project in one place
  * Candidates to appear in this file SHOULD be used at least twice across project
@@ -41,4 +43,24 @@ const val REGISTRY_REWARD_TYPE_POKEMON = "rad_gyms:pokemon"
 const val REGISTRY_REWARD_TYPE_COMMAND = "rad_gyms:command"
 const val REGISTRY_REWARD_TYPE_ADVANCEMENT = "rad_gyms:advancement"
 
-
+val defaultElementalTypes =
+    setOf(
+        ElementalTypes.BUG.showdownId,
+        ElementalTypes.DARK.showdownId,
+        ElementalTypes.DRAGON.showdownId,
+        ElementalTypes.ELECTRIC.showdownId,
+        ElementalTypes.FLYING.showdownId,
+        ElementalTypes.FIGHTING.showdownId,
+        ElementalTypes.FIRE.showdownId,
+        ElementalTypes.FLYING.showdownId,
+        ElementalTypes.GHOST.showdownId,
+        ElementalTypes.GRASS.showdownId,
+        ElementalTypes.GROUND.showdownId,
+        ElementalTypes.ICE.showdownId,
+        ElementalTypes.NORMAL.showdownId,
+        ElementalTypes.POISON.showdownId,
+        ElementalTypes.PSYCHIC.showdownId,
+        ElementalTypes.ROCK.showdownId,
+        ElementalTypes.STEEL.showdownId,
+        ElementalTypes.WATER.showdownId,
+    )

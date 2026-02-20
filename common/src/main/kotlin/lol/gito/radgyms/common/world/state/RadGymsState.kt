@@ -29,29 +29,27 @@ class RadGymsState : SavedData() {
 
     @Suppress("TooManyFunctions")
     companion object {
-        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
         @JvmStatic
         private val type: Factory<RadGymsState> = Factory(
             ::RadGymsState,
             ::load,
-            null
+            null,
         )
 
-        @Suppress("unused")
+        @Suppress("UnusedParameter", "unused")
         @JvmStatic
-        fun load(
-            nbt: CompoundTag,
-            registryLookup: HolderLookup.Provider
-        ): RadGymsState {
+        fun load(nbt: CompoundTag, registryLookup: HolderLookup.Provider): RadGymsState {
             val state = RadGymsState()
-            val playersCompound = when (nbt.contains("Players")) {
-                true -> nbt.getCompound("Players")
-                false -> CompoundTag()
-            }
-            val gymsCompound = when (nbt.contains("Gyms")) {
-                true -> nbt.getCompound("Gyms")
-                false -> CompoundTag()
-            }
+            val playersCompound =
+                when (nbt.contains("Players")) {
+                    true -> nbt.getCompound("Players")
+                    false -> CompoundTag()
+                }
+            val gymsCompound =
+                when (nbt.contains("Gyms")) {
+                    true -> nbt.getCompound("Gyms")
+                    false -> CompoundTag()
+                }
 
             playersCompound.allKeys.forEach { uuidString ->
                 val uuid = UUID.fromString(uuidString)
@@ -67,8 +65,9 @@ class RadGymsState : SavedData() {
 
         @JvmStatic
         fun getServerState(server: MinecraftServer): RadGymsState {
-            val level = server.getLevel(GYM_DIMENSION)
-                ?: throw RadGymsLevelNotFoundException("Trying to access non-existing level")
+            val level =
+                server.getLevel(GYM_DIMENSION)
+                    ?: throw RadGymsLevelNotFoundException("Trying to access non-existing level")
 
             return level.dataStorage.computeIfAbsent(type, MOD_ID).also {
                 it.setDirty()
@@ -77,8 +76,9 @@ class RadGymsState : SavedData() {
 
         @JvmStatic
         fun markDirty(player: ServerPlayer) {
-            val level = player.server.getLevel(GYM_DIMENSION)
-                ?: throw RadGymsLevelNotFoundException("Trying to access non-existing level")
+            val level =
+                player.server.getLevel(GYM_DIMENSION)
+                    ?: throw RadGymsLevelNotFoundException("Trying to access non-existing level")
 
             level.dataStorage.computeIfAbsent(type, MOD_ID).setDirty()
         }
@@ -101,14 +101,11 @@ class RadGymsState : SavedData() {
         }
 
         @JvmStatic
-        fun hasGymForPlayer(player: ServerPlayer): Boolean {
-            return getServerState(player.server).gymInstanceMap.keys.contains(player.uuid)
-        }
+        fun hasGymForPlayer(player: ServerPlayer): Boolean =
+            getServerState(player.server).gymInstanceMap.keys.contains(player.uuid)
 
         @JvmStatic
-        fun getGymForPlayer(player: ServerPlayer): Gym? {
-            return getServerState(player.server).gymInstanceMap[player.uuid]
-        }
+        fun getGymForPlayer(player: ServerPlayer): Gym? = getServerState(player.server).gymInstanceMap[player.uuid]
 
         @JvmStatic
         fun addGymForPlayer(player: ServerPlayer, gymInstance: Gym) {
@@ -125,10 +122,7 @@ class RadGymsState : SavedData() {
         }
     }
 
-    override fun save(
-        nbt: CompoundTag,
-        registryLookup: HolderLookup.Provider
-    ): CompoundTag {
+    override fun save(nbt: CompoundTag, registryLookup: HolderLookup.Provider): CompoundTag {
         val playerDataNbt = CompoundTag()
         val gymDataNbt = CompoundTag()
 

@@ -20,17 +20,21 @@ fun CompoundTag.getRadGymsPlayerData(key: String): PlayerData? {
     if (tag.contains("ReturnCoords")) {
         val returnCoords = tag.getCompound("ReturnCoords")
         if (returnCoords.contains("Position")) {
-            playerData.returnCoords = PlayerData.ReturnCoords(
-                ResourceLocation.parse(returnCoords.getString("Dimension")),
-                returnCoords.getBlockPos("Position")!!
-            )
+            playerData.returnCoords =
+                PlayerData.ReturnCoords(
+                    ResourceLocation.parse(returnCoords.getString("Dimension")),
+                    returnCoords.getBlockPos("Position")!!,
+                )
         }
     }
 
     return playerData
 }
 
-fun CompoundTag.putRadGymsPlayerData(key: String, value: PlayerData) {
+fun CompoundTag.putRadGymsPlayerData(
+    key: String,
+    value: PlayerData,
+) {
     val nbt = CompoundTag()
 
     nbt.putInt("Visits", value.visits)

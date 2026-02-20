@@ -17,24 +17,21 @@ import net.minecraft.network.chat.Component.translatable
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-fun tlc(key: String, vararg args: Any?): MutableComponent = translatable(
-    cobblemonResource(key).toLanguageKey(),
-    *args
-)
+fun tl(key: String, vararg args: Any?): MutableComponent = translatable(modId(key).toLanguageKey(), *args)
 
-fun tl(key: String, vararg args: Any?): MutableComponent = translatable(
-    modId(key).toLanguageKey(),
-    *args
-)
-fun tl(prefix: String, key: String, vararg args: Any?): MutableComponent = translatable(
-    modId(key).toLanguageKey(prefix),
-    *args
-)
+fun tl(prefix: String, key: String, vararg args: Any?): MutableComponent =
+    translatable(modId(key).toLanguageKey(prefix), *args)
+
+fun tlr(key: String, vararg  args: Any?): MutableComponent = translatable(key, *args)
 
 fun tlk(key: String): String = modId(key).toLanguageKey()
 
 fun tlk(prefix: String, key: ResourceLocation): String = key.toLanguageKey(prefix)
+
 fun tlk(prefix: String, key: String): String = modId(key).toLanguageKey(prefix)
+
+fun tlc(key: String, vararg args: Any?): MutableComponent =
+    translatable(cobblemonResource(key).toLanguageKey(), *args)
 
 object ElementalTypeTranslationHelper {
     @Suppress("unused")
@@ -43,37 +40,42 @@ object ElementalTypeTranslationHelper {
 
     fun buildPrefixedSuffixedTypeText(elementalType: String? = null): Component = tl(
         "item.component.gym_type",
-        buildSuffixedTypeText(elementalType)
+        buildSuffixedTypeText(elementalType),
     )
 
     @Suppress("unused")
     fun buildSuffixedTypeText(elementalType: ElementalType? = null): Component =
         buildSuffixedTypeText(elementalType?.showdownId)
 
-    fun buildSuffixedTypeText(elementalType: String? = null): Component = tlc(
-        "type.suffix",
-        buildTypeText(elementalType)
-    )
+    fun buildSuffixedTypeText(elementalType: String? = null): Component =
+        tlc(
+            "type.suffix",
+            buildTypeText(elementalType),
+        )
 
     @Suppress("unused")
-    fun buildTypeText(elementalType: ElementalType? = null): Component =
-        buildTypeText(elementalType?.showdownId)
+    fun buildTypeText(elementalType: ElementalType? = null): Component = buildTypeText(elementalType?.showdownId)
 
-    fun buildTypeText(elementalType: String? = null): Component = when {
-        (elementalType == null) -> tl("item.component.type.chaos").withStyle {
-            it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
-        }
+    fun buildTypeText(elementalType: String? = null): Component =
+        when {
+            (elementalType == null) ->
+                tl("item.component.type.chaos").withStyle {
+                    it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
+                }
 
-        (ElementalTypes.get(elementalType) != null) -> tlc("type.$elementalType").withStyle {
-            it.applyFormat(ChatFormatting.DARK_PURPLE)
-        }
+            (ElementalTypes.get(elementalType) != null) ->
+                tlc("type.$elementalType").withStyle {
+                    it.applyFormat(ChatFormatting.DARK_PURPLE)
+                }
 
-        (elementalType == "chaos") -> tl("item.component.type.chaos").withStyle {
-            it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
-        }
+            (elementalType == "chaos") ->
+                tl("item.component.type.chaos").withStyle {
+                    it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
+                }
 
-        else -> tl("item.component.type.$elementalType").withStyle {
-            it.applyFormat(ChatFormatting.GOLD)
+            else ->
+                tl("item.component.type.$elementalType").withStyle {
+                    it.applyFormat(ChatFormatting.GOLD)
+                }
         }
-    }
 }

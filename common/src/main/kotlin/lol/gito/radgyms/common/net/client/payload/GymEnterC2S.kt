@@ -20,19 +20,20 @@ class GymEnterC2S(
     val key: Boolean,
     val level: Int,
     val type: String? = null,
-    val pos: BlockPos? = null
+    val pos: BlockPos? = null,
 ) : NetworkPacket<GymEnterC2S> {
     override val id: ResourceLocation = ID
 
     companion object {
         val ID = RadGyms.modId("net.gym_enter")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) = GymEnterC2S(
-            ByteBufCodecs.BOOL.decode(buffer),
-            ByteBufCodecs.INT.decode(buffer),
-            ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8).decode(buffer).getOrNull(),
-            ByteBufCodecs.optional(BlockPos.STREAM_CODEC).decode(buffer).getOrNull()
-        )
+        fun decode(buffer: RegistryFriendlyByteBuf) =
+            GymEnterC2S(
+                ByteBufCodecs.BOOL.decode(buffer),
+                ByteBufCodecs.INT.decode(buffer),
+                ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8).decode(buffer).getOrNull(),
+                ByteBufCodecs.optional(BlockPos.STREAM_CODEC).decode(buffer).getOrNull(),
+            )
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
