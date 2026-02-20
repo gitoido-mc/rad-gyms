@@ -16,12 +16,13 @@ typealias CachePoolMap = Map<String, Map<String, Int>>
 
 @Serializable
 class CacheDTO(
-    val pools: CachePoolMap
+    val pools: CachePoolMap,
 ) {
     fun forRarity(rarity: Rarity): ShufflingList<String> {
-        val pokeList = pools[rarity.serializedName.lowercase()] ?: throw RadGymsPoolNotDefinedException(
-            "Cannot find pool: ${rarity.serializedName.lowercase()}"
-        )
+        val pokeList =
+            pools[rarity.serializedName.lowercase()] ?: throw RadGymsPoolNotDefinedException(
+                "Cannot find pool: ${rarity.serializedName.lowercase()}",
+            )
         val list = ShufflingList<String>()
 
         for (pokeItem in pokeList) {

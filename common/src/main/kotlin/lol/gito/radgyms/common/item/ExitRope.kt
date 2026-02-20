@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.item.CobblemonItem
 import lol.gito.radgyms.common.EXIT_ROPE_COOLDOWN
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
+import lol.gito.radgyms.common.helper.tlr
 import lol.gito.radgyms.common.net.server.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
@@ -36,7 +37,6 @@ class ExitRope : CobblemonItem(Properties()) {
 
         when (level.dimension()) {
             RadGymsDimensions.GYM_DIMENSION -> OpenGymLeaveScreenS2C().sendToPlayer(player as ServerPlayer)
-
             else -> player.displayClientMessage(tl("${EXIT_ROPE.descriptionId}.failed"))
         }
 
@@ -48,12 +48,13 @@ class ExitRope : CobblemonItem(Properties()) {
         stack: ItemStack,
         context: TooltipContext,
         tooltip: MutableList<Component>,
-        tooltipFlag: TooltipFlag
+        tooltipFlag: TooltipFlag,
     ) {
-        tooltip.add(tl("${EXIT_ROPE.descriptionId}.tooltip").withStyle(ChatFormatting.GRAY))
+        tooltip.add(tlr("${EXIT_ROPE.descriptionId}.tooltip").withStyle(ChatFormatting.GRAY))
     }
 
-    override fun getDefaultInstance(): ItemStack = ItemStack(this).apply {
-        set(DataComponents.RARITY, Rarity.COMMON)
-    }
+    override fun getDefaultInstance(): ItemStack =
+        ItemStack(this).apply {
+            set(DataComponents.RARITY, Rarity.COMMON)
+        }
 }

@@ -23,7 +23,9 @@ enum class GymTeamType : StringRepresentable {
 
     @JvmField
     @SerialName("pool")
-    POOL;
+    POOL,
+
+    ;
 
     override fun getSerializedName(): String = this.name.lowercase()
 

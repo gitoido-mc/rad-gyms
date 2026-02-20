@@ -24,60 +24,46 @@ import net.minecraft.server.level.ServerPlayer
 
 object RadGymsNetwork {
     @Suppress("unused")
-    fun ServerPlayer.sendPacket(packet: NetworkPacket<*>) {
-        sendPacketToPlayer(this, packet)
-    }
+    fun ServerPlayer.sendPacket(packet: NetworkPacket<*>) = sendPacketToPlayer(this, packet)
 
     @Suppress("unused")
     @JvmStatic
-    fun sendToServer(packet: NetworkPacket<*>) {
-        RadGyms.implementation.networkManager.sendToServer(packet)
-    }
+    fun sendToServer(packet: NetworkPacket<*>) = RadGyms.implementation.networkManager.sendToServer(packet)
 
     @Suppress("unused")
     @JvmStatic
     fun sendToAllPlayers(packet: NetworkPacket<*>) =
-        sendPacketToPlayers(RadGyms.implementation.server()!!.playerList.players, packet)
+        sendPacketToPlayers(
+            RadGyms.implementation
+                .server()!!
+                .playerList.players,
+            packet,
+        )
 
     @JvmStatic
-    fun sendPacketToPlayers(players: Iterable<ServerPlayer>, packet: NetworkPacket<*>) =
-        players.forEach { sendPacketToPlayer(it, packet) }
+    fun sendPacketToPlayers(
+        players: Iterable<ServerPlayer>,
+        packet: NetworkPacket<*>,
+    ) = players.forEach { sendPacketToPlayer(it, packet) }
 
     val s2cPayloads = generateS2CPacketInfoList()
     val c2sPayloads = generateC2SPacketInfoList()
 
-    fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) {
-        RadGyms.implementation.networkManager.sendPacketToPlayer(player, packet)
-    }
+    fun sendPacketToPlayer(
+        player: ServerPlayer,
+        packet: NetworkPacket<*>,
+    ) = RadGyms.implementation.networkManager.sendPacketToPlayer(player, packet)
 
-    private fun generateS2CPacketInfoList(): List<PacketRegisterInfo<*>> = listOf(
-        PacketRegisterInfo(
-            OpenGymEnterScreenS2C.ID,
-            OpenGymEnterScreenS2C::decode,
-            OpenGymEnterScreenHandler
-        ),
-        PacketRegisterInfo(
-            OpenGymLeaveScreenS2C.ID,
-            OpenGymLeaveScreenS2C::decode,
-            OpenGymLeaveScreenHandler
-        ),
-        PacketRegisterInfo(
-            ServerSettingsS2C.ID,
-            ServerSettingsS2C::decode,
-            ServerSettingsHandler
+    private fun generateS2CPacketInfoList(): List<PacketRegisterInfo<*>> =
+        listOf(
+            PacketRegisterInfo(OpenGymEnterScreenS2C.ID, OpenGymEnterScreenS2C::decode, OpenGymEnterScreenHandler),
+            PacketRegisterInfo(OpenGymLeaveScreenS2C.ID, OpenGymLeaveScreenS2C::decode, OpenGymLeaveScreenHandler),
+            PacketRegisterInfo(ServerSettingsS2C.ID, ServerSettingsS2C::decode, ServerSettingsHandler),
         )
-    )
 
-    private fun generateC2SPacketInfoList(): List<PacketRegisterInfo<*>> = listOf(
-        PacketRegisterInfo(
-            GymEnterC2S.ID,
-            GymEnterC2S::decode,
-            GymEnterC2SHandler
-        ),
-        PacketRegisterInfo(
-            GymLeaveC2S.ID,
-            GymLeaveC2S::decode,
-            GymLeaveC2SHandler
+    private fun generateC2SPacketInfoList(): List<PacketRegisterInfo<*>> =
+        listOf(
+            PacketRegisterInfo(GymEnterC2S.ID, GymEnterC2S::decode, GymEnterC2SHandler),
+            PacketRegisterInfo(GymLeaveC2S.ID, GymLeaveC2S::decode, GymLeaveC2SHandler),
         )
-    )
 }

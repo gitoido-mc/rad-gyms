@@ -7,8 +7,10 @@
 
 package lol.gito.radgyms.common.registry
 
-import com.cobblemon.mod.common.api.types.ElementalTypes
+import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.defaultElementalTypes
+import lol.gito.radgyms.common.helper.tl
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -25,19 +27,22 @@ object RadGymsItemGroups {
     private val INJECTORS = hashMapOf<ResourceKey<CreativeModeTab>, (injector: Injector) -> Unit>()
 
     @JvmStatic
-    val GENERAL_GROUP_KEY = this.create(modId("general"), this::generalEntries) {
-        ItemStack(RadGymsItems.GYM_ENTRANCE)
-    }
+    val GENERAL_GROUP_KEY =
+        this.create(modId("general"), this::generalEntries) {
+            ItemStack(RadGymsItems.GYM_ENTRANCE)
+        }
 
     @JvmStatic
-    val KEYS_GROUP_KEY = this.create(modId("keys"), this::keyEntries) {
-        ItemStack(RadGymsItems.GYM_KEY)
-    }
+    val KEYS_GROUP_KEY =
+        this.create(modId("keys"), this::keyEntries) {
+            ItemStack(RadGymsItems.GYM_KEY)
+        }
 
     @JvmStatic
-    val CACHES_GROUP_KEY = this.create(modId("caches"), this::cacheEntries) {
-        ItemStack(RadGymsItems.CACHE_EPIC)
-    }
+    val CACHES_GROUP_KEY =
+        this.create(modId("caches"), this::cacheEntries) {
+            ItemStack(RadGymsItems.CACHE_EPIC)
+        }
 
     @JvmStatic
     val GENERAL_GROUP get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(GENERAL_GROUP_KEY)
@@ -48,13 +53,33 @@ object RadGymsItemGroups {
     @JvmStatic
     val CACHES_GROUP get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(CACHES_GROUP_KEY)
 
+    @Suppress("Unused")
+    @JvmStatic
+    val CACHES_INJECTIONS =
+        this.inject(
+            ResourceKey.create(
+                BuiltInRegistries.CREATIVE_MODE_TAB.key(),
+                modId("caches"),
+            ),
+            this::cacheEntries,
+        )
+
+    @JvmStatic
+    private val defaultCaches =
+        setOf(
+            RadGymsItems.CACHE_COMMON,
+            RadGymsItems.CACHE_UNCOMMON,
+            RadGymsItems.CACHE_RARE,
+            RadGymsItems.CACHE_EPIC,
+        )
+
     fun register(consumer: (holder: ItemGroupHolder) -> CreativeModeTab) {
         ALL.forEach(consumer::invoke)
     }
 
     private fun generalEntries(
         @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
-        entries: CreativeModeTab.Output
+        entries: CreativeModeTab.Output,
     ) {
         entries.accept(RadGymsItems.EXIT_ROPE)
         entries.accept(RadGymsItems.SHARD_COMMON)
@@ -71,56 +96,51 @@ object RadGymsItemGroups {
 
     private fun keyEntries(
         @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
-        entries: CreativeModeTab.Output
+        entries: CreativeModeTab.Output,
     ) {
         entries.accept(RadGymsItems.GYM_KEY)
-        ElementalTypes.all().forEach { type ->
-            val stack = RadGymsItems.GYM_KEY.defaultInstance.also {
-                it.set(DataComponents.RARITY, Rarity.RARE)
-                it.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
-            }
-            entries.accept(stack)
-        }
 
         RadGymsTemplates
             .templates
             .filterNot { it.key == "default" }
-            .filterNot { template -> template.key in ElementalTypes.all().map { it.showdownId } }
             .forEach { template ->
-                val stack = RadGymsItems.GYM_KEY.defaultInstance.also {
-                    it.set(DataComponents.RARITY, Rarity.EPIC)
-                    it.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, template.key)
-                }
+                val rarity =
+                    when (template.key) {
+                        in defaultElementalTypes -> Rarity.RARE
+                        else -> Rarity.EPIC
+                    }
+
+                val stack = ItemStack(RadGymsItems.GYM_KEY)
+                stack.set(DataComponents.RARITY, rarity)
+                stack.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, template.key)
 
                 entries.accept(stack)
             }
     }
 
     private fun cacheEntries(
-        @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
-        entries: CreativeModeTab.Output
-    ) {
-        val caches = listOf(
-            RadGymsItems.CACHE_COMMON,
-            RadGymsItems.CACHE_UNCOMMON,
-            RadGymsItems.CACHE_RARE,
-            RadGymsItems.CACHE_EPIC,
-        )
+        @Suppress("unused")
+        displayContext: CreativeModeTab.ItemDisplayParameters,
+        @Suppress("unused")
+        ignored: CreativeModeTab.Output,
+    ) = Unit
 
-        caches.forEach { cache ->
-            val stack = ItemStack(cache)
-            entries.accept(stack)
-            ElementalTypes.all().forEach { type ->
-                val stack = cache.defaultInstance.also {
-                    it.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
-                }
+    private fun cacheEntries(injector: Injector) {
+        defaultCaches.forEach { cache ->
+            injector.putLast(ItemStack(cache))
+            defaultElementalTypes.forEach { type ->
+                val elementalStack = ItemStack(cache)
+                elementalStack.set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type)
 
-                entries.accept(stack)
+                injector.putLast(elementalStack)
             }
         }
     }
 
-    fun inject(tabKey: ResourceKey<CreativeModeTab>, injector: Injector) {
+    fun inject(
+        tabKey: ResourceKey<CreativeModeTab>,
+        injector: Injector,
+    ) {
         INJECTORS[tabKey]?.invoke(injector)
     }
 
@@ -131,15 +151,16 @@ object RadGymsItemGroups {
         val key: ResourceKey<CreativeModeTab>,
         val displayIconProvider: () -> ItemStack,
         val entryCollector: DisplayItemsGenerator,
-        val displayName: Component = Component.translatable(
-            "itemGroup.${key.location().namespace}.${key.location().path}"
-        )
+        val displayName: Component = run {
+            info(key.location().path)
+            tl("itemGroup", key.location().path)
+        },
     )
 
     private fun create(
         name: ResourceLocation,
         entryCollector: DisplayItemsGenerator,
-        displayIconProvider: () -> ItemStack
+        displayIconProvider: () -> ItemStack,
     ): ResourceKey<CreativeModeTab> {
         val key = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), name)
         this.ALL += ItemGroupHolder(key, displayIconProvider, entryCollector)
@@ -149,7 +170,7 @@ object RadGymsItemGroups {
     @Suppress("unused")
     private fun inject(
         key: ResourceKey<CreativeModeTab>,
-        consumer: (injector: Injector) -> Unit
+        consumer: (injector: Injector) -> Unit,
     ): (injector: Injector) -> Unit {
         this.INJECTORS[key] = consumer
         return consumer
@@ -170,7 +191,10 @@ object RadGymsItemGroups {
          * @param item The [ItemLike] being added before [target].
          * @param target The [ItemLike] being targeted.
          */
-        fun putBefore(item: ItemLike, target: ItemLike)
+        fun putBefore(
+            item: ItemLike,
+            target: ItemLike,
+        )
 
         /**
          * Places the given [item] after the [target].
@@ -179,7 +203,10 @@ object RadGymsItemGroups {
          * @param item The [ItemLike] being added after [target].
          * @param target The [ItemLike] being targeted.
          */
-        fun putAfter(item: ItemLike, target: ItemLike)
+        fun putAfter(
+            item: ItemLike,
+            target: ItemLike,
+        )
 
         /**
          * Places the given [item] at the end of a creative tab.
@@ -187,5 +214,12 @@ object RadGymsItemGroups {
          * @param item The [ItemLike] being added at the end of a tab.
          */
         fun putLast(item: ItemLike)
+
+        /**
+         * Places the given [item] at the end of a creative tab.
+         *
+         * @param item The [ItemStack] being added at the end of a tab.
+         */
+        fun putLast(item: ItemStack)
     }
 }

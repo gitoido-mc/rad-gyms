@@ -25,7 +25,6 @@ import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
 import lol.gito.radgyms.common.cache.CacheDTO
-import net.minecraft.world.item.Rarity
 
 object MRadGymsCodec {
     @JvmStatic
@@ -33,7 +32,7 @@ object MRadGymsCodec {
         it.group(
             Codec.DOUBLE.fieldOf("x").forGetter(Coords::x),
             Codec.DOUBLE.fieldOf("y").forGetter(Coords::y),
-            Codec.DOUBLE.fieldOf("z").forGetter(Coords::z)
+            Codec.DOUBLE.fieldOf("z").forGetter(Coords::z),
         ).apply(it, ::Coords)
     }
 
@@ -41,7 +40,7 @@ object MRadGymsCodec {
     val ENTITY_COORDS_YAW: Codec<EntityCoordsAndYaw> = RecordCodecBuilder.create {
         it.group(
             COORDS.fieldOf("pos").forGetter(EntityCoordsAndYaw::pos),
-            Codec.DOUBLE.fieldOf("yaw").forGetter(EntityCoordsAndYaw::yaw)
+            Codec.DOUBLE.fieldOf("yaw").forGetter(EntityCoordsAndYaw::yaw),
         ).apply(it, ::EntityCoordsAndYaw)
     }
 
@@ -57,7 +56,7 @@ object MRadGymsCodec {
     val BAG: Codec<TrainerBag> = RecordCodecBuilder.create {
         it.group(
             Codec.STRING.fieldOf("item").forGetter(TrainerBag::item),
-            Codec.INT.fieldOf("quantity").forGetter(TrainerBag::quantity)
+            Codec.INT.fieldOf("quantity").forGetter(TrainerBag::quantity),
         ).apply(it, ::TrainerBag)
     }
 
@@ -69,7 +68,7 @@ object MRadGymsCodec {
             Codec.DOUBLE.lenientOptionalFieldOf("switch_bias", null).forGetter(BattleAIConfig::switchBias),
             Codec.DOUBLE.lenientOptionalFieldOf("item_bias", null).forGetter(BattleAIConfig::itemBias),
             Codec.DOUBLE.lenientOptionalFieldOf("max_select_margin", null).forGetter(BattleAIConfig::maxSelectMargin),
-            Codec.INT.lenientOptionalFieldOf("skill_level", null).forGetter(BattleAIConfig::skillLevel)
+            Codec.INT.lenientOptionalFieldOf("skill_level", null).forGetter(BattleAIConfig::skillLevel),
         ).apply(it, ::BattleAIConfig)
     }
 
@@ -77,14 +76,14 @@ object MRadGymsCodec {
     val TRAINER_AI: Codec<BattleAI> = RecordCodecBuilder.create {
         it.group(
             Codec.STRING.fieldOf("type").forGetter(BattleAI::type),
-            AI_CONFIG.optionalFieldOf("data", null).forGetter(BattleAI::data)
+            AI_CONFIG.optionalFieldOf("data", null).forGetter(BattleAI::data),
         ).apply(it, ::BattleAI)
     }
 
     @JvmStatic
     val BATTLE_RULES: Codec<BattleRules> = RecordCodecBuilder.create {
         it.group(
-            Codec.INT.fieldOf("max_item_uses").forGetter(BattleRules::maxItemUses)
+            Codec.INT.fieldOf("max_item_uses").forGetter(BattleRules::maxItemUses),
         ).apply(it, ::BattleRules)
     }
 
@@ -96,7 +95,9 @@ object MRadGymsCodec {
             ENTITY_COORDS_YAW.fieldOf("spawn_relative").forGetter(Trainer::spawnRelative),
             GymTeamType.CODEC.fieldOf("type").forGetter(Trainer::teamType),
             GymTeamGeneratorType.CODEC.fieldOf("generator").forGetter(Trainer::teamGenerator),
-            Codec.list(ElementalType.BY_STRING_CODEC).fieldOf("elemental_types")
+            Codec
+                .list(ElementalType.BY_STRING_CODEC)
+                .fieldOf("elemental_types")
                 .forGetter(Trainer::possibleElementalTypes),
             Codec.list(GymBattleFormat.CODEC).fieldOf("formats").forGetter(Trainer::possibleFormats),
             TRAINER_AI.fieldOf("ai").forGetter(Trainer::ai),
@@ -105,7 +106,7 @@ object MRadGymsCodec {
             BATTLE_RULES.fieldOf("battle_rules").forGetter(Trainer::battleRules),
             Codec.list(Codec.STRING).lenientOptionalFieldOf("team", null).forGetter(Trainer::team),
             Codec.BOOL.fieldOf("leader").forGetter(Trainer::leader),
-            Codec.STRING.lenientOptionalFieldOf("requires", null).forGetter(Trainer::requires)
+            Codec.STRING.lenientOptionalFieldOf("requires", null).forGetter(Trainer::requires),
         ).apply(it, ::Trainer)
     }
 
@@ -114,7 +115,7 @@ object MRadGymsCodec {
     val GYM_REWARD: Codec<RewardInterface> = GYM_REWARD_TYPE.dispatch(
         "type",
         RewardInterface::getRewardType,
-        MGymRewardType<*>::codec
+        MGymRewardType<*>::codec,
     )
 
     @JvmStatic
@@ -125,13 +126,14 @@ object MRadGymsCodec {
             COORDS.fieldOf("exit_block_pos").forGetter(GymJson::exitBlockPos),
             ENTITY_COORDS_YAW.fieldOf("player_spawn_relative").forGetter(GymJson::playerSpawnRelative),
             Codec.list(TRAINER).fieldOf("trainers").forGetter(GymJson::trainers),
-            Codec.list(GYM_REWARD).fieldOf("rewards").forGetter(GymJson::rewards)
+            Codec.list(GYM_REWARD).fieldOf("rewards").forGetter(GymJson::rewards),
         ).apply(it, ::GymJson)
     }
 
     @JvmStatic
     val CACHE_POOL: UnboundedMapCodec<String, Map<String, Int>> = Codec.unboundedMap(
-        Codec.STRING, Codec.unboundedMap(Codec.STRING, Codec.INT)
+        Codec.STRING,
+        Codec.unboundedMap(Codec.STRING, Codec.INT),
     )
 
     @JvmStatic

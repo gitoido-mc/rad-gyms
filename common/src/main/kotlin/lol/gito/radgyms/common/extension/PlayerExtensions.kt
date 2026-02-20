@@ -14,14 +14,18 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import kotlin.math.roundToInt
 
-fun ServerPlayer.averagePokePartyLevel(): Int {
-    val party = Cobblemon.storage.getParty(this)
+fun ServerPlayer.averagePokePartyLevel(): Int =
+    Cobblemon.storage
+        .getParty(this)
+        .map { it.level }
+        .average()
+        .roundToInt()
+        .coerceIn(
+            RadGyms.config.minLevel,
+            RadGyms.config.maxLevel,
+        )
 
-    return party.map { it.level }.average().roundToInt().coerceIn(
-        RadGyms.CONFIG.minLevel,
-        RadGyms.CONFIG.maxLevel
-    )
-}
-
-fun Player.displayClientMessage(component: Component, maybeOverlay: Boolean = true) =
-    this.displayClientMessage(component, maybeOverlay)
+fun Player.displayClientMessage(
+    component: Component,
+    maybeOverlay: Boolean = true,
+) = this.displayClientMessage(component, maybeOverlay)

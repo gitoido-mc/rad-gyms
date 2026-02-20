@@ -14,7 +14,6 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.portal.DimensionTransition
@@ -43,13 +42,7 @@ object PlayerSpawnHelper {
         )
     }
 
-    fun teleportPlayer(
-        serverPlayerUuid: UUID,
-        serverWorld: ServerLevel,
-        pos: BlockPos,
-        yaw: Float,
-        pitch: Float,
-    ) {
+    fun teleportPlayer(serverPlayerUuid: UUID, serverWorld: ServerLevel, pos: BlockPos, yaw: Float, pitch: Float) {
         RadGyms.implementation.server()?.let { server ->
             server.playerList.getPlayer(serverPlayerUuid)?.let {
                 teleportPlayer(it, serverWorld, pos, yaw, pitch)
@@ -57,13 +50,7 @@ object PlayerSpawnHelper {
         }
     }
 
-    fun teleportPlayer(
-        serverPlayer: ServerPlayer,
-        serverWorld: ServerLevel,
-        pos: BlockPos,
-        yaw: Float,
-        pitch: Float,
-    ) {
+    fun teleportPlayer(serverPlayer: ServerPlayer, serverWorld: ServerLevel, pos: BlockPos, yaw: Float, pitch: Float) {
         // Fix experience just in case
         val xpLevels: Int = serverPlayer.experienceLevel
         val xpProgress: Float = serverPlayer.experienceProgress
@@ -74,14 +61,15 @@ object PlayerSpawnHelper {
             RadGymsDimensions.GYM_DIMENSION -> pos.center.add(offset)
             else -> serverWorld.squeezeWithinBounds(pos).center.add(offset)
         }
-        val teleportTarget = DimensionTransition(
-            serverWorld,
-            finalPos,
-            Vec3.ZERO,
-            yaw,
-            pitch,
-            DimensionTransition.PLACE_PORTAL_TICKET
-        )
+        val teleportTarget =
+            DimensionTransition(
+                serverWorld,
+                finalPos,
+                Vec3.ZERO,
+                yaw,
+                pitch,
+                DimensionTransition.PLACE_PORTAL_TICKET,
+            )
 
         val teleportedPlayer = serverPlayer.changeDimension(teleportTarget) as ServerPlayer
         // Fix experience just in case

@@ -24,13 +24,15 @@ object RadGymsBlockEntities : PlatformRegistry<BETRegistry, BETRegistryKey, Bloc
     override val registry: BETRegistry = BuiltInRegistries.BLOCK_ENTITY_TYPE
     override val resourceKey: BETRegistryKey = Registries.BLOCK_ENTITY_TYPE
 
-    val GYM_ENTRANCE_ENTITY: BlockEntityType<GymEntranceEntity> = this.create(
-        modId("gym_entrance_entity"),
-        BlockEntityType.Builder.of(::GymEntranceEntity, RadGymsBlocks.GYM_ENTRANCE).build(null)
-    )
+    val GYM_ENTRANCE_ENTITY: BlockEntityType<GymEntranceEntity> =
+        this.create(
+            modId("gym_entrance_entity"),
+            BlockEntityType.Builder.of(::GymEntranceEntity, RadGymsBlocks.GYM_ENTRANCE).build(null),
+        )
 
-    val GYM_EXIT_ENTITY: BlockEntityType<GymExitEntity> = this.create(
-        modId("gym_exit_entity"),
-        BlockEntityType.Builder.of(::GymExitEntity, RadGymsBlocks.GYM_EXIT).build(null)
-    )
+    val GYM_EXIT_ENTITY: BlockEntityType<GymExitEntity> =
+        this.create(
+            modId("gym_exit_entity"),
+            BlockEntityType.Builder.of(::GymExitEntity, RadGymsBlocks.GYM_EXIT).build(null),
+        )
 }

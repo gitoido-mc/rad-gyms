@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.exception.RadGymsPoolNotDefinedException
 import lol.gito.radgyms.common.extension.shinyRoll
-import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.SPECIES_BY_RARITY
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByRarity
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Rarity
 
@@ -22,29 +22,30 @@ object CacheHandler {
         type: String,
         rarity: Rarity,
         player: ServerPlayer,
-        shinyBoost: Int = 0
-    ): Pokemon = getPoke(
-        ElementalTypes.get(type) ?: ElementalTypes.all().random(),
-        rarity,
-        player,
-        shinyBoost
-    )
+        shinyBoost: Int = 0,
+    ): Pokemon =
+        getPoke(
+            ElementalTypes.get(type) ?: ElementalTypes.all().random(),
+            rarity,
+            player,
+            shinyBoost,
+        )
 
     fun getPoke(
         type: ElementalType,
         rarity: Rarity,
         player: ServerPlayer,
-        shinyBoost: Int = 0
+        shinyBoost: Int = 0,
     ): Pokemon {
         /**
-         * [SPECIES_BY_RARITY] holds all species in map-like object
+         * [speciesByRarity] holds all species in map-like object
          * where the key corresponds to [ElementalType.showdownId] property of passed [type]
          * [CacheDTO.forRarity] is a function that returns shuffleable list of species
          */
-
-        val pool = SPECIES_BY_RARITY[type.showdownId] ?: throw RadGymsPoolNotDefinedException(
-            "Cannot find pool: ${rarity.serializedName.lowercase()}"
-        )
+        val pool =
+            speciesByRarity[type.showdownId] ?: throw RadGymsPoolNotDefinedException(
+                "Cannot find pool: ${rarity.serializedName.lowercase()}",
+            )
 
         val cache = pool.forRarity(rarity)
         var poke: Pokemon

@@ -9,33 +9,39 @@ package lol.gito.radgyms.common.gym.team
 
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.SPECIES_BY_TYPE
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByType
 
 object BstTeamGenerator : GenericTeamGenerator() {
-    override fun generatePokemon(level: Int, thresholdAmount: Int, type: ElementalType): Pokemon {
+    override fun generatePokemon(
+        level: Int,
+        amount: Int,
+        type: ElementalType,
+    ): Pokemon {
         debug("Rolling for pokemon with level $level and type ${type.showdownId}")
-        val speciesList = SPECIES_BY_TYPE[type.showdownId]!!
+        val speciesList = speciesByType[type.showdownId]!!
 
-        val levelChunkedRange = (CONFIG.minLevel!!..CONFIG.maxLevel!!)
-            .chunked(
-                // This calculates the chunk size between min and max levels defined in config
-                (CONFIG.maxLevel!!)
-                    .minus(CONFIG.minLevel!!)
-                    .toDouble()
-                    .div(thresholdAmount)
-                    .toInt()
-                    .minus(1)
-            )
+        val levelChunkedRange =
+            (config.minLevel!!..config.maxLevel!!)
+                .chunked(
+                    // This calculates the chunk size between min and max levels defined in config
+                    (config.maxLevel!!)
+                        .minus(config.minLevel!!)
+                        .toDouble()
+                        .div(amount)
+                        .toInt()
+                        .minus(1),
+                )
 
         val derivedChunkIndex = levelChunkedRange.indexOfFirst { it.contains(level) }
 
-        val derivedSpecies = speciesList
-            .chunked(speciesList.count() / levelChunkedRange.count())
-            .let {
-                it[derivedChunkIndex].random()
-            }
+        val derivedSpecies =
+            speciesList
+                .chunked(speciesList.count() / levelChunkedRange.count())
+                .let {
+                    it[derivedChunkIndex].random()
+                }
 
         debug("Picked {} with {} form", derivedSpecies.species.name, derivedSpecies.form.name)
 

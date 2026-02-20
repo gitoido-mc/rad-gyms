@@ -34,7 +34,7 @@ data class PokemonReward(
     @SerialName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     @Transient
-    val type: GymReward = GymReward.POKEMON
+    val type: GymReward = GymReward.POKEMON,
 ) : RewardInterface {
     override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.POKEMON
 
@@ -46,7 +46,7 @@ data class PokemonReward(
                 Codec.INT.lenientOptionalFieldOf("min_perfect_ivs", null).forGetter(PokemonReward::minPerfectIvs),
                 Codec.INT.fieldOf("min_level").forGetter(PokemonReward::minLevel),
                 Codec.INT.fieldOf("max_level").forGetter(PokemonReward::maxLevel),
-                GymReward.CODEC.fieldOf("type").forGetter(PokemonReward::type)
+                GymReward.CODEC.fieldOf("type").forGetter(PokemonReward::type),
             ).apply(it, ::PokemonReward)
         }
     }

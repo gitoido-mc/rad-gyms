@@ -14,5 +14,5 @@ import kotlinx.serialization.Serializable
 data class TeamLevelThreshold(
     val amount: Int,
     @SerialName("until_level")
-    val untilLevel: Int
+    val untilLevel: Int,
 )

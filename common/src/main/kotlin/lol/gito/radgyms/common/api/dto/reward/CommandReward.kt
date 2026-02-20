@@ -39,15 +39,17 @@ data class CommandReward(
 
     companion object {
         @JvmStatic
-        val CODEC: MapCodec<CommandReward> = RecordCodecBuilder.mapCodec { instance ->
-            instance.group(
-                Codec.STRING.fieldOf("execute").forGetter(CommandReward::execute),
-                Codec.BOOL.fieldOf("as_server").forGetter(CommandReward::asServer),
-                Codec.INT.fieldOf("op_level").forGetter(CommandReward::opLevel),
-                Codec.INT.fieldOf("min_level").forGetter(CommandReward::minLevel),
-                Codec.INT.fieldOf("max_level").forGetter(CommandReward::maxLevel),
-                GymReward.CODEC.fieldOf("type").forGetter(CommandReward::type)
-            ).apply(instance, ::CommandReward)
-        }
+        val CODEC: MapCodec<CommandReward> =
+            RecordCodecBuilder.mapCodec { instance ->
+                instance
+                    .group(
+                        Codec.STRING.fieldOf("execute").forGetter(CommandReward::execute),
+                        Codec.BOOL.fieldOf("as_server").forGetter(CommandReward::asServer),
+                        Codec.INT.fieldOf("op_level").forGetter(CommandReward::opLevel),
+                        Codec.INT.fieldOf("min_level").forGetter(CommandReward::minLevel),
+                        Codec.INT.fieldOf("max_level").forGetter(CommandReward::maxLevel),
+                        GymReward.CODEC.fieldOf("type").forGetter(CommandReward::type),
+                    ).apply(instance, ::CommandReward)
+            }
     }
 }

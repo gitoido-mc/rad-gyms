@@ -21,19 +21,14 @@ object RadGymsFabricNetworkManager : NetworkManager {
         RadGymsNetwork.c2sPayloads.map { FabricPacketInfo(it) }.forEach { it.registerPacket(client = false) }
     }
 
-    fun registerClientHandlers() {
+    fun registerClientHandlers() =
         RadGymsNetwork.s2cPayloads.map { FabricPacketInfo(it) }.forEach { it.registerClientHandler() }
-    }
 
-    fun registerServerHandlers() {
+    fun registerServerHandlers() =
         RadGymsNetwork.c2sPayloads.map { FabricPacketInfo(it) }.forEach { it.registerServerHandler() }
-    }
 
-    override fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) {
+    override fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) =
         ServerPlayNetworking.send(player, packet)
-    }
 
-    override fun sendToServer(packet: NetworkPacket<*>) {
-        ClientPlayNetworking.send(packet)
-    }
+    override fun sendToServer(packet: NetworkPacket<*>) = ClientPlayNetworking.send(packet)
 }

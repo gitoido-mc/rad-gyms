@@ -31,20 +31,22 @@ data class LootTableReward(
     @SerialName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     @Transient
-    val type: GymReward = GymReward.LOOT_TABLE
+    val type: GymReward = GymReward.LOOT_TABLE,
 ) : RewardInterface {
     override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.LOOT_TABLE
 
     companion object {
         @JvmStatic
-        val CODEC: MapCodec<LootTableReward> = RecordCodecBuilder.mapCodec {
-            it.group(
-                Codec.STRING.fieldOf("id").forGetter(LootTableReward::id),
-                Codec.INT.lenientOptionalFieldOf("max_items", null).forGetter(LootTableReward::maxItems),
-                Codec.INT.fieldOf("min_level").forGetter(LootTableReward::minLevel),
-                Codec.INT.fieldOf("max_level").forGetter(LootTableReward::maxLevel),
-                GymReward.CODEC.fieldOf("type").forGetter(LootTableReward::type)
-            ).apply(it, ::LootTableReward)
-        }
+        val CODEC: MapCodec<LootTableReward> =
+            RecordCodecBuilder.mapCodec {
+                it
+                    .group(
+                        Codec.STRING.fieldOf("id").forGetter(LootTableReward::id),
+                        Codec.INT.lenientOptionalFieldOf("max_items", null).forGetter(LootTableReward::maxItems),
+                        Codec.INT.fieldOf("min_level").forGetter(LootTableReward::minLevel),
+                        Codec.INT.fieldOf("max_level").forGetter(LootTableReward::maxLevel),
+                        GymReward.CODEC.fieldOf("type").forGetter(LootTableReward::type),
+                    ).apply(it, ::LootTableReward)
+            }
     }
 }

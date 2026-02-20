@@ -38,21 +38,24 @@ import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 
-class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
+class GenerateRewardHandler(
+    val event: GymEvents.GenerateRewardEvent,
+) {
     init {
         debug(
             "Settling level %d %s type rewards for player %s after beating leader".format(
                 event.level,
                 event.type,
-                event.player.name.tryCollapseToString()
-            )
+                event.player.name.tryCollapseToString(),
+            ),
         )
 
-        val currentLevelRewards = event.template
-            .rewards
-            .filter {
-                event.level in it.minLevel..it.maxLevel
-            }
+        val currentLevelRewards =
+            event.template
+                .rewards
+                .filter {
+                    event.level in it.minLevel..it.maxLevel
+                }
 
         event.player.server.sendSystemMessage(Component.literal("say test"))
 
@@ -66,10 +69,11 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
         val advancements = event.player.server.advancements.allAdvancements
 
         rewards.forEach { reward ->
-            val advancement = advancements.firstNotNullOfOrNull {
-                if (it.id == ResourceLocation.parse(reward.id)) return@firstNotNullOfOrNull it
-                return@firstNotNullOfOrNull null
-            }
+            val advancement =
+                advancements.firstNotNullOfOrNull {
+                    if (it.id == ResourceLocation.parse(reward.id)) return@firstNotNullOfOrNull it
+                    return@firstNotNullOfOrNull null
+                }
 
             advancement?.let { holder ->
                 val progress = event.player.advancements.getOrStartProgress(holder)
@@ -86,10 +90,14 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
         val handler = event.player.server.commands
 
         rewards.forEach {
-            val source = when (it.asServer) {
-                true -> event.player.server.createCommandSourceStack().withPermission(it.opLevel)
-                false -> event.player.createCommandSourceStack().withPermission(it.opLevel)
-            }
+            val source =
+                when (it.asServer) {
+                    true ->
+                        event.player.server
+                            .createCommandSourceStack()
+                            .withPermission(it.opLevel)
+                    false -> event.player.createCommandSourceStack().withPermission(it.opLevel)
+                }
 
             handler.performPrefixedCommand(source, it.execute.trim())
         }
@@ -109,8 +117,8 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
                     when (poke.shiny) {
                         true -> poke.species.translatedName.rainbow()
                         false -> poke.species.translatedName
-                    }
-                )
+                    },
+                ),
             )
         }
     }
@@ -120,17 +128,20 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
         val bundleContents = BundleContents.Mutable(BundleContents.EMPTY)
 
         rewards.forEach { table ->
-            val registryLootTable = event.player
-                .server
-                .reloadableRegistries()
-                .get()
-                .registryOrThrow(Registries.LOOT_TABLE)
-                .get(ResourceLocation.parse(table.id)) ?: return@forEach
+            val registryLootTable =
+                event.player
+                    .server
+                    .reloadableRegistries()
+                    .get()
+                    .registryOrThrow(Registries.LOOT_TABLE)
+                    .get(ResourceLocation.parse(table.id)) ?: return@forEach
 
-            val lootContextParameterSet = LootParams.Builder(event.player.level() as ServerLevel)
-                .withParameter(LootContextParams.THIS_ENTITY, event.player)
-                .withParameter(LootContextParams.ORIGIN, event.player.position())
-                .create(LootContextParamSets.GIFT)
+            val lootContextParameterSet =
+                LootParams
+                    .Builder(event.player.level() as ServerLevel)
+                    .withParameter(LootContextParams.THIS_ENTITY, event.player)
+                    .withParameter(LootContextParams.ORIGIN, event.player.position())
+                    .create(LootContextParamSets.GIFT)
 
             registryLootTable.getRandomItems(lootContextParameterSet).let { loot ->
                 if (table.maxItems != null && loot.count() > table.maxItems) {
@@ -141,48 +152,47 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
             }
         }
 
-        if (event.rewards.count() > BundleItem.DEFAULT_MAX_STACK_SIZE) {
-            LOGGER.warn(
-                "Reward bundle default stack size (%d) overflow (passed %d stacks of items), splitting...".format(
-                    BundleItem.DEFAULT_MAX_STACK_SIZE,
-                    event.rewards.count()
-                ),
-            )
+        when (event.rewards.count() > BundleItem.DEFAULT_MAX_STACK_SIZE) {
+            false -> createBundle(bundle, bundleContents, event.rewards)
+            true -> {
+                LOGGER.warn(
+                    "Reward bundle default stack size (%d) overflow (passed %d stacks of items), splitting...".format(
+                        BundleItem.DEFAULT_MAX_STACK_SIZE,
+                        event.rewards.count(),
+                    ),
+                )
 
-            event.rewards.chunked(BundleItem.DEFAULT_MAX_STACK_SIZE).forEach {
-                createBundle(bundle, bundleContents, it)
+                event.rewards.chunked(BundleItem.DEFAULT_MAX_STACK_SIZE).forEach {
+                    createBundle(bundle, bundleContents, it)
+                }
             }
-        } else {
-            createBundle(bundle, bundleContents, event.rewards)
         }
     }
 
     private fun createBundle(
         bundle: ItemStack,
         bundleContents: BundleContents.Mutable,
-        rewards: List<ItemStack>
+        rewards: List<ItemStack>,
     ) {
         rewards.forEach { bundleContents.tryInsert(it) }
 
         val styledLevel = Component.literal(event.level.toString()).withStyle(ChatFormatting.GOLD)
-        val styledType = tlc("type.${event.type.lowercase()}")
-            .setStyle(
-                Style.EMPTY.withColor(ChatFormatting.GREEN).withItalic(true)
+        val styledType =
+            tlc("type.${event.type.lowercase()}").setStyle(
+                Style.EMPTY.withColor(ChatFormatting.GREEN).withItalic(true),
             )
 
         bundle.set(
             DataComponents.CUSTOM_NAME,
-            tl(prefix = "item", key = "gym_reward", styledLevel, styledType)
+            tl(prefix = "item", key = "gym_reward", styledLevel, styledType),
         )
         bundle.set(DataComponents.BUNDLE_CONTENTS, bundleContents.toImmutable())
         event.player.giveOrDropItemStack(bundle, true)
     }
 
-    private fun addRewards(loot: List<ItemStack>) {
-        if (RadGyms.CONFIG.shardRewards == true) {
-            event.rewards.addAll(loot)
-        } else {
-            event.rewards.addAll(loot.filter { it.item !is PokeShardBase })
+    private fun addRewards(loot: List<ItemStack>) =
+        when (RadGyms.config.shardRewards) {
+            true -> event.rewards.addAll(loot)
+            else -> event.rewards.addAll(loot.filter { it.item !is PokeShardBase })
         }
-    }
 }

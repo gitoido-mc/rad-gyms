@@ -10,4 +10,7 @@ package lol.gito.radgyms.common.api.dto
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 
-data class SpeciesWithForm(val species: Species, val form: FormData)
+data class SpeciesWithForm(
+    val species: Species,
+    val form: FormData,
+)

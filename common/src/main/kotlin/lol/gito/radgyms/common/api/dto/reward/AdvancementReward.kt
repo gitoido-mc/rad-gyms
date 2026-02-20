@@ -29,19 +29,21 @@ data class AdvancementReward(
     @SerialName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     @Transient
-    val type: GymReward = GymReward.ADVANCEMENT
+    val type: GymReward = GymReward.ADVANCEMENT,
 ) : RewardInterface {
     override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.ADVANCEMENT
 
     companion object {
         @JvmStatic
-        val CODEC: MapCodec<AdvancementReward> = RecordCodecBuilder.mapCodec {
-            it.group(
-                Codec.STRING.fieldOf("id").forGetter(AdvancementReward::id),
-                Codec.INT.fieldOf("min_level").forGetter(AdvancementReward::minLevel),
-                Codec.INT.fieldOf("max_level").forGetter(AdvancementReward::maxLevel),
-                GymReward.CODEC.fieldOf("type").forGetter(AdvancementReward::type)
-            ).apply(it, ::AdvancementReward)
-        }
+        val CODEC: MapCodec<AdvancementReward> =
+            RecordCodecBuilder.mapCodec {
+                it
+                    .group(
+                        Codec.STRING.fieldOf("id").forGetter(AdvancementReward::id),
+                        Codec.INT.fieldOf("min_level").forGetter(AdvancementReward::minLevel),
+                        Codec.INT.fieldOf("max_level").forGetter(AdvancementReward::maxLevel),
+                        GymReward.CODEC.fieldOf("type").forGetter(AdvancementReward::type),
+                    ).apply(it, ::AdvancementReward)
+            }
     }
 }

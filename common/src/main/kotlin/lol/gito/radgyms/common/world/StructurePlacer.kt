@@ -20,6 +20,8 @@ import net.minecraft.world.level.levelgen.WorldgenRandom
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 
 object StructurePlacer {
+    const val STRUCTURE_FLAGS = 18
+
     fun placeStructure(world: WorldGenLevel, pos: BlockPos, structureId: String) {
         val structureResource = ResourceLocation.parse(structureId)
         val structTemplateManager = world.server?.structureManager
@@ -36,11 +38,10 @@ object StructurePlacer {
             random.setLargeFeatureSeed(
                 world.seed,
                 pos.x shr WORLDGEN_FEATURE_RANDOM_SHIFT_BITS,
-                pos.z shr WORLDGEN_FEATURE_RANDOM_SHIFT_BITS
+                pos.z shr WORLDGEN_FEATURE_RANDOM_SHIFT_BITS,
             )
 
-            @Suppress("MagicNumber")
-            if (!structureTemplate.get().placeInWorld(world, pos, pos, structPlacementData, random, 18)) {
+            if (!structureTemplate.get().placeInWorld(world, pos, pos, structPlacementData, random, STRUCTURE_FLAGS)) {
                 LOGGER.warn("Error placing structure: $structureResource")
             } else {
                 structTemplateManager.remove(structureResource)

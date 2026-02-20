@@ -15,25 +15,32 @@ import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.level.ServerPlayer
 
 object FixedTeamGenerator : GenericTeamGenerator() {
-    fun generateTeam(player: ServerPlayer?, trainer: Trainer, level: Int): MutableList<PokemonModel> {
-        val rawTeam = trainer.team!!
-            .map { assembleProperties(level, it) }
-            .apply { this.forEach { it.updateAspects() } }
-            .toMutableList()
+    fun generateTeam(
+        player: ServerPlayer?,
+        trainer: Trainer,
+        level: Int,
+    ): MutableList<PokemonModel> {
+        val rawTeam =
+            trainer.team!!
+                .map { assembleProperties(level, it) }
+                .apply { this.forEach { it.updateAspects() } }
+                .toMutableList()
 
-        val possibleTypes = rawTeam
-            .map { ElementalTypes.get(it.type!!)!! }
-            .toMutableSet()
+        val possibleTypes =
+            rawTeam
+                .map { ElementalTypes.get(it.type!!)!! }
+                .toMutableSet()
 
-        val event = GymEvents.GenerateTeamEvent(
-            player,
-            possibleTypes.toList(),
-            level,
-            trainer.id,
-            trainer.leader,
-            rawTeam,
-            trainer.possibleFormats.toMutableList()
-        )
+        val event =
+            GymEvents.GenerateTeamEvent(
+                player,
+                possibleTypes.toList(),
+                level,
+                trainer.id,
+                trainer.leader,
+                rawTeam,
+                trainer.possibleFormats.toMutableList(),
+            )
 
         val team = mutableListOf<PokemonModel>()
 

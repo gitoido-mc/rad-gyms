@@ -15,7 +15,11 @@ import lol.gito.radgyms.common.RadGyms
 import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
 
-fun shinyRoll(poke: Pokemon, player: ServerPlayer, shinyBoost: Int? = 0) {
+fun shinyRoll(
+    poke: Pokemon,
+    player: ServerPlayer,
+    shinyBoost: Int? = 0,
+) {
     var shinyRate = Cobblemon.config.shinyRate
     val event = ShinyChanceCalculationEvent(shinyRate, poke)
 

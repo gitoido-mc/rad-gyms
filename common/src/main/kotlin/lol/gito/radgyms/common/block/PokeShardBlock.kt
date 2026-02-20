@@ -13,7 +13,9 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 
-open class PokeShardBlockBase(val rarity: Rarity) : Block(Properties.ofFullCopy(Blocks.LAPIS_BLOCK)) {
+open class PokeShardBlockBase(
+    val rarity: Rarity,
+) : Block(Properties.ofFullCopy(Blocks.LAPIS_BLOCK)) {
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 }
 

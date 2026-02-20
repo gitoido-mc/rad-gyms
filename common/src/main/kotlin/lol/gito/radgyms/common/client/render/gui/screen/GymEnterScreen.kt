@@ -29,18 +29,20 @@ import org.lwjgl.glfw.GLFW
 class GymEnterScreen(
     val key: Boolean,
     val selectedLevel: Int,
-    val minLevel: Int = RadGyms.CONFIG.minLevel!!,
-    val maxLevel: Int = RadGyms.CONFIG.maxLevel!!,
+    val minLevel: Int = RadGyms.config.minLevel!!,
+    val maxLevel: Int = RadGyms.config.maxLevel!!,
     val type: String? = null,
     val pos: BlockPos? = null,
-    val usesLeft: Int? = null
+    val usesLeft: Int? = null,
 ) : AbstractGymScreen(
-    when {
-        (type == null || ElementalTypes.get(type) != null || type == "chaos") ->
-            tl("gui.common.set-gym-level", buildTypeText(type))
+    when (type) {
+        null, "chaos", (ElementalTypes.getOrException(type).showdownId) -> tl(
+            "gui.common.set-gym-level",
+            buildTypeText(type),
+        )
 
         else -> tl("gui.common.set-custom-gym-level", buildTypeText(type))
-    }
+    },
 ) {
     companion object {
         // Screen root widget params
@@ -101,23 +103,24 @@ class GymEnterScreen(
 
     @Suppress("DuplicatedCode", "LongMethod")
     override fun init() {
-        val levelSelectSlider = LevelSliderWidget(
-            x = leftX + GUI_LSS_OFFSET_X,
-            y = topY + GUI_LSS_OFFSET_Y,
-            initialLevel = this.level,
-            minLevel = this.minLevel,
-            maxLevel = this.maxLevel,
-        ) { level ->
-            this.level = level
-            this.tick()
-        }.also {
-            this.addRenderableWidget(it)
-        }
+        val levelSelectSlider =
+            LevelSliderWidget(
+                x = leftX + GUI_LSS_OFFSET_X,
+                y = topY + GUI_LSS_OFFSET_Y,
+                initialLevel = this.level,
+                minLevel = this.minLevel,
+                maxLevel = this.maxLevel,
+            ) { level ->
+                this.level = level
+                this.tick()
+            }.also {
+                this.addRenderableWidget(it)
+            }
 
         createButton(
             Component.nullToEmpty("-1"),
             Vec2i(GUI_DEC1_WIDTH, GUI_DEC1_HEIGHT),
-            Vec2i(leftX + GUI_DEC1_OFFSET_X, topY + GUI_DEC1_OFFSET_Y)
+            Vec2i(leftX + GUI_DEC1_OFFSET_X, topY + GUI_DEC1_OFFSET_Y),
         ) {
             level = level.dec().coerceIn(this.minLevel, this.maxLevel)
             levelSelectSlider.updateLevel(level)
@@ -128,7 +131,7 @@ class GymEnterScreen(
         createButton(
             Component.nullToEmpty("-10"),
             Vec2i(GUI_DEC10_WIDTH, GUI_DEC10_HEIGHT),
-            Vec2i(leftX + GUI_DEC10_OFFSET_X, topY + GUI_DEC10_OFFSET_Y)
+            Vec2i(leftX + GUI_DEC10_OFFSET_X, topY + GUI_DEC10_OFFSET_Y),
         ) {
             level = level.minus(GUI_DEC10_AMOUNT).coerceIn(this.minLevel, this.maxLevel)
             levelSelectSlider.updateLevel(level)
@@ -163,8 +166,8 @@ class GymEnterScreen(
             Vec2i(GUI_PROCEED_WIDTH, GUI_PROCEED_HEIGHT),
             Vec2i(
                 leftX + GUI_PROCEED_OFFSET_X,
-                topY + (BASE_HEIGHT - GUI_PROCEED_OFFSET_Y)
-            )
+                topY + (BASE_HEIGHT - GUI_PROCEED_OFFSET_Y),
+            ),
         ) {
             onClose(GuiScreenCloseChoice.PROCEED)
         }.also {
@@ -176,8 +179,8 @@ class GymEnterScreen(
             Vec2i(GUI_CANCEL_WIDTH, GUI_CANCEL_HEIGHT),
             Vec2i(
                 leftX + (BASE_WIDTH - GUI_CANCEL_OFFSET_X),
-                topY + (BASE_HEIGHT - GUI_CANCEL_OFFSET_Y)
-            )
+                topY + (BASE_HEIGHT - GUI_CANCEL_OFFSET_Y),
+            ),
         ) {
             onClose(GuiScreenCloseChoice.CANCEL)
         }.also {
@@ -194,12 +197,16 @@ class GymEnterScreen(
                 this.key,
                 this.level,
                 this.type,
-                this.pos
-            )
+                this.pos,
+            ),
         )
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(
+        keyCode: Int,
+        scanCode: Int,
+        modifiers: Int,
+    ): Boolean {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
             this.onClose(GuiScreenCloseChoice.CANCEL)
             return true
@@ -207,17 +214,24 @@ class GymEnterScreen(
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(
+        context: GuiGraphics,
+        mouseX: Int,
+        mouseY: Int,
+        delta: Float,
+    ) {
         super.preRender(context, panelResource)
 
-        val message = when (pos) {
-            null -> tl("gui.common.set-gym-level", buildTypeText(type))
-            else -> tl(
-                "gui.common.set-gym-level-entry",
-                buildTypeText(type),
-                usesLeft
-            )
-        }
+        val message =
+            when (pos) {
+                null -> tl("gui.common.set-gym-level", buildTypeText(type))
+                else ->
+                    tl(
+                        "gui.common.set-gym-level-entry",
+                        buildTypeText(type),
+                        usesLeft,
+                    )
+            }
 
         // Box Label
         drawScaledText(
@@ -226,7 +240,7 @@ class GymEnterScreen(
             x = (width - BASE_WIDTH) / 2 + (BASE_WIDTH / 2),
             y = (height - BASE_HEIGHT) / 2 + 10,
             centered = true,
-            colour = CommonColors.BLACK
+            colour = CommonColors.BLACK,
         )
 
         super.render(context, mouseX, mouseY, delta)

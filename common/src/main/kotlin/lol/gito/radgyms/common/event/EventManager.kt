@@ -21,8 +21,8 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.RCT
+import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -33,22 +33,20 @@ import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_BATTLE_END
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_BATTLE_START
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
+import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.common.event.gyms.*
+import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 import lol.gito.radgyms.common.gym.GymInitializer
-import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry
-import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.SPECIES_BY_TYPE
-import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesOfType
 import lol.gito.radgyms.common.gym.TrainerFactory
 import lol.gito.radgyms.common.gym.TrainerSpawner
 import lol.gito.radgyms.common.helper.hasGymTrainers
 import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
-import lol.gito.radgyms.common.registry.RadGymsBlocks
-import lol.gito.radgyms.common.registry.RadGymsCaches
-import lol.gito.radgyms.common.registry.RadGymsDimensions
-import lol.gito.radgyms.common.registry.RadGymsTemplates
+import lol.gito.radgyms.common.registry.*
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByType
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesOfType
 import lol.gito.radgyms.common.world.StructurePlacer
 import lol.gito.radgyms.common.world.state.RadGymsState
 
@@ -77,19 +75,21 @@ object EventManager {
         // Mod events
         RadGymsTemplates.observable.subscribe(Priority.NORMAL) { registry ->
             debug("Creating gym initializer")
-            RadGyms.gymInitializer = GymInitializer(
-                templateRegistry = registry,
-                trainerSpawner = TrainerSpawner,
-                structureManager = StructurePlacer,
-                trainerFactory = TrainerFactory()
-            )
+            RadGyms.gymInitializer =
+                GymInitializer(
+                    templateRegistry = registry,
+                    trainerSpawner = TrainerSpawner,
+                    structureManager = StructurePlacer,
+                    trainerFactory = TrainerFactory(),
+                )
         }
 
         RadGymsCaches.observable.subscribe(Priority.NORMAL) { registry ->
-            RadGymsSpeciesRegistry.SPECIES_BY_RARITY = registry.caches.mapKeys { (key, _) ->
-                debug("cache key ${key.path}")
-                key.path
-            }
+            RadGymsSpeciesRegistry.speciesByRarity =
+                registry.caches.mapKeys { (key, _) ->
+                    debug("cache key ${key.path}")
+                    key.path
+                }
         }
 
         GYM_ENTER.subscribe(Priority.LOWEST, ::GymEnterHandler)
@@ -104,12 +104,17 @@ object EventManager {
         CACHE_ROLL_POKE.subscribe(Priority.LOWEST, ::CacheRollPokeHandler)
     }
 
-
     @Suppress("UNUSED_PARAMETER")
     private fun onBlockInteract(event: ServerPlayerEvent.RightClickBlock) {
         if (event.player.level().dimension() == RadGymsDimensions.GYM_DIMENSION) {
-            if (CONFIG.debug == true) return
-            if (event.player.level().getBlockState(event.pos).block == RadGymsBlocks.GYM_EXIT) return
+            if (config.debug == true) return
+            if (event.player
+                    .level()
+                    .getBlockState(event.pos)
+                    .block == RadGymsBlocks.GYM_EXIT
+            ) {
+                return
+            }
             event.cancel()
         }
     }
@@ -123,12 +128,12 @@ object EventManager {
     private fun onPlayerJoin(event: ServerPlayerEvent) {
         debug("Sending server settings to player ${event.player.name}")
         ServerSettingsS2C(
-            CONFIG.maxEntranceUses!!,
-            CONFIG.shardRewards!!,
-            CONFIG.lapisBoostAmount!!,
-            CONFIG.ignoredSpecies!!,
-            CONFIG.minLevel!!,
-            CONFIG.maxLevel!!
+            config.maxEntranceUses!!,
+            config.shardRewards!!,
+            config.lapisBoostAmount!!,
+            config.ignoredSpecies!!,
+            config.minLevel!!,
+            config.maxLevel!!,
         ).sendToPlayer(event.player)
 
         try {
@@ -149,11 +154,12 @@ object EventManager {
     }
 
     private fun onSpeciesUpdate(species: PokemonSpecies) {
-        SPECIES_BY_TYPE.clear()
+        speciesByType.clear()
 
-        ElementalTypes.all().forEach {
-            SPECIES_BY_TYPE[it.showdownId] = speciesOfType(species.implemented.toList(), it)
-            debug("Added ${SPECIES_BY_TYPE[it.showdownId]?.size} ${it.showdownId} entries to species map")
+        defaultElementalTypes.forEach {
+            val type = ElementalTypes.get(it) ?: throw RadGymsSpeciesListEmptyException("Cannot get type $it")
+            speciesByType[it] = speciesOfType(species.implemented.toList(), type)
+            debug("Added ${speciesByType[it]?.size} $it entries to species map")
         }
     }
 
@@ -162,11 +168,12 @@ object EventManager {
         if (!hasGymTrainers(event)) return
 
         val players = event.battle.players
-        val trainers = event.battle.actors
-            .filter { it.type == ActorType.NPC && it is AIBattleActor }
-            .map { it as AIBattleActor }
-            .mapNotNull { RCT.trainerRegistry.getById(it.uuid.toString())?.entity }
-            .filterIsInstance<Trainer>()
+        val trainers =
+            event.battle.actors
+                .filter { it.type == ActorType.NPC && it is AIBattleActor }
+                .map { it as AIBattleActor }
+                .mapNotNull { RCT.trainerRegistry.getById(it.uuid.toString())?.entity }
+                .filterIsInstance<Trainer>()
 
         TRAINER_BATTLE_START.postThen(
             GymEvents.TrainerBattleStartEvent(players, trainers.map { it }, event.battle),
@@ -178,9 +185,9 @@ object EventManager {
     @Suppress("ReturnCount")
     private fun onBattleWon(event: BattleVictoryEvent) {
         // Early bail if it was wild poke battle
-        if (event.wasWildCapture)
+        if (event.wasWildCapture) return
         // Early bail if not gym related
-            if (!hasGymTrainers(event)) return
+        if (!hasGymTrainers(event)) return
         if (event.losers.none { it.type == ActorType.NPC }) return
         if (event.winners.none { it.type == ActorType.PLAYER }) return
 
@@ -189,8 +196,8 @@ object EventManager {
                 GymBattleEndReason.BATTLE_WON,
                 event.winners,
                 event.losers,
-                event.battle
-            )
+                event.battle,
+            ),
         )
     }
 
@@ -203,8 +210,8 @@ object EventManager {
                 GymBattleEndReason.BATTLE_FLED,
                 event.battle.winners,
                 event.battle.losers,
-                event.battle
-            )
+                event.battle,
+            ),
         )
     }
 
@@ -226,8 +233,8 @@ object EventManager {
                 GymBattleEndReason.BATTLE_LOST,
                 event.battle.winners,
                 event.battle.losers,
-                event.battle
-            )
+                event.battle,
+            ),
         )
     }
 }

@@ -29,7 +29,9 @@ import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
-class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
+class TrainerInteractHandler(
+    event: GymEvents.TrainerInteractEvent,
+) {
     private val checkTrainerDefeated: Boolean = event.trainer.defeated
 
     init {
@@ -38,7 +40,7 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
             false -> handleNoRequired(event)
             true -> handleRequired(
                 event,
-                (event.trainer.level() as ServerLevel).getEntity(event.trainer.requires!!) as Trainer
+                (event.trainer.level() as ServerLevel).getEntity(event.trainer.requires!!) as Trainer,
             )
         }
     }
@@ -52,13 +54,14 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
         event.cancel()
     }
 
-    private fun handleRequired(event: GymEvents.TrainerInteractEvent, required: Trainer) {
+    private fun handleRequired(
+        event: GymEvents.TrainerInteractEvent,
+        required: Trainer,
+    ) {
         debug("required is: ${required.uuid}, defeated?: ${required.defeated}")
         if (!required.defeated) {
             debug("Linked trainer is not defeated yet, sending chat message")
-            event.player.displayClientMessage(
-                tl("message.info.trainer_required", required.name)
-            )
+            event.player.displayClientMessage(tl("message.info.trainer_required", required.name))
             event.cancel()
             return
         }
@@ -79,80 +82,79 @@ class TrainerInteractHandler(event: GymEvents.TrainerInteractEvent) {
             return
         }
 
-        if (event.trainer.uuid == null) {
-            warn(
-                "Player {} tried to initialize battle with trainer entity {} without trainerId",
-                event.player.uuid,
-                event.trainer.uuid
-            )
-            handleBattleStartError("message.error.battle_start_invalid_entity", event.player)
-            return
-        }
-
-        if (event.trainer.uuid !in gym.npcList) {
-            warn(
-                "Gym instance for player {} does not contain information about trainer {}",
-                event.player.uuid,
-                event.trainer.uuid
-            )
-            handleBattleStartError("message.error.missing_trainer_id_gym_state", event.player)
-            return
-        }
-
-        val trainerRegistry = RCT.trainerRegistry
-        val rctBattleManager = RCT.battleManager
-        val playerTrainer = trainerRegistry.getById(event.player.uuid.toString())
-        val npcTrainer: TrainerNPC = try {
-            trainerRegistry.registerNPC(
-                event.trainer.stringUUID,
-                TrainerModel(
-                    event.trainer.name.string,
-                    JTO.of { RCTBattleAI(RCTBattleAIConfig.Builder().build()) },
-                    event.trainer.configuration.bag,
-                    event.trainer.configuration.team
-                ),
-            )
-        } catch (_: IllegalArgumentException) {
-            trainerRegistry.getById(event.trainer.stringUUID, TrainerNPC::class.java)
-        }
-
-        npcTrainer.entity = event.trainer
-
-        // Check for being in battle just in case
-        // Force all battles for player to end
-        rctBattleManager.apply {
-            this.states.forEach { state ->
-                finalizeState(state, event, rctBattleManager)
+        when (event.trainer.uuid) {
+            null -> {
+                warn(
+                    "Player {} tried to initialize battle with trainer entity {} without trainerId",
+                    event.player.uuid,
+                    event.trainer.uuid,
+                )
+                handleBattleStartError("message.error.battle_start_invalid_entity", event.player)
+                return
+            }
+            !in gym.npcList -> {
+                warn(
+                    "Gym instance for player {} does not contain information about trainer {}",
+                    event.player.uuid,
+                    event.trainer.uuid,
+                )
+                handleBattleStartError("message.error.missing_trainer_id_gym_state", event.player)
+                return
             }
         }
 
-        debug(
-            "Starting {} battle between player {} and trainer {}",
-            event.trainer.format,
-            event.player.displayName?.string as Any,
-            event.trainer.displayName?.string as Any
-        )
+        val sides = with(RCT.trainerRegistry) {
+            val playerTrainer = getById(event.player.uuid.toString())
+            val npcTrainer: TrainerNPC = try {
+                registerNPC(
+                    event.trainer.stringUUID,
+                    TrainerModel(
+                        event.trainer.name.string,
+                        JTO.of { RCTBattleAI(RCTBattleAIConfig.Builder().build()) },
+                        event.trainer.configuration.bag,
+                        event.trainer.configuration.team,
+                    ),
+                )
+            } catch (_: IllegalArgumentException) {
+                getById(event.trainer.stringUUID, TrainerNPC::class.java)
+            }
 
-        rctBattleManager.startBattle(
-            listOf(playerTrainer),
-            listOf(npcTrainer),
-            GymBattleFormat.valueOf(event.trainer.format),
-            BattleRules()
-        )
+            npcTrainer.entity = event.trainer
+
+            return@with playerTrainer to npcTrainer
+        }
+
+        // Check for being in battle just in case
+        // Force all battles for player to end
+        with(RCT.battleManager) {
+            states.forEach { state -> finalizeState(state, event, this) }
+
+            debug(
+                "Starting {} battle between player {} and trainer {}",
+                event.trainer.format,
+                event.player.displayName?.string as Any,
+                event.trainer.displayName?.string as Any,
+            )
+
+            startBattle(
+                listOf(sides.first),
+                listOf(sides.second),
+                GymBattleFormat.valueOf(event.trainer.format),
+                BattleRules(),
+            )
+        }
     }
 
     private fun finalizeState(
         state: BattleState,
         event: GymEvents.TrainerInteractEvent,
-        rctBattleManager: BattleManager
-    ) {
-        state.battle.let { battle ->
-            val actor = battle.actors.firstOrNull { actor -> actor.isForPlayer(event.player) }
-            if (actor != null && battle.ended) {
-                debug("Uh-oh, found stuck battle for player actor, ending it")
-                battle.end()
-                rctBattleManager.end(battle.battleId, true)
-            }
+        rctBattleManager: BattleManager,
+    ) = with(state.battle) {
+        val actor = actors.firstOrNull { actor -> actor.isForPlayer(event.player) }
+        if (actor != null && this.ended) {
+            debug("Uh-oh, found stuck battle for player actor, ending it")
+            end()
+            rctBattleManager.end(battleId, true)
         }
     }
 

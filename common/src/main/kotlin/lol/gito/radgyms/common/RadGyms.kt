@@ -47,7 +47,7 @@ object RadGyms {
 
     val dataProvider: DataProvider = RadGymsDataProvider
 
-    lateinit var CONFIG: RadGymsConfig
+    lateinit var config: RadGymsConfig
     lateinit var implementation: RadGymsImplementation
     lateinit var gymInitializer: GymInitializer
 
@@ -84,7 +84,7 @@ object RadGyms {
 
     @JvmStatic
     fun debug(message: String, vararg params: Any) {
-        if (CONFIG.debug == true) LOGGER.info(message, *params)
+        if (config.debug == true) LOGGER.info(message, *params)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -94,59 +94,53 @@ object RadGyms {
 
         if (configFile.exists()) {
             LOGGER.info("Loading config")
-            CONFIG = configFile.inputStream().let {
-                Json.decodeFromStream<RadGymsConfig>(it)
-            }
+            config = with(configFile.inputStream()) { Json.decodeFromStream<RadGymsConfig>(this) }
         } else {
             LOGGER.info("No config found, creating new")
-            CONFIG = RadGymsConfig.DEFAULT
+            config = RadGymsConfig.DEFAULT
             saveConfig(new = true)
         }
 
         if (this.implementation.server() != null) {
             ServerSettingsS2C(
-                CONFIG.maxEntranceUses!!,
-                CONFIG.shardRewards!!,
-                CONFIG.lapisBoostAmount!!,
-                CONFIG.ignoredSpecies!!,
-                CONFIG.minLevel!!,
-                CONFIG.maxLevel!!
+                config.maxEntranceUses!!,
+                config.shardRewards!!,
+                config.lapisBoostAmount!!,
+                config.ignoredSpecies!!,
+                config.minLevel!!,
+                config.maxLevel!!,
             ).sendToAllPlayers()
         }
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun saveConfig(new: Boolean = false) {
+    fun saveConfig(new: Boolean = false) = with(File(CONFIG_PATH).outputStream()) {
         val prettify = Json {
             prettyPrint = true
         }
-        val configFile = File(CONFIG_PATH)
         val config = when (new) {
             true -> RadGymsConfig.DEFAULT
-            false -> CONFIG
+            false -> config
         }
-
-        configFile.outputStream().let {
-            prettify.encodeToStream(config, it)
-            debug("Saving config")
-        }
+        prettify.encodeToStream(config, this)
+        debug("Saving config")
     }
 
     private fun registerArgumentTypes() {
         this.implementation.registerCommandArgument(
             modId("rarity"),
             RarityArgumentType::class,
-            SingletonArgumentInfo.contextFree(RarityArgumentType::rarity)
+            SingletonArgumentInfo.contextFree(RarityArgumentType::rarity),
         )
         this.implementation.registerCommandArgument(
             modId("elemental_type"),
             ElementalTypeArgumentType::class,
-            SingletonArgumentInfo.contextFree(ElementalTypeArgumentType::type)
+            SingletonArgumentInfo.contextFree(ElementalTypeArgumentType::type),
         )
         this.implementation.registerCommandArgument(
             modId("template"),
             GymTemplateArgumentType::class,
-            SingletonArgumentInfo.contextFree(GymTemplateArgumentType::templates)
+            SingletonArgumentInfo.contextFree(GymTemplateArgumentType::templates),
         )
     }
 }

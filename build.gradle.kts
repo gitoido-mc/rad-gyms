@@ -4,11 +4,9 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-import com.github.zafarkhaja.semver.Version
 import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
-import pl.allegro.tech.build.axion.release.domain.VersionIncrementerContext
 import pl.allegro.tech.build.axion.release.domain.properties.VersionProperties
 import pl.allegro.tech.build.axion.release.domain.scm.ScmPosition
 import java.net.URI
@@ -40,7 +38,7 @@ scmVersion {
         "feature/.*",
         VersionProperties.Creator { version: String, position: ScmPosition ->
             "$version-${position.branch.split("/").last()}"
-        }
+        },
     )
 
     branchVersionIncrementer.putAll(
@@ -50,7 +48,7 @@ scmVersion {
             "feature/.*" to "incrementPrerelease",
             "hotfix/.*" to "incrementPrerelease",
             "refactor/.*" to "incrementPrerelease",
-        )
+        ),
     )
 }
 
@@ -89,21 +87,12 @@ repositories {
     }
 }
 
-
-detekt {
-    config.setFrom(layout.projectDirectory.file("detekt.yml"))
-    buildUponDefaultConfig = true
-}
-
-tasks.withType<Detekt>().configureEach {
-    exclude("**/build/classes/**")
-}
-
-val modProjects = listOf(
-    "common",
-    "fabric",
-    "neoforge"
-)
+val modProjects =
+    listOf(
+        "common",
+        "fabric",
+        "neoforge",
+    )
 
 dependencies {
     kover(project(":common"))
@@ -123,7 +112,7 @@ modProjects.forEach {
         version = rootProject.version
 
         detekt {
-            config.setFrom(rootProject.layout.projectDirectory.file("detekt.yml"))
+            config.setFrom(rootProject.file("detekt.yml"))
             buildUponDefaultConfig = true
         }
 
@@ -154,6 +143,10 @@ modProjects.forEach {
                     includeGroup("com.aetherteam.nitrogen")
                 }
             }
+        }
+
+        dependencies {
+            detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.2")
         }
 
         tasks {
@@ -194,22 +187,35 @@ val buildMod by project.tasks.registering {
     mustRunAfter(
         ":fabric:build",
         ":neoforge:build",
-        "build"
+        "build",
     )
 
     doLast {
         logger.info("Preparing $version jars")
-        layout.buildDirectory.file("libs").get().asFile.delete()
+        layout.buildDirectory
+            .file("libs")
+            .get()
+            .asFile
+            .delete()
         listOf(":common", ":fabric", ":neoforge").forEach { mod ->
             val modProject = project(mod)
-            val jars = listOf(
-                "${project.name}-${modProject.name}-${modProject.version}.jar",
-                "${project.name}-${modProject.name}-${modProject.version}-sources.jar"
-            )
+            val jars =
+                listOf(
+                    "${project.name}-${modProject.name}-${modProject.version}.jar",
+                    "${project.name}-${modProject.name}-${modProject.version}-sources.jar",
+                )
             jars.forEach {
-                val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
+                val dest =
+                    project.layout.buildDirectory
+                        .file("libs/$it")
+                        .get()
+                        .asFile
                 dest.ensureParentDirsCreated()
-                modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
+                modProject.layout.buildDirectory
+                    .file("libs/$it")
+                    .get()
+                    .asFile
+                    .renameTo(dest)
             }
         }
     }

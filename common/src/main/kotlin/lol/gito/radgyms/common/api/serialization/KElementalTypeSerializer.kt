@@ -17,18 +17,18 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-typealias ElementalListType = List<@Serializable(KElementalTypeSerializer::class) ElementalType>
+typealias ElementalListType = List<
+    @Serializable(KElementalTypeSerializer::class)
+    ElementalType,
+    >
 
 object KElementalTypeSerializer : KSerializer<ElementalType> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
         "com.cobblemon.mod.common.api.types.ElementalType",
-        PrimitiveKind.STRING
+        PrimitiveKind.STRING,
     )
 
-    override fun serialize(
-        encoder: Encoder,
-        value: ElementalType
-    ) = encoder.encodeString(value.showdownId)
+    override fun serialize(encoder: Encoder, value: ElementalType) = encoder.encodeString(value.showdownId)
 
     override fun deserialize(decoder: Decoder): ElementalType =
         ElementalTypes.get(decoder.decodeString()) ?: ElementalTypes.BUG

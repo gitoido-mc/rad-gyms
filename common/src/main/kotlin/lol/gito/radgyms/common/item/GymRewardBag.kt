@@ -23,9 +23,8 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.BundleContents
 import net.minecraft.world.level.Level
 
-class GymRewardBag : BundleItem(
-    Properties().stacksTo(1).component(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY)
-) {
+class GymRewardBag :
+    BundleItem(Properties().stacksTo(1).component(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY)) {
     companion object {
         const val DROP_SOUND_VOLUME = 0.8f
         const val DROP_SOUND_PITCH = 0.4f
@@ -34,7 +33,7 @@ class GymRewardBag : BundleItem(
     override fun use(
         level: Level,
         player: Player,
-        interactionHand: InteractionHand
+        interactionHand: InteractionHand,
     ): InteractionResultHolder<ItemStack> {
         val itemStack = player.getItemInHand(interactionHand)
         if (dropContents(itemStack, player)) {
@@ -52,19 +51,22 @@ class GymRewardBag : BundleItem(
         slot: Slot,
         clickAction: ClickAction,
         player: Player,
-        slotAccess: SlotAccess
+        slotAccess: SlotAccess,
     ): Boolean = false
 
     override fun overrideStackedOnOther(
         itemStack: ItemStack,
         slot: Slot,
         clickAction: ClickAction,
-        player: Player
+        player: Player,
     ): Boolean = false
 
     override fun isBarVisible(itemStack: ItemStack): Boolean = false
 
-    private fun dropContents(stack: ItemStack, player: Player): Boolean {
+    private fun dropContents(
+        stack: ItemStack,
+        player: Player,
+    ): Boolean {
         val bundleContents = stack.get<BundleContents>(DataComponents.BUNDLE_CONTENTS)
         if (bundleContents != null && !bundleContents.isEmpty) {
             if (player is ServerPlayer) {
@@ -82,7 +84,7 @@ class GymRewardBag : BundleItem(
         entity.playSound(
             SoundEvents.BUNDLE_DROP_CONTENTS,
             DROP_SOUND_VOLUME,
-            DROP_SOUND_VOLUME + entity.level().getRandom().nextFloat() * DROP_SOUND_PITCH
+            DROP_SOUND_VOLUME + entity.level().getRandom().nextFloat() * DROP_SOUND_PITCH,
         )
     }
 }

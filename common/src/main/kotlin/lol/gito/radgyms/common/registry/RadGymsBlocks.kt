@@ -23,38 +23,28 @@ object RadGymsBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<Bl
     override val resourceKey: ResourceKey<Registry<Block>> = Registries.BLOCK
 
     @JvmField
-    val GYM_ENTRANCE = this.create(
-        modId("gym_entrance"),
-        GymEntranceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS))
-    )
+    val GYM_ENTRANCE =
+        this.create(
+            modId("gym_entrance"),
+            GymEntranceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS)),
+        )
 
     @JvmField
-    val GYM_EXIT = this.create(
-        modId("gym_exit"),
-        GymExitBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS))
-    )
+    val GYM_EXIT =
+        this.create(
+            modId("gym_exit"),
+            GymExitBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS)),
+        )
 
     @JvmField
-    val SHARD_BLOCK_COMMON = this.create(
-        modId("shard_block_common"),
-        CommonShardBlock()
-    )
+    val SHARD_BLOCK_COMMON = this.create(modId("shard_block_common"), CommonShardBlock())
 
     @JvmField
-    val SHARD_BLOCK_UNCOMMON = this.create(
-        modId("shard_block_uncommon"),
-        UncommonShardBlock()
-    )
+    val SHARD_BLOCK_UNCOMMON = this.create(modId("shard_block_uncommon"), UncommonShardBlock())
 
     @JvmField
-    val SHARD_BLOCK_RARE = this.create(
-        modId("shard_block_rare"),
-        RareShardBlock()
-    )
+    val SHARD_BLOCK_RARE = this.create(modId("shard_block_rare"), RareShardBlock())
 
     @JvmField
-    val SHARD_BLOCK_EPIC = this.create(
-        modId("shard_block_epic"),
-        EpicShardBlock()
-    )
+    val SHARD_BLOCK_EPIC = this.create(modId("shard_block_epic"), EpicShardBlock())
 }

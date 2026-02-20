@@ -18,11 +18,11 @@ import java.util.concurrent.CompletableFuture
 
 class BlockTagDataProvider(
     output: FabricDataOutput,
-    registriesFuture: CompletableFuture<HolderLookup.Provider>
+    registriesFuture: CompletableFuture<HolderLookup.Provider>,
 ) : FabricTagProvider<Block>(output, Registries.BLOCK, registriesFuture) {
-
     override fun addTags(wrapper: HolderLookup.Provider) {
-        this.getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
+        this
+            .getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
             .setReplace(false)
             .add(RadGymsBlocks.GYM_ENTRANCE)
             .add(RadGymsBlocks.SHARD_BLOCK_COMMON)

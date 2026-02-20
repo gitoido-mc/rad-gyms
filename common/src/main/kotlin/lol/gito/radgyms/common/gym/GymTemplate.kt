@@ -21,7 +21,7 @@ data class GymTemplate(
     val playerYaw: Float,
     val trainers: List<RGTrainerModel>,
     val type: String?,
-    val rewards: List<RewardInterface>
+    val rewards: List<RewardInterface>,
 ) {
     companion object {
         fun fromDto(
@@ -29,11 +29,12 @@ data class GymTemplate(
             dto: GymJson,
             level: Int,
             type: String?,
-            trainerFactory: TrainerFactory = TrainerFactory()
+            trainerFactory: TrainerFactory = TrainerFactory(),
         ): GymTemplate {
-            val trainers = dto.trainers.map {
-                trainerFactory.create(it, level, player)
-            }
+            val trainers =
+                dto.trainers.map {
+                    trainerFactory.create(it, level, player)
+                }
 
             return GymTemplate(
                 id = dto.id,
@@ -43,7 +44,7 @@ data class GymTemplate(
                 playerYaw = dto.playerSpawnRelative.yaw.toFloat(),
                 trainers = trainers,
                 type = type,
-                rewards = dto.rewards
+                rewards = dto.rewards,
             )
         }
     }

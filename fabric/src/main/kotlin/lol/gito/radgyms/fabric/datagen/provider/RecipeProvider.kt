@@ -49,6 +49,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes.ROCK
 import com.cobblemon.mod.common.api.types.ElementalTypes.STEEL
 import com.cobblemon.mod.common.api.types.ElementalTypes.WATER
 import com.cobblemon.mod.common.item.CobblemonItem
+import com.cobblemon.mod.common.item.PokeBallItem
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.item.GymKey
@@ -84,13 +85,8 @@ import net.minecraft.world.item.Rarity
 import oshi.util.tuples.Quartet
 import java.util.concurrent.CompletableFuture
 
-class RecipeProvider(
-    output: FabricDataOutput,
-    lookup: CompletableFuture<HolderLookup.Provider>
-) : FabricRecipeProvider(output, lookup) {
-    companion object {
-        const val BLOCK_TO_SHARD_AMOUNT = 9
-    }
+class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>) :
+    FabricRecipeProvider(output, lookup) {
 
     override fun buildRecipes(recipeExporter: RecipeOutput) {
         buildShapedGymKey(recipeExporter)
@@ -107,15 +103,13 @@ class RecipeProvider(
         }
     }
 
-    private fun buildShapedPokeCaches(
-        rarity: Rarity,
-        recipeExporter: RecipeOutput
-    ) {
+    private fun buildShapedPokeCaches(rarity: Rarity, recipeExporter: RecipeOutput) {
         val cachePair = cacheConfig(rarity)
         val cacheParts = cachePair.first
 
         if (cacheParts.d == AIR) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cachePair.second, 1)
+            ShapedRecipeBuilder
+                .shaped(RecipeCategory.MISC, cachePair.second, 1)
                 .pattern("sss")
                 .pattern("s s")
                 .pattern("ici")
@@ -126,7 +120,8 @@ class RecipeProvider(
                 .unlockedBy(getHasName(cacheParts.a), has(CRAFTING_TABLE))
                 .save(recipeExporter, modId("cache_${rarity.serializedName}"))
         } else {
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cachePair.second, 1)
+            ShapedRecipeBuilder
+                .shaped(RecipeCategory.MISC, cachePair.second, 1)
                 .pattern("sss")
                 .pattern("sxs")
                 .pattern("ici")
@@ -140,12 +135,10 @@ class RecipeProvider(
         }
     }
 
-    private fun buildShardRecipes(
-        rarity: Rarity,
-        recipeExporter: RecipeOutput
-    ) {
+    private fun buildShardRecipes(rarity: Rarity, recipeExporter: RecipeOutput) {
         val shardPair = shardConfig(rarity)
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, shardPair.second, 1)
+        ShapedRecipeBuilder
+            .shaped(RecipeCategory.MISC, shardPair.second, 1)
             .pattern("sss")
             .pattern("sss")
             .pattern("sss")
@@ -161,121 +154,93 @@ class RecipeProvider(
             .save(recipeExporter, modId("block_to_shards_${rarity.serializedName}"))
     }
 
-    private fun buildAttunedPokeCaches(
-        type: ElementalType,
-        recipeExporter: RecipeOutput
-    ) {
-        Rarity.entries.forEach { rarity ->
+    private fun buildAttunedPokeCaches(type: ElementalType, recipeExporter: RecipeOutput) = Rarity.entries
+        .forEach { rarity ->
             val cache = cacheForRarity(rarity)
             val attunedCachePair = elementalTypeCacheConfig(cache, type)
-            val cacheComponents = DataComponentMap.builder()
-                .set(RARITY, rarity)
-                .set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
+            val cacheComponents =
+                DataComponentMap
+                    .builder()
+                    .set(RARITY, rarity)
+                    .set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
 
-            ShapelessWithComponentRecipeJsonBuilder(
-                RecipeCategory.MISC,
-                attunedCachePair.first,
-                1
-            )
+            ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, attunedCachePair.first, 1)
                 .define(attunedCachePair.first.asItem())
                 .define(attunedCachePair.second.asItem())
                 .group("multi_bench")
                 .withComponentMap(cacheComponents.build())
-                .unlockedBy(
-                    getHasName(attunedCachePair.second),
-                    has(attunedCachePair.first)
-                )
-                .save(
-                    recipeExporter,
-                    modId("cache_${rarity.serializedName}_${type.showdownId}")
-                )
+                .unlockedBy(getHasName(attunedCachePair.second), has(attunedCachePair.first))
+                .save(recipeExporter, modId("cache_${rarity.serializedName}_${type.showdownId}"))
         }
-    }
 
-    private fun buildAttunedGymKey(
-        type: ElementalType,
-        recipeExporter: RecipeOutput
-    ) {
-        try {
-            val pair = elementalTypeKeyConfig(type)
+    private fun buildAttunedGymKey(type: ElementalType, recipeExporter: RecipeOutput) = try {
+        val pair = elementalTypeKeyConfig(type)
 
-            val keyComponents = DataComponentMap.builder()
+        val keyComponents =
+            DataComponentMap
+                .builder()
                 .set(RARITY, Rarity.RARE)
                 .set(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, type.showdownId)
 
-            ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, pair.first)
-                .define(GYM_KEY)
-                .define(pair.second)
-                .group("multi_bench")
-                .withComponentMap(keyComponents.build())
-                .unlockedBy(
-                    getHasName(pair.second),
-                    has(pair.first)
-                )
-                .save(recipeExporter, modId("gym_key_${type.showdownId}"))
-        } catch (_: NotImplementedError) {
-            debug("No keys found for $type")
-        }
-    }
-
-    private fun buildExitRope(recipeExporter: RecipeOutput) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, RadGymsItems.EXIT_ROPE, 1)
-            .pattern("l")
-            .pattern("b")
-            .define('l', LEAD)
-            .define('b', BINDING_BAND)
+        ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, pair.first)
+            .define(GYM_KEY)
+            .define(pair.second)
             .group("multi_bench")
-            .unlockedBy(
-                getHasName(BINDING_BAND),
-                has(BINDING_BAND)
-            )
-            .save(recipeExporter)
+            .withComponentMap(keyComponents.build())
+            .unlockedBy(getHasName(pair.second), has(pair.first))
+            .save(recipeExporter, modId("gym_key_${type.showdownId}"))
+    } catch (_: NotImplementedError) {
+        debug("No keys found for $type")
     }
 
-    private fun buildShapedGymKey(recipeExporter: RecipeOutput) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, GYM_KEY, 1)
-            .pattern(" g")
-            .pattern("b ")
-            .define('g', GOLD_INGOT)
-            .define('b', POKE_BALL.item())
-            .group("multi_bench")
-            .unlockedBy(
-                getHasName(POKE_BALL.item()),
-                has(CRAFTING_TABLE)
-            )
-            .save(recipeExporter)
-    }
+    private fun buildExitRope(recipeExporter: RecipeOutput) = ShapedRecipeBuilder
+        .shaped(RecipeCategory.MISC, RadGymsItems.EXIT_ROPE, 1)
+        .pattern("l")
+        .pattern("b")
+        .define('l', LEAD)
+        .define('b', BINDING_BAND)
+        .group("multi_bench")
+        .unlockedBy(getHasName(BINDING_BAND), has(BINDING_BAND))
+        .save(recipeExporter)
 
-    private fun cacheForRarity(rarity: Rarity): PokeCache {
-        return when (rarity) {
-            Rarity.COMMON -> CACHE_COMMON
-            Rarity.UNCOMMON -> CACHE_UNCOMMON
-            Rarity.RARE -> CACHE_RARE
-            Rarity.EPIC -> CACHE_EPIC
-        }
+    private fun buildShapedGymKey(recipeExporter: RecipeOutput) = ShapedRecipeBuilder
+        .shaped(RecipeCategory.MISC, GYM_KEY, 1)
+        .pattern(" g")
+        .pattern("b ")
+        .define('g', GOLD_INGOT)
+        .define('b', POKE_BALL.item())
+        .group("multi_bench")
+        .unlockedBy(getHasName(POKE_BALL.item()), has(CRAFTING_TABLE))
+        .save(recipeExporter)
+
+    private fun cacheForRarity(rarity: Rarity): PokeCache = when (rarity) {
+        Rarity.COMMON -> CACHE_COMMON
+        Rarity.UNCOMMON -> CACHE_UNCOMMON
+        Rarity.RARE -> CACHE_RARE
+        Rarity.EPIC -> CACHE_EPIC
     }
 
     @Suppress("CyclomaticComplexMethod")
     @Throws(NotImplementedError::class)
     private fun elementalTypeKeyConfig(type: ElementalType): Pair<GymKey, CobblemonItem> = when (type) {
-        BUG -> Pair(GYM_KEY, BUG_GEM)
-        DARK -> Pair(GYM_KEY, DARK_GEM)
-        DRAGON -> Pair(GYM_KEY, DRAGON_GEM)
-        ELECTRIC -> Pair(GYM_KEY, ELECTRIC_GEM)
-        FAIRY -> Pair(GYM_KEY, FAIRY_GEM)
-        FIGHTING -> Pair(GYM_KEY, FIGHTING_GEM)
-        FIRE -> Pair(GYM_KEY, FIRE_GEM)
-        FLYING -> Pair(GYM_KEY, FLYING_GEM)
-        GHOST -> Pair(GYM_KEY, GHOST_GEM)
-        GRASS -> Pair(GYM_KEY, GRASS_GEM)
-        GROUND -> Pair(GYM_KEY, GROUND_GEM)
-        ICE -> Pair(GYM_KEY, ICE_GEM)
-        NORMAL -> Pair(GYM_KEY, NORMAL_GEM)
-        POISON -> Pair(GYM_KEY, POISON_GEM)
-        PSYCHIC -> Pair(GYM_KEY, PSYCHIC_GEM)
-        ROCK -> Pair(GYM_KEY, ROCK_GEM)
-        STEEL -> Pair(GYM_KEY, STEEL_GEM)
-        WATER -> Pair(GYM_KEY, WATER_GEM)
+        BUG -> GYM_KEY to BUG_GEM
+        DARK -> GYM_KEY to DARK_GEM
+        DRAGON -> GYM_KEY to DRAGON_GEM
+        ELECTRIC -> GYM_KEY to ELECTRIC_GEM
+        FAIRY -> GYM_KEY to FAIRY_GEM
+        FIGHTING -> GYM_KEY to FIGHTING_GEM
+        FIRE -> GYM_KEY to FIRE_GEM
+        FLYING -> GYM_KEY to FLYING_GEM
+        GHOST -> GYM_KEY to GHOST_GEM
+        GRASS -> GYM_KEY to GRASS_GEM
+        GROUND -> GYM_KEY to GROUND_GEM
+        ICE -> GYM_KEY to ICE_GEM
+        NORMAL -> GYM_KEY to NORMAL_GEM
+        POISON -> GYM_KEY to POISON_GEM
+        PSYCHIC -> GYM_KEY to PSYCHIC_GEM
+        ROCK -> GYM_KEY to ROCK_GEM
+        STEEL -> GYM_KEY to STEEL_GEM
+        WATER -> GYM_KEY to WATER_GEM
         else -> {
             throw NotImplementedError("No keys found for $type")
         }
@@ -284,24 +249,24 @@ class RecipeProvider(
     @Suppress("CyclomaticComplexMethod")
     private fun elementalTypeCacheConfig(cache: PokeCache, type: ElementalType): Pair<PokeCache, CobblemonItem> =
         when (type) {
-            BUG -> Pair(cache, BUG_GEM)
-            DARK -> Pair(cache, DARK_GEM)
-            DRAGON -> Pair(cache, DRAGON_GEM)
-            ELECTRIC -> Pair(cache, ELECTRIC_GEM)
-            FAIRY -> Pair(cache, FAIRY_GEM)
-            FIGHTING -> Pair(cache, FIGHTING_GEM)
-            FIRE -> Pair(cache, FIRE_GEM)
-            FLYING -> Pair(cache, FLYING_GEM)
-            GHOST -> Pair(cache, GHOST_GEM)
-            GRASS -> Pair(cache, GRASS_GEM)
-            GROUND -> Pair(cache, GROUND_GEM)
-            ICE -> Pair(cache, ICE_GEM)
-            NORMAL -> Pair(cache, NORMAL_GEM)
-            POISON -> Pair(cache, POISON_GEM)
-            PSYCHIC -> Pair(cache, PSYCHIC_GEM)
-            ROCK -> Pair(cache, ROCK_GEM)
-            STEEL -> Pair(cache, STEEL_GEM)
-            WATER -> Pair(cache, WATER_GEM)
+            BUG -> cache to BUG_GEM
+            DARK -> cache to DARK_GEM
+            DRAGON -> cache to DRAGON_GEM
+            ELECTRIC -> cache to ELECTRIC_GEM
+            FAIRY -> cache to FAIRY_GEM
+            FIGHTING -> cache to FIGHTING_GEM
+            FIRE -> cache to FIRE_GEM
+            FLYING -> cache to FLYING_GEM
+            GHOST -> cache to GHOST_GEM
+            GRASS -> cache to GRASS_GEM
+            GROUND -> cache to GROUND_GEM
+            ICE -> cache to ICE_GEM
+            NORMAL -> cache to NORMAL_GEM
+            POISON -> cache to POISON_GEM
+            PSYCHIC -> cache to PSYCHIC_GEM
+            ROCK -> cache to ROCK_GEM
+            STEEL -> cache to STEEL_GEM
+            WATER -> cache to WATER_GEM
 
             else -> {
                 debug("No caches found for $type")
@@ -309,62 +274,22 @@ class RecipeProvider(
             }
         }
 
-    private fun shardConfig(rarity: Rarity): Pair<PokeShardBase, Item> {
-        return when (rarity) {
-            Rarity.COMMON -> Pair(SHARD_COMMON, SHARD_BLOCK_COMMON)
-            Rarity.UNCOMMON -> Pair(SHARD_UNCOMMON, SHARD_BLOCK_UNCOMMON)
-            Rarity.RARE -> Pair(SHARD_RARE, SHARD_BLOCK_RARE)
-            Rarity.EPIC -> Pair(SHARD_EPIC, SHARD_BLOCK_EPIC)
-        }
+    private fun shardConfig(rarity: Rarity): Pair<PokeShardBase, Item> = when (rarity) {
+        Rarity.COMMON -> SHARD_COMMON to SHARD_BLOCK_COMMON
+        Rarity.UNCOMMON -> SHARD_UNCOMMON to SHARD_BLOCK_UNCOMMON
+        Rarity.RARE -> SHARD_RARE to SHARD_BLOCK_RARE
+        Rarity.EPIC -> SHARD_EPIC to SHARD_BLOCK_EPIC
     }
 
-    private fun cacheConfig(rarity: Rarity): Pair<Quartet<PokeShardBase, Item, Item, Item>, Item> = when (rarity) {
-        Rarity.COMMON -> {
-            Pair(
-                Quartet(
-                    SHARD_COMMON,
-                    IRON_INGOT,
-                    LUXURY_BALL.item(),
-                    AIR
-                ),
-                CACHE_COMMON
-            )
+    private fun cacheConfig(rarity: Rarity): Pair<Quartet<out PokeShardBase, Item, PokeBallItem, Item>, PokeCache> =
+        when (rarity) {
+            Rarity.COMMON -> Quartet(SHARD_COMMON, IRON_INGOT, LUXURY_BALL.item(), AIR) to CACHE_COMMON
+            Rarity.UNCOMMON -> Quartet(SHARD_UNCOMMON, GOLD_INGOT, LUXURY_BALL.item(), AIR) to CACHE_UNCOMMON
+            Rarity.RARE -> Quartet(SHARD_RARE, DIAMOND, LUXURY_BALL.item(), AIR) to CACHE_RARE
+            Rarity.EPIC -> Quartet(SHARD_EPIC, NETHERITE_INGOT, LUXURY_BALL.item(), ECHO_SHARD) to CACHE_EPIC
         }
 
-        Rarity.UNCOMMON -> {
-            Pair(
-                Quartet(
-                    SHARD_UNCOMMON,
-                    GOLD_INGOT,
-                    LUXURY_BALL.item(),
-                    AIR
-                ),
-                CACHE_UNCOMMON
-            )
-        }
-
-        Rarity.RARE -> {
-            Pair(
-                Quartet(
-                    SHARD_RARE,
-                    DIAMOND,
-                    LUXURY_BALL.item(),
-                    AIR
-                ),
-                CACHE_RARE
-            )
-        }
-
-        Rarity.EPIC -> {
-            Pair(
-                Quartet(
-                    SHARD_EPIC,
-                    NETHERITE_INGOT,
-                    LUXURY_BALL.item(),
-                    ECHO_SHARD
-                ),
-                CACHE_EPIC
-            )
-        }
+    companion object {
+        const val BLOCK_TO_SHARD_AMOUNT = 9
     }
 }

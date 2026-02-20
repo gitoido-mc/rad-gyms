@@ -33,16 +33,14 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
         lookup,
         PackOutput.Target.DATA_PACK,
         "gyms",
-        MRadGymsCodec.GYM
+        MRadGymsCodec.GYM,
     ) {
-
     override fun getName(): String = "Gym data"
 
-    override fun configure(provider: BiConsumer<ResourceLocation, GymJson>, lookup: HolderLookup.Provider) {
+    override fun configure(provider: BiConsumer<ResourceLocation, GymJson>, lookup: HolderLookup.Provider) =
         ElementalTypes.all().forEach {
             provider.accept(modId(it.showdownId), getDefaultElementalGymDto(it))
         }
-    }
 
     @Suppress("LongMethod", "MagicNumber")
     private fun getDefaultElementalGymDto(type: ElementalType): GymJson = GymJson(
@@ -51,7 +49,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
         exitBlockPos = Coords(16.0, 2.0, 16.0),
         playerSpawnRelative = EntityCoordsAndYaw(
             Coords(16.5, 2.0, 27.0),
-            yaw = -180.0
+            yaw = -180.0,
         ),
         trainers = listOf(
             Trainer(
@@ -59,7 +57,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 name = modId("npc.trainer_junior").toLanguageKey(),
                 spawnRelative = EntityCoordsAndYaw(
                     Coords(26.5, 2.0, 15.5),
-                    yaw = 42.5
+                    yaw = 42.5,
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES),
                 possibleElementalTypes = listOf(type),
@@ -68,8 +66,8 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(2, 25),
                     TeamLevelThreshold(3, 50),
-                    TeamLevelThreshold(4, 100)
-                )
+                    TeamLevelThreshold(4, 100),
+                ),
             ),
             Trainer(
                 id = "default_trainer_senior",
@@ -77,7 +75,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 requires = "default_trainer_junior",
                 spawnRelative = EntityCoordsAndYaw(
                     Coords(5.5, 2.0, 15.5),
-                    yaw = -42.5
+                    yaw = -42.5,
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES, GymBattleFormat.DOUBLES),
                 possibleElementalTypes = listOf(type),
@@ -86,8 +84,8 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(3, 25),
                     TeamLevelThreshold(4, 50),
-                    TeamLevelThreshold(5, 100)
-                )
+                    TeamLevelThreshold(5, 100),
+                ),
             ),
             Trainer(
                 id = "default_trainer_leader",
@@ -96,18 +94,22 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 leader = true,
                 spawnRelative = EntityCoordsAndYaw(
                     Coords(16.0, 2.0, 6.0),
-                    yaw = 0.01
+                    yaw = 0.01,
                 ),
-                possibleFormats = listOf(GymBattleFormat.SINGLES, GymBattleFormat.DOUBLES, GymBattleFormat.TRIPLES),
+                possibleFormats = listOf(
+                    GymBattleFormat.SINGLES,
+                    GymBattleFormat.DOUBLES,
+                    GymBattleFormat.TRIPLES,
+                ),
                 possibleElementalTypes = listOf(type),
                 teamType = GymTeamType.GENERATED,
                 teamGenerator = GymTeamGeneratorType.BST,
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(4, 25),
                     TeamLevelThreshold(5, 50),
-                    TeamLevelThreshold(6, 100)
-                )
+                    TeamLevelThreshold(6, 100),
+                ),
             ),
-        )
+        ),
     )
 }

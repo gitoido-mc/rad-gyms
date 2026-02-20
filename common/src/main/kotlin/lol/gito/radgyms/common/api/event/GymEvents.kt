@@ -35,7 +35,7 @@ object GymEvents {
         val key: Boolean,
         val level: Int,
         val type: String? = null,
-        val pos: BlockPos? = null
+        val pos: BlockPos? = null,
     )
 
     data class GymEnterScreenOpenEvent(
@@ -45,7 +45,7 @@ object GymEvents {
         var minLevel: Int,
         var maxLevel: Int,
         var selectedLevel: Int,
-        var usesLeft: Int?
+        var usesLeft: Int?,
     )
 
     // Caches
@@ -54,12 +54,12 @@ object GymEvents {
         var poke: Pokemon,
         var type: String,
         var rarity: Rarity,
-        var shinyBoost: Int
+        var shinyBoost: Int,
     )
 
     // Gyms
     data class GymLeaveScreenCloseEvent(
-        val choice: GuiScreenCloseChoice
+        val choice: GuiScreenCloseChoice,
     )
 
     data class GymLeaveScreenOpenEvent(
@@ -71,7 +71,7 @@ object GymEvents {
         val template: GymTemplate,
         val level: Int,
         val type: String,
-        val rewards: MutableList<ItemStack> = mutableListOf()
+        val rewards: MutableList<ItemStack> = mutableListOf(),
     )
 
     data class GenerateTeamEvent(
@@ -81,7 +81,7 @@ object GymEvents {
         val trainerId: String,
         val isLeader: Boolean,
         val team: MutableList<PokemonProperties>,
-        val possibleFormats: MutableList<GymBattleFormat>
+        val possibleFormats: MutableList<GymBattleFormat>,
     )
 
     data class GymEnterEvent(
@@ -89,7 +89,7 @@ object GymEvents {
         val gym: Gym,
         val type: String,
         val level: Int,
-        val usedKey: Boolean
+        val usedKey: Boolean,
     )
 
     data class GymLeaveEvent(
@@ -97,7 +97,7 @@ object GymEvents {
         val player: ServerPlayer,
         val completed: Boolean?,
         val usedRope: Boolean?,
-        val gym: Gym? = null
+        val gym: Gym? = null,
     )
 
     // Trainer interaction
@@ -106,18 +106,18 @@ object GymEvents {
         val reason: GymBattleEndReason,
         val winners: List<BattleActor>,
         val losers: List<BattleActor>,
-        val battle: PokemonBattle
+        val battle: PokemonBattle,
     )
 
     data class TrainerBattleStartEvent(
         val players: List<ServerPlayer>,
         val trainers: List<Trainer>,
-        val battle: PokemonBattle
+        val battle: PokemonBattle,
     ) : Cancelable()
 
     data class TrainerInteractEvent(
         val player: ServerPlayer,
-        val trainer: Trainer
+        val trainer: Trainer,
     ) : Cancelable()
 
     @JvmField

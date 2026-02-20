@@ -12,5 +12,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TrainerBag(
     val item: String,
-    val quantity: Int
+    val quantity: Int,
 )

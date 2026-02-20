@@ -12,12 +12,13 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 
-open class PokeShardBase(private val rarity: Rarity) : CobblemonItem(
-    Properties().rarity(rarity)
-) {
-    override fun getDefaultInstance(): ItemStack = super.defaultInstance.also { stack ->
-        stack.set(DataComponents.RARITY, this.rarity)
-    }
+open class PokeShardBase(
+    private val rarity: Rarity,
+) : CobblemonItem(Properties().rarity(rarity)) {
+    override fun getDefaultInstance(): ItemStack =
+        super.defaultInstance.also { stack ->
+            stack.set(DataComponents.RARITY, this.rarity)
+        }
 }
 
 class EpicPokeShard : PokeShardBase(Rarity.EPIC)

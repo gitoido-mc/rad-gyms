@@ -17,7 +17,7 @@ object RadGymsCommands {
     fun register(
         dispatcher: CommandDispatcher<CommandSourceStack>,
         registry: CommandBuildContext,
-        selection: Commands.CommandSelection
+        selection: Commands.CommandSelection,
     ) {
         KickCommand.register(dispatcher)
         ReloadCommand.register(dispatcher)

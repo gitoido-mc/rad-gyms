@@ -15,7 +15,7 @@ import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import lol.gito.radgyms.common.COMMANDS_PREFIX
-import lol.gito.radgyms.common.RadGyms.CONFIG
+import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.dto.gym.GymJson
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -42,47 +42,49 @@ object GiveReward : CommandInterface {
 
     @Suppress("CheckedExceptionsKotlin")
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val selfCommand = literal(COMMANDS_PREFIX).then(
-            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                literal(SUB).then(
-                    argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
-                        argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
-                            argument(TYPE, ElementalTypeArgumentType.type()).executes {
-                                execute(
-                                    it,
-                                    it.player(),
-                                    GymTemplateArgumentType.getTemplate(it, TEMPLATE),
-                                    IntegerArgumentType.getInteger(it, LEVEL),
-                                    ElementalTypeArgumentType.getType(it, TYPE)
-                                )
-                            }
-                        )
-                    )
-                )
-            )
-        )
-
-        val otherCommand = literal(COMMANDS_PREFIX).then(
-            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                literal(SUB).then(
-                    argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
-                        argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
-                            argument(TYPE, ElementalTypeArgumentType.type()).then(
-                                argument(PLAYER, EntityArgument.player()).executes {
+        val selfCommand =
+            literal(COMMANDS_PREFIX).then(
+                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                    literal(SUB).then(
+                        argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
+                            argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
+                                argument(TYPE, ElementalTypeArgumentType.type()).executes {
                                     execute(
                                         it,
-                                        EntityArgument.getPlayer(it, PLAYER),
+                                        it.player(),
                                         GymTemplateArgumentType.getTemplate(it, TEMPLATE),
                                         IntegerArgumentType.getInteger(it, LEVEL),
-                                        ElementalTypeArgumentType.getType(it, TYPE)
+                                        ElementalTypeArgumentType.getType(it, TYPE),
                                     )
-                                }
-                            )
-                        )
-                    )
-                )
+                                },
+                            ),
+                        ),
+                    ),
+                ),
             )
-        )
+
+        val otherCommand =
+            literal(COMMANDS_PREFIX).then(
+                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                    literal(SUB).then(
+                        argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
+                            argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
+                                argument(TYPE, ElementalTypeArgumentType.type()).then(
+                                    argument(PLAYER, EntityArgument.player()).executes {
+                                        execute(
+                                            it,
+                                            EntityArgument.getPlayer(it, PLAYER),
+                                            GymTemplateArgumentType.getTemplate(it, TEMPLATE),
+                                            IntegerArgumentType.getInteger(it, LEVEL),
+                                            ElementalTypeArgumentType.getType(it, TYPE),
+                                        )
+                                    },
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            )
 
         dispatcher.register(selfCommand)
         dispatcher.register(otherCommand)
@@ -95,7 +97,7 @@ object GiveReward : CommandInterface {
         player: ServerPlayer,
         template: GymJson,
         level: Int,
-        type: ElementalType
+        type: ElementalType,
     ): Int {
         GENERATE_REWARD.emit(
             GymEvents.GenerateRewardEvent(
@@ -103,12 +105,12 @@ object GiveReward : CommandInterface {
                 GymTemplate.fromDto(
                     player,
                     template,
-                    level.coerceIn(CONFIG.minLevel!!, Cobblemon.config.maxPokemonLevel),
-                    type.showdownId
+                    level.coerceIn(config.minLevel!!, Cobblemon.config.maxPokemonLevel),
+                    type.showdownId,
                 ),
                 level,
-                template.id
-            )
+                template.id,
+            ),
         )
 
         context.source.sendSystemMessage(
@@ -116,8 +118,8 @@ object GiveReward : CommandInterface {
                 key = "message.info.command.debug_reward",
                 template.id,
                 tlc("type.${type.showdownId}"),
-                level
-            )
+                level,
+            ),
         )
 
         return Command.SINGLE_SUCCESS

@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.helper
 
-import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
@@ -18,20 +17,23 @@ import lol.gito.radgyms.common.entity.Trainer
 
 @Suppress("FunctionName")
 fun TrainerCheckerPredicate(actor: BattleActor): Boolean {
-    if (actor.type != ActorType.NPC) return false
     if (actor !is TrainerEntityBattleActor) return false
     if (actor.entity !is Trainer) return false
     return true
 }
 
-fun hasGymTrainers(event: BattleFledEvent): Boolean = event.battle.actors
-    .any(::TrainerCheckerPredicate)
+fun hasGymTrainers(event: BattleFledEvent): Boolean =
+    event.battle.actors
+        .any(::TrainerCheckerPredicate)
 
-fun hasGymTrainers(event: BattleFaintedEvent): Boolean = event.battle.actors
-    .any(::TrainerCheckerPredicate)
+fun hasGymTrainers(event: BattleFaintedEvent): Boolean =
+    event.battle.actors
+        .any(::TrainerCheckerPredicate)
 
-fun hasGymTrainers(event: BattleVictoryEvent): Boolean = event.battle.actors
-    .any(::TrainerCheckerPredicate)
+fun hasGymTrainers(event: BattleVictoryEvent): Boolean =
+    event.battle.actors
+        .any(::TrainerCheckerPredicate)
 
-fun hasGymTrainers(event: BattleStartedEvent.Pre): Boolean = event.battle.actors
-    .any(::TrainerCheckerPredicate)
+fun hasGymTrainers(event: BattleStartedEvent.Pre): Boolean =
+    event.battle.actors
+        .any(::TrainerCheckerPredicate)

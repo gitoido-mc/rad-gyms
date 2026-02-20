@@ -16,5 +16,5 @@ data class Gym(
     val npcList: List<UUID>,
     val coords: BlockPos,
     val level: Int,
-    val type: String
+    val type: String,
 )

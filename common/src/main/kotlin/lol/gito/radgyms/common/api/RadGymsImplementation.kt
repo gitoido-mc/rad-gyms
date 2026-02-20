@@ -47,13 +47,13 @@ interface RadGymsImplementation {
         identifier: ResourceLocation,
         reloader: PreparableReloadListener,
         type: PackType,
-        dependencies: Collection<ResourceLocation>
+        dependencies: Collection<ResourceLocation>,
     )
 
     fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(
         identifier: ResourceLocation,
         argumentClass: KClass<A>,
-        serializer: ArgumentTypeInfo<A, T>
+        serializer: ArgumentTypeInfo<A, T>,
     )
 
     fun server(): MinecraftServer?

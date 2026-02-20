@@ -20,7 +20,7 @@ class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
     LivingEntityRenderer<Trainer, PlayerModel<Trainer>>(
         ctx,
         PlayerModel(ctx.bakeLayer(ModelLayers.PLAYER), false),
-        SHADOW_RADIUS
+        SHADOW_RADIUS,
     ) {
     companion object {
         const val SHADOW_RADIUS = .5f
@@ -28,12 +28,10 @@ class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
         val DEFAULT_TEXTURE: ResourceLocation = modId("textures/npc/default_trainer.png")
     }
 
-    override fun getTextureLocation(entity: Trainer): ResourceLocation {
-        return try {
-            modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png")
-        } catch (expected: NullPointerException) {
-            RadGyms.LOGGER.warn("Cannot use texture ${Trainer.GYM_ID}", expected)
-            DEFAULT_TEXTURE
-        }
+    override fun getTextureLocation(entity: Trainer): ResourceLocation = try {
+        modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png")
+    } catch (expected: NullPointerException) {
+        RadGyms.LOGGER.warn("Cannot use texture ${Trainer.GYM_ID}", expected)
+        DEFAULT_TEXTURE
     }
 }

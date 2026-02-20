@@ -26,14 +26,11 @@ class CacheDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Hold
         lookup,
         PackOutput.Target.DATA_PACK,
         "caches",
-        MRadGymsCodec.CACHE
+        MRadGymsCodec.CACHE,
     ) {
     override fun getName(): String = "Pokemon Caches"
 
-    override fun configure(
-        provider: BiConsumer<ResourceLocation, CacheDTO>,
-        lookup: HolderLookup.Provider
-    ) {
+    override fun configure(provider: BiConsumer<ResourceLocation, CacheDTO>, lookup: HolderLookup.Provider) {
         val caches = mapOf(
             ElementalTypes.BUG to BUG_CACHE,
             ElementalTypes.DARK to DARK_CACHE,
@@ -52,7 +49,7 @@ class CacheDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Hold
             ElementalTypes.PSYCHIC to PSYCHIC_CACHE,
             ElementalTypes.ROCK to ROCK_CACHE,
             ElementalTypes.STEEL to STEEL_CACHE,
-            ElementalTypes.WATER to WATER_CACHE
+            ElementalTypes.WATER to WATER_CACHE,
         )
 
         caches.forEach {

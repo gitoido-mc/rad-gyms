@@ -27,12 +27,12 @@ object RadGymsEntities : PlatformRegistry<ETRegistry, ETRegistryKey, EntityType<
     override val resourceKey: ETRegistryKey = Registries.ENTITY_TYPE
 
     @JvmField
-    val GYM_TRAINER: EntityType<Trainer> = this.create(
-        RadGyms.modId("gym_trainer"),
-        EntityType.Builder.of(::Trainer, MobCategory.CREATURE).build(RadGyms.modId("gym_trainer").toString())
-    )
+    val GYM_TRAINER: EntityType<Trainer> =
+        this.create(
+            RadGyms.modId("gym_trainer"),
+            EntityType.Builder.of(::Trainer, MobCategory.CREATURE).build(RadGyms.modId("gym_trainer").toString()),
+        )
 
-    fun registerAttributes(consumer: (EntityType<out LivingEntity>, AttributeSupplier.Builder) -> Unit) {
+    fun registerAttributes(consumer: (EntityType<out LivingEntity>, AttributeSupplier.Builder) -> Unit) =
         consumer(GYM_TRAINER, Trainer.createAttributes())
-    }
 }

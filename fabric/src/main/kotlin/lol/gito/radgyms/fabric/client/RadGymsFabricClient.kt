@@ -32,18 +32,18 @@ object RadGymsFabricClient : RadGymsClientImplementation {
 
     override fun registerBlockRenderType(
         layer: RenderType,
-        vararg blocks: Block
+        vararg blocks: Block,
     ) = blocks.forEach {
         BlockRenderLayerMap.INSTANCE.putBlock(it, layer)
     }
 
     override fun <T : BlockEntity> registerBlockEntityRenderer(
         type: BlockEntityType<out T>,
-        factory: BlockEntityRendererProvider<T>
+        factory: BlockEntityRendererProvider<T>,
     ) = BlockEntityRenderers.register(type, factory)
 
     override fun <T : Entity> registerEntityRenderer(
         type: EntityType<out T>,
-        factory: EntityRendererProvider<T>
+        factory: EntityRendererProvider<T>,
     ) = EntityRendererRegistry.register(type, factory)
 }

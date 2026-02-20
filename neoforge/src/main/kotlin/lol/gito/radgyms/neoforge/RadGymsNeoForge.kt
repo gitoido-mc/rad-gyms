@@ -11,8 +11,8 @@ import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
 import com.mojang.brigadier.arguments.ArgumentType
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.CONFIG
 import lol.gito.radgyms.common.RadGyms.MOD_ID
+import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
@@ -57,8 +57,8 @@ import kotlin.reflect.KClass
 
 @Mod(MOD_ID)
 class RadGymsNeoForge : RadGymsImplementation {
-    override val modAPI: ModAPI = ModAPI.NEOFORGE
 
+    override val modAPI: ModAPI = ModAPI.NEOFORGE
     private val hasBeenSynced = hashSetOf<UUID>()
     private val commandArgumentTypes = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, MOD_ID)
     private val reloadableResources = arrayListOf<PreparableReloadListener>()
@@ -89,10 +89,8 @@ class RadGymsNeoForge : RadGymsImplementation {
     }
 
     override fun isModInstalled(id: String) = ModList.get().isLoaded(id)
-
-    override fun environment(): Environment {
-        return if (FMLEnvironment.dist.isClient) Environment.CLIENT else Environment.SERVER
-    }
+    override fun environment(): Environment =
+        if (FMLEnvironment.dist.isClient) Environment.CLIENT else Environment.SERVER
 
     override fun registerDataComponents() {
         MOD_BUS.addListener<RegisterEvent> { event ->
@@ -116,11 +114,13 @@ class RadGymsNeoForge : RadGymsImplementation {
             addListener<RegisterEvent> { event ->
                 event.register(Registries.CREATIVE_MODE_TAB) { helper ->
                     RadGymsItemGroups.register { holder ->
-                        val itemGroup = CreativeModeTab.builder()
-                            .title(holder.displayName)
-                            .icon(holder.displayIconProvider)
-                            .displayItems(holder.entryCollector)
-                            .build()
+                        val itemGroup =
+                            CreativeModeTab
+                                .builder()
+                                .title(holder.displayName)
+                                .icon(holder.displayIconProvider)
+                                .displayItems(holder.entryCollector)
+                                .build()
                         helper.register(holder.key, itemGroup)
                         itemGroup
                     }
@@ -181,7 +181,7 @@ class RadGymsNeoForge : RadGymsImplementation {
         identifier: ResourceLocation,
         reloader: PreparableReloadListener,
         type: PackType,
-        dependencies: Collection<ResourceLocation>
+        dependencies: Collection<ResourceLocation>,
     ) {
         if (type == PackType.SERVER_DATA) {
             this.reloadableResources += reloader
@@ -193,7 +193,7 @@ class RadGymsNeoForge : RadGymsImplementation {
     override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(
         identifier: ResourceLocation,
         argumentClass: KClass<A>,
-        serializer: ArgumentTypeInfo<A, T>
+        serializer: ArgumentTypeInfo<A, T>,
     ) {
         this.commandArgumentTypes.register(identifier.path) { _ ->
             ArgumentTypeInfos.registerByClass(argumentClass.java, serializer)
@@ -201,9 +201,7 @@ class RadGymsNeoForge : RadGymsImplementation {
     }
 
     override fun server(): MinecraftServer? = ServerLifecycleHooks.getCurrentServer()
-
     override fun initialize() = Unit
-
     fun initialize(event: FMLCommonSetupEvent) {
         info("Initializing Rad Gyms for NeoForge!")
         event.enqueueWork {
@@ -237,39 +235,11 @@ class RadGymsNeoForge : RadGymsImplementation {
         RadGymsItemGroups.inject(e.tabKey, forgeInject)
     }
 
-    private class ForgeItemGroupInject(@Suppress("unused") private val entries: BuildCreativeModeTabContentsEvent) :
-        RadGymsItemGroups.Injector {
-
-        override fun putFirst(item: ItemLike) {
-            this.entries.insertFirst(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
-        }
-
-        override fun putBefore(item: ItemLike, target: ItemLike) {
-            this.entries.insertBefore(
-                ItemStack(target),
-                ItemStack(item),
-                CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
-            )
-        }
-
-        override fun putAfter(item: ItemLike, target: ItemLike) {
-            this.entries.insertAfter(
-                ItemStack(target),
-                ItemStack(item),
-                CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
-            )
-        }
-
-        override fun putLast(item: ItemLike) {
-            this.entries.accept(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
-        }
-    }
-
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
         var canCancel: Boolean
         canCancel = (e.level !is ServerLevel)
         if (!canCancel && (e.level as ServerLevel).dimension() == GYM_DIMENSION) {
-            canCancel = (CONFIG.debug == true)
+            canCancel = (config.debug == true)
             if (!canCancel) {
                 e.isCanceled = true
             }
@@ -286,5 +256,30 @@ class RadGymsNeoForge : RadGymsImplementation {
                 e.isCanceled = true
             }
         }
+    }
+
+    private class ForgeItemGroupInject(@Suppress("unused") private val entries: BuildCreativeModeTabContentsEvent) :
+        RadGymsItemGroups.Injector {
+        override fun putFirst(item: ItemLike) {
+            this.entries.insertFirst(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
+        }
+
+        override fun putBefore(item: ItemLike, target: ItemLike) = this.entries.insertBefore(
+            ItemStack(target),
+            ItemStack(item),
+            CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS,
+        )
+
+        override fun putAfter(item: ItemLike, target: ItemLike) = this.entries.insertAfter(
+            ItemStack(target),
+            ItemStack(item),
+            CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS,
+        )
+
+        override fun putLast(item: ItemLike) =
+            this.entries.accept(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
+
+        override fun putLast(item: ItemStack) =
+            this.entries.accept(item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
     }
 }

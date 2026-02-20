@@ -25,5 +25,5 @@ data class BattleAIConfig(
     val maxSelectMargin: Double? = null,
     // StrongBattleAI
     @SerialName("skill_level")
-    val skillLevel: Int? = null
+    val skillLevel: Int? = null,
 )

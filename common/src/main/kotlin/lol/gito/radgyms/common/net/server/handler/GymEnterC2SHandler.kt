@@ -25,18 +25,16 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
     override fun handle(
         packet: GymEnterC2S,
         server: MinecraftServer,
-        player: ServerPlayer
+        player: ServerPlayer,
     ) {
         RadGyms.debug("Using key? : ${packet.key}")
-        var message = tl(
-            "message.info.gym_init",
-            ElementalTypeTranslationHelper.buildTypeText(packet.type)
-        )
+        var message = tl("message.info.gym_init", ElementalTypeTranslationHelper.buildTypeText(packet.type))
 
-        val type: String = when (packet.type) {
-            "chaos", null -> ElementalTypes.all().random().showdownId
-            else -> packet.type
-        }
+        val type: String =
+            when (packet.type) {
+                "chaos", null -> ElementalTypes.all().random().showdownId
+                else -> packet.type
+            }
 
         if (packet.key) {
             val stack = player.mainHandItem
@@ -44,17 +42,11 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
             if (stack.item == RadGymsItems.GYM_KEY) {
                 val stackType =
                     stack.components
-                        .getOrDefault(
-                            RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,
-                            "chaos"
-                        )
+                        .getOrDefault(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, "chaos")
                         .let { it ?: packet.type }
                 RadGyms.debug("Gym key type : $stackType")
 
-                message = tl(
-                    "message.info.gym_init",
-                    ElementalTypeTranslationHelper.buildTypeText(stackType)
-                )
+                message = tl("message.info.gym_init", ElementalTypeTranslationHelper.buildTypeText(stackType))
 
                 stack.consume(1, player)
                 player.awardStat(getStat(RadGyms.statistics.KEYS_USED))

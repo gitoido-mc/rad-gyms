@@ -19,7 +19,10 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-abstract class AbstractGymScreen(heading: Component) : CobblemonRenderable, Screen(heading) {
+abstract class AbstractGymScreen(
+    heading: Component,
+) : Screen(heading),
+    CobblemonRenderable {
     val middleX: Int
         get() = this.minecraft!!.window.guiScaledWidth / 2
     val middleY: Int
@@ -51,14 +54,18 @@ abstract class AbstractGymScreen(heading: Component) : CobblemonRenderable, Scre
         label: Component,
         size: Vec2i,
         pos: Vec2i,
-        callback: (Button) -> Unit
-    ): Button = Button
-        .builder(label, callback)
-        .size(size.x, size.y)
-        .pos(pos.x, pos.y)
-        .build()
+        callback: (Button) -> Unit,
+    ): Button =
+        Button
+            .builder(label, callback)
+            .size(size.x, size.y)
+            .pos(pos.x, pos.y)
+            .build()
 
-    fun preRender(context: GuiGraphics, panelResource: ResourceLocation) {
+    fun preRender(
+        context: GuiGraphics,
+        panelResource: ResourceLocation,
+    ) {
         val matrices = context.pose()
         super.renderTransparentBackground(context)
 
@@ -68,7 +75,7 @@ abstract class AbstractGymScreen(heading: Component) : CobblemonRenderable, Scre
             x = (width - BASE_WIDTH) / 2,
             y = (height - BASE_HEIGHT) / 2,
             width = BASE_WIDTH,
-            height = BASE_HEIGHT
+            height = BASE_HEIGHT,
         )
     }
 }

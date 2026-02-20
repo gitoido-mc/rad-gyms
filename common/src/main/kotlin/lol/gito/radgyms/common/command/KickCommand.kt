@@ -32,30 +32,28 @@ object KickCommand : CommandInterface {
     private const val PLAYER_ARG = "player"
 
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val command = literal(COMMANDS_PREFIX).then(
-            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                argument(PLAYER_ARG, EntityArgument.player()).executes(::execute)
+        val command =
+            literal(COMMANDS_PREFIX).then(
+                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                    argument(PLAYER_ARG, EntityArgument.player()).executes(::execute),
+                ),
             )
-        )
 
         dispatcher.register(command)
     }
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
-        val player = try {
-            context.getArgument(PLAYER_ARG, EntitySelector::class.java).findSinglePlayer(context.source)
-        } catch (_: CommandSyntaxException) {
-            context.source.sendFailure(
-                tl("message.error.command.kick.no_player", context.source.player!!.name)
-            )
-            return -1
-        }
+        val player =
+            try {
+                context.getArgument(PLAYER_ARG, EntitySelector::class.java).findSinglePlayer(context.source)
+            } catch (_: CommandSyntaxException) {
+                context.source.sendFailure(tl("message.error.command.kick.no_player", context.source.player!!.name))
+                return -1
+            }
 
         if (player.level().dimension() != GYM_DIMENSION) {
             if (context.source.isPlayer) {
-                context.source.sendFailure(
-                    tl("message.error.command.kick.wrong_dim", context.source.player!!.name)
-                )
+                context.source.sendFailure(tl("message.error.command.kick.wrong_dim", context.source.player!!.name))
             }
             return -1
         }
@@ -69,8 +67,8 @@ object KickCommand : CommandInterface {
                     player = player,
                     gym = it,
                     completed = false,
-                    usedRope = false
-                )
+                    usedRope = false,
+                ),
             )
         }
 

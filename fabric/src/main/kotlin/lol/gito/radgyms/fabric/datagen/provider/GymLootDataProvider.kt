@@ -68,129 +68,144 @@ class GymLootDataProvider(
     override fun generate(lootTableBiConsumer: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
         lootTableBiConsumer.accept(
             SHARED_LOOT_TABLE,
-            generateSharedDefaultLootTable()
+            generateSharedDefaultLootTable(),
         )
         lootTableBiConsumer.accept(
             COMMON_LOOT_TABLE,
-            generateCommonLootTable()
+            generateCommonLootTable(),
         )
         lootTableBiConsumer.accept(
             UNCOMMON_LOOT_TABLE,
-            generateUncommonLootTable()
+            generateUncommonLootTable(),
         )
         lootTableBiConsumer.accept(
             RARE_LOOT_TABLE,
-            generateRareLootTable()
+            generateRareLootTable(),
         )
         lootTableBiConsumer.accept(
             EPIC_LOOT_TABLE,
-            generateEpicLootTable()
+            generateEpicLootTable(),
         )
     }
 
-    private fun generateSharedDefaultLootTable() = LootTable.Builder()
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(0f, SHARED_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(ITEM_BONUS_ROLLS))
-                .add(TagEntry.expandTag(ANY_HELD_ITEM))
-                .add(TagEntry.expandTag(EVOLUTION_ITEMS))
-                .build()
-        )
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(0f, SHARED_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(TagEntry.expandTag(TUMBLESTONES))
-                .add(TagEntry.expandTag(RESTORES))
-                .add(TagEntry.expandTag(VITAMINS))
-                .build()
-        )
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(LootItem.lootTableItem(LAPIS_LAZULI))
-                .build()
-        )
+    private fun generateSharedDefaultLootTable() =
+        LootTable
+            .Builder()
+            .pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(0f, SHARED_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(ITEM_BONUS_ROLLS))
+                    .add(TagEntry.expandTag(ANY_HELD_ITEM))
+                    .add(TagEntry.expandTag(EVOLUTION_ITEMS))
+                    .build(),
+            ).pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(0f, SHARED_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(TagEntry.expandTag(TUMBLESTONES))
+                    .add(TagEntry.expandTag(RESTORES))
+                    .add(TagEntry.expandTag(VITAMINS))
+                    .build(),
+            ).pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(LootItem.lootTableItem(LAPIS_LAZULI))
+                    .build(),
+            )
 
-    private fun generateCommonLootTable() = LootTable.Builder()
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(0f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(TagEntry.expandTag(TIER_1_POKE_BALLS))
-                .add(TagEntry.expandTag(TIER_1_POKE_BALL_MATERIALS))
-                .add(LootItem.lootTableItem(POTION))
-                .add(LootItem.lootTableItem(ETHER))
-                .add(LootItem.lootTableItem(REVIVE))
-                .build()
-        )
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(0f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(LootItem.lootTableItem(RadGymsItems.SHARD_COMMON))
-                .build()
-        )
+    private fun generateCommonLootTable() =
+        LootTable
+            .Builder()
+            .pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(0f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(TagEntry.expandTag(TIER_1_POKE_BALLS))
+                    .add(TagEntry.expandTag(TIER_1_POKE_BALL_MATERIALS))
+                    .add(LootItem.lootTableItem(POTION))
+                    .add(LootItem.lootTableItem(ETHER))
+                    .add(LootItem.lootTableItem(REVIVE))
+                    .build(),
+            ).pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(0f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(LootItem.lootTableItem(RadGymsItems.SHARD_COMMON))
+                    .build(),
+            )
 
-    private fun generateUncommonLootTable() = LootTable.Builder()
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(TagEntry.expandTag(TIER_2_POKE_BALLS))
-                .add(TagEntry.expandTag(TIER_2_POKE_BALL_MATERIALS))
-                .add(LootItem.lootTableItem(SUPER_POTION))
-                .add(LootItem.lootTableItem(MAX_ETHER))
-                .add(LootItem.lootTableItem(REVIVE))
-                .build()
-        )
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(LootItem.lootTableItem(SHARD_UNCOMMON))
-                .build()
-        )
+    private fun generateUncommonLootTable() =
+        LootTable
+            .Builder()
+            .pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(TagEntry.expandTag(TIER_2_POKE_BALLS))
+                    .add(TagEntry.expandTag(TIER_2_POKE_BALL_MATERIALS))
+                    .add(LootItem.lootTableItem(SUPER_POTION))
+                    .add(LootItem.lootTableItem(MAX_ETHER))
+                    .add(LootItem.lootTableItem(REVIVE))
+                    .build(),
+            ).pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(LootItem.lootTableItem(SHARD_UNCOMMON))
+                    .build(),
+            )
 
-    private fun generateRareLootTable() = LootTable.Builder()
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(TagEntry.expandTag(TIER_3_POKE_BALLS))
-                .add(TagEntry.expandTag(TIER_3_POKE_BALL_MATERIALS))
-                .add(LootItem.lootTableItem(HYPER_POTION))
-                .add(LootItem.lootTableItem(ELIXIR))
-                .add(LootItem.lootTableItem(REVIVE))
-                .build()
-        )
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(LootItem.lootTableItem(SHARD_RARE))
-                .build()
-        )
+    private fun generateRareLootTable() =
+        LootTable
+            .Builder()
+            .pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(TagEntry.expandTag(TIER_3_POKE_BALLS))
+                    .add(TagEntry.expandTag(TIER_3_POKE_BALL_MATERIALS))
+                    .add(LootItem.lootTableItem(HYPER_POTION))
+                    .add(LootItem.lootTableItem(ELIXIR))
+                    .add(LootItem.lootTableItem(REVIVE))
+                    .build(),
+            ).pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(LootItem.lootTableItem(SHARD_RARE))
+                    .build(),
+            )
 
-    private fun generateEpicLootTable() = LootTable.Builder()
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(TagEntry.expandTag(TIER_4_POKE_BALLS))
-                .add(TagEntry.expandTag(TIER_4_POKE_BALL_MATERIALS))
-                .add(LootItem.lootTableItem(MAX_POTION))
-                .add(LootItem.lootTableItem(MAX_ELIXIR))
-                .add(LootItem.lootTableItem(MAX_REVIVE))
-                .build()
-        )
-        .pool(
-            LootPool.lootPool()
-                .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
-                .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
-                .add(LootItem.lootTableItem(SHARD_EPIC))
-                .build()
-        )
+    private fun generateEpicLootTable() =
+        LootTable
+            .Builder()
+            .pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(TagEntry.expandTag(TIER_4_POKE_BALLS))
+                    .add(TagEntry.expandTag(TIER_4_POKE_BALL_MATERIALS))
+                    .add(LootItem.lootTableItem(MAX_POTION))
+                    .add(LootItem.lootTableItem(MAX_ELIXIR))
+                    .add(LootItem.lootTableItem(MAX_REVIVE))
+                    .build(),
+            ).pool(
+                LootPool
+                    .lootPool()
+                    .setRolls(UniformGenerator.between(1f, COMMON_ROLLS))
+                    .setBonusRolls(ConstantValue.exactly(COMMON_BONUS_ROLLS))
+                    .add(LootItem.lootTableItem(SHARD_EPIC))
+                    .build(),
+            )
 }

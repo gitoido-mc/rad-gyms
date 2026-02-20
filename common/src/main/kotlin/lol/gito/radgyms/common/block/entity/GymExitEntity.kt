@@ -12,8 +12,4 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
-class GymExitEntity(pos: BlockPos, state: BlockState) : BlockEntity(
-    RadGymsBlockEntities.GYM_EXIT_ENTITY,
-    pos,
-    state
-)
+class GymExitEntity(pos: BlockPos, state: BlockState) : BlockEntity(RadGymsBlockEntities.GYM_EXIT_ENTITY, pos, state)

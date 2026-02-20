@@ -21,42 +21,43 @@ import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
 
 class GymTemplateArgumentType : ArgumentType<GymJson> {
-    override fun parse(reader: StringReader): GymJson {
+    override fun parse(reader: StringReader): GymJson =
         try {
             val templateToken = reader.readString()
-            val template = RadGymsTemplates
-                .templates
-                .getOrDefault(templateToken, null)
-                ?: throw NoSuchElementException()
+            val template =
+                RadGymsTemplates
+                    .templates
+                    .getOrDefault(templateToken, null)
+                    ?: throw NoSuchElementException()
             return template
         } catch (_: Exception) {
             throw SimpleCommandExceptionType(INVALID_TEMPLATE).createWithContext(reader)
         }
-    }
 
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
-        builder: SuggestionsBuilder
-    ): CompletableFuture<Suggestions> {
-        return SharedSuggestionProvider.suggest(
+        builder: SuggestionsBuilder,
+    ): CompletableFuture<Suggestions> =
+        SharedSuggestionProvider.suggest(
             RadGymsTemplates.templates.map { it.key },
-            builder
+            builder,
         )
-    }
 
-    override fun getExamples(): Collection<String> = listOf(
-        ElementalTypes.WATER.name,
-        ElementalTypes.FIRE.name,
-        ElementalTypes.GRASS.name
-    )
+    override fun getExamples(): Collection<String> =
+        listOf(
+            ElementalTypes.WATER.name,
+            ElementalTypes.FIRE.name,
+            ElementalTypes.GRASS.name,
+        )
 
     companion object {
         val INVALID_TEMPLATE = tl("message.error.argument.invalid_gym_template")
 
         fun templates() = GymTemplateArgumentType()
 
-        fun <S> getTemplate(context: CommandContext<S>, name: String): GymJson {
-            return context.getArgument(name, GymJson::class.java)
-        }
+        fun <S> getTemplate(
+            context: CommandContext<S>,
+            name: String,
+        ): GymJson = context.getArgument(name, GymJson::class.java)
     }
 }

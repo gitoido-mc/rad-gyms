@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft
 object OpenGymLeaveScreenHandler : ClientNetworkPacketHandler<OpenGymLeaveScreenS2C> {
     override fun handle(
         packet: OpenGymLeaveScreenS2C,
-        client: Minecraft
+        client: Minecraft,
     ) {
         client.setScreen(GymLeaveScreen())
     }

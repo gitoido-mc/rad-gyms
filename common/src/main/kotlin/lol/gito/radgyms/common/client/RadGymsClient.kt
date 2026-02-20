@@ -25,7 +25,10 @@ import net.minecraft.resources.ResourceLocation
 
 object RadGymsClient {
     @JvmStatic
-    fun modModelId(id: ResourceLocation, variant: String): ModelResourceLocation = ModelResourceLocation(id, variant)
+    fun modModelId(
+        id: ResourceLocation,
+        variant: String,
+    ): ModelResourceLocation = ModelResourceLocation(id, variant)
 
     lateinit var implementation: RadGymsClientImplementation
 
@@ -39,7 +42,7 @@ object RadGymsClient {
     private fun registerBlockRenderTypes() {
         this.implementation.registerBlockRenderType(
             RenderType.cutout(),
-            RadGymsBlocks.GYM_ENTRANCE
+            RadGymsBlocks.GYM_ENTRANCE,
         )
     }
 
@@ -57,8 +60,8 @@ object RadGymsClient {
                     it.maxLevel,
                     it.type,
                     it.pos,
-                    it.usesLeft
-                )
+                    it.usesLeft,
+                ),
             )
         }
         GymEvents.ENTER_SCREEN_CLOSE.subscribe(Priority.LOWEST) {

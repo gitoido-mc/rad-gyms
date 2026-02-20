@@ -17,8 +17,5 @@ import net.minecraft.world.level.Level
  */
 object RadGymsDimensions {
     @JvmField
-    val GYM_DIMENSION: ResourceKey<Level> = ResourceKey.create(
-        Registries.DIMENSION,
-        modId("gym_dim")
-    )
+    val GYM_DIMENSION: ResourceKey<Level> = ResourceKey.create(Registries.DIMENSION, modId("gym_dim"))
 }

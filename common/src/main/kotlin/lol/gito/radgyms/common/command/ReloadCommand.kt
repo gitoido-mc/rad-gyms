@@ -23,11 +23,12 @@ object ReloadCommand : CommandInterface {
     private const val NAME = "reload"
 
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val command = literal(COMMANDS_PREFIX).then(
-            literal(NAME)
-                .requires { it.hasPermission(Commands.LEVEL_ADMINS) }
-                .executes(::execute)
-        )
+        val command =
+            literal(COMMANDS_PREFIX).then(
+                literal(NAME)
+                    .requires { it.hasPermission(Commands.LEVEL_ADMINS) }
+                    .executes(::execute),
+            )
 
         dispatcher.register(command)
     }

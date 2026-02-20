@@ -28,9 +28,13 @@ import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
-class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(entityType, level) {
+class Trainer(
+    entityType: EntityType<out Trainer>,
+    level: Level,
+) : Villager(entityType, level) {
     companion object {
         fun createAttributes(): AttributeSupplier.Builder = Villager.createAttributes()
+
         val GYM_ID: EntityDataAccessor<String> =
             SynchedEntityData.defineId(Trainer::class.java, EntityDataSerializers.STRING)
         val FORMAT: EntityDataAccessor<String> =
@@ -89,9 +93,15 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(enti
     }
 
     override fun getHeadRotSpeed(): Int = 360
+
     override fun isSilent(): Boolean = true
+
     override fun isPushable(): Boolean = false
-    override fun hurt(source: DamageSource, amount: Float): Boolean = false
+
+    override fun hurt(
+        source: DamageSource,
+        amount: Float,
+    ): Boolean = false
 
     override fun defineSynchedData(builder: SynchedEntityData.Builder) {
         super.defineSynchedData(
@@ -102,7 +112,7 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(enti
                 .define(REQUIRES, Optional<UUID>.ofNullable(null))
                 .define(DEFEATED, false)
                 .define(LEADER, false)
-                .define(CONFIGURATION, CompoundTag())
+                .define(CONFIGURATION, CompoundTag()),
         )
     }
 
@@ -115,7 +125,10 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(enti
         deltaMovement = Vec3.ZERO
     }
 
-    override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
+    override fun mobInteract(
+        player: Player,
+        hand: InteractionHand,
+    ): InteractionResult {
         if (!level().isClientSide) {
             var result: InteractionResult = InteractionResult.FAIL
             TRAINER_INTERACT.postThen(

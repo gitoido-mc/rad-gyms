@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.registry
 
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.warn
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.stats.StatFormatter
@@ -50,9 +51,7 @@ object RadGymsStats {
     fun getStat(radGymsStat: RadGymsStat): ResourceLocation {
         val resourceLocation = radGymsStat.resourceLocation
         val stat = BuiltInRegistries.CUSTOM_STAT.get(resourceLocation)
-        if (stat == null) {
-            RadGyms.warn("Could not find stat with id $resourceLocation")
-        }
+        if (stat == null) warn("Could not find stat with id $resourceLocation")
         return stat ?: throw NullPointerException("Could not find stat with id $resourceLocation")
     }
 

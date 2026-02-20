@@ -16,12 +16,16 @@ import net.minecraft.nbt.CompoundTag
 fun CompoundTag.getRadGymsTrainerTeam(key: String): MutableList<PokemonModel> {
     val nbt = this.getCompound(key)
 
-    return nbt.allKeys.map {
-        PokemonModel(PokemonProperties.parse(nbt.getString(it)).create())
-    }.toMutableList()
+    return nbt.allKeys
+        .map {
+            PokemonModel(PokemonProperties.parse(nbt.getString(it)).create())
+        }.toMutableList()
 }
 
-fun CompoundTag.putRadGymsTrainerTeam(key: String, value: MutableList<PokemonModel>) {
+fun CompoundTag.putRadGymsTrainerTeam(
+    key: String,
+    value: MutableList<PokemonModel>,
+) {
     val nbt = CompoundTag()
 
     val errors = RCTErrors.create()

@@ -35,7 +35,6 @@ val shadowCommon: Configuration by configurations.creating {
     isCanBeConsumed = false
 }
 
-
 loom {
     silentMojangMappingsLicense()
     enableTransitiveAccessWideners.set(true)
@@ -44,7 +43,7 @@ loom {
         getByName("client") {
             programArgs(
                 "--username=Gitoido",
-                "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b"
+                "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b",
             )
         }
     }

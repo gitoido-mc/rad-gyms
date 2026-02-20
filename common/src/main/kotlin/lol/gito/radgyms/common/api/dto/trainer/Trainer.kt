@@ -32,27 +32,30 @@ data class Trainer(
     val teamGenerator: GymTeamGeneratorType = GymTeamGeneratorType.CHAOTIC,
     @Contextual
     @SerialName("elemental_types")
-    val possibleElementalTypes: ElementalListType = listOf(
-        ElementalTypes.getRandomType()
-    ),
+    val possibleElementalTypes: ElementalListType =
+        listOf(
+            ElementalTypes.getRandomType(),
+        ),
     @SerialName("formats")
     val possibleFormats: List<GymBattleFormat> = listOf(GymBattleFormat.SINGLES),
     val ai: BattleAI = BattleAI(),
-    val bag: List<TrainerBag> = listOf(
-        TrainerBag("cobblemon:hyper_potion", 2)
-    ),
+    val bag: List<TrainerBag> =
+        listOf(
+            TrainerBag("cobblemon:hyper_potion", 2),
+        ),
     @SerialName("level_thresholds")
-    val countPerLevelThreshold: List<TeamLevelThreshold> = listOf(
-        TeamLevelThreshold(T1_TEAM_SIZE, T1_TEAM_LEVEL_THRESHOLD),
-        TeamLevelThreshold(T2_TEAM_SIZE, T2_TEAM_LEVEL_THRESHOLD),
-        TeamLevelThreshold(T3_TEAM_SIZE, T3_TEAM_LEVEL_THRESHOLD),
-        TeamLevelThreshold(T4_TEAM_SIZE, T4_TEAM_LEVEL_THRESHOLD),
-    ),
+    val countPerLevelThreshold: List<TeamLevelThreshold> =
+        listOf(
+            TeamLevelThreshold(T1_TEAM_SIZE, T1_TEAM_LEVEL_THRESHOLD),
+            TeamLevelThreshold(T2_TEAM_SIZE, T2_TEAM_LEVEL_THRESHOLD),
+            TeamLevelThreshold(T3_TEAM_SIZE, T3_TEAM_LEVEL_THRESHOLD),
+            TeamLevelThreshold(T4_TEAM_SIZE, T4_TEAM_LEVEL_THRESHOLD),
+        ),
     @SerialName("battle_rules")
     val battleRules: BattleRules = BattleRules(),
     val team: List<String>? = null,
     val leader: Boolean = false,
-    val requires: String? = null
+    val requires: String? = null,
 ) {
     companion object {
         const val T1_TEAM_SIZE = 3

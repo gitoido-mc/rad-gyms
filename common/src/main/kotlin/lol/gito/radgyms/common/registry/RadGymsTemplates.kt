@@ -36,10 +36,7 @@ object RadGymsTemplates : JsonDataRegistry<GymJson> {
 
     @OptIn(ExperimentalSerializationApi::class)
     @Throws(ExecutionException::class)
-    override fun parse(
-        stream: InputStream,
-        identifier: ResourceLocation
-    ): GymJson {
+    override fun parse(stream: InputStream, identifier: ResourceLocation): GymJson {
         val module = SerializersModule {
             polymorphic(RewardInterface::class) {
                 subclass(CommandReward::class)
