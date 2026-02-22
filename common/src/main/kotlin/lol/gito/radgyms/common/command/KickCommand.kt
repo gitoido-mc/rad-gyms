@@ -43,22 +43,26 @@ object KickCommand : CommandInterface {
     }
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
-        val player =
-            try {
-                context.getArgument(PLAYER_ARG, EntitySelector::class.java).findSinglePlayer(context.source)
-            } catch (_: CommandSyntaxException) {
-                context.source.sendFailure(tl("message.error.command.kick.no_player", context.source.player!!.name))
-                return -1
-            }
+        var shouldReturn = false
 
-        if (player.level().dimension() != GYM_DIMENSION) {
+        val player = try {
+            context.getArgument(PLAYER_ARG, EntitySelector::class.java).findSinglePlayer(context.source)
+        } catch (_: CommandSyntaxException) {
+            context.source.sendFailure(tl("message.error.command.kick.no_player", context.source.player!!.name))
+            shouldReturn = true
+            null
+        }
+
+        if (player != null && player.level().dimension() != GYM_DIMENSION) {
             if (context.source.isPlayer) {
                 context.source.sendFailure(tl("message.error.command.kick.wrong_dim", context.source.player!!.name))
             }
-            return -1
+            shouldReturn = false
         }
 
-        player.displayClientMessage(tl("message.info.command.op_kick"))
+        if (shouldReturn) return -1
+
+        player!!.displayClientMessage(tl("message.info.command.op_kick"))
 
         RadGymsState.getGymForPlayer(player)?.let {
             GYM_LEAVE.emit(

@@ -7,7 +7,14 @@
 
 package lol.gito.radgyms.fabric.datagen
 
-import lol.gito.radgyms.fabric.datagen.provider.*
+import lol.gito.radgyms.fabric.datagen.provider.BlockLootTableProvider
+import lol.gito.radgyms.fabric.datagen.provider.BlockTagDataProvider
+import lol.gito.radgyms.fabric.datagen.provider.CacheDataProvider
+import lol.gito.radgyms.fabric.datagen.provider.EnUSLocaleProvider
+import lol.gito.radgyms.fabric.datagen.provider.GymDataProvider
+import lol.gito.radgyms.fabric.datagen.provider.GymLootDataProvider
+import lol.gito.radgyms.fabric.datagen.provider.RecipeProvider
+import lol.gito.radgyms.fabric.datagen.provider.StructureLootDataProvider
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator.Pack

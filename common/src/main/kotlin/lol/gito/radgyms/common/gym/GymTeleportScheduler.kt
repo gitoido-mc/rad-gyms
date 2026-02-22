@@ -16,12 +16,9 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
 class GymTeleportScheduler {
+
     @Suppress("MagicNumber")
-    fun scheduleReturnWithCountdown(
-        player: ServerPlayer,
-        dim: ServerLevel,
-        pos: BlockPos,
-    ) {
+    fun scheduleReturnWithCountdown(player: ServerPlayer, dim: ServerLevel, pos: BlockPos) {
         player.displayClientMessage(Component.nullToEmpty("5..."))
         afterOnServer(1f) {
             player.displayClientMessage(Component.nullToEmpty("4..."))

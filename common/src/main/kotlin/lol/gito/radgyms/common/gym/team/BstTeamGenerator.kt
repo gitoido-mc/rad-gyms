@@ -14,34 +14,25 @@ import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByType
 
 object BstTeamGenerator : GenericTeamGenerator() {
-    override fun generatePokemon(
-        level: Int,
-        amount: Int,
-        type: ElementalType,
-    ): Pokemon {
+    override fun generatePokemon(level: Int, amount: Int, type: ElementalType): Pokemon {
         debug("Rolling for pokemon with level $level and type ${type.showdownId}")
         val speciesList = speciesByType[type.showdownId]!!
 
-        val levelChunkedRange =
-            (config.minLevel!!..config.maxLevel!!)
-                .chunked(
-                    // This calculates the chunk size between min and max levels defined in config
-                    (config.maxLevel!!)
-                        .minus(config.minLevel!!)
-                        .toDouble()
-                        .div(amount)
-                        .toInt()
-                        .minus(1),
-                )
+        val levelChunkedRange = (config.minLevel!!..config.maxLevel!!).chunked(
+            // This calculates the chunk size between min and max levels defined in config
+            (config.maxLevel!!)
+                .minus(config.minLevel!!)
+                .toDouble()
+                .div(amount)
+                .toInt()
+                .minus(1),
+        )
 
-        val derivedChunkIndex = levelChunkedRange.indexOfFirst { it.contains(level) }
-
-        val derivedSpecies =
-            speciesList
-                .chunked(speciesList.count() / levelChunkedRange.count())
-                .let {
-                    it[derivedChunkIndex].random()
-                }
+        val derivedSpecies = speciesList
+            .chunked(speciesList.count() / levelChunkedRange.count())
+            .let { chunked ->
+                chunked[levelChunkedRange.indexOfFirst { range -> range.contains(level) }].random()
+            }
 
         debug("Picked {} with {} form", derivedSpecies.species.name, derivedSpecies.form.name)
 

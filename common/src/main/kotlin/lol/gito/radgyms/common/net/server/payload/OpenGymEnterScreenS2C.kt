@@ -31,14 +31,13 @@ class OpenGymEnterScreenS2C(
     companion object {
         val ID = modId("net.gym_enter_screen")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) =
-            OpenGymEnterScreenS2C(
-                ByteBufCodecs.INT.decode(buffer),
-                ByteBufCodecs.BOOL.decode(buffer),
-                ByteBufCodecs.STRING_UTF8.decode(buffer),
-                ByteBufCodecs.optional(BlockPos.STREAM_CODEC).decode(buffer).getOrNull(),
-                ByteBufCodecs.optional(ByteBufCodecs.INT).decode(buffer).getOrNull(),
-            )
+        fun decode(buffer: RegistryFriendlyByteBuf) = OpenGymEnterScreenS2C(
+            ByteBufCodecs.INT.decode(buffer),
+            ByteBufCodecs.BOOL.decode(buffer),
+            ByteBufCodecs.STRING_UTF8.decode(buffer),
+            ByteBufCodecs.optional(BlockPos.STREAM_CODEC).decode(buffer).getOrNull(),
+            ByteBufCodecs.optional(ByteBufCodecs.INT).decode(buffer).getOrNull(),
+        )
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {

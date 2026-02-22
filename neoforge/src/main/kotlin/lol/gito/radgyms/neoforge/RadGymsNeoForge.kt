@@ -18,8 +18,13 @@ import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
-import lol.gito.radgyms.common.registry.*
+import lol.gito.radgyms.common.registry.RadGymsBlockEntities
+import lol.gito.radgyms.common.registry.RadGymsBlocks
+import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
+import lol.gito.radgyms.common.registry.RadGymsEntities
+import lol.gito.radgyms.common.registry.RadGymsItemGroups
+import lol.gito.radgyms.common.registry.RadGymsItems
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
 import lol.gito.radgyms.neoforge.net.RadGymsNeoForgeNetworkManager
 import net.minecraft.commands.synchronization.ArgumentTypeInfo

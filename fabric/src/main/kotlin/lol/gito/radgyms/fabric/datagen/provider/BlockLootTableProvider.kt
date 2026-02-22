@@ -13,10 +13,8 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
 import net.minecraft.core.HolderLookup
 import java.util.concurrent.CompletableFuture
 
-class BlockLootTableProvider(
-    output: FabricDataOutput,
-    lookup: CompletableFuture<HolderLookup.Provider>,
-) : FabricBlockLootTableProvider(output, lookup) {
+class BlockLootTableProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>) :
+    FabricBlockLootTableProvider(output, lookup) {
     override fun generate() {
         dropSelf(RadGymsBlocks.SHARD_BLOCK_COMMON)
         dropSelf(RadGymsBlocks.SHARD_BLOCK_UNCOMMON)

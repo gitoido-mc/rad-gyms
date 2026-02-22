@@ -13,9 +13,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceLocation
 
-class GymLeaveC2S(
-    val teleport: Boolean,
-) : NetworkPacket<GymLeaveC2S> {
+class GymLeaveC2S(val teleport: Boolean) : NetworkPacket<GymLeaveC2S> {
     override val id: ResourceLocation = ID
 
     companion object {
@@ -24,7 +22,5 @@ class GymLeaveC2S(
         fun decode(buffer: RegistryFriendlyByteBuf) = GymLeaveC2S(ByteBufCodecs.BOOL.decode(buffer))
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        ByteBufCodecs.BOOL.encode(buffer, teleport)
-    }
+    override fun encode(buffer: RegistryFriendlyByteBuf) = ByteBufCodecs.BOOL.encode(buffer, teleport)
 }

@@ -18,11 +18,7 @@ import net.minecraft.world.phys.Vec3
 import java.util.*
 
 object TrainerSpawner {
-    fun spawnAll(
-        template: GymTemplate,
-        gymDimension: ServerLevel,
-        coords: BlockPos,
-    ): Map<UUID, TrainerModel> {
+    fun spawnAll(template: GymTemplate, gymDimension: ServerLevel, coords: BlockPos): Map<UUID, TrainerModel> {
         val trainerIds = mutableMapOf<String, Pair<UUID, TrainerModel>>()
 
         template.trainers.forEach { trainer ->
@@ -42,33 +38,32 @@ object TrainerSpawner {
         trainerUUID: UUID,
         requiredUUID: UUID?,
     ): Pair<UUID, TrainerModel> {
-        val trainerEntity =
-            Trainer(RadGymsEntities.GYM_TRAINER, gymDimension).apply {
-                uuid = trainerUUID
-                gymId = trainer.id
-                leader = trainer.leader
-                format = trainer.format.name
-                trainerId = trainerUUID
-                requires = requiredUUID
-                yHeadRot = trainer.npc.yaw
-                yBodyRot = trainer.npc.yaw
-                customName = trainer.npc.name
-                configuration =
-                    TrainerConfiguration(
-                        trainer.battleRules,
-                        trainer.trainer.bag,
-                        trainer.trainer.team,
-                    )
-                isCustomNameVisible = true
-                setPersistenceRequired()
-                setPos(
-                    Vec3(
-                        coords.x + trainer.npc.relativePosition.x,
-                        coords.y + trainer.npc.relativePosition.y,
-                        coords.z + trainer.npc.relativePosition.z,
-                    ),
+        val trainerEntity = Trainer(RadGymsEntities.GYM_TRAINER, gymDimension).apply {
+            uuid = trainerUUID
+            gymId = trainer.id
+            leader = trainer.leader
+            format = trainer.format.name
+            trainerId = trainerUUID
+            requires = requiredUUID
+            yHeadRot = trainer.npc.yaw
+            yBodyRot = trainer.npc.yaw
+            customName = trainer.npc.name
+            configuration =
+                TrainerConfiguration(
+                    trainer.battleRules,
+                    trainer.trainer.bag,
+                    trainer.trainer.team,
                 )
-            }
+            isCustomNameVisible = true
+            setPersistenceRequired()
+            setPos(
+                Vec3(
+                    coords.x + trainer.npc.relativePosition.x,
+                    coords.y + trainer.npc.relativePosition.y,
+                    coords.z + trainer.npc.relativePosition.z,
+                ),
+            )
+        }
 
         debug("Spawning trainer ${trainerEntity.id} at ${trainerEntity.x} ${trainerEntity.y} ${trainerEntity.z}")
         gymDimension.tryAddFreshEntityWithPassengers(trainerEntity)

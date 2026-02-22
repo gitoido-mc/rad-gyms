@@ -24,6 +24,7 @@ const val TELEPORT_PRELOAD_CHUNKS = 4
 const val WORLDGEN_FEATURE_RANDOM_SHIFT_BITS = 4
 const val GYM_SPACING_IN_DIMENSION = 128
 
+// Cooldown of item use in ticks (20t = 5s)
 const val EXIT_ROPE_COOLDOWN = 100
 
 const val MIN_POKE_LEVEL = 1
@@ -43,24 +44,23 @@ const val REGISTRY_REWARD_TYPE_POKEMON = "rad_gyms:pokemon"
 const val REGISTRY_REWARD_TYPE_COMMAND = "rad_gyms:command"
 const val REGISTRY_REWARD_TYPE_ADVANCEMENT = "rad_gyms:advancement"
 
-val defaultElementalTypes =
-    setOf(
-        ElementalTypes.BUG.showdownId,
-        ElementalTypes.DARK.showdownId,
-        ElementalTypes.DRAGON.showdownId,
-        ElementalTypes.ELECTRIC.showdownId,
-        ElementalTypes.FLYING.showdownId,
-        ElementalTypes.FIGHTING.showdownId,
-        ElementalTypes.FIRE.showdownId,
-        ElementalTypes.FLYING.showdownId,
-        ElementalTypes.GHOST.showdownId,
-        ElementalTypes.GRASS.showdownId,
-        ElementalTypes.GROUND.showdownId,
-        ElementalTypes.ICE.showdownId,
-        ElementalTypes.NORMAL.showdownId,
-        ElementalTypes.POISON.showdownId,
-        ElementalTypes.PSYCHIC.showdownId,
-        ElementalTypes.ROCK.showdownId,
-        ElementalTypes.STEEL.showdownId,
-        ElementalTypes.WATER.showdownId,
-    )
+val defaultElementalTypes = setOf(
+    ElementalTypes.BUG.showdownId,
+    ElementalTypes.DARK.showdownId,
+    ElementalTypes.DRAGON.showdownId,
+    ElementalTypes.ELECTRIC.showdownId,
+    ElementalTypes.FLYING.showdownId,
+    ElementalTypes.FIGHTING.showdownId,
+    ElementalTypes.FIRE.showdownId,
+    ElementalTypes.FLYING.showdownId,
+    ElementalTypes.GHOST.showdownId,
+    ElementalTypes.GRASS.showdownId,
+    ElementalTypes.GROUND.showdownId,
+    ElementalTypes.ICE.showdownId,
+    ElementalTypes.NORMAL.showdownId,
+    ElementalTypes.POISON.showdownId,
+    ElementalTypes.PSYCHIC.showdownId,
+    ElementalTypes.ROCK.showdownId,
+    ElementalTypes.STEEL.showdownId,
+    ElementalTypes.WATER.showdownId,
+)

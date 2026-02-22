@@ -7,7 +7,11 @@
 
 package lol.gito.radgyms.fabric.datagen.provider.caches
 
-import lol.gito.radgyms.common.*
+import lol.gito.radgyms.common.CACHE_DEFAULT_ENTRY_WEIGHT_COMMON
+import lol.gito.radgyms.common.CACHE_DEFAULT_ENTRY_WEIGHT_EPIC
+import lol.gito.radgyms.common.CACHE_DEFAULT_ENTRY_WEIGHT_RARE
+import lol.gito.radgyms.common.CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON
+import lol.gito.radgyms.common.CACHE_STARTER_ENTRY_WEIGHT
 import lol.gito.radgyms.common.cache.CacheDTO
 import net.minecraft.world.item.Rarity
 

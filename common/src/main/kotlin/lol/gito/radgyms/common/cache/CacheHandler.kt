@@ -18,34 +18,22 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Rarity
 
 object CacheHandler {
-    fun getPoke(
-        type: String,
-        rarity: Rarity,
-        player: ServerPlayer,
-        shinyBoost: Int = 0,
-    ): Pokemon =
-        getPoke(
-            ElementalTypes.get(type) ?: ElementalTypes.all().random(),
-            rarity,
-            player,
-            shinyBoost,
-        )
+    fun getPoke(type: String, rarity: Rarity, player: ServerPlayer, shinyBoost: Int = 0): Pokemon = getPoke(
+        ElementalTypes.get(type) ?: ElementalTypes.all().random(),
+        rarity,
+        player,
+        shinyBoost,
+    )
 
-    fun getPoke(
-        type: ElementalType,
-        rarity: Rarity,
-        player: ServerPlayer,
-        shinyBoost: Int = 0,
-    ): Pokemon {
+    fun getPoke(type: ElementalType, rarity: Rarity, player: ServerPlayer, shinyBoost: Int = 0): Pokemon {
         /**
          * [speciesByRarity] holds all species in map-like object
          * where the key corresponds to [ElementalType.showdownId] property of passed [type]
          * [CacheDTO.forRarity] is a function that returns shuffleable list of species
          */
-        val pool =
-            speciesByRarity[type.showdownId] ?: throw RadGymsPoolNotDefinedException(
-                "Cannot find pool: ${rarity.serializedName.lowercase()}",
-            )
+        val pool = speciesByRarity[type.showdownId] ?: throw RadGymsPoolNotDefinedException(
+            "Cannot find pool: ${rarity.serializedName.lowercase()}",
+        )
 
         val cache = pool.forRarity(rarity)
         var poke: Pokemon

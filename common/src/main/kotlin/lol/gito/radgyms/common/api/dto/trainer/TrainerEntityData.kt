@@ -10,8 +10,4 @@ package lol.gito.radgyms.common.api.dto.trainer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.Vec3
 
-data class TrainerEntityData(
-    val name: Component,
-    val relativePosition: Vec3,
-    val yaw: Float,
-)
+data class TrainerEntityData(val name: Component, val relativePosition: Vec3, val yaw: Float)

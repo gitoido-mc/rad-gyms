@@ -11,18 +11,10 @@ sealed class RadGymsException : RuntimeException {
     constructor(message: String) : super(message)
 }
 
-class RadGymsLevelNotFoundException(
-    message: String,
-) : RadGymsException(message)
+class RadGymsLevelNotFoundException(message: String) : RadGymsException(message)
 
-class RadGymsSpeciesListEmptyException(
-    message: String,
-) : RadGymsException(message)
+class RadGymsSpeciesListEmptyException(message: String) : RadGymsException(message)
 
-class RadGymsPoolNotDefinedException(
-    message: String,
-) : RadGymsException(message)
+class RadGymsPoolNotDefinedException(message: String) : RadGymsException(message)
 
-class RadGymsUnknownBattleAIException(
-    message: String,
-) : RadGymsException(message)
+class RadGymsUnknownBattleAIException(message: String) : RadGymsException(message)

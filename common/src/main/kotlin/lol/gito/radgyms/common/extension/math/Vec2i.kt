@@ -12,10 +12,7 @@ import net.minecraft.world.phys.Vec2
 import kotlin.math.roundToInt
 
 @Suppress("unused")
-class Vec2i(
-    val x: Int = 0,
-    val y: Int = 0,
-) {
+class Vec2i(val x: Int = 0, val y: Int = 0) {
     companion object {
         const val MIN_NEG_FLOAT = 1.0E-4f
 

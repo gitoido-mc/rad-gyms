@@ -4,6 +4,7 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
+@file:Suppress("MaxLineLength")
 
 plugins {
     id("dev.architectury.loom")
@@ -48,8 +49,15 @@ dependencies {
         exclude("net.neoforged.fancymodloader", "loader")
     }
     modImplementation("dev.architectury:architectury-neoforge:${property("architectury_api_version")}")
-    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
-        isTransitive = false
+    // Cobblemon
+    if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
+        modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
+            isTransitive = false
+        }
+    } else {
+        modImplementation("com.cobblemon:neoforge:${property("cobblemon_snapshot_version")}+${property("minecraft_version")}-SNAPSHOT") {
+            isTransitive = false
+        }
     }
 
     implementation(project(":common", configuration = "namedElements"))

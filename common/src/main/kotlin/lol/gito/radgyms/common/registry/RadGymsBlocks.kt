@@ -9,7 +9,12 @@ package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.block.*
+import lol.gito.radgyms.common.block.CommonShardBlock
+import lol.gito.radgyms.common.block.EpicShardBlock
+import lol.gito.radgyms.common.block.GymEntranceBlock
+import lol.gito.radgyms.common.block.GymExitBlock
+import lol.gito.radgyms.common.block.RareShardBlock
+import lol.gito.radgyms.common.block.UncommonShardBlock
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries

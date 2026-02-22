@@ -26,9 +26,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 
-class GymExitBlock(
-    properties: Properties,
-) : BaseEntityBlock(properties) {
+class GymExitBlock(properties: Properties) : BaseEntityBlock(properties) {
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 
     override fun codec(): MapCodec<out BaseEntityBlock> = simpleCodec { GymExitBlock(it) }

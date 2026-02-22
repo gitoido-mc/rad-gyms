@@ -17,21 +17,15 @@ import net.minecraft.client.Minecraft
  * Emits open gym entrance screen event in mod bus
  */
 object OpenGymEnterScreenHandler : ClientNetworkPacketHandler<OpenGymEnterScreenS2C> {
-    override fun handle(
-        packet: OpenGymEnterScreenS2C,
-        client: Minecraft,
-    ) {
-        // Config or someone might be able to override some stuff via event
-        GymEvents.ENTER_SCREEN_OPEN.emit(
-            GymEvents.GymEnterScreenOpenEvent(
-                packet.pos,
-                packet.key,
-                packet.type,
-                RadGyms.config.minLevel!!,
-                RadGyms.config.maxLevel!!,
-                packet.derivedLevel,
-                packet.usesLeft,
-            ),
-        )
-    }
+    override fun handle(packet: OpenGymEnterScreenS2C, client: Minecraft) = GymEvents.ENTER_SCREEN_OPEN.emit(
+        GymEvents.GymEnterScreenOpenEvent(
+            packet.pos,
+            packet.key,
+            packet.type,
+            RadGyms.config.minLevel!!,
+            RadGyms.config.maxLevel!!,
+            packet.derivedLevel,
+            packet.usesLeft,
+        ),
+    )
 }

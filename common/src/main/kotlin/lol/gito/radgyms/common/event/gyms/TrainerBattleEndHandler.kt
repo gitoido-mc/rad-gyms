@@ -23,19 +23,17 @@ import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.server.level.ServerPlayer
 
-class TrainerBattleEndHandler(
-    event: GymEvents.TrainerBattleEndEvent,
-) {
+class TrainerBattleEndHandler(val event: GymEvents.TrainerBattleEndEvent) {
     init {
         debug("Trainer battle end triggered")
 
         when (event.reason) {
-            GymBattleEndReason.BATTLE_FLED, GymBattleEndReason.BATTLE_LOST -> handleGymLeave(event)
-            GymBattleEndReason.BATTLE_WON -> handleGymWin(event)
+            GymBattleEndReason.BATTLE_FLED, GymBattleEndReason.BATTLE_LOST -> handleGymLeave()
+            GymBattleEndReason.BATTLE_WON -> handleGymWin()
         }
     }
 
-    private fun handleGymWin(event: GymEvents.TrainerBattleEndEvent) {
+    private fun handleGymWin() {
         var defeatedLeader: Trainer? = null
 
         event.losers
@@ -49,10 +47,9 @@ class TrainerBattleEndHandler(
             }
 
         if (defeatedLeader != null) {
-            val winnerPlayers =
-                event.winners
-                    .filterIsInstance<PlayerBattleActor>()
-                    .map { it.entity as ServerPlayer }
+            val winnerPlayers = event.winners
+                .filterIsInstance<PlayerBattleActor>()
+                .map { it.entity as ServerPlayer }
 
             val firstPlayer = winnerPlayers.first()
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
@@ -68,14 +65,13 @@ class TrainerBattleEndHandler(
         }
     }
 
-    private fun handleGymLeave(event: GymEvents.TrainerBattleEndEvent) =
-        event
-            .battle
-            .players
-            .filter { it.level().dimension() == GYM_DIMENSION }
-            .forEach {
-                GymTeardownService
-                    .withTeleportScheduler(GymTeleportScheduler())
-                    .handleGymLeave(it)
-            }
+    private fun handleGymLeave() = event
+        .battle
+        .players
+        .filter { it.level().dimension() == GYM_DIMENSION }
+        .forEach {
+            GymTeardownService
+                .withTeleportScheduler(GymTeleportScheduler())
+                .handleGymLeave(it)
+        }
 }

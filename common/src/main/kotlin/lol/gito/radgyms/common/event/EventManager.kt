@@ -37,16 +37,24 @@ import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
-import lol.gito.radgyms.common.event.gyms.*
+import lol.gito.radgyms.common.event.gyms.GenerateRewardHandler
+import lol.gito.radgyms.common.event.gyms.GymEnterHandler
+import lol.gito.radgyms.common.event.gyms.GymLeaveHandler
+import lol.gito.radgyms.common.event.gyms.TrainerBattleEndHandler
+import lol.gito.radgyms.common.event.gyms.TrainerInteractHandler
 import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 import lol.gito.radgyms.common.gym.GymInitializer
 import lol.gito.radgyms.common.gym.TrainerFactory
 import lol.gito.radgyms.common.gym.TrainerSpawner
 import lol.gito.radgyms.common.helper.hasGymTrainers
 import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
-import lol.gito.radgyms.common.registry.*
+import lol.gito.radgyms.common.registry.RadGymsBlocks
+import lol.gito.radgyms.common.registry.RadGymsCaches
+import lol.gito.radgyms.common.registry.RadGymsDimensions
+import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByType
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesOfType
+import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.world.StructurePlacer
 import lol.gito.radgyms.common.world.state.RadGymsState
 

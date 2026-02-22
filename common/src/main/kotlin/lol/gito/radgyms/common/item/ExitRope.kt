@@ -28,11 +28,7 @@ import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 
 class ExitRope : CobblemonItem(Properties()) {
-    override fun use(
-        level: Level,
-        player: Player,
-        hand: InteractionHand,
-    ): InteractionResultHolder<ItemStack> {
+    override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
         when (level.dimension()) {
@@ -53,8 +49,7 @@ class ExitRope : CobblemonItem(Properties()) {
         tooltip.add(tlr("${EXIT_ROPE.descriptionId}.tooltip").withStyle(ChatFormatting.GRAY))
     }
 
-    override fun getDefaultInstance(): ItemStack =
-        ItemStack(this).apply {
-            set(DataComponents.RARITY, Rarity.COMMON)
-        }
+    override fun getDefaultInstance(): ItemStack = ItemStack(this).apply {
+        set(DataComponents.RARITY, Rarity.COMMON)
+    }
 }

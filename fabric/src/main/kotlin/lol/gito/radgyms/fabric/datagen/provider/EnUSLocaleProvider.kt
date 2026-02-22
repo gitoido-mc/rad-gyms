@@ -41,11 +41,7 @@ import net.minecraft.world.item.Rarity
 import java.util.concurrent.CompletableFuture
 
 class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: CompletableFuture<HolderLookup.Provider>) :
-    FabricLanguageProvider(
-        dataOutput,
-        "en_us",
-        registryLookup,
-    ) {
+    FabricLanguageProvider(dataOutput, "en_us", registryLookup) {
     private fun provideTranslations(): Map<String, String> {
         val translations = mutableMapOf<String, String>()
 

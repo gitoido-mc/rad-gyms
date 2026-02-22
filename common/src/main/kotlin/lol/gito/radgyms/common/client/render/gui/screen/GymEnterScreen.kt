@@ -202,11 +202,7 @@ class GymEnterScreen(
         )
     }
 
-    override fun keyPressed(
-        keyCode: Int,
-        scanCode: Int,
-        modifiers: Int,
-    ): Boolean {
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
             this.onClose(GuiScreenCloseChoice.CANCEL)
             return true
@@ -214,12 +210,7 @@ class GymEnterScreen(
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun render(
-        context: GuiGraphics,
-        mouseX: Int,
-        mouseY: Int,
-        delta: Float,
-    ) {
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         super.preRender(context, panelResource)
 
         val message =

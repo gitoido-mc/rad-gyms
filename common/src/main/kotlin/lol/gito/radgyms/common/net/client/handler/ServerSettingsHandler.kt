@@ -18,19 +18,15 @@ import net.minecraft.client.Minecraft
  * Emits open gym entrance screen event in mod bus
  */
 object ServerSettingsHandler : ClientNetworkPacketHandler<ServerSettingsS2C> {
-    override fun handle(
-        packet: ServerSettingsS2C,
-        client: Minecraft,
-    ) {
-        val serverConfig =
-            RadGymsConfig(
-                maxEntranceUses = packet.maxEntranceUses,
-                shardRewards = packet.shardRewards,
-                lapisBoostAmount = packet.lapisBoostAmount,
-                ignoredSpecies = packet.ignoredSpecies,
-                minLevel = packet.minLevel,
-                maxLevel = packet.maxLevel,
-            )
+    override fun handle(packet: ServerSettingsS2C, client: Minecraft) {
+        val serverConfig = RadGymsConfig(
+            maxEntranceUses = packet.maxEntranceUses,
+            shardRewards = packet.shardRewards,
+            lapisBoostAmount = packet.lapisBoostAmount,
+            ignoredSpecies = packet.ignoredSpecies,
+            minLevel = packet.minLevel,
+            maxLevel = packet.maxLevel,
+        )
 
         config = config.combine(serverConfig)
         debug("Received server config for Rad Gyms")

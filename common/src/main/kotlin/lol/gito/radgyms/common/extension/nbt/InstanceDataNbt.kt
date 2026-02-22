@@ -17,8 +17,11 @@ import java.util.*
 fun CompoundTag.getRadGymsInstanceData(key: String): Gym? {
     val tag = this.getCompound(key) ?: return null
     val template = RadGymsTemplates.templates[tag.getString("Template")]!!
-    val player =
-        RadGyms.implementation.server()!!.playerList.getPlayer(
+    val player = RadGyms
+        .implementation
+        .server()!!
+        .playerList
+        .getPlayer(
             UUID.fromString(key),
         )
 
@@ -37,18 +40,14 @@ fun CompoundTag.getRadGymsInstanceData(key: String): Gym? {
     )
 }
 
-fun CompoundTag.putRadGymsInstanceData(
-    key: String,
-    value: Gym,
-) {
+fun CompoundTag.putRadGymsInstanceData(key: String, value: Gym) {
     val nbt = CompoundTag()
     val trainersNbt = CompoundTag()
 
-    val templateKey =
-        RadGymsTemplates.templates.firstNotNullOf { (key, template) ->
-            if (value.template.id == template.id) return@firstNotNullOf key
-            return@firstNotNullOf null
-        }
+    val templateKey = RadGymsTemplates.templates.firstNotNullOf { (key, template) ->
+        if (value.template.id == template.id) return@firstNotNullOf key
+        return@firstNotNullOf null
+    }
 
     nbt.putString("Template", templateKey)
     nbt.putBlockPos("Coords", value.coords)

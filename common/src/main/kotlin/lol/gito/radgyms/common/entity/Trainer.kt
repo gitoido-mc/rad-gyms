@@ -28,10 +28,7 @@ import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
-class Trainer(
-    entityType: EntityType<out Trainer>,
-    level: Level,
-) : Villager(entityType, level) {
+class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(entityType, level) {
     companion object {
         fun createAttributes(): AttributeSupplier.Builder = Villager.createAttributes()
 
@@ -98,37 +95,25 @@ class Trainer(
 
     override fun isPushable(): Boolean = false
 
-    override fun hurt(
-        source: DamageSource,
-        amount: Float,
-    ): Boolean = false
+    override fun hurt(source: DamageSource, amount: Float): Boolean = false
 
-    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
-        super.defineSynchedData(
-            builder
-                .define(GYM_ID, "default_trainer")
-                .define(FORMAT, GymBattleFormat.SINGLES.name)
-                .define(TRAINER_ID, Optional<UUID>.ofNullable(null))
-                .define(REQUIRES, Optional<UUID>.ofNullable(null))
-                .define(DEFEATED, false)
-                .define(LEADER, false)
-                .define(CONFIGURATION, CompoundTag()),
-        )
-    }
-
-    override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
-        super.onSyncedDataUpdated(data)
-    }
+    override fun defineSynchedData(builder: SynchedEntityData.Builder) = super.defineSynchedData(
+        builder
+            .define(GYM_ID, "default_trainer")
+            .define(FORMAT, GymBattleFormat.SINGLES.name)
+            .define(TRAINER_ID, Optional<UUID>.ofNullable(null))
+            .define(REQUIRES, Optional<UUID>.ofNullable(null))
+            .define(DEFEATED, false)
+            .define(LEADER, false)
+            .define(CONFIGURATION, CompoundTag()),
+    )
 
     override fun aiStep() {
         super.aiStep()
         deltaMovement = Vec3.ZERO
     }
 
-    override fun mobInteract(
-        player: Player,
-        hand: InteractionHand,
-    ): InteractionResult {
+    override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
         if (!level().isClientSide) {
             var result: InteractionResult = InteractionResult.FAIL
             TRAINER_INTERACT.postThen(

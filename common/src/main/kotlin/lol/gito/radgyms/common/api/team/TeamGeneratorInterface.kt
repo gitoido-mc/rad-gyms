@@ -24,9 +24,5 @@ interface TeamGeneratorInterface {
         types: List<ElementalType>? = listOf(ElementalTypes.getRandomType()),
     ): MutableList<PokemonModel>
 
-    fun generatePokemon(
-        level: Int,
-        amount: Int,
-        type: ElementalType = ElementalTypes.getRandomType(),
-    ): Pokemon
+    fun generatePokemon(level: Int, amount: Int, type: ElementalType = ElementalTypes.getRandomType()): Pokemon
 }

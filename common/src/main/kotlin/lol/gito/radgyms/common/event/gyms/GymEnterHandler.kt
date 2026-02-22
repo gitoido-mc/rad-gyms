@@ -10,9 +10,7 @@ package lol.gito.radgyms.common.event.gyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.event.GymEvents
 
-class GymEnterHandler(
-    @Suppress("unused") event: GymEvents.GymEnterEvent,
-) {
+class GymEnterHandler(@Suppress("unused") ignored: GymEvents.GymEnterEvent) {
     init {
         debug("Gym enter event triggered")
     }

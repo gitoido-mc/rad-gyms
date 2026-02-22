@@ -29,12 +29,7 @@ class LevelSliderWidget(
 
     var level: Int = this.initialLevel
 
-    override fun renderWidget(
-        context: GuiGraphics,
-        mouseX: Int,
-        mouseY: Int,
-        delta: Float,
-    ) {
+    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         updateLevel(this.level)
         updateMessage()
         super.renderWidget(context, mouseX, mouseY, delta)
@@ -51,18 +46,16 @@ class LevelSliderWidget(
 
     fun updateLevel(level: Int) {
         this.level = level
-        this.value =
-            level
-                .toDouble()
-                .minus(this.minLevel)
-                .div(maxLevel.minus(minLevel))
+        this.value = level
+            .toDouble()
+            .minus(this.minLevel)
+            .div(maxLevel.minus(minLevel))
     }
 
-    private fun fromSliderValue(): Int =
-        (value - 0.0)
-            .times(maxLevel - minLevel)
-            .div(1.0 - 0.0)
-            .plus(minLevel)
-            .floor()
-            .toInt()
+    private fun fromSliderValue(): Int = (value - 0.0)
+        .times(maxLevel - minLevel)
+        .div(1.0 - 0.0)
+        .plus(minLevel)
+        .floor()
+        .toInt()
 }
