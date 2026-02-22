@@ -29,6 +29,7 @@ fun tl(prefix: String, key: RL, vararg args: Any?): MC = translatable(key.toLang
 fun tlr(key: String, vararg args: Any?): MC = translatable(key, *args)
 
 fun tlk(key: String): String = RL.parse(key).toLanguageKey()
+fun tlk(key: ResourceLocation): String = key.toLanguageKey()
 
 fun tlk(prefix: String, key: String): String = RL.parse(key).toLanguageKey(prefix)
 fun tlk(prefix: String, key: RL): String = key.toLanguageKey(prefix)

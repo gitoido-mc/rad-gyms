@@ -7,6 +7,7 @@
 
 package lol.gito.radgyms.fabric.datagen.provider
 
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.helper.tlk
 import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
 import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_EXIT
@@ -14,9 +15,6 @@ import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_COMMON
 import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_EPIC
 import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_RARE
 import lol.gito.radgyms.common.registry.RadGymsBlocks.SHARD_BLOCK_UNCOMMON
-import lol.gito.radgyms.common.registry.RadGymsItemGroups.CACHES_GROUP
-import lol.gito.radgyms.common.registry.RadGymsItemGroups.GENERAL_GROUP
-import lol.gito.radgyms.common.registry.RadGymsItemGroups.KEYS_GROUP
 import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_COMMON
 import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_EPIC
 import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_RARE
@@ -69,44 +67,44 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         SHARD_UNCOMMON.descriptionId to "Uncommon cache shard",
         SHARD_RARE.descriptionId to "Rare cache shard",
         SHARD_EPIC.descriptionId to "Epic cache shard",
-        tlk("item.component.type.chaos") to "Chaos",
-        tlk("item.component.gym_type") to "Attuned to %s",
-        tlk("item.component.shiny_boost") to "Shiny chance boosted x%s time(s)",
-        tlk("item", "gym_reward") to "Level %s %s gym reward cache",
+        tlk(modId("item.component.type.chaos")) to "Chaos",
+        tlk(modId("item.component.gym_type")) to "Attuned to %s",
+        tlk(modId("item.component.shiny_boost")) to "Shiny chance boosted x%s time(s)",
+        tlk("item", modId("gym_reward")) to "Level %s %s gym reward cache",
     )
 
     private fun infoTranslations(): Map<String, String> = mapOf(
-        tlk("message.info.gym_entrance_breaking") to
+        tlk(modId("message.info.gym_entrance_breaking")) to
             "Gym entrances do not drop when broken."
                 .plus(" If you break it, all players will lose access to this entrance"),
-        tlk("message.info.gym_entrance_exhausted") to
+        tlk(modId("message.info.gym_entrance_exhausted")) to
             "This gym entrance lost all his energies, look for another one",
-        tlk("message.info.gym_entrance_party_empty") to
+        tlk(modId("message.info.gym_entrance_party_empty")) to
             "Your Pokemon party is not enough. Bring at least 3 Pokemon",
-        tlk("message.info.gym_entrance_party_fainted") to "Your pokemon party requires healing",
-        tlk("message.info.trainer_required") to "Go fight %s before challenging me.",
-        tlk("message.info.trainer_defeated") to "You won! Go challenge next trainer.",
-        tlk("message.info.leader_defeated") to "Congratulations on beating the gym!",
-        tlk("message.info.gym_failed") to "Mysterious forces are teleporting you away from the trial",
-        tlk("message.info.gym_init") to "Mysterious forces are teleporting you to %s trial",
-        tlk("message.info.gym_complete") to "An exit appeared somewhere in gym",
-        tlk("message.info.command.config_reloaded") to "Rad Gyms config reloaded!",
-        tlk("message.info.command.op_kick") to "Mysterious forces are forcibly extracting you out from trial",
-        tlk("message.info.command.debug_reward") to
+        tlk(modId("message.info.gym_entrance_party_fainted")) to "Your pokemon party requires healing",
+        tlk(modId("message.info.trainer_required")) to "Go fight %s before challenging me.",
+        tlk(modId("message.info.trainer_defeated")) to "You won! Go challenge next trainer.",
+        tlk(modId("message.info.leader_defeated")) to "Congratulations on beating the gym!",
+        tlk(modId("message.info.gym_failed")) to "Mysterious forces are teleporting you away from the trial",
+        tlk(modId("message.info.gym_init")) to "Mysterious forces are teleporting you to %s trial",
+        tlk(modId("message.info.gym_complete")) to "An exit appeared somewhere in gym",
+        tlk(modId("message.info.command.config_reloaded")) to "Rad Gyms config reloaded!",
+        tlk(modId("message.info.command.op_kick")) to "Mysterious forces are forcibly extracting you out from trial",
+        tlk(modId("message.info.command.debug_reward")) to
             "Generated rewards for gym template %s with poke typing %s with level %s",
-        tlk("message.info.poke_cache.shiny") to "SHINY ",
-        tlk("message.info.poke_cache.reward") to "You got %s %s from cache!",
+        tlk(modId("message.info.poke_cache.shiny")) to "SHINY ",
+        tlk(modId("message.info.poke_cache.reward")) to "You got %s %s from cache!",
     )
 
     private fun errorTranslations(): Map<String, String> = mapOf(
-        tlk("message.error.common.no-response") to "Cannot acquire server response, try again",
-        tlk("message.error.key.not-in-main-hand") to "Gym key must be in your main hand",
-        tlk("message.error.gym_entrance.not-sneaking") to "You need to sneak to break gym entrance",
-        tlk("message.error.command.op_kick") to "Cannot kick player %s from gym",
-        tlk("message.error.command.kick.wrong_dim") to "Target is not in the gym dimension",
-        tlk("message.error.command.kick.no_player") to "There is no such player currently online",
-        tlk("message.error.command.debug_reward.no_template") to "Cannot find template provided",
-        tlk("message.error.command.debug_reward.no_player") to "Command was not executed by player",
+        tlk(modId("message.error.common.no-response")) to "Cannot acquire server response, try again",
+        tlk(modId("message.error.key.not-in-main-hand")) to "Gym key must be in your main hand",
+        tlk(modId("message.error.gym_entrance.not-sneaking")) to "You need to sneak to break gym entrance",
+        tlk(modId("message.error.command.op_kick")) to "Cannot kick player %s from gym",
+        tlk(modId("message.error.command.kick.wrong_dim")) to "Target is not in the gym dimension",
+        tlk(modId("message.error.command.kick.no_player")) to "There is no such player currently online",
+        tlk(modId("message.error.command.debug_reward.no_template")) to "Cannot find template provided",
+        tlk(modId("message.error.command.debug_reward.no_player")) to "Command was not executed by player",
     )
 
     private fun objectTranslations(): Map<String, String> = mapOf(
@@ -119,27 +117,27 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         SHARD_BLOCK_UNCOMMON.descriptionId to "Uncommon shard block",
         SHARD_BLOCK_RARE.descriptionId to "Rare shard block",
         SHARD_BLOCK_EPIC.descriptionId to "Epic shard block",
-        tlk("npc.trainer_junior") to "Junior gym trainer",
-        tlk("npc.trainer_senior") to "Senior gym trainer",
-        tlk("npc.leader") to "Gym Leader",
+        tlk(modId("npc.trainer_junior")) to "Junior gym trainer",
+        tlk(modId("npc.trainer_senior")) to "Senior gym trainer",
+        tlk(modId("npc.leader")) to "Gym Leader",
     )
 
     private fun guiTranslations(): Map<String, String> = mapOf(
-        GENERAL_GROUP!!.displayName.string to "Rad Gyms: General",
-        KEYS_GROUP!!.displayName.string to "Rad Gyms: Keys",
-        CACHES_GROUP!!.displayName.string to "Rad Gyms: Pokémon caches",
-        tlk("gui.common.set-gym-level") to "Select desirable %s gym level",
-        tlk("gui.common.set-gym-level-entry") to "Select desirable %s gym level (Uses left: %s)",
-        tlk("gui.common.leave-gym") to "You want to leave?",
-        tlk("gui.common.leave-gym-reward") to "Rewards will be lost if leader is not defeated.",
-        tlk("gui.common.leave") to "Leave Gym",
-        tlk("gui.common.uses_left") to "Entrance uses left: %s",
-        tlk("biome", "gym_biome") to "Gym Trials",
-        tlk("label.rarity.${Rarity.COMMON.name.lowercase()}") to "Common",
-        tlk("label.rarity.${Rarity.UNCOMMON.name.lowercase()}") to "Uncommon",
-        tlk("label.rarity.${Rarity.RARE.name.lowercase()}") to "Rare",
-        tlk("label.rarity.${Rarity.EPIC.name.lowercase()}") to "Epic",
-        tlk("label.rarity.${Rarity.EPIC.name.lowercase()}") to "Epic",
+        tlk("itemGroup", modId("general")) to "Rad Gyms: General",
+        tlk("itemGroup", modId("keys")) to "Rad Gyms: Keys",
+        tlk("itemGroup", modId("caches")) to "Rad Gyms: Pokémon caches",
+        tlk("biome", modId("gym_biome")) to "Gym Trials",
+        tlk(modId("label.rarity.${Rarity.COMMON.name.lowercase()}")) to "Common",
+        tlk(modId("label.rarity.${Rarity.UNCOMMON.name.lowercase()}")) to "Uncommon",
+        tlk(modId("label.rarity.${Rarity.RARE.name.lowercase()}")) to "Rare",
+        tlk(modId("label.rarity.${Rarity.EPIC.name.lowercase()}")) to "Epic",
+        tlk(modId("label.rarity.${Rarity.EPIC.name.lowercase()}")) to "Epic",
+        tlk(modId("gui.common.set-gym-level")) to "Select desirable %s gym level",
+        tlk(modId("gui.common.set-gym-level-entry")) to "Select desirable %s gym level (Uses left: %s)",
+        tlk(modId("gui.common.leave-gym")) to "You want to leave?",
+        tlk(modId("gui.common.leave-gym-reward")) to "Rewards will be lost if leader is not defeated.",
+        tlk(modId("gui.common.leave")) to "Leave Gym",
+        tlk(modId("gui.common.uses_left")) to "Entrance uses left: %s",
     )
 
     private fun statTranslations(): Map<String, String> = mapOf(
@@ -150,7 +148,6 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         tlk("stat", ENTRANCES_USED.resourceLocation) to "Gym entrances used",
         tlk("stat", ROPES_USED.resourceLocation) to "Gym escape ropes used",
         tlk("stat", CACHES_OPENED.resourceLocation) to "Poke caches opened",
-        tlk("biome", "gym_biome") to "Gym Trials",
     )
 
     override fun generateTranslations(wrapperLookup: HolderLookup.Provider, translationBuilder: TranslationBuilder) {
