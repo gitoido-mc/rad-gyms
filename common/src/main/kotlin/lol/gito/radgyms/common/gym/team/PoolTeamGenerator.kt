@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.gym.team
 
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -15,52 +14,40 @@ import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.level.ServerPlayer
 
 object PoolTeamGenerator : GenericTeamGenerator() {
-    fun generateTeam(
-        player: ServerPlayer?,
-        trainer: Trainer,
-        level: Int,
-    ): MutableList<PokemonModel> {
-        val initialAmount =
-            trainer
-                .possibleFormats
-                .maxOfOrNull {
-                    it.format.cobblemonBattleFormat.battleType.slotsPerActor
-                } ?: 1
+    fun generateTeam(player: ServerPlayer?, trainer: Trainer, level: Int): MutableList<PokemonModel> {
+        val initialAmount = trainer
+            .possibleFormats
+            .maxOfOrNull {
+                it.format.cobblemonBattleFormat.battleType.slotsPerActor
+            } ?: 1
 
-        val amount =
-            trainer
-                .countPerLevelThreshold
-                .filter { it.untilLevel >= level }
-                .minByOrNull { it.untilLevel }
-                ?.amount ?: initialAmount
+        val amount = trainer
+            .countPerLevelThreshold
+            .filter { it.untilLevel >= level }
+            .minByOrNull { it.untilLevel }
+            ?.amount ?: initialAmount
 
-        val rawTeam =
-            trainer.team!!
-                .shuffled()
-                .take(amount)
-                .map { assembleProperties(level, it) }
-                .apply { this.forEach { it.updateAspects() } }
-                .toMutableList()
+        val rawTeam = trainer.team!!
+            .shuffled()
+            .take(amount)
+            .map { assembleProperties(level, it) }
+            .apply { this.forEach { it.updateAspects() } }
+            .toMutableList()
 
-        val possibleTypes =
-            rawTeam
-                .map { ElementalTypes.get(it.type!!)!! }
-                .toMutableSet()
+        @Suppress("DuplicatedCode")
+        val team = mutableListOf<PokemonModel>()
 
-        val event =
+        GENERATE_TEAM.post(
             GymEvents.GenerateTeamEvent(
                 player,
-                possibleTypes.toList(),
+                possibleTypes(rawTeam).toList(),
                 level,
                 trainer.id,
                 trainer.leader,
                 rawTeam,
                 trainer.possibleFormats.toMutableList(),
-            )
-
-        val team = mutableListOf<PokemonModel>()
-
-        GENERATE_TEAM.post(event) { generated ->
+            ),
+        ) { generated ->
             generated.team.forEach { props ->
                 team.add(createPokemonModel(props))
             }

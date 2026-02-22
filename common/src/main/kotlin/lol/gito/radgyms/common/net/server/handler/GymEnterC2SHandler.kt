@@ -22,11 +22,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
 object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
-    override fun handle(
-        packet: GymEnterC2S,
-        server: MinecraftServer,
-        player: ServerPlayer,
-    ) {
+    override fun handle(packet: GymEnterC2S, server: MinecraftServer, player: ServerPlayer) {
         RadGyms.debug("Using key? : ${packet.key}")
         var message = tl("message.info.gym_init", ElementalTypeTranslationHelper.buildTypeText(packet.type))
 

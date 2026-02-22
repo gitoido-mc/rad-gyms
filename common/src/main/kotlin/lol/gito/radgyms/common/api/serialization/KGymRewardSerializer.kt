@@ -17,16 +17,12 @@ import lol.gito.radgyms.common.api.enumeration.GymReward
 
 @Suppress("Unused")
 object KGymRewardSerializer : KSerializer<GymReward> {
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor(
-            "lol.gito.radgyms.common.api.enumeration.GymReward",
-            PrimitiveKind.STRING,
-        )
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
+        "lol.gito.radgyms.common.api.enumeration.GymReward",
+        PrimitiveKind.STRING,
+    )
 
-    override fun serialize(
-        encoder: Encoder,
-        value: GymReward,
-    ) = encoder.encodeString(value.name)
+    override fun serialize(encoder: Encoder, value: GymReward) = encoder.encodeString(value.name)
 
     override fun deserialize(decoder: Decoder): GymReward = GymReward.valueOf(decoder.decodeString())
 }

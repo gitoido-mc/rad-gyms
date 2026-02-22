@@ -62,7 +62,7 @@ repositories {
     mavenCentral()
     maven("https://maven.architectury.dev/")
     maven("https://maven.wispforest.io/releases/")
-    maven("https://maven.impactdev.net/repository/development/")
+    maven("https://maven.internal.gito.lol/")
     maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
     maven("https://maven.blamejared.com/")
     maven {
@@ -99,7 +99,6 @@ dependencies {
     kover(project(":fabric"))
     kover(project(":neoforge"))
 }
-
 modProjects.forEach {
     project(it) {
         apply(plugin = "java")
@@ -120,7 +119,11 @@ modProjects.forEach {
             mavenCentral()
             maven("https://maven.architectury.dev/")
             maven("https://maven.wispforest.io/releases/")
-            maven("https://maven.impactdev.net/repository/development/")
+            if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
+                maven("https://maven.internal.gito.lol/releases/")
+            } else {
+                maven("https://maven.internal.gito.lol/snapshots/")
+            }
             maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
             maven("https://maven.blamejared.com/")
             maven {

@@ -22,16 +22,13 @@ fun CompoundTag.getRadGymsBattleRules(key: String): BattleRules {
         .build()
 }
 
-fun CompoundTag.putRadGymsBattleRules(
-    key: String,
-    value: BattleRules,
-) {
+fun CompoundTag.putRadGymsBattleRules(key: String, value: BattleRules) {
     val nbt = CompoundTag()
 
     nbt.putInt("MaxItemUses", value.maxItemUses)
-    nbt.putBoolean("HealPlayers", value.healPlayers)
-    nbt.putBoolean("AdjustPlayerLevels", value.adjustPlayerLevels)
-    nbt.putBoolean("AdjustNpcLevels", value.adjustNPCLevels)
+    if (value.healPlayers) nbt.putBoolean("HealPlayers", value.healPlayers)
+    if (value.adjustPlayerLevels) nbt.putBoolean("AdjustPlayerLevels", value.adjustPlayerLevels)
+    if (value.adjustNPCLevels) nbt.putBoolean("AdjustNpcLevels", value.adjustNPCLevels)
 
     this.put(key, nbt)
 }

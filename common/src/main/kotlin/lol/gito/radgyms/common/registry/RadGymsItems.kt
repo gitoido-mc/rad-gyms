@@ -9,7 +9,17 @@ package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.item.*
+import lol.gito.radgyms.common.item.CommonPokeCache
+import lol.gito.radgyms.common.item.CommonPokeShard
+import lol.gito.radgyms.common.item.EpicPokeCache
+import lol.gito.radgyms.common.item.EpicPokeShard
+import lol.gito.radgyms.common.item.ExitRope
+import lol.gito.radgyms.common.item.GymKey
+import lol.gito.radgyms.common.item.GymRewardBag
+import lol.gito.radgyms.common.item.RarePokeCache
+import lol.gito.radgyms.common.item.RarePokeShard
+import lol.gito.radgyms.common.item.UncommonPokeCache
+import lol.gito.radgyms.common.item.UncommonPokeShard
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -75,9 +85,6 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     @JvmField
     val SHARD_BLOCK_EPIC = blockItem(modId("shard_block_epic"), RadGymsBlocks.SHARD_BLOCK_EPIC)
 
-    private fun blockItem(
-        name: ResourceLocation,
-        block: Block,
-        rarity: Rarity = Rarity.COMMON,
-    ): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
+    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem =
+        this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 }

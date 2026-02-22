@@ -17,16 +17,12 @@ import net.minecraft.world.item.Rarity
 
 @Suppress("Unused")
 object KRaritySerializer : KSerializer<Rarity> {
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor(
-            "net.minecraft.world.item.Rarity",
-            PrimitiveKind.STRING,
-        )
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
+        "net.minecraft.world.item.Rarity",
+        PrimitiveKind.STRING,
+    )
 
-    override fun serialize(
-        encoder: Encoder,
-        value: Rarity,
-    ) = encoder.encodeString(value.serializedName)
+    override fun serialize(encoder: Encoder, value: Rarity) = encoder.encodeString(value.serializedName)
 
     override fun deserialize(decoder: Decoder): Rarity = Rarity.valueOf(decoder.decodeString().uppercase())
 }

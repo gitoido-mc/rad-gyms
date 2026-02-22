@@ -26,15 +26,14 @@ class ServerSettingsS2C(
     companion object {
         val ID = modId("net.server_settings")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) =
-            ServerSettingsS2C(
-                ByteBufCodecs.INT.decode(buffer),
-                ByteBufCodecs.BOOL.decode(buffer),
-                ByteBufCodecs.INT.decode(buffer),
-                ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).decode(buffer),
-                ByteBufCodecs.INT.decode(buffer),
-                ByteBufCodecs.INT.decode(buffer),
-            )
+        fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsS2C(
+            ByteBufCodecs.INT.decode(buffer),
+            ByteBufCodecs.BOOL.decode(buffer),
+            ByteBufCodecs.INT.decode(buffer),
+            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).decode(buffer),
+            ByteBufCodecs.INT.decode(buffer),
+            ByteBufCodecs.INT.decode(buffer),
+        )
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {

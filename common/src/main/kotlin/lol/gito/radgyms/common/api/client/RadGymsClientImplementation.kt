@@ -17,18 +17,12 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 
 interface RadGymsClientImplementation {
-    fun registerBlockRenderType(
-        layer: RenderType,
-        vararg blocks: Block,
-    )
+    fun registerBlockRenderType(layer: RenderType, vararg blocks: Block)
+
+    fun <T : Entity> registerEntityRenderer(type: EntityType<out T>, factory: EntityRendererProvider<T>)
 
     fun <T : BlockEntity> registerBlockEntityRenderer(
         type: BlockEntityType<out T>,
         factory: BlockEntityRendererProvider<T>,
-    )
-
-    fun <T : Entity> registerEntityRenderer(
-        type: EntityType<out T>,
-        factory: EntityRendererProvider<T>,
     )
 }

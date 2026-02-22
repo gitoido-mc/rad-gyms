@@ -40,9 +40,8 @@ class GymRewardBag :
             this.playDropContentsSound(player)
             player.awardStat(Stats.ITEM_USED.get(this))
             return InteractionResultHolder.sidedSuccess<ItemStack>(itemStack, level.isClientSide())
-        } else {
-            return InteractionResultHolder.fail<ItemStack>(itemStack)
         }
+        return InteractionResultHolder.fail<ItemStack>(itemStack)
     }
 
     override fun overrideOtherStackedOnMe(
@@ -63,28 +62,21 @@ class GymRewardBag :
 
     override fun isBarVisible(itemStack: ItemStack): Boolean = false
 
-    private fun dropContents(
-        stack: ItemStack,
-        player: Player,
-    ): Boolean {
+    private fun dropContents(stack: ItemStack, player: Player): Boolean {
         val bundleContents = stack.get<BundleContents>(DataComponents.BUNDLE_CONTENTS)
         if (bundleContents != null && !bundleContents.isEmpty) {
             if (player is ServerPlayer) {
                 bundleContents.itemsCopy().forEach { player.drop(it, true) }
                 stack.shrink(1)
             }
-
             return true
-        } else {
-            return false
         }
+        return false
     }
 
-    private fun playDropContentsSound(entity: Entity) {
-        entity.playSound(
-            SoundEvents.BUNDLE_DROP_CONTENTS,
-            DROP_SOUND_VOLUME,
-            DROP_SOUND_VOLUME + entity.level().getRandom().nextFloat() * DROP_SOUND_PITCH,
-        )
-    }
+    private fun playDropContentsSound(entity: Entity) = entity.playSound(
+        SoundEvents.BUNDLE_DROP_CONTENTS,
+        DROP_SOUND_VOLUME,
+        DROP_SOUND_VOLUME + entity.level().getRandom().nextFloat() * DROP_SOUND_PITCH,
+    )
 }

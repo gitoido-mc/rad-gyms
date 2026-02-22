@@ -4,6 +4,7 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
+@file:Suppress("MaxLineLength")
 
 plugins {
     id("dev.architectury.loom")
@@ -58,8 +59,14 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
     modImplementation("dev.architectury:architectury-fabric:${property("architectury_api_version")}")
-    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") {
-        isTransitive = false
+    if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
+        modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") {
+            isTransitive = false
+        }
+    } else {
+        modImplementation("com.cobblemon:fabric:${property("cobblemon_snapshot_version")}+${property("minecraft_version")}-SNAPSHOT") {
+            isTransitive = false
+        }
     }
 
     // Common code

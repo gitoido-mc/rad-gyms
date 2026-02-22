@@ -1,23 +1,11 @@
 style:
-  WildcardImport:
-    active: false
   ReturnCount:
-    max: 3
     excludeGuardClauses: true
 complexity:
   TooManyFunctions:
     active: false
-  LongMethod:
-    allowedLines: 100
 ktlint:
-  autoCorrect: true
   BlankLineBetweenWhenConditions:
     active: false
-  NoWildcardImports:
-    active: false
-  FunctionSignature:
-    active: false
   LongMethod:
-    active: false
-  ClassSignature:
     active: false

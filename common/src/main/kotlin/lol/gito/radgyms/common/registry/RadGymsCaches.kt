@@ -32,10 +32,8 @@ object RadGymsCaches : JsonDataRegistry<CacheDTO> {
 
     @OptIn(ExperimentalSerializationApi::class)
     @Throws(ExecutionException::class)
-    override fun parse(
-        stream: InputStream,
-        identifier: ResourceLocation,
-    ): CacheDTO = Json.decodeFromStream<CacheDTO>(stream)
+    override fun parse(stream: InputStream, identifier: ResourceLocation): CacheDTO =
+        Json.decodeFromStream<CacheDTO>(stream)
 
     override fun reload(data: Map<ResourceLocation, CacheDTO>) {
         caches.clear()

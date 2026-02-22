@@ -25,6 +25,9 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionResultHolder.fail
+import net.minecraft.world.InteractionResultHolder.sidedSuccess
+import net.minecraft.world.InteractionResultHolder.success
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items.LAPIS_BLOCK
@@ -35,54 +38,24 @@ import net.minecraft.world.level.Level
 
 const val RG_CACHE_BLOCK_BOOST = 9
 
-open class PokeCache(
-    private val rarity: Rarity,
-) : CobblemonItem(Properties().rarity(rarity)) {
-    override fun use(
-        level: Level,
-        user: Player,
-        hand: InteractionHand,
-    ): InteractionResultHolder<ItemStack> {
-        if (level.isClientSide) return InteractionResultHolder.sidedSuccess(user.getItemInHand(hand), true)
-        if (hand != InteractionHand.MAIN_HAND) return InteractionResultHolder.fail(user.getItemInHand(hand))
-
-        val stack = user.getItemInHand(hand)
-        val offhand = user.offhandItem
-        var boost = stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)
-        val type =
-            when (stack.getOrDefault(RG_GYM_TYPE_COMPONENT, ElementalTypes.all().random().showdownId)) {
-                "chaos" -> ElementalTypes.all().random().showdownId
-                else -> stack.getOrDefault(RG_GYM_TYPE_COMPONENT, ElementalTypes.all().random().showdownId)
-            }
-        if (offhand.item == LAPIS_LAZULI && boost < Cobblemon.config.shinyRate) {
-            boost = boost.plus(config.lapisBoostAmount!!)
-            stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, boost)
-        }
-        if (offhand.item == LAPIS_BLOCK && boost < Cobblemon.config.shinyRate) {
-            boost =
-                when (boost.plus(RG_CACHE_BLOCK_BOOST) > Cobblemon.config.shinyRate) {
-                    true -> Cobblemon.config.shinyRate.toInt()
-                    false ->
-                        boost
-                            .plus(RG_CACHE_BLOCK_BOOST * config.lapisBoostAmount!!)
-                            .coerceAtMost(Cobblemon.config.shinyRate.toInt() - 1)
+open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().rarity(rarity)) {
+    override fun use(level: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> = when {
+        level.isClientSide -> sidedSuccess(user.getItemInHand(hand), true)
+        (hand != InteractionHand.MAIN_HAND) -> fail(user.getItemInHand(hand))
+        (user.offhandItem.item in listOf(LAPIS_LAZULI, LAPIS_BLOCK)) -> sidedSuccess(user.getItemInHand(hand), true)
+        else -> {
+            val stack = user.getItemInHand(hand)
+            val rarity = stack.getOrDefault(RARITY, Rarity.COMMON)
+            val boost = calculateCacheBoost(stack, user.offhandItem, user)
+            val type =
+                when (stack.getOrDefault(RG_GYM_TYPE_COMPONENT, ElementalTypes.all().random().showdownId)) {
+                    "chaos" -> ElementalTypes.all().random().showdownId
+                    else -> stack.getOrDefault(RG_GYM_TYPE_COMPONENT, ElementalTypes.all().random().showdownId)
                 }
-            stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, boost)
-        }
+            val poke: Pokemon = CacheHandler.getPoke(type, rarity, user as ServerPlayer, boost)
+            CACHE_ROLL_POKE.emit(GymEvents.CacheRollPokeEvent(user, poke, type, rarity, boost))
 
-        when (offhand.item) {
-            LAPIS_LAZULI, LAPIS_BLOCK -> {
-                offhand.consume(1, user)
-                return InteractionResultHolder.sidedSuccess(user.getItemInHand(hand), true)
-            }
-
-            else -> {
-                val rarity = stack.getOrDefault(RARITY, Rarity.COMMON)
-                val poke: Pokemon = CacheHandler.getPoke(type, rarity, user as ServerPlayer, boost)
-                CACHE_ROLL_POKE.emit(GymEvents.CacheRollPokeEvent(user, poke, type, rarity, boost))
-
-                return InteractionResultHolder.success(user.getItemInHand(hand))
-            }
+            success(user.getItemInHand(hand))
         }
     }
 
@@ -91,30 +64,49 @@ open class PokeCache(
         context: TooltipContext,
         tooltip: MutableList<Component>,
         type: TooltipFlag,
-    ) {
-        val shinyBoost = stack.get(RG_CACHE_SHINY_BOOST_COMPONENT)
-        val cacheType = stack.get(RG_GYM_TYPE_COMPONENT)
-        if (shinyBoost != null && shinyBoost > 0) {
-            val tooltipText =
-                tl(
-                    "item.component.shiny_boost",
-                    "1/${(Cobblemon.config.shinyRate.toInt() - shinyBoost).coerceAtLeast(1)}",
-                )
+    ) = with(stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)) {
+        if (this > 0) {
+            val tooltipText = tl(
+                "item.component.shiny_boost",
+                "1/${(Cobblemon.config.shinyRate.toInt() - this).coerceAtLeast(1)}",
+            )
 
             tooltip.add(tooltipText.withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD))
         }
 
-        val tooltipText: Component = buildPrefixedSuffixedTypeText(cacheType)
+        val tooltipText: Component = buildPrefixedSuffixedTypeText(stack.get(RG_GYM_TYPE_COMPONENT))
         tooltip.add(tooltipText)
+
+        return@with
     }
 
-    override fun getDefaultInstance(): ItemStack =
-        super.defaultInstance.also { stack ->
-            stack.set(RARITY, this.rarity)
-            stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, 0)
-        }
+    override fun getDefaultInstance(): ItemStack = super.defaultInstance.also { stack ->
+        stack.set(RARITY, this.rarity)
+        stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, 0)
+    }
 
     override fun isFoil(stack: ItemStack): Boolean = stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0) > 0
+
+    private fun calculateCacheBoost(stack: ItemStack, offhand: ItemStack, user: Player): Int =
+        with(stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)) {
+            if (equals(Cobblemon.config.shinyRate)) return@with this
+
+            return@with when (offhand.item) {
+                LAPIS_LAZULI -> this.plus(config.lapisBoostAmount!!).also {
+                    stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, it)
+                    offhand.consume(1, user)
+                }
+
+                LAPIS_BLOCK -> this.plus(RG_CACHE_BLOCK_BOOST * config.lapisBoostAmount!!)
+                    .coerceAtMost(Cobblemon.config.shinyRate.toInt().dec())
+                    .also {
+                        stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, it)
+                        offhand.consume(1, user)
+                    }
+
+                else -> this
+            }
+        }
 }
 
 class CommonPokeCache : PokeCache(Rarity.COMMON)

@@ -19,11 +19,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
 object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
-    override fun handle(
-        packet: GymLeaveC2S,
-        server: MinecraftServer,
-        player: ServerPlayer,
-    ) {
+    override fun handle(packet: GymLeaveC2S, server: MinecraftServer, player: ServerPlayer) {
         val stack = player.mainHandItem
         val gym = RadGymsState.getGymForPlayer(player)
 

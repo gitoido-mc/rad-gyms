@@ -29,10 +29,7 @@ object GymTeardownService {
         return this
     }
 
-    fun destructGym(
-        serverPlayer: ServerPlayer,
-        removeCoords: Boolean = true,
-    ) {
+    fun destructGym(serverPlayer: ServerPlayer, removeCoords: Boolean = true) {
         if (!RadGymsState.hasGymForPlayer(serverPlayer)) return
         if (removeCoords) RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
 
@@ -85,16 +82,12 @@ object GymTeardownService {
         teleportScheduler!!.scheduleReturnWithCountdown(serverPlayer, preloadDim, preloadPos)
     }
 
-    fun spawnExitBlock(
-        server: MinecraftServer,
-        gym: Gym,
-    ) {
-        val pos =
-            BlockPos(
-                (gym.coords.x + gym.template.relativeExitBlockSpawn.x).toInt(),
-                (gym.coords.y + gym.template.relativeExitBlockSpawn.y).toInt(),
-                (gym.coords.z + gym.template.relativeExitBlockSpawn.z).toInt(),
-            )
+    fun spawnExitBlock(server: MinecraftServer, gym: Gym) {
+        val pos = BlockPos(
+            (gym.coords.x + gym.template.relativeExitBlockSpawn.x).toInt(),
+            (gym.coords.y + gym.template.relativeExitBlockSpawn.y).toInt(),
+            (gym.coords.z + gym.template.relativeExitBlockSpawn.z).toInt(),
+        )
 
         debug("Derived exit block: $pos")
         server.getLevel(RadGymsDimensions.GYM_DIMENSION)?.setBlockAndUpdate(

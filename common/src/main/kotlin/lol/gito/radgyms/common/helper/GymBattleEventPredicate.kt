@@ -22,18 +22,14 @@ fun TrainerCheckerPredicate(actor: BattleActor): Boolean {
     return true
 }
 
-fun hasGymTrainers(event: BattleFledEvent): Boolean =
-    event.battle.actors
-        .any(::TrainerCheckerPredicate)
+fun hasGymTrainers(event: BattleFledEvent): Boolean = event.battle.actors
+    .any(::TrainerCheckerPredicate)
 
-fun hasGymTrainers(event: BattleFaintedEvent): Boolean =
-    event.battle.actors
-        .any(::TrainerCheckerPredicate)
+fun hasGymTrainers(event: BattleFaintedEvent): Boolean = event.battle.actors
+    .any(::TrainerCheckerPredicate)
 
-fun hasGymTrainers(event: BattleVictoryEvent): Boolean =
-    event.battle.actors
-        .any(::TrainerCheckerPredicate)
+fun hasGymTrainers(event: BattleVictoryEvent): Boolean = event.battle.actors
+    .any(::TrainerCheckerPredicate)
 
-fun hasGymTrainers(event: BattleStartedEvent.Pre): Boolean =
-    event.battle.actors
-        .any(::TrainerCheckerPredicate)
+fun hasGymTrainers(event: BattleStartedEvent.Pre): Boolean = event.battle.actors
+    .any(::TrainerCheckerPredicate)

@@ -16,10 +16,8 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.Block
 import java.util.concurrent.CompletableFuture
 
-class BlockTagDataProvider(
-    output: FabricDataOutput,
-    registriesFuture: CompletableFuture<HolderLookup.Provider>,
-) : FabricTagProvider<Block>(output, Registries.BLOCK, registriesFuture) {
+class BlockTagDataProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>) :
+    FabricTagProvider<Block>(output, Registries.BLOCK, registriesFuture) {
     override fun addTags(wrapper: HolderLookup.Provider) {
         this
             .getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)

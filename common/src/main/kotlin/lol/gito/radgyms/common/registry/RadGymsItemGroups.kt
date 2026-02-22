@@ -137,12 +137,7 @@ object RadGymsItemGroups {
         }
     }
 
-    fun inject(
-        tabKey: ResourceKey<CreativeModeTab>,
-        injector: Injector,
-    ) {
-        INJECTORS[tabKey]?.invoke(injector)
-    }
+    fun inject(tabKey: ResourceKey<CreativeModeTab>, injector: Injector) = INJECTORS[tabKey]?.invoke(injector)
 
     @Suppress("unused")
     fun injectorKeys(): Collection<ResourceKey<CreativeModeTab>> = this.INJECTORS.keys
@@ -191,10 +186,7 @@ object RadGymsItemGroups {
          * @param item The [ItemLike] being added before [target].
          * @param target The [ItemLike] being targeted.
          */
-        fun putBefore(
-            item: ItemLike,
-            target: ItemLike,
-        )
+        fun putBefore(item: ItemLike, target: ItemLike)
 
         /**
          * Places the given [item] after the [target].
@@ -203,10 +195,7 @@ object RadGymsItemGroups {
          * @param item The [ItemLike] being added after [target].
          * @param target The [ItemLike] being targeted.
          */
-        fun putAfter(
-            item: ItemLike,
-            target: ItemLike,
-        )
+        fun putAfter(item: ItemLike, target: ItemLike)
 
         /**
          * Places the given [item] at the end of a creative tab.

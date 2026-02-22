@@ -33,10 +33,7 @@ private fun PokemonProperties.matchesSimplified(other: SpeciesWithForm): Boolean
     return this.species == other.species.resourceIdentifier.path
 }
 
-private fun mapToSpeciesWithForms(
-    list: List<Species>,
-    type: ElementalType? = null,
-): SpeciesWithForms {
+private fun mapToSpeciesWithForms(list: List<Species>, type: ElementalType? = null): SpeciesWithForms {
     val ignored = config.ignoredSpecies?.map { PokemonProperties.parse(it) } ?: emptyList()
 
     val filtered =
@@ -82,10 +79,7 @@ object RadGymsSpeciesRegistry {
     var speciesByType: HashMap<String, SpeciesWithForms> = HashMap(ElementalTypes.count())
     var speciesByRarity: Map<String, CacheDTO> = mutableMapOf()
 
-    fun speciesOfType(
-        species: List<Species>,
-        elementalType: ElementalType,
-    ): SpeciesWithForms {
+    fun speciesOfType(species: List<Species>, elementalType: ElementalType): SpeciesWithForms {
         val filtered = mapToSpeciesWithForms(species, elementalType)
 
         when (filtered.isNotEmpty()) {

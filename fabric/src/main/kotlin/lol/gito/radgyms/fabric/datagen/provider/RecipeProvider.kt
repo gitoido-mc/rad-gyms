@@ -80,7 +80,14 @@ import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.Items.*
+import net.minecraft.world.item.Items.AIR
+import net.minecraft.world.item.Items.CRAFTING_TABLE
+import net.minecraft.world.item.Items.DIAMOND
+import net.minecraft.world.item.Items.ECHO_SHARD
+import net.minecraft.world.item.Items.GOLD_INGOT
+import net.minecraft.world.item.Items.IRON_INGOT
+import net.minecraft.world.item.Items.LEAD
+import net.minecraft.world.item.Items.NETHERITE_INGOT
 import net.minecraft.world.item.Rarity
 import oshi.util.tuples.Quartet
 import java.util.concurrent.CompletableFuture

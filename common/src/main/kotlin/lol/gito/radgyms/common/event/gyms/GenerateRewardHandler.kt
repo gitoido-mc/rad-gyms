@@ -38,9 +38,7 @@ import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 
-class GenerateRewardHandler(
-    val event: GymEvents.GenerateRewardEvent,
-) {
+class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
     init {
         debug(
             "Settling level %d %s type rewards for player %s after beating leader".format(
@@ -50,18 +48,17 @@ class GenerateRewardHandler(
             ),
         )
 
-        val currentLevelRewards =
-            event.template
-                .rewards
-                .filter {
-                    event.level in it.minLevel..it.maxLevel
-                }
+        val currentLevelRewards = event.template
+            .rewards
+            .filter {
+                event.level in it.minLevel..it.maxLevel
+            }
 
         event.player.server.sendSystemMessage(Component.literal("say test"))
 
+        handleCommandRewards(currentLevelRewards.filterIsInstance<CommandReward>())
         handleLootRewards(currentLevelRewards.filterIsInstance<LootTableReward>())
         handlePokemonRewards(currentLevelRewards.filterIsInstance<PokemonReward>())
-        handleCommandRewards(currentLevelRewards.filterIsInstance<CommandReward>())
         handleAdvancementRewards(currentLevelRewards.filterIsInstance<AdvancementReward>())
     }
 
@@ -69,11 +66,10 @@ class GenerateRewardHandler(
         val advancements = event.player.server.advancements.allAdvancements
 
         rewards.forEach { reward ->
-            val advancement =
-                advancements.firstNotNullOfOrNull {
-                    if (it.id == ResourceLocation.parse(reward.id)) return@firstNotNullOfOrNull it
-                    return@firstNotNullOfOrNull null
-                }
+            val advancement = advancements.firstNotNullOfOrNull {
+                if (it.id == ResourceLocation.parse(reward.id)) return@firstNotNullOfOrNull it
+                return@firstNotNullOfOrNull null
+            }
 
             advancement?.let { holder ->
                 val progress = event.player.advancements.getOrStartProgress(holder)
@@ -90,37 +86,35 @@ class GenerateRewardHandler(
         val handler = event.player.server.commands
 
         rewards.forEach {
-            val source =
-                when (it.asServer) {
-                    true ->
-                        event.player.server
-                            .createCommandSourceStack()
-                            .withPermission(it.opLevel)
-                    false -> event.player.createCommandSourceStack().withPermission(it.opLevel)
-                }
+            val source = when (it.asServer) {
+                true ->
+                    event.player.server
+                        .createCommandSourceStack()
+                        .withPermission(it.opLevel)
+
+                false -> event.player.createCommandSourceStack().withPermission(it.opLevel)
+            }
 
             handler.performPrefixedCommand(source, it.execute.trim())
         }
     }
 
-    private fun handlePokemonRewards(rewards: List<PokemonReward>) {
-        rewards.forEach {
-            if (it.minPerfectIvs != null) {
-                it.pokemon.minPerfectIVs = it.minPerfectIvs.coerceIn(0, MAX_PERFECT_IVS)
-            }
-            val poke = it.pokemon.create(event.player)
-            event.player.party().add(poke)
-
-            event.player.displayClientMessage(
-                tl(
-                    "message.info.gym_complete.reward_poke",
-                    when (poke.shiny) {
-                        true -> poke.species.translatedName.rainbow()
-                        false -> poke.species.translatedName
-                    },
-                ),
-            )
+    private fun handlePokemonRewards(rewards: List<PokemonReward>) = rewards.forEach { reward ->
+        if (reward.minPerfectIvs != null) {
+            reward.pokemon.minPerfectIVs = reward.minPerfectIvs.coerceIn(0, MAX_PERFECT_IVS)
         }
+        val poke = reward.pokemon.create(event.player)
+        event.player.party().add(poke)
+
+        event.player.displayClientMessage(
+            tl(
+                "message.info.gym_complete.reward_poke",
+                when (poke.shiny) {
+                    true -> poke.species.translatedName.rainbow()
+                    false -> poke.species.translatedName
+                },
+            ),
+        )
     }
 
     private fun handleLootRewards(rewards: List<LootTableReward>) {
@@ -169,18 +163,13 @@ class GenerateRewardHandler(
         }
     }
 
-    private fun createBundle(
-        bundle: ItemStack,
-        bundleContents: BundleContents.Mutable,
-        rewards: List<ItemStack>,
-    ) {
+    private fun createBundle(bundle: ItemStack, bundleContents: BundleContents.Mutable, rewards: List<ItemStack>) {
         rewards.forEach { bundleContents.tryInsert(it) }
 
         val styledLevel = Component.literal(event.level.toString()).withStyle(ChatFormatting.GOLD)
-        val styledType =
-            tlc("type.${event.type.lowercase()}").setStyle(
-                Style.EMPTY.withColor(ChatFormatting.GREEN).withItalic(true),
-            )
+        val styledType = tlc("type.${event.type.lowercase()}").setStyle(
+            Style.EMPTY.withColor(ChatFormatting.GREEN).withItalic(true),
+        )
 
         bundle.set(
             DataComponents.CUSTOM_NAME,
@@ -190,9 +179,8 @@ class GenerateRewardHandler(
         event.player.giveOrDropItemStack(bundle, true)
     }
 
-    private fun addRewards(loot: List<ItemStack>) =
-        when (RadGyms.config.shardRewards) {
-            true -> event.rewards.addAll(loot)
-            else -> event.rewards.addAll(loot.filter { it.item !is PokeShardBase })
-        }
+    private fun addRewards(loot: List<ItemStack>) = when (RadGyms.config.shardRewards) {
+        true -> event.rewards.addAll(loot)
+        else -> event.rewards.addAll(loot.filter { it.item !is PokeShardBase })
+    }
 }

@@ -20,10 +20,7 @@ fun CompoundTag.getBlockPos(key: String): BlockPos? {
     )
 }
 
-fun CompoundTag.putBlockPos(
-    key: String,
-    value: BlockPos,
-) {
+fun CompoundTag.putBlockPos(key: String, value: BlockPos) {
     val nbt = CompoundTag()
 
     nbt.putInt("x", value.x)

@@ -14,7 +14,4 @@ import net.minecraft.resources.ResourceLocation
 fun modResource(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
 
 @Suppress("unused")
-fun modModel(
-    path: String,
-    variant: String,
-): ModelResourceLocation = ModelResourceLocation(modResource(path), variant)
+fun modModel(path: String, variant: String): ModelResourceLocation = ModelResourceLocation(modResource(path), variant)

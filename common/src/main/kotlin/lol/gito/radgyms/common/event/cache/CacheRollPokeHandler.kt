@@ -16,9 +16,7 @@ import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.item.PokeCache
 import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 
-class CacheRollPokeHandler(
-    event: GymEvents.CacheRollPokeEvent,
-) {
+class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
     init {
         event.player.party().add(event.poke)
 
@@ -30,6 +28,7 @@ class CacheRollPokeHandler(
                     true ->
                         event.poke.species.translatedName
                             .rainbow()
+
                     false -> event.poke.species.translatedName
                 },
             ),

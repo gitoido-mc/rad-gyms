@@ -21,11 +21,12 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
-class GymEntranceEntity(val pos: BlockPos, state: BlockState) : BlockEntity(
-    RadGymsBlockEntities.GYM_ENTRANCE_ENTITY,
-    pos,
-    state,
-) {
+class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
+    BlockEntity(
+        RadGymsBlockEntities.GYM_ENTRANCE_ENTITY,
+        pos,
+        state,
+    ) {
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
     private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
