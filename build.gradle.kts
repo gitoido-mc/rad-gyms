@@ -21,7 +21,7 @@ plugins {
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
     id("dev.detekt") version "2.0.0-alpha.2"
-    id("org.jetbrains.kotlinx.kover") version "0.9.7"
+
 }
 
 scmVersion {
@@ -87,24 +87,17 @@ repositories {
     }
 }
 
-val modProjects =
-    listOf(
-        "common",
-        "fabric",
-        "neoforge",
-    )
+val modProjects = listOf(
+    "common",
+    "fabric",
+    "neoforge",
+)
 
-dependencies {
-    kover(project(":common"))
-    kover(project(":fabric"))
-    kover(project(":neoforge"))
-}
 modProjects.forEach {
     project(it) {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
-        apply(plugin = "org.jetbrains.kotlinx.kover")
         apply(plugin = "dev.detekt")
 
         group = property("maven_group")!!
@@ -186,7 +179,6 @@ val buildMod by project.tasks.registering {
     dependsOn(":common:build")
     dependsOn(":fabric:build")
     dependsOn(":neoforge:build")
-    dependsOn(":docs:build")
     mustRunAfter(
         ":fabric:build",
         ":neoforge:build",
@@ -195,30 +187,21 @@ val buildMod by project.tasks.registering {
 
     doLast {
         logger.info("Preparing $version jars")
-        layout.buildDirectory
-            .file("libs")
-            .get()
-            .asFile
-            .delete()
+
+        layout.buildDirectory.file("libs").get().asFile.delete()
+
         listOf(":common", ":fabric", ":neoforge").forEach { mod ->
             val modProject = project(mod)
-            val jars =
-                listOf(
-                    "${project.name}-${modProject.name}-${modProject.version}.jar",
-                    "${project.name}-${modProject.name}-${modProject.version}-sources.jar",
-                )
+            val jars = listOf(
+                "${project.name}-${modProject.name}-${modProject.version}.jar",
+                "${project.name}-${modProject.name}-${modProject.version}-sources.jar",
+            )
+
             jars.forEach {
-                val dest =
-                    project.layout.buildDirectory
-                        .file("libs/$it")
-                        .get()
-                        .asFile
+                val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
                 dest.ensureParentDirsCreated()
-                modProject.layout.buildDirectory
-                    .file("libs/$it")
-                    .get()
-                    .asFile
-                    .renameTo(dest)
+
+                modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
             }
         }
     }

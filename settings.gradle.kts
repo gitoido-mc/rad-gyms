@@ -21,6 +21,5 @@ pluginManagement {
 listOf(
     "common",
     "fabric",
-    "neoforge",
-    "docs",
+    "neoforge"
 ).forEach { include(it) }
