@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.RadGyms.config
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.cache.CacheHandler
@@ -67,7 +68,7 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
     ) = with(stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)) {
         if (this > 0) {
             val tooltipText = tl(
-                "item.component.shiny_boost",
+                modId("item.component.shiny_boost"),
                 "1/${(Cobblemon.config.shinyRate.toInt() - this).coerceAtLeast(1)}",
             )
 

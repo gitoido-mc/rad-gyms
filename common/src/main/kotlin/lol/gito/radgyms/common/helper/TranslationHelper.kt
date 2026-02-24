@@ -10,6 +10,7 @@ package lol.gito.radgyms.common.helper
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.cobblemonResource
+import lol.gito.radgyms.common.RadGyms.modId
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Component.translatable
@@ -42,7 +43,7 @@ object ElementalTypeTranslationHelper {
         buildPrefixedSuffixedTypeText(elementalType?.showdownId)
 
     fun buildPrefixedSuffixedTypeText(elementalType: String? = null): C = tl(
-        "item.component.gym_type",
+        modId("item.component.gym_type"),
         buildSuffixedTypeText(elementalType),
     )
 
@@ -58,24 +59,24 @@ object ElementalTypeTranslationHelper {
     @Suppress("unused")
     fun buildTypeText(elementalType: ElementalType? = null): C = buildTypeText(elementalType?.showdownId)
 
-    fun buildTypeText(elementalType: String? = null): C = when {
-        (elementalType == null) ->
-            tl("item.component.type.chaos").withStyle {
+    fun buildTypeText(type: String? = null): C = when {
+        (type == null) ->
+            tl(modId("item.component.type.chaos")).withStyle {
                 it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
             }
 
-        (ElementalTypes.get(elementalType) != null) ->
-            tlc("type.$elementalType").withStyle {
+        (ElementalTypes.get(type) != null) ->
+            tlc("type.$type").withStyle {
                 it.applyFormat(ChatFormatting.DARK_PURPLE)
             }
 
-        (elementalType == "chaos") ->
-            tl("item.component.type.chaos").withStyle {
+        (type == "chaos") ->
+            tl(modId("item.component.type.chaos")).withStyle {
                 it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
             }
 
         else ->
-            tl("item.component.type.$elementalType").withStyle {
+            tl(modId("item.component.type.$type")).withStyle {
                 it.applyFormat(ChatFormatting.GOLD)
             }
     }

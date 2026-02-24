@@ -9,6 +9,7 @@ package lol.gito.radgyms.common.block
 
 import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymExitEntity
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
@@ -52,7 +53,7 @@ class GymExitBlock(properties: Properties) : BaseEntityBlock(properties) {
                         debug("Client: Opening gym exit screen for ${it.uuid} at $pos in ${level.dimension()}")
                         OpenGymLeaveScreenS2C().sendToPlayer(it)
                     } else {
-                        it.displayClientMessage(tl("${EXIT_ROPE.descriptionId}.failed"))
+                        it.displayClientMessage(tl(modId("${EXIT_ROPE.descriptionId}.failed")))
                     }
                 }
             }

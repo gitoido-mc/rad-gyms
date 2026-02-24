@@ -12,6 +12,7 @@ import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
@@ -40,6 +41,7 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
@@ -68,7 +70,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         )
     }
 
-    override fun useShapeForLightOcclusion(blockState: BlockState): Boolean = true
+    override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
 
@@ -111,14 +113,14 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
             false -> {
                 (player as ServerPlayer).let { player ->
                     if (player.party().occupied() < MIN_PLAYER_TEAM_SIZE) {
-                        player.displayClientMessage(tl("message.info.gym_entrance_party_empty"))
+                        player.displayClientMessage(tl(modId("message.info.gym_entrance_party_empty")))
                         debug("Player ${player.uuid} tried to use $pos gym entry with empty party, denying...")
                         result = InteractionResult.FAIL
                         return@let
                     }
 
                     if (player.party().all { it.isFainted() }) {
-                        player.displayClientMessage(tl("message.info.gym_entrance_party_fainted"))
+                        player.displayClientMessage(tl(modId("message.info.gym_entrance_party_fainted")))
                         debug("Player ${player.uuid} tried to use $pos gym entry with party fainted, denying...")
                         result = InteractionResult.FAIL
                         return@let
@@ -127,7 +129,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                     val gymEntrance: GymEntranceEntity = level.getBlockEntity(pos) as GymEntranceEntity
 
                     if (gymEntrance.usesLeftForPlayer(player) == 0) {
-                        player.displayClientMessage(tl("message.info.gym_entrance_exhausted"))
+                        player.displayClientMessage(tl(modId("message.info.gym_entrance_exhausted")))
                         debug("Player ${player.uuid} tried to use $pos gym entry with tries exhausted, denying...")
                         result = InteractionResult.FAIL
                         return@let
@@ -199,7 +201,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                 level.addParticle(
                     ParticleTypes.TRIAL_SPAWNER_DETECTED_PLAYER_OMINOUS,
                     Random.nextDouble(blockPos.center.x - CENTER_OFFSET, blockPos.center.x + CENTER_OFFSET),
-                    blockPos.center.y - CENTER_OFFSET,
+                    blockPos.center.y + CENTER_Y_OFFSET,
                     Random.nextDouble(blockPos.center.z - CENTER_OFFSET, blockPos.center.z + CENTER_OFFSET),
                     Random.nextDouble(PARTICLE_RADIX_MIN, PARTICLE_RADIX_MAX),
                     0.0,
@@ -222,7 +224,8 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
     companion object {
         const val BLOCK_REACT_RANGE = 8
         const val CENTER_OFFSET = 0.25
-        const val PARTICLE_AMOUNT = 2
+        const val CENTER_Y_OFFSET = 0.2
+        const val PARTICLE_AMOUNT = 1
         const val PARTICLE_RADIX_MIN = -0.1
         const val PARTICLE_RADIX_MAX = 0.1
         const val SOUND_CHANCE = 0.05f

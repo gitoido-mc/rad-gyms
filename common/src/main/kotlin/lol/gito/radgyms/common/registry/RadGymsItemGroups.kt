@@ -87,7 +87,6 @@ object RadGymsItemGroups {
         entries.accept(RadGymsItems.SHARD_RARE)
         entries.accept(RadGymsItems.SHARD_EPIC)
         entries.accept(RadGymsItems.GYM_ENTRANCE)
-        entries.accept(RadGymsItems.GYM_EXIT)
         entries.accept(RadGymsItems.SHARD_BLOCK_COMMON)
         entries.accept(RadGymsItems.SHARD_BLOCK_UNCOMMON)
         entries.accept(RadGymsItems.SHARD_BLOCK_EPIC)
@@ -147,8 +146,8 @@ object RadGymsItemGroups {
         val displayIconProvider: () -> ItemStack,
         val entryCollector: DisplayItemsGenerator,
         val displayName: Component = run {
-            info(key.location().path)
-            tl("itemGroup", key.location().path)
+            info(key.location().toLanguageKey())
+            tl("itemGroup", key.location())
         },
     )
 
