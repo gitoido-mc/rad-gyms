@@ -22,9 +22,13 @@ import lol.gito.radgyms.common.registry.RadGymsBlocks.GYM_ENTRANCE
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
+import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -36,16 +40,18 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.block.state.properties.DirectionProperty
+import net.minecraft.world.level.levelgen.structure.BoundingBox
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
+import kotlin.random.Random
 
 private val gymEntranceHorizontalFacing: DirectionProperty = HORIZONTAL_FACING
 
@@ -62,7 +68,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         )
     }
 
-    override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
+    override fun useShapeForLightOcclusion(blockState: BlockState): Boolean = true
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
 
@@ -169,5 +175,59 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         if (!world.isClientSide) {
             (world as ServerLevel).chunkSource.blockChanged(pos)
         }
+    }
+
+    override fun animateTick(blockState: BlockState, level: Level, blockPos: BlockPos, randomSource: RandomSource) {
+        val entranceEntity = level.getBlockEntity(blockPos) ?: return
+        if (entranceEntity !is GymEntranceEntity) return
+
+        val bounds = AABB.of(
+            BoundingBox.encapsulatingPositions(
+                listOf(
+                    blockPos.north(BLOCK_REACT_RANGE).above(BLOCK_REACT_RANGE).west(BLOCK_REACT_RANGE),
+                    blockPos.south(BLOCK_REACT_RANGE).below(BLOCK_REACT_RANGE).east(BLOCK_REACT_RANGE),
+                ),
+            ).get(),
+        )
+
+        val nearestPlayers = level.getEntitiesOfClass(Player::class.java, bounds) {
+            entranceEntity.usesLeftForPlayer(it) > 0
+        }
+
+        nearestPlayers.forEach { _ ->
+            repeat(PARTICLE_AMOUNT) {
+                level.addParticle(
+                    ParticleTypes.TRIAL_SPAWNER_DETECTED_PLAYER_OMINOUS,
+                    Random.nextDouble(blockPos.center.x - CENTER_OFFSET, blockPos.center.x + CENTER_OFFSET),
+                    blockPos.center.y - CENTER_OFFSET,
+                    Random.nextDouble(blockPos.center.z - CENTER_OFFSET, blockPos.center.z + CENTER_OFFSET),
+                    Random.nextDouble(PARTICLE_RADIX_MIN, PARTICLE_RADIX_MAX),
+                    0.0,
+                    Random.nextDouble(PARTICLE_RADIX_MIN, PARTICLE_RADIX_MAX),
+                )
+            }
+            if (randomSource.nextFloat() < SOUND_CHANCE) {
+                level.playLocalSound(
+                    blockPos,
+                    SoundEvents.BEACON_AMBIENT,
+                    SoundSource.BLOCKS,
+                    SOUND_VOLUME_INITIAL + randomSource.nextFloat(),
+                    randomSource.nextFloat() * SOUND_PITCH_MULTIPLIER + SOUND_PITCH_SCALAR_INC,
+                    true
+                )
+            }
+        }
+    }
+
+    companion object {
+        const val BLOCK_REACT_RANGE = 8
+        const val CENTER_OFFSET = 0.25
+        const val PARTICLE_AMOUNT = 2
+        const val PARTICLE_RADIX_MIN = -0.1
+        const val PARTICLE_RADIX_MAX = 0.1
+        const val SOUND_CHANCE = 0.05f
+        const val SOUND_VOLUME_INITIAL = 0.05f
+        const val SOUND_PITCH_MULTIPLIER = 0.7f
+        const val SOUND_PITCH_SCALAR_INC = 0.3f
     }
 }
