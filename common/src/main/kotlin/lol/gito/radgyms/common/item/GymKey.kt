@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
@@ -38,18 +39,18 @@ class GymKey :
         val party = (player as ServerPlayer).party()
         return when {
             (level.dimension() == RadGymsDimensions.GYM_DIMENSION) -> {
-                player.displayClientMessage(tl("message.info.gym_key_wrong_place"))
+                player.displayClientMessage(tl(modId("message.info.gym_key_wrong_place")))
                 InteractionResultHolder.fail(player.getItemInHand(hand))
             }
 
             (party.occupied() < MIN_PLAYER_TEAM_SIZE) -> {
-                player.displayClientMessage(tl("message.info.gym_entrance_party_empty"))
+                player.displayClientMessage(tl(modId("message.info.gym_entrance_party_empty")))
                 debug("Player ${player.uuid} tried to use gym key with empty party, denying...")
                 InteractionResultHolder.fail(player.getItemInHand(hand))
             }
 
             (party.all { it.isFainted() }) -> {
-                player.displayClientMessage(tl("message.info.gym_entrance_party_fainted"))
+                player.displayClientMessage(tl(modId("message.info.gym_entrance_party_fainted")))
                 debug("Player ${player.uuid} tried to use gym key with party fainted, denying...")
                 InteractionResultHolder.fail(player.getItemInHand(hand))
             }

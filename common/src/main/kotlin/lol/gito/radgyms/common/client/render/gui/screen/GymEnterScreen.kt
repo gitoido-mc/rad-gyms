@@ -36,12 +36,12 @@ class GymEnterScreen(
     val usesLeft: Int? = null,
 ) : AbstractGymScreen(
     when (type) {
-        null, "chaos", (ElementalTypes.getOrException(type).showdownId) -> tl(
-            "gui.common.set-gym-level",
+        null, "chaos", in (ElementalTypes.all().map { it.showdownId }) -> tl(
+            modId("gui.common.set-gym-level"),
             buildTypeText(type),
         )
 
-        else -> tl("gui.common.set-custom-gym-level", buildTypeText(type))
+        else -> tl(modId("gui.common.set-custom-gym-level"), buildTypeText(type))
     },
 ) {
     companion object {
@@ -215,10 +215,10 @@ class GymEnterScreen(
 
         val message =
             when (pos) {
-                null -> tl("gui.common.set-gym-level", buildTypeText(type))
+                null -> tl(modId("gui.common.set-gym-level"), buildTypeText(type))
                 else ->
                     tl(
-                        "gui.common.set-gym-level-entry",
+                        modId("gui.common.set-gym-level-entry"),
                         buildTypeText(type),
                         usesLeft,
                     )
