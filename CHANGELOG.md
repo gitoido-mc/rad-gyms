@@ -2,52 +2,147 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is *loosely* based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [ZeroVer](https://0ver.org).
 
 ## [Unreleased]
 
+### <!-- 1 -->🐛 Bug Fixes
+- Ensure i18n provider generates translation keys in proper namespace
+
+### <!-- 2 -->🚜 Refactor
+- Detekt checks, code flow optimizations, reintroduced snapshot switch
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Remove dangling docs project
+
+## [1.7.3+0.4.3] - 2026-02-20
+
+### <!-- 1 -->🐛 Bug Fixes
+- More detekt cleanup + msd compat fixes
+
+### <!-- 5 -->🎨 Styling
+- Detekt checks
+- More detekt cleanup
+- Dead code cleanup
+- Update copyrights, more code cleanup
+- Fixed code smell according to detekt in loader-specific proj, reran datagen to ensure parity
+- Updated detekt rules
+
+## [1.7.3+0.4.2] - 2026-02-18
+
 ### <!-- 0 -->🚀 Features
-- NeoForge initial support
-- Configurable species pools for Poke Caches
-- Trainer's party generator now respects level of the gym and selects pokemons based on BST. That means you will not see Rayquaza in level 10 gyms for example
-- New trainer party generator type - `pool`. an addition to existing `fixed` and `generated` types. Allows you to declare a list of pokemons for generator to pick from.
+- Added missing translations
+
+### <!-- 2 -->🚜 Refactor
+- Changed custom stats registration on world init
+
+### <!-- 5 -->🎨 Styling
+- Cleaned dead code in config file
+
+## [1.7.3+0.4.1] - 2026-02-17
+
+### <!-- 1 -->🐛 Bug Fixes
+- Change how gym species registry filled to evade mutation of cobblemon species registry
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Reintroduce dependencies into buildscript
+
+## [1.7.3+0.4.0] - 2026-02-17
+
+### <!-- 0 -->🚀 Features
+- Implemented custom gym stats
+- Implement gym persistence
+
+### <!-- 1 -->🐛 Bug Fixes
+- Added missing mega aspect to ignored species
+
+### <!-- 10 -->💼 Other
+- 0.4.0
+- Repair commands
+
+### <!-- 2 -->🚜 Refactor
+- Small optimizations
+- Reintroduce datagen resources
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Update publishing script once again to ensure multiplatform delivery
+- Add download artifacts task
+- Update publish script
+- Update build file to use dynamic versioning for jars
+- Add JDK setup step in CodeQL workflow
+- Update CodeQL workflow configuration
+- Update gitignore, fine-tune scm versioning, update pull_request workflow
+
+## [1.7.0+0.4.0-alpha] - 2026-02-04
+
+### <!-- 0 -->🚀 Features
+- Implement custom fabric datagen
+- SCM versioning via gradle plugin, proper mixin and aw propagation, updated docs build, added pull request workflow
+- New `Fixed` and `Pool` type team generators. Serialization codecs for most of the gym classes.
+
+### <!-- 2 -->🚜 Refactor
+- DX - annotate logger methods, modId helper and RadGymsState companion object methods as @JvmStatic
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Remove artifacts from main
+
+## [1.7.0+0.3.1] - 2026-02-03
+
+### <!-- 0 -->🚀 Features
+- GH issue templates
+- Buildscript for docs
+- Configurable pokecache pools
+- Moving stuff around + bst selector
+- Refined buildscript
+- NeoForge + 0.3.1 fixes
+- Multiplatform initial push
 
 ### <!-- 1 -->🐛 Bug Fixes
 - GymEnterScreen now uses proper translation string
-- Fixed crash caused by disconnecting and connecting multiple times in a row in [#104](https://github.com/gitoido-mc/rad-gyms/pull/104) by @landonjw
 
-### New Contributors
-* @landonjw made their first contribution
+### <!-- 10 -->💼 Other
+- Port fix up to 0.4.x
 
-## [1.7.x+0.3.1-stable] - 2025-12-08
+### <!-- 2 -->🚜 Refactor
+- Humanize level thresholds in gym definitions
+- Alot of updates
 
-### <!-- 0 -->🐛 Bug Fixes
-- Fixed gym leave NPE
-- Fixed datagen saving recipes in wrong namespace
-- Added checks on server cleanup to prevent shutdown NPE
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Alot of stuff
+- Tidy up code, resolve deprecated usage and bump dependency versions
+- Tidy up resources
+- .gitignore update
 
 ## [1.7.0+0.3.0-stable] - 2025-12-04
 
 ### <!-- 0 -->🚀 Features
-- Goodbye Yarn mappings, hello Mojmap!
-- License update
 - Disabled worldborder for gym dimension
+- License update
+- PlayerJoin event now properly handles edge case of player being already present in gym trainers registry
+- Server settings are now properly applied to client
+- AbstractGymScreen preRender helper function. Fixes missing text labels render because it was rendered on wrong stack "layer"
 
 ### <!-- 1 -->🐛 Bug Fixes
-- Server settings are now properly applied on client
-- PlayerJoin event now properly handles edge case of player being already present in gym trainers registry
+- Teleportation now respects world borders
 - Server state not picking up changes
 - Proper gym instance teardown when server stops or crashes
 - SpeciesManager not picking up ignoredSpecies/ignoredForms config
+- Player entries for particular gym entry were calculated wrongly (agane)
 - Player entries for particular gym entry were calculated wrongly
 - Caches now roll on only implemented species
 - Vec2i helper stack overflow fix
-- Gym reward bundle not consumed in creative mode
+- Updated calls to separated gym manager classes
+- Bundle not consumed in creative mode
+- Datagen recipe generation
 - Caches creative item group was showing incorrect items
+- OnLoadModels mixin target fix
+
+### <!-- 10 -->💼 Other
+- 0.3-stable
+- Update README.md
 
 ### <!-- 2 -->🚜 Refactor
-- AbstractGymScreen preRender helper function. Fixes missing text labels render because it was rendered on wrong stack "layer"
 - Use serverPlayer.server link where possible, at some times global server may be empty
 - Use different method to spawn entities to prevent "no entity found" error
 - Moved fabric-specific data loader to fabric package
@@ -58,15 +153,59 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Gym manager separation of concerns
 - Fabric client logic separation, proper implementation of multiplatform common class
 - Deduplication of GUI screen code
-- Structural changes
+- Architectury preparation
 - Pass uses left for player via net packet when opening gym entrance interface
+- Mojmap
 
-## [0.3-alpha.1] - 2025-11-22
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Gh-action fix regex cause silly take one thousand minus 7
+- Gh-action fix regex cause silly
+- Gh-action build on tag
+- Gh-action update until I figure out a better way to deliver
+- More debug
+- Bump Cobblemon to 1.7.1
+- Updated datagen
+- Entrypoint rename
+- Datagen mojmap update
+- Gitignore update
+- Forgotten gradle version bump
+
+## [1.6.1+0.3.0-beta1] - 2025-11-25
+
+### <!-- 1 -->🐛 Bug Fixes
+- Added another lowercase transform on clientside just in case
+
+### <!-- 2 -->🚜 Refactor
+- Removed RCTApi mixin, because it was fixed on their side
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Updated deps in CI publish action and in fabric.mod.json
+
+## [1.6.1+0.3.0-alpha1] - 2025-11-22
 
 ### <!-- 0 -->🚀 Features
 - 1.7 initial support
 
-## [0.2-beta.6] - 2025-11-12
+### <!-- 1 -->🐛 Bug Fixes
+- Broken build???
+- Broken build
+- Added loot tables and mineable tag for shard blocks
+
+### <!-- 10 -->💼 Other
+- 1.7.0 initial support
+
+### <!-- 2 -->🚜 Refactor
+- Moved alot of code around
+- Moved code around
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Datagen
+- 1.7.0 build support
+- Serialization update and additions
+- Gradle and Kotlin version bump
+- Suppress unused debug function warnings for now
+
+## [1.6.1+0.2.0-beta6] - 2025-11-12
 
 ### <!-- 0 -->🚀 Features
 - Battle formats
@@ -78,9 +217,6 @@ and this project adheres to [ZeroVer](https://0ver.org).
 
 ### <!-- 1 -->🐛 Bug Fixes
 - Fixed shardReward config
-
-### <!-- 10 -->💼 Other
-- Merge pull request #83 from gitoido-mc/release/v0.2-beta.6 in [#83](https://github.com/gitoido-mc/rad-gyms/pull/83)
 
 ### <!-- 2 -->🚜 Refactor
 - TrainerBattleEndHandler now handles reasoning too
@@ -104,15 +240,14 @@ and this project adheres to [ZeroVer](https://0ver.org).
 
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
 - Removed dead code
-- Removed dead code
 - Accessors for RCTBattleAI, persistence groundwork
 
-## [0.2-beta.5] - 2025-11-05
+## [1.6.1+0.2.0-beta5] - 2025-11-05
 
 ### <!-- 1 -->🐛 Bug Fixes
-- Event handling early bailout, fixes RCTMod compat
+- Event handling early bailout, fixes RCTMod compa
 
-## [0.2-beta.4] - 2025-10-29
+## [1.6.1+0.2.0-beta4] - 2025-10-29
 
 ### <!-- 0 -->🚀 Features
 - More events
@@ -140,7 +275,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
 - Code cleanup
 
-## [0.2-beta.3] - 2025-09-19
+## [1.6.1+0.2.0-beta3] - 2025-09-19
 
 ### <!-- 1 -->🐛 Bug Fixes
 - Fix(dep+npc)+chore(docs): Update RCT Api version. Fix doubling battle init. Added player in battle check for somehow stuck battles
@@ -148,13 +283,13 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 2 -->🚜 Refactor
 - Remove compat plugins for now
 
-## [0.2-beta.2] - 2025-08-26
+## [1.6.1+0.2.0-beta2] - 2025-08-26
 
 ### <!-- 1 -->🐛 Bug Fixes
 - Lower fabric loader dependency version
 - Fixed gym exit block interaction
 
-## [0.2-beta.1] - 2025-08-16
+## [1.6.1+0.2.0-beta1] - 2025-08-16
 
 ### <!-- 0 -->🚀 Features
 - Removal of owo-lib and big refactor
@@ -166,10 +301,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Invalid fire entrance variation structure name fix
 
 ### <!-- 10 -->💼 Other
-- Merge pull request #68 from gitoido-mc/release/v0.2-beta.1 in [#68](https://github.com/gitoido-mc/rad-gyms/pull/68)
-- Merge pull request #67 from gitoido-mc/release/v0.2-alpha4 in [#67](https://github.com/gitoido-mc/rad-gyms/pull/67)
-- Merge pull request #66 from KaptainWutax/main in [#66](https://github.com/gitoido-mc/rad-gyms/pull/66)
-- Fix gyms persistent data not persisting when the player dies or completes the end fight by @KaptainWutax
+- Fix gyms persistent data not persisting when the player dies or completes the end fight
 
 ### <!-- 2 -->🚜 Refactor
 - Networking done right
@@ -181,7 +313,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Readme update
 - Version bump
 
-## [0.2-alpha.3] - 2025-07-21
+## [1.6.1+0.2.0-alpha3] - 2025-07-21
 
 ### <!-- 0 -->🚀 Features
 - Move starters to rare caches with lower weight, remove starter evolutions for cache rewards
@@ -194,7 +326,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Update changelog
 - Broken badges
 
-## [0.2-alpha.2] - 2025-07-18
+## [1.6.1+0.2.0-alpha2] - 2025-07-18
 
 ### <!-- 0 -->🚀 Features
 - Typed entrance loot tables
@@ -202,11 +334,9 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
 - Update changelog
 
-## [0.2-alpha] - 2025-07-16
+## [1.6.1+0.2.0-alpha1] - 2025-07-16
 
 ### <!-- 0 -->🚀 Features
-- Custom gym key models in [#61](https://github.com/gitoido-mc/rad-gyms/pull/61)
-- Pokecaches in [#51](https://github.com/gitoido-mc/rad-gyms/pull/51)
 - Immersive entrance ruins + localization
 - Basic layout for docs site
 - 11ty static site init
@@ -225,7 +355,6 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Lang update
 - Shadowjar + Admiral dependency for quick command creation
 - Removed gitbook docs
-- Readme update
 - Pokecache weight tables
 - Build update
 - Pokecache item translations and assets
@@ -236,12 +365,9 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Aether compat mixin
 
 ### <!-- 10 -->💼 Other
-- Merge pull request #63 from gitoido-mc/feat/pokemon-caches in [#63](https://github.com/gitoido-mc/rad-gyms/pull/63)
-- Merge branch 'feat/pokemon-caches' into main by @KaptainWutax
-- Add support for custom gym key models by gym type by @KaptainWutax
-- Merge pull request #60 from KaptainWutax/main in [#60](https://github.com/gitoido-mc/rad-gyms/pull/60)
-- Set team's pokemon level to gym level if not provided by @KaptainWutax
-- Fix structure having no Random during placement by @KaptainWutax
+- Add support for custom gym key models by gym type
+- Set team's pokemon level to gym level if not provided
+- Fix structure having no Random during placement
 
 ### <!-- 2 -->🚜 Refactor
 - DataSaver player mixin slight refactor
@@ -254,28 +380,21 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Update changelog
 - Intermediate commit to fix changes
 - Gradle.properties deps update
-- Gradle.properties deps update
 - Readme update
 - RCTApi battle init update for new version
 - BundleItemMixin codestyle
 
-### New Contributors
-* @KaptainWutax made their first contribution
-
-## [0.1.13.1-stable] - 2025-05-22
+## [1.6.1+0.1.13-stable1] - 2025-05-22
 
 ### <!-- 10 -->💼 Other
 - Update changelog for v0.1.9 changes
 - Fabric.mod.json dependency update
 - Update changelog for v0.1.9
-- Fabric.mod.json dependency update
 
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
 - CHANGELOG.md workflow
-- CHANGELOG.md workflow
-- CHANGELOG.md workflow
 
-## [0.1.13-stable] - 2025-05-20
+## [1.6.1+0.1.13-stable] - 2025-05-20
 
 ### <!-- 0 -->🚀 Features
 - Aether compat
@@ -286,30 +405,22 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 10 -->💼 Other
 - Update build.yml
 - Update changelog for v0.1.9
-- Update build.yml
-- Merge pull request #57 from gitoido-mc/fix/old-deps-config-gen-aether-compat in [#57](https://github.com/gitoido-mc/rad-gyms/pull/57)
-- Update changelog for v0.1.9
 
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
 - Update gradle.properties
 - Code quality
 - Dependency update
 
-## [0.1.12-stable] - 2025-04-20
+## [1.6.1+0.1.12-stable] - 2025-04-20
 
 ### <!-- 10 -->💼 Other
-- Merge pull request #54 from gitoido-mc/hotfix/close-screen-button in [#54](https://github.com/gitoido-mc/rad-gyms/pull/54)
 - Closing screen crash fix
 - Update changelog for v0.1.9
 
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
 - Github-actions update
-- Github-actions update
-- Github-actions update
-- Github-actions update
-- Github-actions update
 
-## [0.1.11] - 2025-04-05
+## [1.6.1+0.1.11-stable] - 2025-04-05
 
 ### <!-- 0 -->🚀 Features
 - Working debug flag, bundle gym rewards
@@ -320,9 +431,6 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Dying in gym breaks its instance
 
 ### <!-- 10 -->💼 Other
-- Merge pull request #49 from gitoido-mc/feat/logging-done-right in [#49](https://github.com/gitoido-mc/rad-gyms/pull/49)
-- Merge pull request #48 from gitoido-mc/fix/breaking-gyms-on-player-death in [#48](https://github.com/gitoido-mc/rad-gyms/pull/48)
-- Merge pull request #47 from gitoido-mc/fix/breaking-gyms-on-player-death in [#47](https://github.com/gitoido-mc/rad-gyms/pull/47)
 - Create FUNDING.yml
 
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
@@ -330,24 +438,20 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Added CHANGELOG.md
 - Additional checks whether gym instance exists
 
-## [0.1.10] - 2025-03-23
+## [1.6.1+0.1.10-stable] - 2025-03-23
 
 ### <!-- 1 -->🐛 Bug Fixes
 - Trainer registration in RCT, entity type fix
 
-### <!-- 10 -->💼 Other
-- Merge pull request #46 from gitoido-mc/fix-entity-not-attached-properly in [#46](https://github.com/gitoido-mc/rad-gyms/pull/46)
-
-## [0.1.9] - 2025-02-28
+## [1.6.1+0.1.9-stable] - 2025-02-28
 
 ### <!-- 1 -->🐛 Bug Fixes
 - Scheduled tasks for gym init
 
 ### <!-- 10 -->💼 Other
-- Merge pull request #43 from gitoido-mc/fix-entity-not-attached-properly in [#43](https://github.com/gitoido-mc/rad-gyms/pull/43)
 - No commit message
 
-## [0.1.8b-stable] - 2025-02-19
+## [1.6.1+0.1.8-stableb] - 2025-02-19
 
 ### <!-- 1 -->🐛 Bug Fixes
 - Preload chunks correctly
@@ -359,7 +463,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Lower chunk update radius
 - Version
 
-## [0.1.8-stable] - 2025-02-18
+## [1.6.1+0.1.8-stable] - 2025-02-18
 
 ### <!-- 0 -->🚀 Features
 - Preload chunk where player will be teleported to. Add 1 second delay before teleport. Use Cobblemon scheduler for executing teleport
@@ -368,12 +472,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 1 -->🐛 Bug Fixes
 - Species were mapped to forms incorrectly
 
-### <!-- 10 -->💼 Other
-- Merge pull request #42 from gitoido-mc/feat-preload-teleport-coords-chunk in [#42](https://github.com/gitoido-mc/rad-gyms/pull/42)
-- Merge pull request #41 from gitoido-mc/fix-species-aspects-mapping in [#41](https://github.com/gitoido-mc/rad-gyms/pull/41)
-- Merge pull request #40 from gitoido-mc/feat-es-es-i18n in [#40](https://github.com/gitoido-mc/rad-gyms/pull/40)
-
-## [0.1.7-stable] - 2025-02-17
+## [1.6.1+0.1.7-stable] - 2025-02-17
 
 ### <!-- 0 -->🚀 Features
 - Sparse entrance generation, exclude beaches and oceans from allowed biomes
@@ -384,17 +483,9 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Use TeleportTarget instead of player.teleport
 
 ### <!-- 10 -->💼 Other
-- Merge pull request #39 from gitoido-mc/38-form-aspects-doesnt-apply in [#39](https://github.com/gitoido-mc/rad-gyms/pull/39)
-- Merge pull request #37 from gitoido-mc/feature-entrance-worldgen in [#37](https://github.com/gitoido-mc/rad-gyms/pull/37)
-- Merge pull request #35 from gitoido-mc/feat-add-party-check-gym-entrance in [#35](https://github.com/gitoido-mc/rad-gyms/pull/35)
-- Merge pull request #34 from gitoido-mc/fix-player-teleport in [#34](https://github.com/gitoido-mc/rad-gyms/pull/34)
-- Merge pull request #32 from Brzjomo/main in [#32](https://github.com/gitoido-mc/rad-gyms/pull/32)
-- Chinese translation by @Brzjomo
+- Chinese translation
 
-### New Contributors
-* @Brzjomo made their first contribution
-
-## [0.1.6-stable] - 2025-02-15
+## [1.6.1+0.1.6-stable] - 2025-02-15
 
 ### <!-- 0 -->🚀 Features
 - Exit Rope item
@@ -408,20 +499,14 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Creative checks and additional player notifications when Gym key being used by player
 - Default values in trainer DTO
 
-### <!-- 10 -->💼 Other
-- Merge pull request #30 from gitoido-mc/fix-gym-team-dtos in [#30](https://github.com/gitoido-mc/rad-gyms/pull/30)
-
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
 - Localization update
 - Version bump
 - Updated rarities for gym keys
 
-## [0.1.5-stable] - 2025-02-13
+## [1.6.1+0.1.5-stable] - 2025-02-13
 
-### <!-- 10 -->💼 Other
-- Merge branch 'main' of github.com:gitoido-mc/rad-gyms
-
-## [0.1.4-stable] - 2025-02-13
+## [1.6.1+0.1.4-stable] - 2025-02-13
 
 ### <!-- 0 -->🚀 Features
 - Config file
@@ -431,22 +516,15 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 1 -->🐛 Bug Fixes
 - OnBattleFainted condition fix
 
-### <!-- 10 -->💼 Other
-- Merge pull request #29 from gitoido-mc/23-modmenu-integration in [#29](https://github.com/gitoido-mc/rad-gyms/pull/29)
-- Merge pull request #27 from gitoido-mc/feature-dynamic-keys in [#27](https://github.com/gitoido-mc/rad-gyms/pull/27)
-
-## [0.1.3-stable] - 2025-02-11
+## [1.6.1+0.1.3-stable] - 2025-02-11
 
 ### <!-- 0 -->🚀 Features
 - Boot player from gym on team fainted
 
-### <!-- 10 -->💼 Other
-- Merge pull request #26 from gitoido-mc/25-implement-single-use-return-item in [#26](https://github.com/gitoido-mc/rad-gyms/pull/26)
-
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
 - Readme and build update
 
-## [0.1.2-stable] - 2025-02-11
+## [1.6.1+0.1.2-stable] - 2025-02-11
 
 ### <!-- 0 -->🚀 Features
 - Modrinth build enbled. Closes #19
@@ -467,7 +545,10 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Gym level slider now sets internal level value correctly
 - Publish only on release created
 
-## [0.1.1-beta] - 2025-02-09
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Version bump
+
+## [1.6.1+0.1.1-beta] - 2025-02-09
 
 ### <!-- 0 -->🚀 Features
 - Gym exit stub
@@ -475,39 +556,43 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Player NBT data, gym generation progress
 
 ### <!-- 10 -->💼 Other
+- Beta 0.1.1
+- 0.1.0-alpha
 - Alpha version
 - Initial commit
 
-### New Contributors
-* @gitoido made their first contribution
-
-[unreleased]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.0+0.3.1-stable...HEAD
-[1.7.x+0.3.1-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.0+0.3.0-stable...1.7.0+0.3.1-stable
-[1.7.0+0.3.0-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.0/nightly...1.7.0+0.3.0-stable
-[0.3-beta.1]: https://github.com/gitoido-mc/rad-gyms/compare/v0.3-alpha.1...v0.3-beta.1
-[0.3-alpha.1]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-beta.6...v0.3-alpha.1
-[0.2-beta.6]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-beta.5...v0.2-beta.6
-[0.2-beta.5]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-beta.4...v0.2-beta.5
-[0.2-beta.4]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-beta.3...v0.2-beta.4
-[0.2-beta.3]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-beta.2...v0.2-beta.3
-[0.2-beta.2]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-beta.1...v0.2-beta.2
-[0.2-beta.1]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-alpha.3...v0.2-beta.1
-[0.2-alpha.3]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-alpha.2...v0.2-alpha.3
-[0.2-alpha.2]: https://github.com/gitoido-mc/rad-gyms/compare/v0.2-alpha...v0.2-alpha.2
-[0.2-alpha]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.13.1-stable...v0.2-alpha
-[0.1.13.1-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.13-stable...v0.1.13.1-stable
-[0.1.13-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.12-stable...v0.1.13-stable
-[0.1.12-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.11...v0.1.12-stable
-[0.1.11]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.10...v0.1.11
-[0.1.10]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.9...v0.1.10
-[0.1.9]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.8b-stable...v0.1.9
-[0.1.8b-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.8-stable...v0.1.8b-stable
-[0.1.8-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.7-stable...v0.1.8-stable
-[0.1.7-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.6-stable...v0.1.7-stable
-[0.1.6-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.5-stable...v0.1.6-stable
-[0.1.5-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.4-stable...v0.1.5-stable
-[0.1.4-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.3-stable...v0.1.4-stable
-[0.1.3-stable]: https://github.com/gitoido-mc/rad-gyms/compare/v0.1.2-stable...v0.1.3-stable
-[0.1.2-stable]: https://github.com/gitoido-mc/rad-gyms/compare/0.1.1-beta...v0.1.2-stable
+[unreleased]: https://github.com///compare/1.7.3+0.4.3...HEAD
+[1.7.3+0.4.3]: https://github.com///compare/1.7.3+0.4.2...1.7.3+0.4.3
+[1.7.3+0.4.2]: https://github.com///compare/1.7.3+0.4.1...1.7.3+0.4.2
+[1.7.3+0.4.1]: https://github.com///compare/1.7.3+0.4.0...1.7.3+0.4.1
+[1.7.3+0.4.0]: https://github.com///compare/1.7.0+0.4.0-alpha...1.7.3+0.4.0
+[1.7.0+0.4.0-alpha]: https://github.com///compare/1.7.0+0.3.1...1.7.0+0.4.0-alpha
+[1.7.0+0.3.1]: https://github.com///compare/1.7.0+0.3.0-stable...1.7.0+0.3.1
+[1.7.0+0.3.0-stable]: https://github.com///compare/1.6.1+0.3.0-beta1...1.7.0+0.3.0-stable
+[1.6.1+0.3.0-beta1]: https://github.com///compare/1.6.1+0.3.0-alpha1...1.6.1+0.3.0-beta1
+[1.6.1+0.3.0-alpha1]: https://github.com///compare/1.6.1+0.2.0-beta6...1.6.1+0.3.0-alpha1
+[1.6.1+0.2.0-beta6]: https://github.com///compare/1.6.1+0.2.0-beta5...1.6.1+0.2.0-beta6
+[1.6.1+0.2.0-beta5]: https://github.com///compare/1.6.1+0.2.0-beta4...1.6.1+0.2.0-beta5
+[1.6.1+0.2.0-beta4]: https://github.com///compare/1.6.1+0.2.0-beta3...1.6.1+0.2.0-beta4
+[1.6.1+0.2.0-beta3]: https://github.com///compare/1.6.1+0.2.0-beta2...1.6.1+0.2.0-beta3
+[1.6.1+0.2.0-beta2]: https://github.com///compare/1.6.1+0.2.0-beta1...1.6.1+0.2.0-beta2
+[1.6.1+0.2.0-beta1]: https://github.com///compare/1.6.1+0.2.0-alpha3...1.6.1+0.2.0-beta1
+[1.6.1+0.2.0-alpha3]: https://github.com///compare/1.6.1+0.2.0-alpha2...1.6.1+0.2.0-alpha3
+[1.6.1+0.2.0-alpha2]: https://github.com///compare/1.6.1+0.2.0-alpha1...1.6.1+0.2.0-alpha2
+[1.6.1+0.2.0-alpha1]: https://github.com///compare/1.6.1+0.1.13-stable1...1.6.1+0.2.0-alpha1
+[1.6.1+0.1.13-stable1]: https://github.com///compare/1.6.1+0.1.13-stable...1.6.1+0.1.13-stable1
+[1.6.1+0.1.13-stable]: https://github.com///compare/1.6.1+0.1.12-stable...1.6.1+0.1.13-stable
+[1.6.1+0.1.12-stable]: https://github.com///compare/1.6.1+0.1.11-stable...1.6.1+0.1.12-stable
+[1.6.1+0.1.11-stable]: https://github.com///compare/1.6.1+0.1.10-stable...1.6.1+0.1.11-stable
+[1.6.1+0.1.10-stable]: https://github.com///compare/1.6.1+0.1.9-stable...1.6.1+0.1.10-stable
+[1.6.1+0.1.9-stable]: https://github.com///compare/1.6.1+0.1.8-stableb...1.6.1+0.1.9-stable
+[1.6.1+0.1.8-stableb]: https://github.com///compare/1.6.1+0.1.8-stable...1.6.1+0.1.8-stableb
+[1.6.1+0.1.8-stable]: https://github.com///compare/1.6.1+0.1.7-stable...1.6.1+0.1.8-stable
+[1.6.1+0.1.7-stable]: https://github.com///compare/1.6.1+0.1.6-stable...1.6.1+0.1.7-stable
+[1.6.1+0.1.6-stable]: https://github.com///compare/1.6.1+0.1.5-stable...1.6.1+0.1.6-stable
+[1.6.1+0.1.5-stable]: https://github.com///compare/1.6.1+0.1.4-stable...1.6.1+0.1.5-stable
+[1.6.1+0.1.4-stable]: https://github.com///compare/1.6.1+0.1.3-stable...1.6.1+0.1.4-stable
+[1.6.1+0.1.3-stable]: https://github.com///compare/1.6.1+0.1.2-stable...1.6.1+0.1.3-stable
+[1.6.1+0.1.2-stable]: https://github.com///compare/1.6.1+0.1.1-beta...1.6.1+0.1.2-stable
 
 <!-- generated by git-cliff -->

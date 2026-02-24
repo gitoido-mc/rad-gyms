@@ -75,6 +75,9 @@ commit_preprocessors = [
     { pattern = '\((\w+\s)?#([0-9]+)\)', replace = "" },
 ]
 commit_parsers = [
+    { message = ".*skip_cl", skip = true },
+    { message = ".*skip-cl", skip = true },
+    { message = "^Upload", skip = true },
     { message = "^feat", group = "<!-- 0 -->🚀 Features" },
     { field = "github.pr_labels", pattern = "^enhancement", group = "<!-- 0 -->🚀 Features" },
     { message = "^fix", group = "<!-- 1 -->🐛 Bug Fixes" },
@@ -94,15 +97,13 @@ commit_parsers = [
     { body = ".*security", group = "<!-- 8 -->🛡️ Security" },
     { message = "^revert", group = "<!-- 9 -->◀️ Revert" },
     { message = ".*", group = "<!-- 10 -->💼 Other" },
-    { message = ".*skip_cl", skip = true },
-    { message = ".*skip-cl", skip = true },
 ]
 
 filter_commits = true
 topo_order = false
 sort_commits = "newest"
-skip_tags = '1.(\d)+.(\d|\w)+/nightly'
-tag_pattern = '[0-9]+.[0-9]+.[0-9]+\-\w+\z'
+skip_tags = '1.(\d)+.(\d|\w)+nightly'
+tag_pattern = '[0-9]+.[0-9]+.[0-9]+(\-\w+){0,1}'
 
 [bump]
 features_always_bump_minor = false
