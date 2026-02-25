@@ -7,7 +7,7 @@
 
 package lol.gito.radgyms.common.client.render.entity
 
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.entity.Trainer
 import net.minecraft.client.model.PlayerModel
@@ -15,8 +15,9 @@ import net.minecraft.client.model.geom.ModelLayers
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.resources.ResourceLocation
+import java.io.FileNotFoundException
 
-class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
+class TrainerEntityRenderer(val ctx: EntityRendererProvider.Context) :
     LivingEntityRenderer<Trainer, PlayerModel<Trainer>>(
         ctx,
         PlayerModel(ctx.bakeLayer(ModelLayers.PLAYER), false),
@@ -29,9 +30,17 @@ class TrainerEntityRenderer(ctx: EntityRendererProvider.Context) :
     }
 
     override fun getTextureLocation(entity: Trainer): ResourceLocation = try {
-        modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png")
-    } catch (expected: NullPointerException) {
-        RadGyms.LOGGER.warn("Cannot use texture ${Trainer.GYM_ID}", expected)
+        val id = modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png")
+        ctx.resourceManager.getResourceOrThrow(id)
+
+        debug(
+            "Cannot find texture {}, falling back to {}",
+            modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png").toString(),
+            DEFAULT_TEXTURE.toString(),
+        )
+
+        id
+    } catch (_: FileNotFoundException) {
         DEFAULT_TEXTURE
     }
 }
