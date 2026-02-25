@@ -49,6 +49,7 @@ val defaultElementalTypes = setOf(
     ElementalTypes.DARK.showdownId,
     ElementalTypes.DRAGON.showdownId,
     ElementalTypes.ELECTRIC.showdownId,
+    ElementalTypes.FAIRY.showdownId,
     ElementalTypes.FLYING.showdownId,
     ElementalTypes.FIGHTING.showdownId,
     ElementalTypes.FIRE.showdownId,
