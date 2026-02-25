@@ -30,7 +30,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         const val GENERATOR_SHINY_ODDS = 10
     }
 
-    protected fun assembleProperties(level: Int, params: String): PokemonProperties = when (params.contains("level=")) {
+    protected fun setLevel(level: Int, params: String): PokemonProperties = when (params.contains("level=")) {
         true -> PokemonProperties.parse(params)
         false -> PokemonProperties.parse("level=$level $params")
     }
@@ -125,11 +125,8 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         poke.aspects,
     )
 
-    protected fun possibleTypes(rawTeam: MutableList<PokemonProperties>): List<ElementalType> = rawTeam
-        .map { ElementalTypes.get(it.type!!)!! }
-
     protected fun rawTeam(trainer: Trainer, level: Int): MutableList<PokemonProperties> = trainer.team!!
-        .map { assembleProperties(level, it) }
+        .map { setLevel(level, it) }
         .apply { this.forEach { it.updateAspects() } }
         .toMutableList()
 }

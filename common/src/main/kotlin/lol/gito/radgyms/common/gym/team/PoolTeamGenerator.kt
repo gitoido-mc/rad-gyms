@@ -30,7 +30,7 @@ object PoolTeamGenerator : GenericTeamGenerator() {
         val rawTeam = trainer.team!!
             .shuffled()
             .take(amount)
-            .map { assembleProperties(level, it) }
+            .map { setLevel(level, it) }
             .apply { this.forEach { it.updateAspects() } }
             .toMutableList()
 
