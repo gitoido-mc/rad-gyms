@@ -23,7 +23,7 @@ object FixedTeamGenerator : GenericTeamGenerator() {
         GENERATE_TEAM.post(
             GymEvents.GenerateTeamEvent(
                 player,
-                possibleTypes(rawTeam).toList(),
+                listOf(),
                 level,
                 trainer.id,
                 trainer.leader,

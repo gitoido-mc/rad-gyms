@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.client.render.gui.screen
 
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.client.render.drawScaledText
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.modId
@@ -15,6 +14,7 @@ import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.ENTER_SCREEN_CLOSE
 import lol.gito.radgyms.common.client.render.gui.widget.LevelSliderWidget
+import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.extension.math.Vec2i
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildTypeText
 import lol.gito.radgyms.common.helper.tl
@@ -36,7 +36,7 @@ class GymEnterScreen(
     val usesLeft: Int? = null,
 ) : AbstractGymScreen(
     when (type) {
-        null, "chaos", in (ElementalTypes.all().map { it.showdownId }) -> tl(
+        null, "chaos", in defaultElementalTypes -> tl(
             modId("gui.common.set-gym-level"),
             buildTypeText(type),
         )

@@ -20,6 +20,7 @@ import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import lol.gito.radgyms.common.api.team.TeamGeneratorInterface
+import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByType
 import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
@@ -60,7 +61,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
 
         val event = GymEvents.GenerateTeamEvent(
             player,
-            types ?: ElementalTypes.all().shuffled().take(1),
+            types ?: defaultElementalTypes.shuffled().take(1).map { ElementalTypes.getOrException(it) },
             level,
             trainer.id,
             trainer.leader,

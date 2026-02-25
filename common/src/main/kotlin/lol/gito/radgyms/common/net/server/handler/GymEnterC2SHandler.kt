@@ -8,9 +8,9 @@
 package lol.gito.radgyms.common.net.server.handler
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
+import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper
 import lol.gito.radgyms.common.helper.tl
@@ -26,20 +26,18 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
         RadGyms.debug("Using key? : ${packet.key}")
         var message = tl("message.info.gym_init", ElementalTypeTranslationHelper.buildTypeText(packet.type))
 
-        val type: String =
-            when (packet.type) {
-                "chaos", null -> ElementalTypes.all().random().showdownId
-                else -> packet.type
-            }
+        val type: String = when (packet.type) {
+            "chaos", null -> defaultElementalTypes.random()
+            else -> packet.type
+        }
 
         if (packet.key) {
             val stack = player.mainHandItem
 
             if (stack.item == RadGymsItems.GYM_KEY) {
-                val stackType =
-                    stack.components
-                        .getOrDefault(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, "chaos")
-                        .let { it ?: packet.type }
+                val stackType = stack.components
+                    .getOrDefault(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, "chaos")
+                    .let { it ?: packet.type }
                 RadGyms.debug("Gym key type : $stackType")
 
                 message = tl("message.info.gym_init", ElementalTypeTranslationHelper.buildTypeText(stackType))

@@ -15,6 +15,7 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
+import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.helper.tl
 import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
@@ -31,7 +32,7 @@ class ElementalTypeArgumentType : ArgumentType<ElementalType> {
         context: CommandContext<S>,
         builder: SuggestionsBuilder,
     ): CompletableFuture<Suggestions> = SharedSuggestionProvider.suggest(
-        ElementalTypes.all().map { it.showdownId },
+        defaultElementalTypes,
         builder,
     )
 
