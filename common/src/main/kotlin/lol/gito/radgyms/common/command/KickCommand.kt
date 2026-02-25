@@ -59,8 +59,8 @@ object KickCommand : CommandInterface {
                 context.source.sendFailure(
                     tl(
                         modId("message.error.command.kick.wrong_dim"),
-                        context.source.player!!.name
-                    )
+                        context.source.player!!.name,
+                    ),
                 )
             }
             shouldReturn = false

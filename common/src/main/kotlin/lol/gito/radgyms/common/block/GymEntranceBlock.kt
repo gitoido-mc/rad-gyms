@@ -215,7 +215,7 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                     SoundSource.BLOCKS,
                     SOUND_VOLUME_INITIAL + randomSource.nextFloat(),
                     randomSource.nextFloat() * SOUND_PITCH_MULTIPLIER + SOUND_PITCH_SCALAR_INC,
-                    true
+                    true,
                 )
             }
         }
