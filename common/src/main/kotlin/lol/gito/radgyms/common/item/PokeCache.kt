@@ -8,7 +8,6 @@
 package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.RadGyms.config
@@ -16,6 +15,7 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.cache.CacheHandler
+import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsDataComponents.RG_CACHE_SHINY_BOOST_COMPONENT
@@ -48,11 +48,10 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
             val stack = user.getItemInHand(hand)
             val rarity = stack.getOrDefault(RARITY, Rarity.COMMON)
             val boost = calculateCacheBoost(stack, user.offhandItem, user)
-            val type =
-                when (stack.getOrDefault(RG_GYM_TYPE_COMPONENT, ElementalTypes.all().random().showdownId)) {
-                    "chaos" -> ElementalTypes.all().random().showdownId
-                    else -> stack.getOrDefault(RG_GYM_TYPE_COMPONENT, ElementalTypes.all().random().showdownId)
-                }
+            val type = when (stack.getOrDefault(RG_GYM_TYPE_COMPONENT, defaultElementalTypes.random())) {
+                "chaos" -> defaultElementalTypes.random()
+                else -> stack.getOrDefault(RG_GYM_TYPE_COMPONENT, defaultElementalTypes.random())
+            }
             val poke: Pokemon = CacheHandler.getPoke(type, rarity, user as ServerPlayer, boost)
             CACHE_ROLL_POKE.emit(GymEvents.CacheRollPokeEvent(user, poke, type, rarity, boost))
 

@@ -7,9 +7,9 @@
 
 package lol.gito.radgyms.common.block.entity
 
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.registry.RadGymsBlockEntities
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -30,7 +30,7 @@ class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
     private val playerUsageDataKey = "playerEntries"
     private val gymTypeKey = "type"
     private var playerUseCounter: MutableMap<String, Int> = mutableMapOf()
-    var gymType: String = ElementalTypes.all().random().showdownId
+    var gymType: String = defaultElementalTypes.random()
 
     fun incrementPlayerUseCount(player: Player) {
         playerUseCounter[player.uuid.toString()] = playerUseCounter
