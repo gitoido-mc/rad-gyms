@@ -52,9 +52,8 @@ class LevelSliderWidget(
             .div(maxLevel.minus(minLevel))
     }
 
-    private fun fromSliderValue(): Int = (value - 0.0)
+    private fun fromSliderValue(): Int = value
         .times(maxLevel - minLevel)
-        .div(1.0 - 0.0)
         .plus(minLevel)
         .floor()
         .toInt()

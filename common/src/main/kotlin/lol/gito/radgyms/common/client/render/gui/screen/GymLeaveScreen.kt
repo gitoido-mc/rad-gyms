@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.client.render.gui.screen
 
 import com.cobblemon.mod.common.client.render.drawScaledText
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.LEAVE_SCREEN_CLOSE
@@ -19,7 +20,7 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.util.CommonColors
 import org.lwjgl.glfw.GLFW
 
-class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
+class GymLeaveScreen : AbstractGymScreen(tl(modId("gui.common.leave"))) {
     companion object {
         // Screen root widget params
         const val BASE_WIDTH = 300
@@ -94,7 +95,7 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
         // Box Label
         drawScaledText(
             context = context,
-            text = tl("gui.common.leave"),
+            text = tl(modId("gui.common.leave")),
             x = x + (BASE_WIDTH / 2),
             y = y + 10,
             centered = true,
@@ -102,7 +103,7 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
         )
         drawScaledText(
             context = context,
-            text = tl("gui.common.leave-gym"),
+            text = tl(modId("gui.common.leave-gym")),
             x = x + (BASE_WIDTH / 2),
             y = middleY - 16,
             centered = true,
@@ -110,7 +111,7 @@ class GymLeaveScreen : AbstractGymScreen(tl("gui.common.leave")) {
         )
         drawScaledText(
             context = context,
-            text = tl("gui.common.leave-gym-reward"),
+            text = tl(modId("gui.common.leave-gym-reward")),
             x = x + (BASE_WIDTH / 2),
             y = middleY - 4,
             centered = true,
