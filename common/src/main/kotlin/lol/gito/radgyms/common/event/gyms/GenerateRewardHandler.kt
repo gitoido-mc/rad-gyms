@@ -13,6 +13,7 @@ import lol.gito.radgyms.common.MAX_PERFECT_IVS
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.reward.AdvancementReward
 import lol.gito.radgyms.common.api.dto.reward.CommandReward
 import lol.gito.radgyms.common.api.dto.reward.LootTableReward
@@ -108,7 +109,7 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
 
         event.player.displayClientMessage(
             tl(
-                "message.info.gym_complete.reward_poke",
+                modId("message.info.gym_complete.reward_poke"),
                 when (poke.shiny) {
                     true -> poke.species.translatedName.rainbow()
                     false -> poke.species.translatedName
@@ -173,7 +174,7 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
 
         bundle.set(
             DataComponents.CUSTOM_NAME,
-            tl(prefix = "item", key = "gym_reward", styledLevel, styledType),
+            tl("item", modId("gym_reward"), styledLevel, styledType),
         )
         bundle.set(DataComponents.BUNDLE_CONTENTS, bundleContents.toImmutable())
         event.player.giveOrDropItemStack(bundle, true)

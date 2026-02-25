@@ -7,7 +7,7 @@
 
 package lol.gito.radgyms.common.registry
 
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.RadGyms.warn
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
@@ -56,6 +56,6 @@ object RadGymsStats {
     }
 
     data class RadGymsStat(val path: String, val formatter: StatFormatter = StatFormatter.DEFAULT) {
-        val resourceLocation: ResourceLocation = RadGyms.modId(path)
+        val resourceLocation: ResourceLocation = modId(path)
     }
 }

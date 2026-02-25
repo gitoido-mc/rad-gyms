@@ -12,6 +12,7 @@ import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import lol.gito.radgyms.common.COMMANDS_PREFIX
 import lol.gito.radgyms.common.RadGyms.loadConfig
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
@@ -35,7 +36,7 @@ object ReloadCommand : CommandInterface {
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         loadConfig()
-        context.source.player?.displayClientMessage(tl("message.info.command.config_reloaded"))
+        context.source.player?.displayClientMessage(tl(modId("message.info.command.config_reloaded")))
         return Command.SINGLE_SUCCESS
     }
 }

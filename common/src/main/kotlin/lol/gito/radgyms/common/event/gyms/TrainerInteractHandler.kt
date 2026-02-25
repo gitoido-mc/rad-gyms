@@ -18,6 +18,7 @@ import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
 import com.gitlab.srcmc.rctapi.api.util.JTO
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.RadGyms.warn
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -26,6 +27,7 @@ import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
 import lol.gito.radgyms.common.world.state.RadGymsState
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
@@ -79,13 +81,13 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
                     event.player.uuid,
                     event.trainer.uuid,
                 )
-                handleBattleStartError("message.error.battle_start_invalid_entity", event.player)
+                handleBattleStartError(modId("message.error.battle_start_invalid_entity"), event.player)
                 true
             }
 
             (gym == null) -> {
                 warn("Player {} tried to initialize battle without proper gym instance", event.player.uuid)
-                handleBattleStartError("message.error.player_gym_state_empty", event.player)
+                handleBattleStartError(modId("message.error.player_gym_state_empty"), event.player)
                 true
             }
 
@@ -95,7 +97,7 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
                     event.player.uuid,
                     event.trainer.uuid,
                 )
-                handleBattleStartError("message.error.missing_trainer_id_gym_state", event.player)
+                handleBattleStartError(modId("message.error.missing_trainer_id_gym_state"), event.player)
                 true
             }
 
@@ -162,10 +164,10 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
             false -> "message.info.trainer_defeated"
         }
 
-        event.player.displayClientMessage(tl(messageKey))
+        event.player.displayClientMessage(tl(modId(messageKey)))
     }
 
-    private fun handleBattleStartError(message: String, player: ServerPlayer) {
+    private fun handleBattleStartError(message: ResourceLocation, player: ServerPlayer) {
         player.displayClientMessage(tl(message))
         player.giveOrDropItemStack(EXIT_ROPE.defaultInstance, true)
     }

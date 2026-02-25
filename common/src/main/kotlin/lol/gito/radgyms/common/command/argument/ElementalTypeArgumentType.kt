@@ -44,7 +44,7 @@ class ElementalTypeArgumentType : ArgumentType<ElementalType> {
     )
 
     companion object {
-        val INVALID_TYPE = tl("message.error.argument.invalid_elemental_type")
+        val INVALID_TYPE = tl(modId("message.error.argument.invalid_elemental_type"))
 
         fun type() = ElementalTypeArgumentType()
 

@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
@@ -60,7 +61,7 @@ class TrainerBattleEndHandler(val event: GymEvents.TrainerBattleEndEvent) {
 
             winnerPlayers.forEach {
                 GENERATE_REWARD.emit(GymEvents.GenerateRewardEvent(it, gym.template, gym.level, gym.type))
-                it.displayClientMessage(tl("message.info.gym_complete"))
+                it.displayClientMessage(tl(modId("message.info.gym_complete")))
             }
         }
     }

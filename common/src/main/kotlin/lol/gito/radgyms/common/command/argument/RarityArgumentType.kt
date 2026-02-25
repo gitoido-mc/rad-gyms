@@ -13,6 +13,7 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.helper.tl
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.world.item.Rarity
@@ -36,7 +37,7 @@ class RarityArgumentType : ArgumentType<Rarity> {
     override fun getExamples(): Collection<String> = Rarity.entries.map { it.name.lowercase() }
 
     companion object {
-        val INVALID_RARITY = tl("message.error.argument.invalid_rarity")
+        val INVALID_RARITY = tl(modId("message.error.argument.invalid_rarity"))
 
         fun rarity() = RarityArgumentType()
 

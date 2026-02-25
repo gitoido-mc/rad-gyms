@@ -9,6 +9,7 @@ package lol.gito.radgyms.common.event.cache
 
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.extension.rainbow
@@ -22,8 +23,8 @@ class CacheRollPokeHandler(event: GymEvents.CacheRollPokeEvent) {
 
         event.player.displayClientMessage(
             tl(
-                "message.info.poke_cache.reward",
-                tl("label.rarity.${event.rarity.toString().lowercase()}").withStyle(event.rarity.color()),
+                modId("message.info.poke_cache.reward"),
+                tl(modId("label.rarity.${event.rarity.toString().lowercase()}")).withStyle(event.rarity.color()),
                 when (event.poke.shiny) {
                     true ->
                         event.poke.species.translatedName

@@ -16,6 +16,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import lol.gito.radgyms.common.COMMANDS_PREFIX
 import lol.gito.radgyms.common.RadGyms.config
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.dto.gym.GymJson
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -115,7 +116,7 @@ object GiveReward : CommandInterface {
 
         context.source.sendSystemMessage(
             tl(
-                key = "message.info.command.debug_reward",
+                modId("message.info.command.debug_reward"),
                 template.id,
                 tlc("type.${type.showdownId}"),
                 level,

@@ -14,6 +14,7 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.gym.GymJson
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsTemplates
@@ -48,7 +49,7 @@ class GymTemplateArgumentType : ArgumentType<GymJson> {
     )
 
     companion object {
-        val INVALID_TEMPLATE = tl("message.error.argument.invalid_gym_template")
+        val INVALID_TEMPLATE = tl(modId("message.error.argument.invalid_gym_template"))
 
         fun templates() = GymTemplateArgumentType()
 

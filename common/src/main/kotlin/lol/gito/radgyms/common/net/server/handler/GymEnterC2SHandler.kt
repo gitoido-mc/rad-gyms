@@ -9,6 +9,7 @@ package lol.gito.radgyms.common.net.server.handler
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.extension.displayClientMessage
@@ -24,7 +25,7 @@ import net.minecraft.server.level.ServerPlayer
 object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
     override fun handle(packet: GymEnterC2S, server: MinecraftServer, player: ServerPlayer) {
         RadGyms.debug("Using key? : ${packet.key}")
-        var message = tl("message.info.gym_init", ElementalTypeTranslationHelper.buildTypeText(packet.type))
+        var message = tl(modId("message.info.gym_init"), ElementalTypeTranslationHelper.buildTypeText(packet.type))
 
         val type: String = when (packet.type) {
             "chaos", null -> defaultElementalTypes.random()
@@ -40,12 +41,12 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
                     .let { it ?: packet.type }
                 RadGyms.debug("Gym key type : $stackType")
 
-                message = tl("message.info.gym_init", ElementalTypeTranslationHelper.buildTypeText(stackType))
+                message = tl(modId("message.info.gym_init"), ElementalTypeTranslationHelper.buildTypeText(stackType))
 
                 stack.consume(1, player)
                 player.awardStat(getStat(RadGyms.statistics.KEYS_USED))
             } else {
-                player.displayClientMessage(tl("message.error.key.not-in-main-hand"))
+                player.displayClientMessage(tl(modId("message.error.key.not-in-main-hand")))
             }
         }
 
