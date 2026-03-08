@@ -57,6 +57,7 @@ import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesOfType
 import lol.gito.radgyms.common.registry.RadGymsTemplates
 import lol.gito.radgyms.common.world.StructurePlacer
 import lol.gito.radgyms.common.world.state.RadGymsState
+import net.minecraft.core.registries.BuiltInRegistries
 
 @Suppress("TooManyFunctions")
 object EventManager {
@@ -64,6 +65,7 @@ object EventManager {
         debug("Registering event handlers")
         // Minecraft events
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStarting)
+        PlatformEvents.SERVER_STARTED.subscribe(Priority.NORMAL, ::onServerStarted)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
@@ -133,12 +135,22 @@ object EventManager {
         trainerRegistry.init(event.server)
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    private fun onServerStarted(event: ServerEvent.Started) {
+        RadGyms.cacheBoosters = try {
+            config.pokeCacheBoosters?.mapKeys { entry ->
+                BuiltInRegistries.ITEM.getHolder(entry.key).get()
+            } ?: emptyMap()
+        } catch (_: Throwable) {
+            emptyMap()
+        }
+    }
+
     private fun onPlayerJoin(event: ServerPlayerEvent) {
         debug("Sending server settings to player ${event.player.name}")
         ServerSettingsS2C(
             config.maxEntranceUses!!,
             config.shardRewards!!,
-            config.lapisBoostAmount!!,
             config.ignoredSpecies!!,
             config.minLevel!!,
             config.maxLevel!!,

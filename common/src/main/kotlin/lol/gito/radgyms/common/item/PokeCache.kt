@@ -10,7 +10,7 @@ package lol.gito.radgyms.common.item
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.RadGyms.config
+import lol.gito.radgyms.common.RadGyms.cacheBoosters
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
@@ -36,8 +36,6 @@ import net.minecraft.world.item.Items.LAPIS_LAZULI
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
-
-const val RG_CACHE_BLOCK_BOOST = 9
 
 open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().rarity(rarity)) {
     override fun use(level: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> = when {
@@ -90,21 +88,12 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
     private fun calculateCacheBoost(stack: ItemStack, offhand: ItemStack, user: Player): Int =
         with(stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)) {
             if (equals(Cobblemon.config.shinyRate)) return@with this
-
-            return@with when (offhand.item) {
-                LAPIS_LAZULI -> this.plus(config.lapisBoostAmount!!).also {
+            return@with when (val boost = cacheBoosters.getOrDefault(offhand.itemHolder, null)) {
+                null -> this
+                else -> this.plus(boost).also {
                     stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, it)
                     offhand.consume(1, user)
                 }
-
-                LAPIS_BLOCK -> this.plus(RG_CACHE_BLOCK_BOOST * config.lapisBoostAmount!!)
-                    .coerceAtMost(Cobblemon.config.shinyRate.toInt().dec())
-                    .also {
-                        stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, it)
-                        offhand.consume(1, user)
-                    }
-
-                else -> this
             }
         }
 }

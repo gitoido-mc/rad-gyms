@@ -24,7 +24,9 @@ import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry
 import lol.gito.radgyms.common.registry.RadGymsStats
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
+import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
 import net.minecraft.world.level.border.WorldBorder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -43,13 +45,16 @@ object RadGyms {
     @JvmField
     val dimensionWorldBorder: WorldBorder = WorldBorder()
 
+    @JvmField
     val statistics: RadGymsStats = RadGymsStats
 
+    @JvmField
     val dataProvider: DataProvider = RadGymsDataProvider
 
     lateinit var config: RadGymsConfig
     lateinit var implementation: RadGymsImplementation
     lateinit var gymInitializer: GymInitializer
+    lateinit var cacheBoosters: Map<Holder.Reference<Item>, Int>
 
     fun preInitialize(implementation: RadGymsImplementation) {
         this.implementation = implementation
@@ -94,7 +99,11 @@ object RadGyms {
 
         if (configFile.exists()) {
             LOGGER.info("Loading config")
-            config = with(configFile.inputStream()) { Json.decodeFromStream<RadGymsConfig>(this) }
+            config = with(configFile.inputStream()) {
+                val fileData = Json.decodeFromStream<RadGymsConfig>(this)
+
+                return@with RadGymsConfig.DEFAULT.combine(fileData)
+            }
         } else {
             LOGGER.info("No config found, creating new")
             config = RadGymsConfig.DEFAULT
@@ -105,7 +114,6 @@ object RadGyms {
             ServerSettingsS2C(
                 config.maxEntranceUses!!,
                 config.shardRewards!!,
-                config.lapisBoostAmount!!,
                 config.ignoredSpecies!!,
                 config.minLevel!!,
                 config.maxLevel!!,
