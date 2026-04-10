@@ -7,14 +7,12 @@
 
 package lol.gito.radgyms.common.cache
 
-import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.exception.RadGymsPoolNotDefinedException
 import net.minecraft.world.entity.ai.behavior.ShufflingList
 import net.minecraft.world.item.Rarity
 
 typealias CachePoolMap = Map<String, Map<String, Int>>
 
-@Serializable
 class CacheDTO(val pools: CachePoolMap) {
     fun forRarity(rarity: Rarity): ShufflingList<String> {
         val pokeList = pools[rarity.serializedName.lowercase()] ?: throw RadGymsPoolNotDefinedException(

@@ -7,37 +7,34 @@
 
 package lol.gito.radgyms.common.api.dto.reward
 
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
-import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_COMMAND
 import lol.gito.radgyms.common.api.enumeration.GymReward
-import lol.gito.radgyms.common.api.serialization.MGymRewardType
-import lol.gito.radgyms.common.api.serialization.MGymRewardTypes
+import lol.gito.radgyms.common.api.serialization.GymRewardType
+import lol.gito.radgyms.common.api.serialization.GymRewardTypes
 
-@Serializable
-@SerialName(REGISTRY_REWARD_TYPE_COMMAND)
 data class CommandReward(
     val execute: String,
-    @SerialName("as_server")
+    @SerializedName("as_server")
     val asServer: Boolean = false,
-    @SerialName("op_level")
+    @SerializedName("op_level")
     val opLevel: Int = 2,
-    @SerialName("min_level")
+    @SerializedName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
-    @SerialName("max_level")
+    @SerializedName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     @Transient
     val type: GymReward = GymReward.COMMAND,
 ) : RewardInterface {
-    override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.COMMAND
+    override fun getRewardType(): GymRewardType<*> = GymRewardTypes.COMMAND
 
     companion object {
+        const val ID = "command"
+
         @JvmStatic
         val CODEC: MapCodec<CommandReward> =
             RecordCodecBuilder.mapCodec { instance ->

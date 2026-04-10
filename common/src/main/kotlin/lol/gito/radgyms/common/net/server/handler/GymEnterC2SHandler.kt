@@ -9,9 +9,9 @@ package lol.gito.radgyms.common.net.server.handler
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
-import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper
 import lol.gito.radgyms.common.helper.tl

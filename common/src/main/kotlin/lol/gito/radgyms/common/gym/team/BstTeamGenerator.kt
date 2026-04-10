@@ -9,8 +9,8 @@ package lol.gito.radgyms.common.gym.team
 
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByType
 
 object BstTeamGenerator : GenericTeamGenerator() {
@@ -18,10 +18,10 @@ object BstTeamGenerator : GenericTeamGenerator() {
         debug("Rolling for pokemon with level $level and type ${type.showdownId}")
         val speciesList = speciesByType[type.showdownId]!!
 
-        val levelChunkedRange = (config.minLevel!!..config.maxLevel!!).chunked(
+        val levelChunkedRange = (RadGymsConfigs.server.minLevel..RadGymsConfigs.server.maxLevel).chunked(
             // This calculates the chunk size between min and max levels defined in config
-            (config.maxLevel!!)
-                .minus(config.minLevel!!)
+            (RadGymsConfigs.server.maxLevel)
+                .minus(RadGymsConfigs.server.minLevel)
                 .toDouble()
                 .div(amount)
                 .toInt()

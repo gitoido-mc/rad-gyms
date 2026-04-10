@@ -7,28 +7,23 @@
 
 package lol.gito.radgyms.common.api.dto.gym
 
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 import lol.gito.radgyms.common.api.dto.geospatial.Coords
 import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
 import lol.gito.radgyms.common.api.dto.reward.LootTableReward
 import lol.gito.radgyms.common.api.dto.reward.RewardInterface
 import lol.gito.radgyms.common.api.dto.trainer.Trainer
 
-@Serializable
 data class GymJson(
     val id: String,
-    @SerialName("interior_template")
+    @SerializedName("interior_template")
     val template: String,
-    @SerialName("exit_block_pos")
+    @SerializedName("exit_block_pos")
     val exitBlockPos: Coords,
-    @SerialName("player_spawn_relative")
+    @SerializedName("player_spawn_relative")
     val playerSpawnRelative: EntityCoordsAndYaw,
-    @SerialName("trainers")
     val trainers: List<Trainer>,
-    @SerialName("rewards")
-    val rewards: List<@Polymorphic RewardInterface> =
+    val rewards: List<RewardInterface> =
         listOf(
             LootTableReward(
                 id = "rad_gyms:gyms/default/shared_loot_table",

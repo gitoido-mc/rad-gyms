@@ -10,10 +10,10 @@ package lol.gito.radgyms.common.block
 import com.cobblemon.mod.common.util.party
 import com.mojang.serialization.MapCodec
 import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
-import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
@@ -136,9 +136,9 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
                     }
 
                     val derivedLevel =
-                        when (RadGyms.config.deriveAverageGymLevel!!) {
+                        when (RadGymsConfigs.server.deriveAverageGymLevel) {
                             true -> player.averagePokePartyLevel()
-                            false -> RadGyms.config.minLevel!!
+                            false -> RadGymsConfigs.server.minLevel
                         }
 
                     OpenGymEnterScreenS2C(

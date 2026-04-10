@@ -10,9 +10,9 @@ package lol.gito.radgyms.common.item
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
-import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
@@ -56,9 +56,9 @@ class GymKey :
             }
 
             else -> {
-                val derivedLevel = when (RadGyms.config.deriveAverageGymLevel!!) {
+                val derivedLevel = when (RadGymsConfigs.server.deriveAverageGymLevel) {
                     true -> player.averagePokePartyLevel()
-                    false -> RadGyms.config.minLevel!!
+                    false -> RadGymsConfigs.server.minLevel
                 }
                 val type = player.getItemInHand(hand).getOrDefault(
                     RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,

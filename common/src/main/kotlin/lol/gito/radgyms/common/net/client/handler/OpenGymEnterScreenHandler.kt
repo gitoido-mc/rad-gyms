@@ -8,8 +8,8 @@
 package lol.gito.radgyms.common.net.client.handler
 
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
-import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.net.server.payload.OpenGymEnterScreenS2C
 import net.minecraft.client.Minecraft
 
@@ -22,8 +22,8 @@ object OpenGymEnterScreenHandler : ClientNetworkPacketHandler<OpenGymEnterScreen
             packet.pos,
             packet.key,
             packet.type,
-            RadGyms.config.minLevel!!,
-            RadGyms.config.maxLevel!!,
+            RadGymsConfigs.server.minLevel,
+            RadGymsConfigs.server.maxLevel,
             packet.derivedLevel,
             packet.usesLeft,
         ),

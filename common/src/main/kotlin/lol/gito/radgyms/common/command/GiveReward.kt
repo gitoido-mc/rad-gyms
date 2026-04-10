@@ -15,7 +15,6 @@ import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import lol.gito.radgyms.common.COMMANDS_PREFIX
-import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.dto.gym.GymJson
@@ -23,6 +22,7 @@ import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
 import lol.gito.radgyms.common.command.argument.ElementalTypeArgumentType
 import lol.gito.radgyms.common.command.argument.GymTemplateArgumentType
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.gym.GymTemplate
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.helper.tlc
@@ -106,7 +106,7 @@ object GiveReward : CommandInterface {
                 GymTemplate.fromDto(
                     player,
                     template,
-                    level.coerceIn(config.minLevel!!, Cobblemon.config.maxPokemonLevel),
+                    level.coerceIn(RadGymsConfigs.server.minLevel, Cobblemon.config.maxPokemonLevel),
                     type.showdownId,
                 ),
                 level,

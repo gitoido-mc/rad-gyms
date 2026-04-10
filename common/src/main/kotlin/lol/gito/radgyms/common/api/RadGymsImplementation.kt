@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
+import java.nio.file.Path
 import kotlin.reflect.KClass
 
 interface RadGymsImplementation {
@@ -30,6 +31,8 @@ interface RadGymsImplementation {
     fun environment(): Environment
 
     fun isModInstalled(id: String): Boolean
+
+    fun configDir(): Path
 
     fun registerDataComponents()
 

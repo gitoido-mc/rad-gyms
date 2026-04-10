@@ -9,29 +9,23 @@ package lol.gito.radgyms.common.api.enumeration
 
 import com.gitlab.srcmc.rctapi.api.battle.BattleFormat
 import com.gitlab.srcmc.rctapi.api.battle.BattleFormatProvider
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import net.minecraft.util.StringRepresentable
 import com.cobblemon.mod.common.battles.BattleFormat as CBattleFormat
 
-@Serializable
 enum class GymBattleFormat :
     BattleFormatProvider,
     StringRepresentable {
     @JvmField
-    @SerialName("singles")
     SINGLES {
         override val format: BattleFormat = BattleFormat.GEN_9_SINGLES
     },
 
     @JvmField
-    @SerialName("doubles")
     DOUBLES {
         override val format: BattleFormat = BattleFormat.GEN_9_DOUBLES
     },
 
     @JvmField
-    @SerialName("triples")
     TRIPLES {
         override val format: BattleFormat = BattleFormat.GEN_9_TRIPLES
     }, ;

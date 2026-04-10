@@ -7,12 +7,10 @@
 
 package lol.gito.radgyms.common.api.dto.trainer
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class TeamLevelThreshold(
     val amount: Int,
-    @SerialName("until_level")
+    @SerializedName("until_level")
     val untilLevel: Int,
 )

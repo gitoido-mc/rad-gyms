@@ -7,23 +7,18 @@
 
 package lol.gito.radgyms.common.api.enumeration
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import lol.gito.radgyms.common.gym.team.BstTeamGenerator
 import lol.gito.radgyms.common.gym.team.ChaoticTeamGenerator
 import lol.gito.radgyms.common.gym.team.GenericTeamGenerator
 import net.minecraft.util.StringRepresentable
 
-@Serializable
 enum class GymTeamGeneratorType : StringRepresentable {
     @JvmField
-    @SerialName("bst")
     BST {
         override val instance: GenericTeamGenerator = BstTeamGenerator
     },
 
     @JvmField
-    @SerialName("chaotic")
     CHAOTIC {
         override val instance: GenericTeamGenerator = ChaoticTeamGenerator
     }, ;

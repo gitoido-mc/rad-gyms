@@ -10,12 +10,12 @@ package lol.gito.radgyms.common.item
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.RadGyms.config
+import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
 import lol.gito.radgyms.common.cache.CacheHandler
-import lol.gito.radgyms.common.defaultElementalTypes
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildPrefixedSuffixedTypeText
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsDataComponents.RG_CACHE_SHINY_BOOST_COMPONENT
@@ -92,12 +92,12 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
             if (equals(Cobblemon.config.shinyRate)) return@with this
 
             return@with when (offhand.item) {
-                LAPIS_LAZULI -> this.plus(config.lapisBoostAmount!!).also {
+                LAPIS_LAZULI -> this.plus(RadGymsConfigs.server.lapisBoostAmount).also {
                     stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, it)
                     offhand.consume(1, user)
                 }
 
-                LAPIS_BLOCK -> this.plus(RG_CACHE_BLOCK_BOOST * config.lapisBoostAmount!!)
+                LAPIS_BLOCK -> this.plus(RG_CACHE_BLOCK_BOOST * RadGymsConfigs.server.lapisBoostAmount)
                     .coerceAtMost(Cobblemon.config.shinyRate.toInt().dec())
                     .also {
                         stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, it)
