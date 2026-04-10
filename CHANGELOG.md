@@ -7,13 +7,37 @@ and this project adheres to [ZeroVer](https://0ver.org).
 
 ## [Unreleased]
 
+### <!-- 2 -->🚜 Refactor
+- Changed serialization to gson and refactored config load
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Updated gradle, deps and removed kotlinx.serialization
+
+## [1.7.3+0.4.4] - 2026-02-25
+
+### <!-- 0 -->🚀 Features
+- Added particles and sounds for gym entrance block
+
 ### <!-- 1 -->🐛 Bug Fixes
+- Rollback mirrored gradle repo for cobblemon
+- Fix translations defaulting to minecraft namespace again
+- Add missing fairy type to defaultElementalTypes
+- Refactor type checks to use defaultElementalType list
+- Add check for custom trainer texture
+- Fix more GUI translations defaulting to minecraft namespace after TranslationHelper update
+- Fix translations defaulting to minecraft namespace after TranslationHelper update
 - Ensure i18n provider generates translation keys in proper namespace
 
 ### <!-- 2 -->🚜 Refactor
 - Detekt checks, code flow optimizations, reintroduced snapshot switch
 
+### <!-- 5 -->🎨 Styling
+- Detekt checks
+- Cleanup dead code and rename assembleProperties to setLevel in generic team generator
+
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Unused library versions cleanup
+- Changelog update
 - Remove dangling docs project
 
 ## [1.7.3+0.4.3] - 2026-02-20
@@ -561,7 +585,8 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Alpha version
 - Initial commit
 
-[unreleased]: https://github.com///compare/1.7.3+0.4.3...HEAD
+[unreleased]: https://github.com///compare/1.7.3+0.4.4...HEAD
+[1.7.3+0.4.4]: https://github.com///compare/1.7.3+0.4.3...1.7.3+0.4.4
 [1.7.3+0.4.3]: https://github.com///compare/1.7.3+0.4.2...1.7.3+0.4.3
 [1.7.3+0.4.2]: https://github.com///compare/1.7.3+0.4.1...1.7.3+0.4.2
 [1.7.3+0.4.1]: https://github.com///compare/1.7.3+0.4.0...1.7.3+0.4.1
