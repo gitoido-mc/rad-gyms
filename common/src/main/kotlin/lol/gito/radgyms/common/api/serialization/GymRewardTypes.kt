@@ -16,29 +16,29 @@ import lol.gito.radgyms.common.api.dto.reward.RewardInterface
 import lol.gito.radgyms.common.api.enumeration.GymReward
 import net.minecraft.core.Registry
 
-object MGymRewardTypes {
-    val COMMAND: MGymRewardType<CommandReward> = register(
+object GymRewardTypes {
+    val COMMAND: GymRewardType<CommandReward> = register(
         GymReward.COMMAND,
-        MGymRewardType(CommandReward.CODEC),
+        GymRewardType(CommandReward.CODEC),
     )
 
-    val LOOT_TABLE: MGymRewardType<LootTableReward> = register(
+    val LOOT_TABLE: GymRewardType<LootTableReward> = register(
         GymReward.LOOT_TABLE,
-        MGymRewardType(LootTableReward.CODEC),
+        GymRewardType(LootTableReward.CODEC),
     )
 
-    val POKEMON: MGymRewardType<PokemonReward> = register(
+    val POKEMON: GymRewardType<PokemonReward> = register(
         GymReward.POKEMON,
-        MGymRewardType(PokemonReward.CODEC),
+        GymRewardType(PokemonReward.CODEC),
     )
 
-    val ADVANCEMENT: MGymRewardType<AdvancementReward> = register(
+    val ADVANCEMENT: GymRewardType<AdvancementReward> = register(
         GymReward.ADVANCEMENT,
-        MGymRewardType(AdvancementReward.CODEC),
+        GymRewardType(AdvancementReward.CODEC),
     )
 
-    fun <T : RewardInterface> register(type: GymReward, item: MGymRewardType<T>): MGymRewardType<T> = Registry.register(
-        MGymRewardType.REGISTRY,
+    fun <T : RewardInterface> register(type: GymReward, item: GymRewardType<T>): GymRewardType<T> = Registry.register(
+        GymRewardType.REGISTRY,
         modId(type.serializedName),
         item,
     )

@@ -8,7 +8,7 @@
 package lol.gito.radgyms.common.extension
 
 import com.cobblemon.mod.common.Cobblemon
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
@@ -20,7 +20,7 @@ fun ServerPlayer.averagePokePartyLevel(): Int = Cobblemon.storage
     .average()
     .roundToInt()
     .coerceIn(
-        RadGyms.config.minLevel,
+        RadGymsConfigs.server.minLevel,
         Cobblemon.config.maxPokemonLevel,
     )
 

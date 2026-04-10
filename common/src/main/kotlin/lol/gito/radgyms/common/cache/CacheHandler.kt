@@ -11,7 +11,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.defaultElementalTypes
+import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
 import lol.gito.radgyms.common.exception.RadGymsPoolNotDefinedException
 import lol.gito.radgyms.common.extension.shinyRoll
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByRarity

@@ -13,10 +13,10 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
-import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.SpeciesWithForm
 import lol.gito.radgyms.common.cache.CacheDTO
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 
 private typealias SpeciesWithForms = List<SpeciesWithForm>
@@ -34,11 +34,11 @@ private fun PokemonProperties.matchesSimplified(other: SpeciesWithForm): Boolean
 }
 
 private fun mapToSpeciesWithForms(list: List<Species>, type: ElementalType? = null): SpeciesWithForms {
-    val ignored = config.ignoredSpecies?.map { PokemonProperties.parse(it) } ?: emptyList()
+    val ignored = RadGymsConfigs.server.ignoredSpecies.map { PokemonProperties.parse(it) }
 
     val filtered =
         list // Make a copy
-            .filterNot { it.resourceIdentifier.path in config.ignoredSpecies!! }
+            .filterNot { it.resourceIdentifier.path in RadGymsConfigs.server.ignoredSpecies }
             .associateWith { associateSpecies ->
                 val forms = mutableListOf<FormData>()
                 forms.addAll(associateSpecies.forms)

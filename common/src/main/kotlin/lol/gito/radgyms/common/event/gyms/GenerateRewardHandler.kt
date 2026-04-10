@@ -10,7 +10,6 @@ package lol.gito.radgyms.common.event.gyms
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.MAX_PERFECT_IVS
-import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.LOGGER
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
@@ -19,6 +18,7 @@ import lol.gito.radgyms.common.api.dto.reward.CommandReward
 import lol.gito.radgyms.common.api.dto.reward.LootTableReward
 import lol.gito.radgyms.common.api.dto.reward.PokemonReward
 import lol.gito.radgyms.common.api.event.GymEvents
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.extension.rainbow
 import lol.gito.radgyms.common.helper.tl
@@ -180,7 +180,7 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
         event.player.giveOrDropItemStack(bundle, true)
     }
 
-    private fun addRewards(loot: List<ItemStack>) = when (RadGyms.config.shardRewards) {
+    private fun addRewards(loot: List<ItemStack>) = when (RadGymsConfigs.server.shardRewards) {
         true -> event.rewards.addAll(loot)
         else -> event.rewards.addAll(loot.filter { it.item !is PokeShardBase })
     }

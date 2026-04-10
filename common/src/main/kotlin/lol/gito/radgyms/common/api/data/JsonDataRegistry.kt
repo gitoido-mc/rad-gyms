@@ -8,6 +8,8 @@
 package lol.gito.radgyms.common.api.data
 
 import com.cobblemon.mod.common.util.endsWith
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import java.io.File
@@ -16,11 +18,15 @@ import java.io.InputStream
 import java.util.concurrent.ExecutionException
 
 interface JsonDataRegistry<T> : DataRegistry {
-    val resourcePath: String
-
     companion object {
         const val JSON_EXTENSION = ".json"
     }
+
+    val gson: Gson
+
+    val typeToken: TypeToken<T>
+
+    val resourcePath: String
 
     @Throws(ExecutionException::class)
     override fun reload(manager: ResourceManager) {
@@ -47,7 +53,12 @@ interface JsonDataRegistry<T> : DataRegistry {
         reload(data)
     }
 
-    fun parse(stream: InputStream, identifier: ResourceLocation): T
+    @Throws(ExecutionException::class)
+    fun parse(stream: InputStream, identifier: ResourceLocation): T = try {
+        gson.fromJson(stream.reader(), typeToken.type)
+    } catch (exception: IOException) {
+        throw ExecutionException("Error loading JSON for data: $identifier", exception)
+    }
 
     fun reload(data: Map<ResourceLocation, T>)
 }

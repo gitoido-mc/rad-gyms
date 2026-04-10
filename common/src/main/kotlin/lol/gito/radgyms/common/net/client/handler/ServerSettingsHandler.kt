@@ -8,9 +8,9 @@
 package lol.gito.radgyms.common.net.client.handler
 
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
-import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.config.RadGymsConfig
+import lol.gito.radgyms.common.config.RadGymsConfigs
+import lol.gito.radgyms.common.config.ServerConfig
 import lol.gito.radgyms.common.net.server.payload.ServerSettingsS2C
 import net.minecraft.client.Minecraft
 
@@ -19,7 +19,7 @@ import net.minecraft.client.Minecraft
  */
 object ServerSettingsHandler : ClientNetworkPacketHandler<ServerSettingsS2C> {
     override fun handle(packet: ServerSettingsS2C, client: Minecraft) {
-        val serverConfig = RadGymsConfig(
+        val serverConfig = ServerConfig.create(
             maxEntranceUses = packet.maxEntranceUses,
             shardRewards = packet.shardRewards,
             lapisBoostAmount = packet.lapisBoostAmount,
@@ -28,7 +28,7 @@ object ServerSettingsHandler : ClientNetworkPacketHandler<ServerSettingsS2C> {
             maxLevel = packet.maxLevel,
         )
 
-        config = config.combine(serverConfig)
+        RadGymsConfigs.sync(serverConfig)
         debug("Received server config for Rad Gyms")
     }
 }

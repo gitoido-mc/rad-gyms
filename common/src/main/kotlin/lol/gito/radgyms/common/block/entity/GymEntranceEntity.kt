@@ -7,9 +7,9 @@
 
 package lol.gito.radgyms.common.block.entity
 
-import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.defaultElementalTypes
+import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.registry.RadGymsBlockEntities
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -36,7 +36,7 @@ class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
         playerUseCounter[player.uuid.toString()] = playerUseCounter
             .getOrDefault(player.uuid.toString(), 0)
             .inc()
-            .coerceIn(0, config.maxEntranceUses!!)
+            .coerceIn(0, RadGymsConfigs.server.maxEntranceUses)
 
         setChanged()
         debug(
@@ -82,15 +82,15 @@ class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
     fun usesLeftForPlayer(player: Player): Int {
         val playerCounter = playerUseCounter
             .getOrDefault(player.uuid.toString(), 0)
-            .coerceIn(0, config.maxEntranceUses!!)
+            .coerceIn(0, RadGymsConfigs.server.maxEntranceUses)
 
         debug(
             "Uses left for {} for {} gym entrance: {} (config max: {})",
             player,
             pos,
-            config.maxEntranceUses!! - playerCounter,
-            config.maxEntranceUses!!,
+            RadGymsConfigs.server.maxEntranceUses - playerCounter,
+            RadGymsConfigs.server.maxEntranceUses,
         )
-        return config.maxEntranceUses!! - playerCounter
+        return RadGymsConfigs.server.maxEntranceUses - playerCounter
     }
 }

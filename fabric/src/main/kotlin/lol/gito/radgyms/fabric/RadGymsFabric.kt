@@ -11,9 +11,9 @@ import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.ModAPI
 import com.mojang.brigadier.arguments.ArgumentType
 import lol.gito.radgyms.common.RadGyms
-import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsBlockEntities
@@ -52,6 +52,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
+import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.reflect.KClass
@@ -63,13 +64,15 @@ object RadGymsFabric : RadGymsImplementation {
 
     override val networkManager = RadGymsFabricNetworkManager
 
+    override fun isModInstalled(id: String): Boolean = FabricLoader.getInstance().isModLoaded(id)
+
+    override fun configDir(): Path = FabricLoader.getInstance().configDir
+
     override fun environment(): Environment = when (FabricLoader.getInstance().environmentType) {
         EnvType.CLIENT -> Environment.CLIENT
         EnvType.SERVER -> Environment.SERVER
         else -> error("Fabric implementation cannot resolve environment yet")
     }
-
-    override fun isModInstalled(id: String): Boolean = FabricLoader.getInstance().isModLoaded(id)
 
     override fun initialize() {
         RadGyms.preInitialize(this)
@@ -165,7 +168,7 @@ object RadGymsFabric : RadGymsImplementation {
     }
 
     fun onBeforeBlockBreak(world: Level, player: Player, state: BlockState): Boolean = with(world.dimension()) {
-        if (this == RadGymsDimensions.GYM_DIMENSION && config.debug == true) return@with true
+        if (this == RadGymsDimensions.GYM_DIMENSION && RadGymsConfigs.server.debug) return@with true
 
         return@with when (state.block == RadGymsBlocks.GYM_ENTRANCE && !player.isShiftKeyDown) {
             false -> true

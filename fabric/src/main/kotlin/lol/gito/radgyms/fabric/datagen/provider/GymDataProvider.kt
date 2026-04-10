@@ -18,7 +18,7 @@ import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
-import lol.gito.radgyms.common.api.serialization.MRadGymsCodec
+import lol.gito.radgyms.common.api.serialization.RadGymsCodecs
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider
 import net.minecraft.core.HolderLookup
@@ -33,7 +33,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
         lookup,
         PackOutput.Target.DATA_PACK,
         "gyms",
-        MRadGymsCodec.GYM,
+        RadGymsCodecs.GYM,
     ) {
     override fun getName(): String = "Gym data"
 

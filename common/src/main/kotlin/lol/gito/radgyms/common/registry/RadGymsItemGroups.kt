@@ -7,9 +7,9 @@
 
 package lol.gito.radgyms.common.registry
 
+import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.defaultElementalTypes
 import lol.gito.radgyms.common.helper.tl
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries

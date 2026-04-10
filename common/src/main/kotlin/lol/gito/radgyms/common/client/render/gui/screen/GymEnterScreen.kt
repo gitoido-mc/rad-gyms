@@ -8,13 +8,13 @@
 package lol.gito.radgyms.common.client.render.gui.screen
 
 import com.cobblemon.mod.common.client.render.drawScaledText
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.ENTER_SCREEN_CLOSE
 import lol.gito.radgyms.common.client.render.gui.widget.LevelSliderWidget
-import lol.gito.radgyms.common.defaultElementalTypes
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.math.Vec2i
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildTypeText
 import lol.gito.radgyms.common.helper.tl
@@ -29,8 +29,8 @@ import org.lwjgl.glfw.GLFW
 class GymEnterScreen(
     val key: Boolean,
     val selectedLevel: Int,
-    val minLevel: Int = RadGyms.config.minLevel!!,
-    val maxLevel: Int = RadGyms.config.maxLevel!!,
+    val minLevel: Int = RadGymsConfigs.server.minLevel,
+    val maxLevel: Int = RadGymsConfigs.server.maxLevel,
     val type: String? = null,
     val pos: BlockPos? = null,
     val usesLeft: Int? = null,

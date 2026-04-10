@@ -7,7 +7,7 @@
 
 package lol.gito.radgyms.common.client.render.gui.widget
 
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.math.floor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractSliderButton
@@ -17,7 +17,7 @@ import net.minecraft.network.chat.Component
 class LevelSliderWidget(
     x: Int,
     y: Int,
-    private val initialLevel: Int = RadGyms.config.minLevel!!,
+    private val initialLevel: Int = RadGymsConfigs.server.minLevel,
     private val minLevel: Int,
     private val maxLevel: Int,
     private val onChange: (Int) -> Unit,

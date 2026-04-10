@@ -7,10 +7,9 @@
 
 package lol.gito.radgyms.common.api.dto.trainer
 
+import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 import lol.gito.radgyms.common.MAX_PARTY_SIZE
 import lol.gito.radgyms.common.api.dto.battle.BattleAI
 import lol.gito.radgyms.common.api.dto.battle.BattleRules
@@ -18,32 +17,29 @@ import lol.gito.radgyms.common.api.dto.geospatial.EntityCoordsAndYaw
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
-import lol.gito.radgyms.common.api.serialization.ElementalListType
 
-@Serializable
 data class Trainer(
     val id: String,
     var name: String = "rad_gyms.npc.default_trainer",
-    @SerialName("spawn_relative")
+    @SerializedName("spawn_relative")
     val spawnRelative: EntityCoordsAndYaw,
-    @SerialName("type")
+    @SerializedName("type")
     val teamType: GymTeamType = GymTeamType.GENERATED,
-    @SerialName("generator")
+    @SerializedName("generator")
     val teamGenerator: GymTeamGeneratorType = GymTeamGeneratorType.CHAOTIC,
-    @Contextual
-    @SerialName("elemental_types")
-    val possibleElementalTypes: ElementalListType =
+    @SerializedName("elemental_types")
+    val possibleElementalTypes: List<ElementalType> =
         listOf(
             ElementalTypes.getRandomType(),
         ),
-    @SerialName("formats")
+    @SerializedName("formats")
     val possibleFormats: List<GymBattleFormat> = listOf(GymBattleFormat.SINGLES),
     val ai: BattleAI = BattleAI(),
     val bag: List<TrainerBag> =
         listOf(
             TrainerBag("cobblemon:hyper_potion", 2),
         ),
-    @SerialName("level_thresholds")
+    @SerializedName("level_thresholds")
     val countPerLevelThreshold: List<TeamLevelThreshold> =
         listOf(
             TeamLevelThreshold(T1_TEAM_SIZE, T1_TEAM_LEVEL_THRESHOLD),
@@ -51,7 +47,7 @@ data class Trainer(
             TeamLevelThreshold(T3_TEAM_SIZE, T3_TEAM_LEVEL_THRESHOLD),
             TeamLevelThreshold(T4_TEAM_SIZE, T4_TEAM_LEVEL_THRESHOLD),
         ),
-    @SerialName("battle_rules")
+    @SerializedName("battle_rules")
     val battleRules: BattleRules = BattleRules(),
     val team: List<String>? = null,
     val leader: Boolean = false,

@@ -7,35 +7,32 @@
 
 package lol.gito.radgyms.common.api.dto.reward
 
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
-import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_LOOT_TABLE
 import lol.gito.radgyms.common.api.enumeration.GymReward
-import lol.gito.radgyms.common.api.serialization.MGymRewardType
-import lol.gito.radgyms.common.api.serialization.MGymRewardTypes
+import lol.gito.radgyms.common.api.serialization.GymRewardType
+import lol.gito.radgyms.common.api.serialization.GymRewardTypes
 
-@Serializable
-@SerialName(REGISTRY_REWARD_TYPE_LOOT_TABLE)
 data class LootTableReward(
     val id: String,
-    @SerialName("max_items")
+    @SerializedName("max_items")
     val maxItems: Int? = null,
-    @SerialName("min_level")
+    @SerializedName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
-    @SerialName("max_level")
+    @SerializedName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     @Transient
     val type: GymReward = GymReward.LOOT_TABLE,
 ) : RewardInterface {
-    override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.LOOT_TABLE
+    override fun getRewardType(): GymRewardType<*> = GymRewardTypes.LOOT_TABLE
 
     companion object {
+        const val ID = "loot_table"
+
         @JvmStatic
         val CODEC: MapCodec<LootTableReward> =
             RecordCodecBuilder.mapCodec {

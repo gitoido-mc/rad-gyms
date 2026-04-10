@@ -43,11 +43,11 @@ object RadGymsNetwork {
     fun sendPacketToPlayers(players: Iterable<ServerPlayer>, packet: NetworkPacket<*>) =
         players.forEach { sendPacketToPlayer(it, packet) }
 
-    val s2cPayloads = generateS2CPacketInfoList()
-    val c2sPayloads = generateC2SPacketInfoList()
-
     fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) =
         RadGyms.implementation.networkManager.sendPacketToPlayer(player, packet)
+
+    val s2cPayloads = generateS2CPacketInfoList()
+    val c2sPayloads = generateC2SPacketInfoList()
 
     private fun generateS2CPacketInfoList(): List<PacketRegisterInfo<*>> = listOf(
         PacketRegisterInfo(OpenGymEnterScreenS2C.ID, OpenGymEnterScreenS2C::decode, OpenGymEnterScreenHandler),

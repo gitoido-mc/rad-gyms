@@ -7,24 +7,17 @@
 
 package lol.gito.radgyms.common.api.enumeration
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import net.minecraft.util.StringRepresentable
 
-@Serializable
 enum class GymTeamType : StringRepresentable {
     @JvmField
-    @SerialName("generated")
     GENERATED,
 
     @JvmField
-    @SerialName("fixed")
     FIXED,
 
     @JvmField
-    @SerialName("pool")
     POOL,
-
     ;
 
     override fun getSerializedName(): String = this.name.lowercase()

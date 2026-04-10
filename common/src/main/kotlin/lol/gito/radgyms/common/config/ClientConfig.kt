@@ -5,10 +5,6 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-package lol.gito.radgyms.common.api.dto.geospatial
+package lol.gito.radgyms.common.config
 
-import net.minecraft.world.phys.Vec3
-
-data class Coords(val x: Double, val y: Double, val z: Double) {
-    fun toVec3D(): Vec3 = Vec3(this.x, this.y, this.z)
-}
+class ClientConfig

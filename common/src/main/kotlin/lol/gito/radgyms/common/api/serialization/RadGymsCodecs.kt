@@ -26,7 +26,7 @@ import lol.gito.radgyms.common.api.enumeration.GymTeamGeneratorType
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
 import lol.gito.radgyms.common.cache.CacheDTO
 
-object MRadGymsCodec {
+object RadGymsCodecs {
     @JvmStatic
     val COORDS: Codec<Coords> = RecordCodecBuilder.create {
         it.group(
@@ -110,12 +110,12 @@ object MRadGymsCodec {
         ).apply(it, ::Trainer)
     }
 
-    val GYM_REWARD_TYPE: Codec<MGymRewardType<*>> = MGymRewardType.REGISTRY.byNameCodec()
+    val GYM_REWARD_TYPE: Codec<GymRewardType<*>> = GymRewardType.REGISTRY.byNameCodec()
 
     val GYM_REWARD: Codec<RewardInterface> = GYM_REWARD_TYPE.dispatch(
         "type",
         RewardInterface::getRewardType,
-        MGymRewardType<*>::codec,
+        GymRewardType<*>::codec,
     )
 
     @JvmStatic

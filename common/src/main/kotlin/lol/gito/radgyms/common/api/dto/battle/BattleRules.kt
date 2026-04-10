@@ -7,11 +7,9 @@
 
 package lol.gito.radgyms.common.api.dto.battle
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class BattleRules(
-    @SerialName("max_item_uses")
+    @SerializedName("max_item_uses")
     val maxItemUses: Int = 5,
 )

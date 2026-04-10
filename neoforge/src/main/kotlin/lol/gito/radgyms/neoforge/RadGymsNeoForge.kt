@@ -12,10 +12,10 @@ import com.cobblemon.mod.common.ModAPI
 import com.mojang.brigadier.arguments.ArgumentType
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.MOD_ID
-import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.api.RadGymsImplementation
 import lol.gito.radgyms.common.command.RadGymsCommands
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsBlockEntities
@@ -45,6 +45,7 @@ import net.neoforged.fml.ModList
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.fml.loading.FMLEnvironment
+import net.neoforged.fml.loading.FMLPaths
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
@@ -57,12 +58,12 @@ import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
+import java.nio.file.Path
 import java.util.*
 import kotlin.reflect.KClass
 
 @Mod(MOD_ID)
 class RadGymsNeoForge : RadGymsImplementation {
-
     override val modAPI: ModAPI = ModAPI.NEOFORGE
     private val hasBeenSynced = hashSetOf<UUID>()
     private val commandArgumentTypes = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, MOD_ID)
@@ -94,6 +95,9 @@ class RadGymsNeoForge : RadGymsImplementation {
     }
 
     override fun isModInstalled(id: String) = ModList.get().isLoaded(id)
+
+    override fun configDir(): Path = FMLPaths.CONFIGDIR.get()
+
     override fun environment(): Environment =
         if (FMLEnvironment.dist.isClient) Environment.CLIENT else Environment.SERVER
 
@@ -244,7 +248,7 @@ class RadGymsNeoForge : RadGymsImplementation {
         var canCancel: Boolean
         canCancel = (e.level !is ServerLevel)
         if (!canCancel && (e.level as ServerLevel).dimension() == GYM_DIMENSION) {
-            canCancel = (config.debug == true)
+            canCancel = RadGymsConfigs.server.debug
             if (!canCancel) {
                 e.isCanceled = true
             }

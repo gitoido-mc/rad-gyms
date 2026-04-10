@@ -8,9 +8,9 @@
 package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.data.JsonDataRegistry
@@ -18,8 +18,6 @@ import lol.gito.radgyms.common.cache.CacheDTO
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
-import java.io.InputStream
-import java.util.concurrent.ExecutionException
 
 object RadGymsCaches : JsonDataRegistry<CacheDTO> {
     const val SLUG = "caches"
@@ -27,13 +25,13 @@ object RadGymsCaches : JsonDataRegistry<CacheDTO> {
     override val id: ResourceLocation = modId(SLUG)
     override val type: PackType = PackType.SERVER_DATA
     override val observable: SimpleObservable<RadGymsCaches> = SimpleObservable<RadGymsCaches>()
+    override val typeToken: TypeToken<CacheDTO> = TypeToken.of(CacheDTO::class.java)
+    override val gson: Gson = GsonBuilder()
+        .disableHtmlEscaping()
+        .setPrettyPrinting()
+        .create()
 
     val caches = mutableMapOf<ResourceLocation, CacheDTO>()
-
-    @OptIn(ExperimentalSerializationApi::class)
-    @Throws(ExecutionException::class)
-    override fun parse(stream: InputStream, identifier: ResourceLocation): CacheDTO =
-        Json.decodeFromStream<CacheDTO>(stream)
 
     override fun reload(data: Map<ResourceLocation, CacheDTO>) {
         caches.clear()

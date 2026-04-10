@@ -14,6 +14,7 @@ import lol.gito.radgyms.common.TELEPORT_PRELOAD_CHUNKS
 import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_ENTER
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 import lol.gito.radgyms.common.registry.RadGymsTemplates
@@ -55,7 +56,7 @@ class GymInitializer(
         )
         RadGymsState.markDirty(serverPlayer)
 
-        val gymLevel = level.coerceIn(RadGyms.config.minLevel!!..RadGyms.config.maxLevel!!)
+        val gymLevel = level.coerceIn(RadGymsConfigs.server.minLevel..RadGymsConfigs.server.maxLevel)
         val gymType = if (type in templateRegistry.templates.keys) type else DEFAULT_GYM_TYPE
 
         val gymTemplate = GymTemplate.fromDto(serverPlayer, dto, gymLevel, gymType, trainerFactory)

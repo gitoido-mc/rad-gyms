@@ -7,23 +7,21 @@
 
 package lol.gito.radgyms.common.api.dto.battle
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class BattleAIConfig(
     // RCTBattleAI params
-    @SerialName("move_bias")
+    @SerializedName("move_bias")
     val moveBias: Double? = null,
-    @SerialName("status_move_bias")
+    @SerializedName("status_move_bias")
     val statusMoveBias: Double? = null,
-    @SerialName("switch_bias")
+    @SerializedName("switch_bias")
     val switchBias: Double? = null,
-    @SerialName("item_bias")
+    @SerializedName("item_bias")
     val itemBias: Double? = null,
-    @SerialName("max_select_margin")
+    @SerializedName("max_select_margin")
     val maxSelectMargin: Double? = null,
     // StrongBattleAI
-    @SerialName("skill_level")
+    @SerializedName("skill_level")
     val skillLevel: Int? = null,
 )

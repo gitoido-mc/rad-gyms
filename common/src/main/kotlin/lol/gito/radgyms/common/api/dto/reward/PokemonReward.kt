@@ -8,37 +8,32 @@
 package lol.gito.radgyms.common.api.dto.reward
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import lol.gito.radgyms.common.MAX_POKE_LEVEL
 import lol.gito.radgyms.common.MIN_POKE_LEVEL
-import lol.gito.radgyms.common.REGISTRY_REWARD_TYPE_POKEMON
 import lol.gito.radgyms.common.api.enumeration.GymReward
-import lol.gito.radgyms.common.api.serialization.KPokemonPropertiesSerializer
-import lol.gito.radgyms.common.api.serialization.MGymRewardType
-import lol.gito.radgyms.common.api.serialization.MGymRewardTypes
+import lol.gito.radgyms.common.api.serialization.GymRewardType
+import lol.gito.radgyms.common.api.serialization.GymRewardTypes
 
-@Serializable
-@SerialName(REGISTRY_REWARD_TYPE_POKEMON)
 data class PokemonReward(
-    @Serializable(KPokemonPropertiesSerializer::class)
     val pokemon: PokemonProperties,
-    @SerialName("min_perfect_ivs")
+    @SerializedName("min_perfect_ivs")
     val minPerfectIvs: Int? = null,
-    @SerialName("min_level")
+    @SerializedName("min_level")
     override val minLevel: Int = MIN_POKE_LEVEL,
-    @SerialName("max_level")
+    @SerializedName("max_level")
     override val maxLevel: Int = MAX_POKE_LEVEL,
     @Transient
     val type: GymReward = GymReward.POKEMON,
 ) : RewardInterface {
-    override fun getRewardType(): MGymRewardType<*> = MGymRewardTypes.POKEMON
+    override fun getRewardType(): GymRewardType<*> = GymRewardTypes.POKEMON
 
     companion object {
+        const val ID = "pokemon"
+
         @JvmStatic
         val CODEC: MapCodec<PokemonReward> = RecordCodecBuilder.mapCodec {
             it.group(

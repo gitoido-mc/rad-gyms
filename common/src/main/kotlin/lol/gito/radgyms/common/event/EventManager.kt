@@ -22,8 +22,8 @@ import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.RCT
-import lol.gito.radgyms.common.RadGyms.config
 import lol.gito.radgyms.common.RadGyms.debug
+import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
 import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.CACHE_ROLL_POKE
@@ -33,7 +33,7 @@ import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_BATTLE_END
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_BATTLE_START
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
-import lol.gito.radgyms.common.defaultElementalTypes
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
@@ -115,7 +115,7 @@ object EventManager {
     @Suppress("UNUSED_PARAMETER")
     private fun onBlockInteract(event: ServerPlayerEvent.RightClickBlock) {
         if (event.player.level().dimension() == RadGymsDimensions.GYM_DIMENSION) {
-            if (config.debug == true) return
+            if (RadGymsConfigs.server.debug) return
             if (event.player
                     .level()
                     .getBlockState(event.pos)
@@ -136,12 +136,12 @@ object EventManager {
     private fun onPlayerJoin(event: ServerPlayerEvent) {
         debug("Sending server settings to player ${event.player.name}")
         ServerSettingsS2C(
-            config.maxEntranceUses!!,
-            config.shardRewards!!,
-            config.lapisBoostAmount!!,
-            config.ignoredSpecies!!,
-            config.minLevel!!,
-            config.maxLevel!!,
+            RadGymsConfigs.server.maxEntranceUses,
+            RadGymsConfigs.server.shardRewards,
+            RadGymsConfigs.server.lapisBoostAmount,
+            RadGymsConfigs.server.ignoredSpecies,
+            RadGymsConfigs.server.minLevel,
+            RadGymsConfigs.server.maxLevel,
         ).sendToPlayer(event.player)
 
         try {
