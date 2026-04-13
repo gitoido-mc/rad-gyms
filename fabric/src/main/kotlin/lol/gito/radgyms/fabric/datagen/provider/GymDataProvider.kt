@@ -45,7 +45,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
     @Suppress("LongMethod", "MagicNumber")
     private fun getDefaultElementalGymDto(type: ElementalType): GymJson = GymJson(
         id = type.showdownId,
-        template = "rad_gyms:gym_interior_${type.showdownId}",
+        template = "rad_gyms:gym_interior/${type.showdownId}",
         exitBlockPos = Coords(15.0, 3.0, 1.0),
         playerSpawnRelative = EntityCoordsAndYaw(
             Coords(15.0, 2.0, 53.0),
@@ -53,7 +53,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
         ),
         trainers = listOf(
             Trainer(
-                id = "default_trainer_junior",
+                id = "trainer_junior",
                 name = modId("npc.trainer_junior").toLanguageKey(),
                 spawnRelative = EntityCoordsAndYaw(
                     Coords(27.5, 2.0, 41.5),
@@ -70,9 +70,9 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 ),
             ),
             Trainer(
-                id = "default_trainer_senior",
+                id = "trainer_senior",
                 name = modId("npc.trainer_senior").toLanguageKey(),
-                requires = "default_trainer_junior",
+                requires = "trainer_junior",
                 spawnRelative = EntityCoordsAndYaw(
                     Coords(3.5, 2.0, 31.5),
                     yaw = -90.0,
@@ -88,9 +88,9 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 ),
             ),
             Trainer(
-                id = "default_trainer_leader",
+                id = "trainer_leader",
                 name = modId("npc.leader").toLanguageKey(),
-                requires = "default_trainer_senior",
+                requires = "trainer_senior",
                 leader = true,
                 spawnRelative = EntityCoordsAndYaw(
                     Coords(15.5, 2.0, 7.5),

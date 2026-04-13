@@ -100,6 +100,7 @@ tasks {
     processResources {
         dependsOn(copyAccessWidener)
         dependsOn(copyGenerated)
+        mustRunAfter(copyGenerated)
 
         inputs.property("version", project.version)
 

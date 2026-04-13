@@ -126,6 +126,7 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         tlk("itemGroup", modId("general")) to "Rad Gyms: General",
         tlk("itemGroup", modId("keys")) to "Rad Gyms: Keys",
         tlk("itemGroup", modId("caches")) to "Rad Gyms: Pokémon caches",
+        tlk("itemGroup", modId("decor")) to "Rad Gyms: Decorations",
         tlk("biome", modId("gym_biome")) to "Gym Trials",
         tlk(modId("label.rarity.${Rarity.COMMON.name.lowercase()}")) to "Common",
         tlk(modId("label.rarity.${Rarity.UNCOMMON.name.lowercase()}")) to "Uncommon",
