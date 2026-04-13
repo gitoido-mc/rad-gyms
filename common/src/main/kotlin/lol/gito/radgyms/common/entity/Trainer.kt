@@ -95,6 +95,10 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(enti
 
     override fun isPushable(): Boolean = false
 
+    override fun canBreed(): Boolean = false
+
+    override fun canBeLeashed(): Boolean = false
+
     override fun hurt(source: DamageSource, amount: Float): Boolean = false
 
     override fun defineSynchedData(builder: SynchedEntityData.Builder) = super.defineSynchedData(

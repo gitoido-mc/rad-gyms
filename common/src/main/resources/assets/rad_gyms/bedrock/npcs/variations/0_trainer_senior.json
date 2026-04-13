@@ -1,0 +1,13 @@
+{
+  "name": "rad_gyms:trainer_senior",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:standard",
+      "model": "cobblemon:steve.geo",
+      "texture": "rad_gyms:textures/npc/default_trainer_senior.png",
+      "layers": []
+    }
+  ]
+}

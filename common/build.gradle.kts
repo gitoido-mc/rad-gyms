@@ -19,7 +19,9 @@ val generatedResources = file("src/generated")
 
 sourceSets {
     main {
-        resources.srcDir(generatedResources)
+        resources.srcDir(
+            generatedResources
+        )
     }
 }
 
@@ -37,6 +39,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
 
     // Cobblemon
+    modApi("local.com.bedrockk:molang:1.1.20")
     if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
         modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") {
             isTransitive = false
