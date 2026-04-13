@@ -1,0 +1,51 @@
+{
+  "initializationAction": [
+    "c.npc.set_chatting();"
+  ],
+  "speakers": {
+    "npc": {
+      "name": {
+        "type": "expression",
+        "expression": "q.npc.name"
+      },
+      "face": "q.npc.face();",
+      "gibber": {}
+    },
+    "player": {
+      "face": "q.player.face();",
+      "name": {
+        "type": "expression",
+        "expression": "q.player.username"
+      }
+    }
+  },
+  "pages": [
+    {
+      "id": "greeting",
+      "speaker": "npc",
+      "clientActions": [
+        "q.face.play_animation('win');"
+      ],
+      "lines": ["Ready to fight?"],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "Yes",
+            "value": "yes",
+            "action": [
+              "c.npc.start_rg_battle(q.player);",
+              "q.dialogue.close();"
+            ]
+          },
+          {
+            "text": "No",
+            "value": "no",
+            "action": "q.dialogue.close();"
+          }
+        ]
+      }
+    }
+  ]
+}

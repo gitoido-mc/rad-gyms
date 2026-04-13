@@ -16,6 +16,7 @@ import lol.gito.radgyms.common.command.argument.GymTemplateArgumentType
 import lol.gito.radgyms.common.command.argument.RarityArgumentType
 import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.event.EventManager
+import lol.gito.radgyms.common.extension.cobblemon.molang.NPCEntityRGBridge
 import lol.gito.radgyms.common.gym.GymInitializer
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry
 import lol.gito.radgyms.common.registry.RadGymsStats
@@ -87,6 +88,8 @@ object RadGyms {
         RadGymsDataProvider.registerDefaults()
         // Events
         EventManager.register()
+        // Molang
+        NPCEntityRGBridge.init()
     }
 
     @JvmStatic

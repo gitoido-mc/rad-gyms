@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2026. gitoido-mc
+  ~ This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+  ~ If a copy of the GNU General Public License v3.0 was not distributed with this file,
+  ~ you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
+  -->
+
+<metadata>
+  <groupId>local.com.bedrockk</groupId>
+  <artifactId>molang</artifactId>
+  <versioning>
+    <release>1.1.20</release>
+    <versions>
+      <version>1.1.20</version>
+    </versions>
+    <lastUpdated>20231949390007</lastUpdated>
+  </versioning>
+</metadata>
