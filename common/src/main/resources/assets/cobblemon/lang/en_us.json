@@ -1,0 +1,20 @@
+{
+  "block.cobblemon.type_gem_block_normal": "Normal Type Gem Block",
+  "block.cobblemon.type_gem_block_fire": "Fire Type Gem Block",
+  "block.cobblemon.type_gem_block_water": "Water Type Gem Block",
+  "block.cobblemon.type_gem_block_electric": "Electric Type Gem Block",
+  "block.cobblemon.type_gem_block_grass": "Grass Type Gem Block",
+  "block.cobblemon.type_gem_block_ice": "Ice Type Gem Block",
+  "block.cobblemon.type_gem_block_fighting": "Fighting Type Gem Block",
+  "block.cobblemon.type_gem_block_poison": "Poison Type Gem Block",
+  "block.cobblemon.type_gem_block_ground": "Ground Type Gem Block",
+  "block.cobblemon.type_gem_block_flying": "Flying Type Gem Block",
+  "block.cobblemon.type_gem_block_psychic": "Psychic Type Gem Block",
+  "block.cobblemon.type_gem_block_bug": "Bug Type Gem Block",
+  "block.cobblemon.type_gem_block_rock": "Rock Type Gem Block",
+  "block.cobblemon.type_gem_block_ghost": "Ghost Type Gem Block",
+  "block.cobblemon.type_gem_block_dragon": "Dragon Type Gem Block",
+  "block.cobblemon.type_gem_block_dark": "Dark Type Gem Block",
+  "block.cobblemon.type_gem_block_steel": "Steel Type Gem Block",
+  "block.cobblemon.type_gem_block_fairy": "Fairy Type Gem Block"
+}

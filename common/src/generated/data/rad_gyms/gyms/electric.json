@@ -5,7 +5,7 @@
     "z": 1.0
   },
   "id": "electric",
-  "interior_template": "rad_gyms:gym_interior_electric",
+  "interior_template": "rad_gyms:gym_interior/electric",
   "player_spawn_relative": {
     "pos": {
       "x": 15.0,
@@ -68,7 +68,7 @@
         "singles"
       ],
       "generator": "bst",
-      "id": "default_trainer_junior",
+      "id": "trainer_junior",
       "leader": false,
       "level_thresholds": [
         {
@@ -116,7 +116,7 @@
         "doubles"
       ],
       "generator": "bst",
-      "id": "default_trainer_senior",
+      "id": "trainer_senior",
       "leader": false,
       "level_thresholds": [
         {
@@ -133,7 +133,7 @@
         }
       ],
       "name": "rad_gyms.npc.trainer_senior",
-      "requires": "default_trainer_junior",
+      "requires": "trainer_junior",
       "spawn_relative": {
         "pos": {
           "x": 3.5,
@@ -166,7 +166,7 @@
         "triples"
       ],
       "generator": "bst",
-      "id": "default_trainer_leader",
+      "id": "trainer_leader",
       "leader": true,
       "level_thresholds": [
         {
@@ -183,7 +183,7 @@
         }
       ],
       "name": "rad_gyms.npc.leader",
-      "requires": "default_trainer_senior",
+      "requires": "trainer_senior",
       "spawn_relative": {
         "pos": {
           "x": 15.5,

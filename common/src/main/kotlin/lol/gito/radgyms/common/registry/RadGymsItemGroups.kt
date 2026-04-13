@@ -27,22 +27,24 @@ object RadGymsItemGroups {
     private val INJECTORS = hashMapOf<ResourceKey<CreativeModeTab>, (injector: Injector) -> Unit>()
 
     @JvmStatic
-    val GENERAL_GROUP_KEY =
-        this.create(modId("general"), this::generalEntries) {
-            ItemStack(RadGymsItems.GYM_ENTRANCE)
-        }
+    val GENERAL_GROUP_KEY = this.create(modId("general"), this::generalEntries) {
+        ItemStack(RadGymsItems.GYM_ENTRANCE)
+    }
 
     @JvmStatic
-    val KEYS_GROUP_KEY =
-        this.create(modId("keys"), this::keyEntries) {
-            ItemStack(RadGymsItems.GYM_KEY)
-        }
+    val KEYS_GROUP_KEY = this.create(modId("keys"), this::keyEntries) {
+        ItemStack(RadGymsItems.GYM_KEY)
+    }
 
     @JvmStatic
-    val CACHES_GROUP_KEY =
-        this.create(modId("caches"), this::cacheEntries) {
-            ItemStack(RadGymsItems.CACHE_EPIC)
-        }
+    val CACHES_GROUP_KEY = this.create(modId("caches"), this::cacheEntries) {
+        ItemStack(RadGymsItems.CACHE_EPIC)
+    }
+
+    @JvmStatic
+    val DECOR_GROUP_KEY = this.create(modId("decor"), this::decorEntries) {
+        ItemStack(RadGymsItems.TYPE_GEM_BLOCK_NORMAL)
+    }
 
     @JvmStatic
     val GENERAL_GROUP get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(GENERAL_GROUP_KEY)
@@ -55,23 +57,21 @@ object RadGymsItemGroups {
 
     @Suppress("Unused")
     @JvmStatic
-    val CACHES_INJECTIONS =
-        this.inject(
-            ResourceKey.create(
-                BuiltInRegistries.CREATIVE_MODE_TAB.key(),
-                modId("caches"),
-            ),
-            this::cacheEntries,
-        )
+    val CACHES_INJECTIONS = this.inject(
+        ResourceKey.create(
+            BuiltInRegistries.CREATIVE_MODE_TAB.key(),
+            modId("caches"),
+        ),
+        this::cacheEntries,
+    )
 
     @JvmStatic
-    private val defaultCaches =
-        setOf(
-            RadGymsItems.CACHE_COMMON,
-            RadGymsItems.CACHE_UNCOMMON,
-            RadGymsItems.CACHE_RARE,
-            RadGymsItems.CACHE_EPIC,
-        )
+    private val defaultCaches = setOf(
+        RadGymsItems.CACHE_COMMON,
+        RadGymsItems.CACHE_UNCOMMON,
+        RadGymsItems.CACHE_RARE,
+        RadGymsItems.CACHE_EPIC,
+    )
 
     fun register(consumer: (holder: ItemGroupHolder) -> CreativeModeTab) {
         ALL.forEach(consumer::invoke)
@@ -91,6 +91,30 @@ object RadGymsItemGroups {
         entries.accept(RadGymsItems.SHARD_BLOCK_UNCOMMON)
         entries.accept(RadGymsItems.SHARD_BLOCK_EPIC)
         entries.accept(RadGymsItems.SHARD_BLOCK_RARE)
+    }
+
+    private fun decorEntries(
+        @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
+        entries: CreativeModeTab.Output,
+    ) {
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_BUG)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_DARK)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_DRAGON)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_ELECTRIC)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_FAIRY)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_FIGHTING)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_FIRE)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_FLYING)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_GHOST)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_GRASS)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_GROUND)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_ICE)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_NORMAL)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_POISON)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_PSYCHIC)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_ROCK)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_STEEL)
+        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_WATER)
     }
 
     private fun keyEntries(
