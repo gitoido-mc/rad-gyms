@@ -108,6 +108,7 @@ modProjects.forEach {
 
         repositories {
             mavenCentral()
+            maven(url = "${rootProject.projectDir}/deps")
             maven("https://maven.architectury.dev/")
             maven("https://maven.wispforest.io/releases/")
             maven("https://maven.impactdev.net/repository/development/")

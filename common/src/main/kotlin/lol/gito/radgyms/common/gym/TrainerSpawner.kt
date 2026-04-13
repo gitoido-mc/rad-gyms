@@ -7,14 +7,12 @@
 
 package lol.gito.radgyms.common.gym
 
-import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.api.dto.trainer.TrainerConfiguration
+import com.cobblemon.mod.common.api.npc.NPCClasses
+import com.cobblemon.mod.common.entity.npc.NPCEntity
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.trainer.TrainerModel
-import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.registry.RadGymsEntities
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.phys.Vec3
 import java.util.*
 
 object TrainerSpawner {
@@ -31,6 +29,7 @@ object TrainerSpawner {
         return trainerIds.values.associate { it.first to it.second }
     }
 
+    @Suppress("UnusedParameter")
     private fun buildTrainerEntity(
         trainer: TrainerModel,
         gymDimension: ServerLevel,
@@ -38,36 +37,52 @@ object TrainerSpawner {
         trainerUUID: UUID,
         requiredUUID: UUID?,
     ): Pair<UUID, TrainerModel> {
-        val trainerEntity = Trainer(RadGymsEntities.GYM_TRAINER, gymDimension).apply {
-            uuid = trainerUUID
-            gymId = trainer.id
-            leader = trainer.leader
-            format = trainer.format.name
-            trainerId = trainerUUID
-            requires = requiredUUID
-            yHeadRot = trainer.npc.yaw
-            yBodyRot = trainer.npc.yaw
-            customName = trainer.npc.name
-            configuration =
-                TrainerConfiguration(
-                    trainer.battleRules,
-                    trainer.trainer.bag,
-                    trainer.trainer.team,
-                )
-            isCustomNameVisible = true
-            setPersistenceRequired()
-            setPos(
-                Vec3(
-                    coords.x + trainer.npc.relativePosition.x,
-                    coords.y + trainer.npc.relativePosition.y,
-                    coords.z + trainer.npc.relativePosition.z,
-                ),
-            )
-        }
+        val npcClass =
+            NPCClasses.getByIdentifier(modId(trainer.id)) ?: error("Cannot find NPC with id: ${modId(trainer.id)}")
 
-        debug("Spawning trainer ${trainerEntity.id} at ${trainerEntity.x} ${trainerEntity.y} ${trainerEntity.z}")
-        gymDimension.tryAddFreshEntityWithPassengers(trainerEntity)
+        val npc = NPCEntity(gymDimension)
+        npc.moveTo(
+            coords.x + trainer.npc.relativePosition.x,
+            coords.y + trainer.npc.relativePosition.y,
+            coords.z + trainer.npc.relativePosition.z,
+            trainer.npc.yaw,
+            trainer.npc.yaw,
+        )
+        npc.npc = npcClass
+        npc.initialize(trainer.trainer.team.first().level)
+        gymDimension.addFreshEntity(npc)
 
-        return Pair(trainerEntity.uuid, trainer)
+//        val trainerEntity = Trainer(RadGymsEntities.GYM_TRAINER, gymDimension).apply {
+//            uuid = trainerUUID
+//            gymId = trainer.id
+//            leader = trainer.leader
+//            format = trainer.format.name
+//            trainerId = trainerUUID
+//            requires = requiredUUID
+//            yHeadRot = trainer.npc.yaw
+//            yBodyRot = trainer.npc.yaw
+//            customName = trainer.npc.name
+//            configuration =
+//                TrainerConfiguration(
+//                    trainer.battleRules,
+//                    trainer.trainer.bag,
+//                    trainer.trainer.team,
+//                )
+//            isCustomNameVisible = true
+//            setPersistenceRequired()
+//            setPos(
+//                Vec3(
+//                    coords.x + trainer.npc.relativePosition.x,
+//                    coords.y + trainer.npc.relativePosition.y,
+//                    coords.z + trainer.npc.relativePosition.z,
+//                ),
+//            )
+//        }
+//
+//        debug("Spawning trainer ${trainerEntity.id} at ${trainerEntity.x} ${trainerEntity.y} ${trainerEntity.z}")
+//        gymDimension.tryAddFreshEntityWithPassengers(trainerEntity)
+
+//        return Pair(trainerEntity.uuid, trainer)
+        return Pair(npc.uuid, trainer)
     }
 }
