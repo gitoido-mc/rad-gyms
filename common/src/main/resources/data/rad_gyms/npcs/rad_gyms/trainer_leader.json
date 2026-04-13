@@ -1,0 +1,11 @@
+{
+  "hitbox": "player",
+  "names": [
+    "rad_gyms.npc.leader"
+  ],
+  "interaction": {
+    "type": "dialogue",
+    "dialogue": "rad_gyms:trainer_interaction"
+  },
+  "canDespawn": false
+}

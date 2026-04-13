@@ -25,6 +25,7 @@ import lol.gito.radgyms.common.gym.GymTemplate
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 
@@ -111,7 +112,7 @@ object GymEvents {
         val battle: PokemonBattle,
     ) : Cancelable()
 
-    data class TrainerInteractEvent(val player: ServerPlayer, val trainer: Trainer) : Cancelable()
+    data class TrainerInteractEvent(val player: ServerPlayer, val trainer: LivingEntity) : Cancelable()
 
     @JvmField
     val CACHE_ROLL_POKE = EventObservable<CacheRollPokeEvent>()
