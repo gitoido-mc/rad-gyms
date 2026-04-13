@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.platform.PlatformRegistry
+import com.cobblemon.mod.common.util.cobblemonResource
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.item.CommonPokeCache
 import lol.gito.radgyms.common.item.CommonPokeShard
@@ -33,6 +34,9 @@ import net.minecraft.world.level.block.Block
 object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item>() {
     override val registry: Registry<Item> = BuiltInRegistries.ITEM
     override val resourceKey: ResourceKey<Registry<Item>> = Registries.ITEM
+
+    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem =
+        this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
     @JvmField
     val GYM_KEY: GymKey = this.create(modId("gym_key"), GymKey())
@@ -85,6 +89,65 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     @JvmField
     val SHARD_BLOCK_EPIC = blockItem(modId("shard_block_epic"), RadGymsBlocks.SHARD_BLOCK_EPIC)
 
-    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem =
-        this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
+    @JvmField
+    val TYPE_GEM_BLOCK_BUG = blockItem(cobblemonResource("type_gem_block_bug"), RadGymsBlocks.TYPE_GEM_BLOCK_BUG)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_DARK = blockItem(cobblemonResource("type_gem_block_dark"), RadGymsBlocks.TYPE_GEM_BLOCK_DARK)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_DRAGON =
+        blockItem(cobblemonResource("type_gem_block_dragon"), RadGymsBlocks.TYPE_GEM_BLOCK_DRAGON)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_ELECTRIC =
+        blockItem(cobblemonResource("type_gem_block_electric"), RadGymsBlocks.TYPE_GEM_BLOCK_ELECTRIC)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_FAIRY = blockItem(cobblemonResource("type_gem_block_fairy"), RadGymsBlocks.TYPE_GEM_BLOCK_FAIRY)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_FIGHTING =
+        blockItem(cobblemonResource("type_gem_block_fighting"), RadGymsBlocks.TYPE_GEM_BLOCK_FIGHTING)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_FIRE = blockItem(cobblemonResource("type_gem_block_fire"), RadGymsBlocks.TYPE_GEM_BLOCK_FIRE)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_FLYING =
+        blockItem(cobblemonResource("type_gem_block_flying"), RadGymsBlocks.TYPE_GEM_BLOCK_FLYING)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_GHOST = blockItem(cobblemonResource("type_gem_block_ghost"), RadGymsBlocks.TYPE_GEM_BLOCK_GHOST)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_GRASS = blockItem(cobblemonResource("type_gem_block_grass"), RadGymsBlocks.TYPE_GEM_BLOCK_GRASS)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_GROUND =
+        blockItem(cobblemonResource("type_gem_block_ground"), RadGymsBlocks.TYPE_GEM_BLOCK_GROUND)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_ICE = blockItem(cobblemonResource("type_gem_block_ice"), RadGymsBlocks.TYPE_GEM_BLOCK_ICE)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_NORMAL =
+        blockItem(cobblemonResource("type_gem_block_normal"), RadGymsBlocks.TYPE_GEM_BLOCK_NORMAL)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_POISON =
+        blockItem(cobblemonResource("type_gem_block_poison"), RadGymsBlocks.TYPE_GEM_BLOCK_POISON)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_PSYCHIC =
+        blockItem(cobblemonResource("type_gem_block_psychic"), RadGymsBlocks.TYPE_GEM_BLOCK_PSYCHIC)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_ROCK = blockItem(cobblemonResource("type_gem_block_rock"), RadGymsBlocks.TYPE_GEM_BLOCK_ROCK)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_STEEL = blockItem(cobblemonResource("type_gem_block_steel"), RadGymsBlocks.TYPE_GEM_BLOCK_STEEL)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_WATER = blockItem(cobblemonResource("type_gem_block_water"), RadGymsBlocks.TYPE_GEM_BLOCK_WATER)
 }

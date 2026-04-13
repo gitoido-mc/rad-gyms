@@ -1,5 +1,5 @@
 {
-  "name": "rad_gyms:gym_interior_default/start_pool",
+  "name": "rad_gyms:gym_interior/fire_pool",
   "fallback": "minecraft:empty",
   "elements": [
     {

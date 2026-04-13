@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cobblemon:block/type_gems/type_gem_block_poison"
+  }
+}
