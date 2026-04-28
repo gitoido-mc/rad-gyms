@@ -18,13 +18,14 @@ import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
 import net.minecraft.server.level.ServerPlayer
 import java.util.*
+import java.util.function.Function as JavaFn
 
 object NPCEntityRGBridge {
     fun init() {
         npcFunctions.add { entity ->
             return@add hashMapOf(
-                "start_rg_battle" to java.util.function.Function { params ->
-                    val value = params.getOrNull<MoValue>(0) ?: return@Function DoubleValue.ZERO
+                "start_rg_battle" to JavaFn { params ->
+                    val value = params.getOrNull<MoValue>(0) ?: return@JavaFn DoubleValue.ZERO
 
                     val player = when (value) {
                         is ObjectValue<*> -> value.obj as ServerPlayer
@@ -33,13 +34,13 @@ object NPCEntityRGBridge {
                         }
 
                         else -> {
-                            return@Function DoubleValue.ZERO
+                            return@JavaFn DoubleValue.ZERO
                         }
                     }
 
                     TRAINER_INTERACT.post(GymEvents.TrainerInteractEvent(player, entity))
 
-                    return@Function DoubleValue.ONE
+                    return@JavaFn DoubleValue.ONE
                 },
             )
         }
