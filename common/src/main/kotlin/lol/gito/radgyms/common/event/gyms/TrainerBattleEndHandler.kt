@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
@@ -15,7 +16,6 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_REWARD
-import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.GymTeleportScheduler
@@ -35,15 +35,16 @@ class TrainerBattleEndHandler(val event: GymEvents.TrainerBattleEndEvent) {
     }
 
     private fun handleGymWin() {
-        var defeatedLeader: Trainer? = null
+        var defeatedLeader: NPCEntity? = null
 
         event.losers
             .filterIsInstance<TrainerEntityBattleActor>()
-            .filter { it.entity is Trainer }
+            .filter { it.entity is NPCEntity }
             .forEach { loser ->
-                val trainer = loser.entity as Trainer
-                trainer.defeated = true
-                if (trainer.leader) defeatedLeader = trainer
+                val trainer = loser.entity as NPCEntity
+                trainer.appliedAspects.add("defeated")
+                trainer.updateAspects()
+                if (trainer.aspects.contains("leader")) defeatedLeader = trainer
                 RadGyms.RCT.trainerRegistry.unregisterById(trainer.stringUUID)
             }
 

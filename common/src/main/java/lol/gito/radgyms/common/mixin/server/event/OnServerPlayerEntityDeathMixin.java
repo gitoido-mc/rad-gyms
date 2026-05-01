@@ -25,16 +25,17 @@ public abstract class OnServerPlayerEntityDeathMixin {
     @Inject(method = "die", at = @At("HEAD"))
     public void RadGyms$onDeath(DamageSource damageSource, CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer) (Object) this;
-
         Gym gym = RadGymsState.Companion.getGymForPlayer(player);
-        if (gym != null) {
-            GYM_LEAVE.emit(new GymEvents.GymLeaveEvent(
-                GymLeaveReason.PLAYER_DEATH,
-                player,
-                false,
-                false,
-                gym
-            ));
-        }
+
+        // Early bail
+        if (gym == null) return;
+
+        GYM_LEAVE.emit(new GymEvents.GymLeaveEvent(
+            GymLeaveReason.PLAYER_DEATH,
+            player,
+            false,
+            false,
+            gym
+        ));
     }
 }

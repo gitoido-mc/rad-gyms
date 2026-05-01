@@ -16,6 +16,8 @@ import lol.gito.radgyms.common.block.GymEntranceBlock
 import lol.gito.radgyms.common.block.GymExitBlock
 import lol.gito.radgyms.common.block.RareShardBlock
 import lol.gito.radgyms.common.block.UncommonShardBlock
+import lol.gito.radgyms.common.block.decorative.DecorativeEndPortal
+import lol.gito.radgyms.common.block.decorative.DecorativeWetSponge
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -44,6 +46,13 @@ object RadGymsBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<Bl
         modId("gym_exit"),
         GymExitBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS)),
     )
+
+    // Decorative blocks
+    @JvmField
+    val DECORATIVE_END_PORTAL = this.create(modId("decorative_end_portal"), DecorativeEndPortal())
+
+    @JvmField
+    val DECORATIVE_WET_SPONGE = this.create(modId("decorative_wet_sponge"), DecorativeWetSponge())
 
     @JvmField
     val SHARD_BLOCK_COMMON = this.create(modId("shard_block_common"), CommonShardBlock())

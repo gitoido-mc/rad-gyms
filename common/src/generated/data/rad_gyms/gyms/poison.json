@@ -5,7 +5,7 @@
     "z": 1.0
   },
   "id": "poison",
-  "interior_template": "rad_gyms:gym_interior/poison",
+  "interior_template": "rad_gyms:interior/poison",
   "player_spawn_relative": {
     "pos": {
       "x": 15.0,

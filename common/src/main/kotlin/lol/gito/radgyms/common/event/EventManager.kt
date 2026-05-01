@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
@@ -34,7 +35,6 @@ import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_BATTLE_END
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_BATTLE_START
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
 import lol.gito.radgyms.common.config.RadGymsConfigs
-import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.event.cache.CacheRollPokeHandler
 import lol.gito.radgyms.common.event.cache.ShinyCharmCheckHandler
 import lol.gito.radgyms.common.event.gyms.GenerateRewardHandler
@@ -181,7 +181,7 @@ object EventManager {
                 .filter { it.type == ActorType.NPC && it is AIBattleActor }
                 .map { it as AIBattleActor }
                 .mapNotNull { RCT.trainerRegistry.getById(it.uuid.toString())?.entity }
-                .filterIsInstance<Trainer>()
+                .filterIsInstance<NPCEntity>()
 
         TRAINER_BATTLE_START.postThen(
             GymEvents.TrainerBattleStartEvent(players, trainers.map { it }, event.battle),

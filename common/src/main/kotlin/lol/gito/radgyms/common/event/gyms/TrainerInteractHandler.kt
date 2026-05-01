@@ -8,22 +8,20 @@
 package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.util.asUUID
 import com.cobblemon.mod.common.util.giveOrDropItemStack
-import com.gitlab.srcmc.rctapi.api.ai.RCTBattleAI
-import com.gitlab.srcmc.rctapi.api.ai.config.RCTBattleAIConfig
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.battle.BattleState
-import com.gitlab.srcmc.rctapi.api.models.TrainerModel
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
-import com.gitlab.srcmc.rctapi.api.util.JTO
+import lol.gito.radgyms.common.ASPECT_REQUIRED
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.RadGyms.warn
-import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
-import lol.gito.radgyms.common.entity.Trainer
+import lol.gito.radgyms.common.extension.cobblemon.npc.isDefeated
+import lol.gito.radgyms.common.extension.cobblemon.npc.isLeader
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
@@ -31,51 +29,42 @@ import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import java.util.*
+import lol.gito.radgyms.common.api.dto.trainer.TrainerModel as RGModel
 
 class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
-    private val checkTrainerDefeated: Boolean = when(event.trainer) {
-        is Trainer -> event.trainer.defeated
-        else -> false
+//    private fun NPCEntity.rctTrainer(): TrainerNPC {
+//        return when (val model = RCT.trainerRegistry.getById(this.uuid.toString())) {
+//            null -> RCT.trainerRegistry.registerNPC(this.uuid.toString(), event.trainer.rgModel()!!.trainer)
+//                .also { model ->
+//                    model.entity = this
+//                }
+//
+//            else -> model
+//        } as TrainerNPC
+//    }
+
+    private fun NPCEntity.rgModel(): RGModel? {
+        val gym = RadGymsState.getGymForPlayer(event.player)
+        return gym
+            ?.template
+            ?.trainers
+            ?.firstOrNull { it.id == this.resourceIdentifier.path }
     }
 
     init {
-        if (event.trainer is NPCEntity) {
-            val gym = RadGymsState.getGymForPlayer(event.player)
-            val trainerModel = RCT.trainerRegistry.getById(event.player.uuid.toString())
-            val gymConfig = gym
-                ?.template
-                ?.trainers
-                ?.firstOrNull { it.id == event.trainer.resourceIdentifier.path }!!
 
+        val required = required()
+        debug("Checking required: ${required?.uuid}")
 
-            val npcModel: TrainerNPC = when (val model = RCT.trainerRegistry.getById(event.trainer.uuid.toString())) {
-                null -> RCT.trainerRegistry.registerNPC(event.trainer.uuid.toString(), gymConfig.trainer)
-                else -> model
-            } as TrainerNPC
-
-            npcModel.entity = event.trainer
-
-            RCT.battleManager.startBattle(
-                listOf(trainerModel),
-                listOf(npcModel),
-                gymConfig.format,
-                gymConfig.battleRules,
-            )
-        }
-
-        if (event.trainer is Trainer) {
-            debug("Checking required: ${event.trainer.requires}")
-            when (event.trainer.requires != null) {
-                false -> handleNoRequired()
-                true -> handleRequired(
-                    (event.trainer.level() as ServerLevel).getEntity(event.trainer.requires!!) as Trainer,
-                )
-            }
+        when (required != null) {
+            false -> handleNoRequired()
+            true -> handleRequired(required)
         }
     }
 
     private fun handleNoRequired() {
-        if (!checkTrainerDefeated) {
+        if (!event.trainer.isDefeated) {
             startBattle()
             return
         }
@@ -83,16 +72,16 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
         event.cancel()
     }
 
-    private fun handleRequired(required: Trainer) {
-        debug("required is: ${required.uuid}, defeated?: ${required.defeated}")
-        if (!required.defeated) {
+    private fun handleRequired(required: NPCEntity) {
+        debug("required is: ${required.uuid}, defeated?: ${required.isDefeated}")
+        if (!required.isDefeated) {
             debug("Linked trainer is not defeated yet, sending chat message")
             event.player.displayClientMessage(tl(modId("message.info.trainer_required"), required.name))
             event.cancel()
             return
         }
 
-        if (checkTrainerDefeated) {
+        if (event.trainer.isDefeated) {
             notifyPlayer()
             event.cancel()
             return
@@ -136,48 +125,43 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
 
         if (shouldReturn) return
 
-        if (event.trainer is Trainer) {
-            with(RCT.battleManager) {
-                // Check for being in battle just in case
-                // Force all battles for player to end
-                states.forEach { state -> finalizeState(state, this) }
 
-                debug(
-                    "Starting {} battle between player {} and trainer {}",
-                    event.trainer.format,
-                    event.player.displayName?.string as Any,
-                    event.trainer.displayName?.string as Any,
-                )
 
-                val sides = getSides()
-                startBattle(
-                    listOf(sides.first),
-                    listOf(sides.second),
-                    GymBattleFormat.valueOf(event.trainer.format),
-                    BattleRules(),
-                )
-            }
+        with(RCT.battleManager) {
+            // Check for being in battle just in case
+            // Force all battles for player to end
+            states.forEach { state -> finalizeState(state, this) }
+            val trainer = event.trainer.rgModel()!!
+            debug(
+                "Starting {} battle between player {} and trainer {}",
+                trainer.format,
+                event.player.displayName?.string as Any,
+                event.trainer.displayName?.string as Any,
+            )
+
+            val sides = getSides()
+            startBattle(
+                listOf(sides.first),
+                listOf(sides.second),
+                trainer.format,
+                BattleRules(),
+            )
         }
     }
 
     private fun getSides() = with(RCT.trainerRegistry) {
         val playerTrainer = getById(event.player.uuid.toString())
-        val trainer = event.trainer as Trainer
+        val model = event.trainer.rgModel()!!
         val npcTrainer: TrainerNPC = try {
-                registerNPC(
-                    trainer.stringUUID,
-                    TrainerModel(
-                        trainer.name.string,
-                        JTO.of { RCTBattleAI(RCTBattleAIConfig.Builder().build()) },
-                        trainer.configuration.bag,
-                        trainer.configuration.team,
-                    ),
-                )
+            registerNPC(
+                event.trainer.stringUUID,
+                model.trainer
+            )
         } catch (_: IllegalArgumentException) {
-            getById(trainer.stringUUID, TrainerNPC::class.java)
+            getById(event.trainer.stringUUID, TrainerNPC::class.java)
         } as TrainerNPC
 
-        npcTrainer.entity = trainer
+        npcTrainer.entity = event.trainer
 
         return@with playerTrainer to npcTrainer
     }
@@ -192,18 +176,27 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
     }
 
     private fun notifyPlayer() {
-        if (event.trainer is Trainer) {
-            val messageKey = when (event.trainer.leader) {
-                true -> "message.info.leader_defeated"
-                false -> "message.info.trainer_defeated"
-            }
-
-            event.player.displayClientMessage(tl(modId(messageKey)))
+        val messageKey = when (event.trainer.isLeader) {
+            true -> "message.info.leader_defeated"
+            false -> "message.info.trainer_defeated"
         }
+
+        event.player.displayClientMessage(tl(modId(messageKey)))
     }
 
     private fun handleBattleStartError(message: ResourceLocation, player: ServerPlayer) {
         player.displayClientMessage(tl(message))
         player.giveOrDropItemStack(EXIT_ROPE.defaultInstance, true)
+    }
+
+    private fun required(): NPCEntity? {
+        return when (val aspect = event.trainer.aspects.firstOrNull { it.startsWith(ASPECT_REQUIRED) }) {
+            null -> null
+            else -> {
+                val uuid: UUID = aspect.replace(ASPECT_REQUIRED, "").asUUID!!
+
+                (event.trainer.level() as ServerLevel).getEntity(uuid) as NPCEntity?
+            }
+        }
     }
 }

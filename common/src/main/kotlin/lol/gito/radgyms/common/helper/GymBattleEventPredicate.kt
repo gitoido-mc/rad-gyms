@@ -12,13 +12,13 @@ import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
-import lol.gito.radgyms.common.entity.Trainer
 
 @Suppress("FunctionName")
 fun TrainerCheckerPredicate(actor: BattleActor): Boolean {
     if (actor !is TrainerEntityBattleActor) return false
-    if (actor.entity !is Trainer) return false
+    if (actor.entity !is NPCEntity) return false
     return true
 }
 

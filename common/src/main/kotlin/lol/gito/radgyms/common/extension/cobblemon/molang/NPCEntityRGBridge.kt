@@ -16,15 +16,23 @@ import com.cobblemon.mod.common.util.getOrNull
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
+import lol.gito.radgyms.common.extension.cobblemon.npc.isDefeated
 import net.minecraft.server.level.ServerPlayer
 import java.util.*
+import java.util.function.Function as Fn
 
 object NPCEntityRGBridge {
     fun init() {
         npcFunctions.add { entity ->
             return@add hashMapOf(
-                "start_rg_battle" to java.util.function.Function { params ->
-                    val value = params.getOrNull<MoValue>(0) ?: return@Function DoubleValue.ZERO
+                "rg_is_defeated" to Fn { _ ->
+                    return@Fn when(entity.isDefeated) {
+                        true -> DoubleValue.ONE
+                        false -> DoubleValue.ZERO
+                    }
+                },
+                "rg_start_battle" to Fn { params ->
+                    val value = params.getOrNull<MoValue>(0) ?: return@Fn DoubleValue.ZERO
 
                     val player = when (value) {
                         is ObjectValue<*> -> value.obj as ServerPlayer
@@ -33,13 +41,13 @@ object NPCEntityRGBridge {
                         }
 
                         else -> {
-                            return@Function DoubleValue.ZERO
+                            return@Fn DoubleValue.ZERO
                         }
                     }
 
                     TRAINER_INTERACT.post(GymEvents.TrainerInteractEvent(player, entity))
 
-                    return@Function DoubleValue.ONE
+                    return@Fn DoubleValue.ONE
                 },
             )
         }

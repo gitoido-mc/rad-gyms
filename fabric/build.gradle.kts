@@ -16,8 +16,6 @@ repositories {
     maven("https://maven.fabricmc.net/")
 }
 
-val generatedResources: File = project(":common").file("src/generated")
-
 architectury {
     platformSetupLoomIde()
     fabric {
@@ -25,7 +23,7 @@ architectury {
             configureDataGeneration {
                 client = true
                 modId = rootProject.property("mod_id") as String
-                outputDirectory = generatedResources
+                outputDirectory = project(":common").file("src/generated")
             }
         }
     }
@@ -74,7 +72,11 @@ dependencies {
     "developmentFabric"(project(":common", configuration = "namedElements"))
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
 
+    //
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_fabric_version")}")
+    modImplementation("mod.azure.azurelib:azurelib-common-${rootProject.property("minecraft_version")}:${property("azurelib_version")}")
+
+    // Compat
     modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-fabric")
 }
 

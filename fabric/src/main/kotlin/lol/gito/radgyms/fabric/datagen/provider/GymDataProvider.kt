@@ -45,7 +45,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
     @Suppress("LongMethod", "MagicNumber")
     private fun getDefaultElementalGymDto(type: ElementalType): GymJson = GymJson(
         id = type.showdownId,
-        template = "rad_gyms:gym_interior/${type.showdownId}",
+        template = "rad_gyms:interior/${type.showdownId}",
         exitBlockPos = Coords(15.0, 3.0, 1.0),
         playerSpawnRelative = EntityCoordsAndYaw(
             Coords(15.0, 2.0, 53.0),
@@ -66,7 +66,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(2, 25),
                     TeamLevelThreshold(3, 50),
-                    TeamLevelThreshold(4, 100),
+                    TeamLevelThreshold(4),
                 ),
             ),
             Trainer(
@@ -84,7 +84,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(3, 25),
                     TeamLevelThreshold(4, 50),
-                    TeamLevelThreshold(5, 100),
+                    TeamLevelThreshold(5),
                 ),
             ),
             Trainer(
@@ -107,7 +107,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(4, 25),
                     TeamLevelThreshold(5, 50),
-                    TeamLevelThreshold(6, 100),
+                    TeamLevelThreshold(6),
                 ),
             ),
         ),
