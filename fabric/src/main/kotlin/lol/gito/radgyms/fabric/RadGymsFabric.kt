@@ -20,7 +20,6 @@ import lol.gito.radgyms.common.registry.RadGymsBlockEntities
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsDimensions
-import lol.gito.radgyms.common.registry.RadGymsEntities
 import lol.gito.radgyms.common.registry.RadGymsItemGroups
 import lol.gito.radgyms.common.registry.RadGymsItems
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
@@ -32,7 +31,6 @@ import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.loader.api.FabricLoader
@@ -137,14 +135,6 @@ object RadGymsFabric : RadGymsImplementation {
 
     override fun registerBlockEntityTypes() = RadGymsBlockEntities.register { identifier, entry ->
         Registry.register(RadGymsBlockEntities.registry, identifier, entry)
-    }
-
-    override fun registerEntityTypes() = RadGymsEntities.register { identifier, entry ->
-        Registry.register(RadGymsEntities.registry, identifier, entry)
-    }
-
-    override fun registerEntityAttributes() = RadGymsEntities.registerAttributes { entityType, builder ->
-        FabricDefaultAttributeRegistry.register(entityType, builder)
     }
 
     override fun registerResourceReloader(

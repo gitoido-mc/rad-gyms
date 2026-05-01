@@ -1,75 +1,75 @@
 {
   "structures": [
     {
-      "structure": "rad_gyms:gym_entrance_bug",
+      "structure": "rad_gyms:entrance/bug",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_dark",
+      "structure": "rad_gyms:entrance/dark",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_dragon",
+      "structure": "rad_gyms:entrance/dragon",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_electric",
+      "structure": "rad_gyms:entrance/electric",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_fairy",
+      "structure": "rad_gyms:entrance/fairy",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_fighting",
+      "structure": "rad_gyms:entrance/fighting",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_fire",
+      "structure": "rad_gyms:entrance/fire",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_flying",
+      "structure": "rad_gyms:entrance/flying",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_ghost",
+      "structure": "rad_gyms:entrance/ghost",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_grass",
+      "structure": "rad_gyms:entrance/grass",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_ground",
+      "structure": "rad_gyms:entrance/ground",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_ice",
+      "structure": "rad_gyms:entrance/ice",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_normal",
+      "structure": "rad_gyms:entrance/normal",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_poison",
+      "structure": "rad_gyms:entrance/poison",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_psychic",
+      "structure": "rad_gyms:entrance/psychic",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_rock",
+      "structure": "rad_gyms:entrance/rock",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_steel",
+      "structure": "rad_gyms:entrance/steel",
       "weight": 1
     },
     {
-      "structure": "rad_gyms:gym_entrance_water",
+      "structure": "rad_gyms:entrance/water",
       "weight": 1
     }
   ],

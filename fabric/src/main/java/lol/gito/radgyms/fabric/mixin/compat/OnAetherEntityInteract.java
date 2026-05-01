@@ -8,7 +8,7 @@
 package lol.gito.radgyms.fabric.mixin.compat;
 
 import com.aetherteam.aether.event.listeners.EntityListener;
-import lol.gito.radgyms.common.entity.Trainer;
+import com.cobblemon.mod.common.entity.npc.NPCEntity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -29,7 +29,7 @@ class OnAetherEntityInteract {
             EntityHitResult hitResult,
             CallbackInfoReturnable<InteractionResult> cir
     ) {
-        if (targetEntity instanceof Trainer) {
+        if (targetEntity instanceof NPCEntity) {
             cir.setReturnValue(InteractionResult.PASS);
         }
     }

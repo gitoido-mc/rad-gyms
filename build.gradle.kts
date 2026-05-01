@@ -64,6 +64,7 @@ repositories {
     maven("https://maven.internal.gito.lol/")
     maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
     maven("https://maven.blamejared.com/")
+    maven("https://maven.azuredoom.com/mods")
     maven {
         url = URI("https://www.cursemaven.com")
         content {
@@ -114,6 +115,7 @@ modProjects.forEach {
             maven("https://maven.impactdev.net/repository/development/")
             maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
             maven("https://maven.blamejared.com/")
+            maven("https://maven.azuredoom.com/mods")
             maven {
                 url = URI("https://www.cursemaven.com")
                 content {

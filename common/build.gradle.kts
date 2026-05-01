@@ -15,13 +15,9 @@ architectury {
     common("neoforge", "fabric")
 }
 
-val generatedResources = file("src/generated")
-
 sourceSets {
     main {
-        resources.srcDir(
-            generatedResources
-        )
+        resources.srcDir(file("src/generated"))
     }
 }
 
@@ -52,6 +48,7 @@ dependencies {
 
     // Project deps
     modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
+    modCompileOnly("mod.azure.azurelib:azurelib-common-${rootProject.property("minecraft_version")}:${property("azurelib_version")}")
 }
 
 tasks {

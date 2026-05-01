@@ -14,18 +14,17 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.enumeration.GymBattleEndReason
 import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.enumeration.GymLeaveReason
-import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymTemplate
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 
@@ -108,11 +107,11 @@ object GymEvents {
 
     data class TrainerBattleStartEvent(
         val players: List<ServerPlayer>,
-        val trainers: List<Trainer>,
+        val trainers: List<NPCEntity>,
         val battle: PokemonBattle,
     ) : Cancelable()
 
-    data class TrainerInteractEvent(val player: ServerPlayer, val trainer: LivingEntity) : Cancelable()
+    data class TrainerInteractEvent(val player: ServerPlayer, val trainer: NPCEntity) : Cancelable()
 
     @JvmField
     val CACHE_ROLL_POKE = EventObservable<CacheRollPokeEvent>()

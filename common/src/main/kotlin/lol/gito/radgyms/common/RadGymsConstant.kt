@@ -45,3 +45,7 @@ const val REGISTRY_REWARD_TYPE_LOOT_TABLE = "rad_gyms:loot_table"
 const val REGISTRY_REWARD_TYPE_POKEMON = "rad_gyms:pokemon"
 const val REGISTRY_REWARD_TYPE_COMMAND = "rad_gyms:command"
 const val REGISTRY_REWARD_TYPE_ADVANCEMENT = "rad_gyms:advancement"
+
+const val ASPECT_DEFEATED = "rg-defeated"
+const val ASPECT_LEADER = "rg-leader"
+const val ASPECT_REQUIRED = "rg-required-"

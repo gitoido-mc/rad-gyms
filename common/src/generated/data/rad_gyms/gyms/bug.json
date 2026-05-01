@@ -5,7 +5,7 @@
     "z": 1.0
   },
   "id": "bug",
-  "interior_template": "rad_gyms:gym_interior/bug",
+  "interior_template": "rad_gyms:interior/bug",
   "player_spawn_relative": {
     "pos": {
       "x": 15.0,
