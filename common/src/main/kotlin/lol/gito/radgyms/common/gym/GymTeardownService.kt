@@ -90,6 +90,11 @@ object GymTeardownService {
         )
 
         debug("Derived exit block: $pos")
+
+        server.getLevel(RadGymsDimensions.GYM_DIMENSION)?.destroyBlock(
+            pos,
+            false
+        )
         server.getLevel(RadGymsDimensions.GYM_DIMENSION)?.setBlockAndUpdate(
             pos,
             RadGymsBlocks.GYM_EXIT.defaultBlockState(),

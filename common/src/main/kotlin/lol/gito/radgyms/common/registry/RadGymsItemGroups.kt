@@ -55,6 +55,9 @@ object RadGymsItemGroups {
     @JvmStatic
     val CACHES_GROUP get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(CACHES_GROUP_KEY)
 
+    @JvmStatic
+    val DECOR_GROUP get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(DECOR_GROUP_KEY)
+
     @Suppress("Unused")
     @JvmStatic
     val CACHES_INJECTIONS = this.inject(
@@ -97,6 +100,8 @@ object RadGymsItemGroups {
         @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
         entries: CreativeModeTab.Output,
     ) {
+        entries.accept(RadGymsItems.DECORATIVE_END_PORTAL)
+        entries.accept(RadGymsItems.DECORATIVE_WET_SPONGE)
         entries.accept(RadGymsItems.TYPE_GEM_BLOCK_BUG)
         entries.accept(RadGymsItems.TYPE_GEM_BLOCK_DARK)
         entries.accept(RadGymsItems.TYPE_GEM_BLOCK_DRAGON)

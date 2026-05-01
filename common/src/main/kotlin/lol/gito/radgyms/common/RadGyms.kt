@@ -74,8 +74,6 @@ object RadGyms {
         implementation.registerDataComponents()
         implementation.registerBlocks()
         implementation.registerItems()
-        implementation.registerEntityTypes()
-        implementation.registerEntityAttributes()
         implementation.registerBlockEntityTypes()
         registerArgumentTypes()
     }

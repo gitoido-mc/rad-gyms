@@ -10,6 +10,7 @@ package lol.gito.radgyms.common.gym
 import com.cobblemon.mod.common.util.toBlockPos
 import lol.gito.radgyms.common.DEFAULT_GYM_TYPE
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.TELEPORT_PRELOAD_CHUNKS
 import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -89,6 +90,10 @@ class GymInitializer(
             )
 
         RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
+
+        trainers.forEach { (uuid, entity) ->
+            RCT.trainerRegistry.registerNPC(uuid.toString(), entity.trainer)
+        }
 
         GYM_ENTER.emit(
             GymEvents.GymEnterEvent(

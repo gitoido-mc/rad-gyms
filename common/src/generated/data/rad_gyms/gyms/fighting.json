@@ -5,7 +5,7 @@
     "z": 1.0
   },
   "id": "fighting",
-  "interior_template": "rad_gyms:gym_interior/fighting",
+  "interior_template": "rad_gyms:interior/fighting",
   "player_spawn_relative": {
     "pos": {
       "x": 15.0,

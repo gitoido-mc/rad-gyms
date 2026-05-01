@@ -5,7 +5,7 @@
     "z": 1.0
   },
   "id": "flying",
-  "interior_template": "rad_gyms:gym_interior/flying",
+  "interior_template": "rad_gyms:interior/flying",
   "player_spawn_relative": {
     "pos": {
       "x": 15.0,

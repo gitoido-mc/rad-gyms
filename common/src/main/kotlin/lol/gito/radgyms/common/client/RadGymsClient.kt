@@ -11,13 +11,11 @@ import com.cobblemon.mod.common.api.Priority
 import lol.gito.radgyms.common.api.client.RadGymsClientImplementation
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
-import lol.gito.radgyms.common.client.render.entity.TrainerEntityRenderer
 import lol.gito.radgyms.common.client.render.gui.screen.GymEnterScreen
 import lol.gito.radgyms.common.client.render.gui.screen.GymLeaveScreen
 import lol.gito.radgyms.common.net.client.payload.GymEnterC2S
 import lol.gito.radgyms.common.net.client.payload.GymLeaveC2S
 import lol.gito.radgyms.common.registry.RadGymsBlocks
-import lol.gito.radgyms.common.registry.RadGymsEntities
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.resources.model.ModelResourceLocation
@@ -32,7 +30,6 @@ object RadGymsClient {
     fun initialize(implementation: RadGymsClientImplementation) {
         this.implementation = implementation
         this.registerBlockRenderTypes()
-        this.registerEntityRenderers()
         this.registerClientEvents()
     }
 
@@ -41,10 +38,10 @@ object RadGymsClient {
             RenderType.cutout(),
             RadGymsBlocks.GYM_ENTRANCE,
         )
-    }
-
-    private fun registerEntityRenderers() {
-        this.implementation.registerEntityRenderer(RadGymsEntities.GYM_TRAINER, ::TrainerEntityRenderer)
+        this.implementation.registerBlockRenderType(
+            RenderType.endGateway(),
+            RadGymsBlocks.DECORATIVE_END_PORTAL,
+        )
     }
 
     private fun registerClientEvents() {

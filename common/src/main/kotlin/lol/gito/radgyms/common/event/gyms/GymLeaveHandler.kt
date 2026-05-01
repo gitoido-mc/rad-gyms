@@ -7,10 +7,10 @@
 
 package lol.gito.radgyms.common.event.gyms
 
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.event.GymEvents
-import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.gym.GymTeardownService
 import lol.gito.radgyms.common.gym.GymTeleportScheduler
 import lol.gito.radgyms.common.registry.RadGymsStats.getStat
@@ -36,7 +36,7 @@ object GymLeaveHandler {
 
             event.player
                 .level()
-                .getEntitiesOfClass(Trainer::class.java, bounds).forEach { it.discard() }
+                .getEntitiesOfClass(NPCEntity::class.java, bounds).forEach { it.discard() }
         }
 
         when (event.completed) {

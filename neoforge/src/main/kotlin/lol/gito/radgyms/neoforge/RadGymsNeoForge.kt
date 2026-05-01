@@ -22,7 +22,6 @@ import lol.gito.radgyms.common.registry.RadGymsBlockEntities
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
-import lol.gito.radgyms.common.registry.RadGymsEntities
 import lol.gito.radgyms.common.registry.RadGymsItemGroups
 import lol.gito.radgyms.common.registry.RadGymsItems
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
@@ -51,7 +50,6 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.OnDatapackSyncEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
-import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -154,24 +152,6 @@ class RadGymsNeoForge : RadGymsImplementation {
                 RadGymsBlockEntities.register { identifier, block ->
                     helper.register(identifier, block)
                 }
-            }
-        }
-    }
-
-    override fun registerEntityTypes() {
-        MOD_BUS.addListener<RegisterEvent> { event ->
-            event.register(RadGymsEntities.resourceKey) { helper ->
-                RadGymsEntities.register { identifier, block ->
-                    helper.register(identifier, block)
-                }
-            }
-        }
-    }
-
-    override fun registerEntityAttributes() {
-        MOD_BUS.addListener<EntityAttributeCreationEvent> { event ->
-            RadGymsEntities.registerAttributes { type, builder ->
-                event.put(type, builder.build())
             }
         }
     }

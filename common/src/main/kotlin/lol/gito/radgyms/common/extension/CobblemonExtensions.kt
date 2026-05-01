@@ -32,7 +32,3 @@ fun shinyRoll(poke: Pokemon, player: ServerPlayer, shinyBoost: Int? = 0) {
         poke.shiny = (shinyRate > 0 && (Random.nextFloat() < 1 / shinyRate))
     }
 }
-
-fun test() {
-//    NPCPartyProvider.types.put()
-}

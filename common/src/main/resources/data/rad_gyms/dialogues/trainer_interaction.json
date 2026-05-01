@@ -1,5 +1,6 @@
 {
   "initializationAction": [
+    "q.npc.rg_is_defeated() ? q.dialogue.set_page('can_battle')",
     "c.npc.set_chatting();"
   ],
   "speakers": {
@@ -21,7 +22,7 @@
   },
   "pages": [
     {
-      "id": "greeting",
+      "id": "can_battle",
       "speaker": "npc",
       "clientActions": [
         "q.face.play_animation('win');"
@@ -41,6 +42,25 @@
           },
           {
             "text": "No",
+            "value": "no",
+            "action": "q.dialogue.close();"
+          }
+        ]
+      }
+    },
+    {
+      "id": "defeated",
+      "speaker": "npc",
+      "clientActions": [
+        "q.face.play_animation('lose');"
+      ],
+      "lines": ["You defeated me already, go fight next trainer."],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "Proceed",
             "value": "no",
             "action": "q.dialogue.close();"
           }

@@ -9,6 +9,8 @@ package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import lol.gito.radgyms.common.ASPECT_REQUIRED
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.trainer.TrainerModel
 import net.minecraft.core.BlockPos
@@ -41,48 +43,26 @@ object TrainerSpawner {
             NPCClasses.getByIdentifier(modId(trainer.id)) ?: error("Cannot find NPC with id: ${modId(trainer.id)}")
 
         val npc = NPCEntity(gymDimension)
+        if (trainer.leader) npc.appliedAspects.add("leader")
+        if (requiredUUID != null) npc.appliedAspects.add(ASPECT_REQUIRED.plus(requiredUUID.toString()))
         npc.moveTo(
             coords.x + trainer.npc.relativePosition.x,
             coords.y + trainer.npc.relativePosition.y,
-            coords.z + trainer.npc.relativePosition.z,
-            trainer.npc.yaw,
-            trainer.npc.yaw,
+            coords.z + trainer.npc.relativePosition.z
         )
         npc.npc = npcClass
         npc.initialize(trainer.trainer.team.first().level)
         gymDimension.addFreshEntity(npc)
+        npc.xRot = trainer.npc.yaw
+        npc.yRot = trainer.npc.yaw
+        npc.absRotateTo(
+            trainer.npc.yaw,
+            0f
+        )
 
-//        val trainerEntity = Trainer(RadGymsEntities.GYM_TRAINER, gymDimension).apply {
-//            uuid = trainerUUID
-//            gymId = trainer.id
-//            leader = trainer.leader
-//            format = trainer.format.name
-//            trainerId = trainerUUID
-//            requires = requiredUUID
-//            yHeadRot = trainer.npc.yaw
-//            yBodyRot = trainer.npc.yaw
-//            customName = trainer.npc.name
-//            configuration =
-//                TrainerConfiguration(
-//                    trainer.battleRules,
-//                    trainer.trainer.bag,
-//                    trainer.trainer.team,
-//                )
-//            isCustomNameVisible = true
-//            setPersistenceRequired()
-//            setPos(
-//                Vec3(
-//                    coords.x + trainer.npc.relativePosition.x,
-//                    coords.y + trainer.npc.relativePosition.y,
-//                    coords.z + trainer.npc.relativePosition.z,
-//                ),
-//            )
-//        }
-//
-//        debug("Spawning trainer ${trainerEntity.id} at ${trainerEntity.x} ${trainerEntity.y} ${trainerEntity.z}")
-//        gymDimension.tryAddFreshEntityWithPassengers(trainerEntity)
 
-//        return Pair(trainerEntity.uuid, trainer)
+        debug("Spawned trainer ${npc.id} at ${npc.x} ${npc.y} ${npc.z}")
+
         return Pair(npc.uuid, trainer)
     }
 }

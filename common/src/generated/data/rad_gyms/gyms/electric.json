@@ -5,7 +5,7 @@
     "z": 1.0
   },
   "id": "electric",
-  "interior_template": "rad_gyms:gym_interior/electric",
+  "interior_template": "rad_gyms:interior/electric",
   "player_spawn_relative": {
     "pos": {
       "x": 15.0,

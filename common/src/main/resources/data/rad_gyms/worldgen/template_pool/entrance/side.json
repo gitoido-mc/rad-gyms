@@ -1,0 +1,126 @@
+{
+  "name": "rad_gyms:entrance/side",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side1a",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_a",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side1b",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_b",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side1c",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_c",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side2a",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_a",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side2b",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_b",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side2c",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_b",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side3a",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_a",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side3b",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_b",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side3c",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_c",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side4a",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_a",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side4b",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_b",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "rad_gyms:entrance/side4c",
+        "element_type": "minecraft:single_pool_element",
+        "override_liquid_settings": "apply_waterlogging",
+        "processors": "rad_gyms:entrance/side_c",
+        "projection": "rigid"
+      }
+    }
+  ]
+}
