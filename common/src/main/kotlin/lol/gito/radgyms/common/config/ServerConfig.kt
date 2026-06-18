@@ -8,7 +8,10 @@
 
 package lol.gito.radgyms.common.config
 
-import net.minecraft.world.item.Rarity
+import lol.gito.radgyms.common.RadGyms.debug
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
 
 @Suppress("MagicNumber")
 class ServerConfig(
@@ -26,8 +29,10 @@ class ServerConfig(
     val maxEntranceUses: Int = 3,
 
     // Cache shiny boost amount per unit of lapis
-    // todo: refactor to support other items
-    val lapisBoostAmount: Int = 1,
+    val cacheBoosters: MutableMap<String, Int> = mutableMapOf(
+        "minecraft:lapis_lazuli" to 1,
+        "minecraft:lapis_block" to 9,
+    ),
 
     // Add shard rewards
     val shardRewards: Boolean = true,
@@ -39,41 +44,34 @@ class ServerConfig(
         "mega-y",
         "gmax",
     ),
-
-    // Caches
-    val pokeCachePools: MutableMap<String, Set<String>> = mutableMapOf(
-        Rarity.COMMON.serializedName to mutableSetOf(
-            Rarity.COMMON.serializedName,
-        ),
-        Rarity.UNCOMMON.serializedName to mutableSetOf(
-            Rarity.UNCOMMON.serializedName,
-            Rarity.COMMON.serializedName,
-        ),
-        Rarity.RARE.serializedName to mutableSetOf(
-            Rarity.RARE.serializedName,
-            Rarity.UNCOMMON.serializedName,
-        ),
-        Rarity.EPIC.serializedName to mutableSetOf(
-            Rarity.EPIC.serializedName,
-            Rarity.RARE.serializedName,
-        ),
-    ),
 ) {
+    val boosterMap: Map<Item, Int> by lazy {
+        this.cacheBoosters.mapKeys {
+            BuiltInRegistries.ITEM.get(ResourceLocation.parse(it.key))
+        }.also {
+            debug("Loaded ${this.cacheBoosters.count()} cache boosters")
+        }
+    }
+
     companion object {
         fun create(
             maxEntranceUses: Int,
             shardRewards: Boolean,
-            lapisBoostAmount: Int,
             ignoredSpecies: List<String>,
             minLevel: Int,
             maxLevel: Int,
         ): ServerConfig = ServerConfig(
             maxEntranceUses = maxEntranceUses,
             shardRewards = shardRewards,
-            lapisBoostAmount = lapisBoostAmount,
             ignoredSpecies = ignoredSpecies,
             minLevel = minLevel,
             maxLevel = maxLevel,
         )
+    }
+
+    fun warmupBoosters() {
+//        if (!this::boosterMap.isInitialized) {
+//            this.boosterMap =
+//        }
     }
 }

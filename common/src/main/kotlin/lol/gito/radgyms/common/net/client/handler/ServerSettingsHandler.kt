@@ -22,7 +22,6 @@ object ServerSettingsHandler : ClientNetworkPacketHandler<ServerSettingsS2C> {
         val serverConfig = ServerConfig.create(
             maxEntranceUses = packet.maxEntranceUses,
             shardRewards = packet.shardRewards,
-            lapisBoostAmount = packet.lapisBoostAmount,
             ignoredSpecies = packet.ignoredSpecies,
             minLevel = packet.minLevel,
             maxLevel = packet.maxLevel,

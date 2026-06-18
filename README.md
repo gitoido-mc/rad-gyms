@@ -7,35 +7,36 @@
   <img alt="GitHub License" src="https://img.shields.io/github/license/gitoido-mc/rad-gyms?style=for-the-badge&logoSize=auto&labelColor=%23222222">
 </div>
 
-### Lore bit
+### Quick links
+*
 
-Legends of Arceus speak of mysterious Evergaols scattered across the wild, said to hold ancient trials meant to test the
-courage and skill of daring Pokémon trainers. Are you brave enough to face these challenges and claim the bountiful
-rewards that await?
+### About
+Spiritual successor to [CobGyms](https://github.com/Gensir017/cobgyms).
 
-### Mod description
+Usually, when it comes to gyms in pokemon, you can notice one thing: they are static.
+The initial vision was to add randomness, and by design, replayability. But, what if we can do more than that?
 
-* 18 new world structures, every structure is related to specific pokemon element.
-* Gym entrances with ability to limit usage per player in config
-* Gym keys, which will automatically pick up new gym types added in creative mode
-* Exit rope, which allows you to escape from gym
-* Pokecaches, configurable via datapacks
-* Randomly generated pokemon teams for each trainer based on gym type (element gyms only)
-* Ability to add new gyms through datapacks, with customizable teams.
+### Features
+* Extends and embraces cobblemon NPC system
+* Random teams generation based on BST
+* Gym entrances styled as cobblemon ruins in the world
+* 18 elemental typed gym configurations out of the box
+* Ability to add pooled or static configurations via datapacks
+* Dynamically added gym keys, based on the available configurations. Check your creative tab!
+* Exit rope, an instrument to escape the instance (be prepared, [RCT Api](https://gitlab.com/srcmc/rct/api) AI doesn't joke around)
+* Poke Caches, configurable with datapacks
+* Multiple reward types (bundles with loot tables, commands, advancements)
+* Customizable shiny chance boosters for caches
 
 ### Dependencies
-
-* [Fabric API](https://modrinth.com/mod/fabric-api)
 * [Cobblemon](https://modrinth.com/mod/cobblemon)
-* [Radical Cobblemon Trainers API](https://modrinth.com/mod/rctapi) - Trainers functionality
-* [Architectury API](https://modrinth.com/mod/architectury-api) - RCT Api dependency
-* [Admiral (embedded)](https://modrinth.com/mod/admiral) - Nice library for creating commands
+* [Radical Cobblemon Trainers API](https://modrinth.com/mod/rctapi) - Trainers registry lib
 
-### Kudos
-
-* [Gensir017](https://github.com/Gensir017) (Original CobGyms mod)
-* [HDainester](https://gitlab.com/hdainester1) (Radical Cobblemon Trainers API library)
+### Kudos and thanks
+* [Gensir017](https://github.com/Gensir017), who made original [CobGyms mod](https://github.com/Gensir017/cobgyms)
+* [HDainester](https://gitlab.com/hdainester1), who made [Radical Cobblemon Trainers API](https://modrinth.com/mod/rctapi)
+* [Wundati](https://modrinth.com/user/wundati), who made amazing interiors and was just being a bro
+* [Jakotens](https://modrinth.com/user/Jakotens), who allowed me to use his amazing [Pokemon Trainer Cosmetics](https://modrinth.com/resourcepack/jakotens-pokmon-trainer-cosmetics) resourcepack for npc skins 
 
 ### Modpack usage
-
-Feel free to use this mod in modpacks while crediting the author.
+Yes! Credit the mod properly somewhere in the pack description, for example "Uses Gito's Rad Gyms".
