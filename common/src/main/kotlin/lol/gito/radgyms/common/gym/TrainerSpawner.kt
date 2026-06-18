@@ -9,7 +9,7 @@ package lol.gito.radgyms.common.gym
 
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.entity.npc.NPCEntity
-import lol.gito.radgyms.common.ASPECT_REQUIRED
+import lol.gito.radgyms.common.DATA_REQUIRED
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.trainer.TrainerModel
@@ -24,7 +24,7 @@ object TrainerSpawner {
         template.trainers.forEach { trainer ->
             val uuid = UUID.randomUUID()
             val requiredUUID = trainer.requires?.let { trainerIds[it]?.first }
-            val pair = buildTrainerEntity(trainer, gymDimension, coords, uuid, requiredUUID)
+            val pair = buildTrainerEntity(trainer, gymDimension, coords, requiredUUID)
             trainerIds[trainer.id] = pair
         }
 
@@ -36,7 +36,6 @@ object TrainerSpawner {
         trainer: TrainerModel,
         gymDimension: ServerLevel,
         coords: BlockPos,
-        trainerUUID: UUID,
         requiredUUID: UUID?,
     ): Pair<UUID, TrainerModel> {
         val npcClass =
@@ -44,22 +43,17 @@ object TrainerSpawner {
 
         val npc = NPCEntity(gymDimension)
         if (trainer.leader) npc.appliedAspects.add("leader")
-        if (requiredUUID != null) npc.appliedAspects.add(ASPECT_REQUIRED.plus(requiredUUID.toString()))
+        if (requiredUUID != null) npc.appliedAspects.add(DATA_REQUIRED.plus(requiredUUID.toString()))
         npc.moveTo(
             coords.x + trainer.npc.relativePosition.x,
             coords.y + trainer.npc.relativePosition.y,
             coords.z + trainer.npc.relativePosition.z
         )
         npc.npc = npcClass
+        npc.isNoGravity = true
+        npc.setYBodyRot(trainer.npc.yaw)
         npc.initialize(trainer.trainer.team.first().level)
         gymDimension.addFreshEntity(npc)
-        npc.xRot = trainer.npc.yaw
-        npc.yRot = trainer.npc.yaw
-        npc.absRotateTo(
-            trainer.npc.yaw,
-            0f
-        )
-
 
         debug("Spawned trainer ${npc.id} at ${npc.x} ${npc.y} ${npc.z}")
 
