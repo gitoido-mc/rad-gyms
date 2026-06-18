@@ -8,13 +8,11 @@
 package lol.gito.radgyms.common.event.gyms
 
 import com.cobblemon.mod.common.entity.npc.NPCEntity
-import com.cobblemon.mod.common.util.asUUID
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.battle.BattleState
 import com.gitlab.srcmc.rctapi.api.trainer.TrainerNPC
-import lol.gito.radgyms.common.ASPECT_REQUIRED
 import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
@@ -22,6 +20,7 @@ import lol.gito.radgyms.common.RadGyms.warn
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.extension.cobblemon.npc.isDefeated
 import lol.gito.radgyms.common.extension.cobblemon.npc.isLeader
+import lol.gito.radgyms.common.extension.cobblemon.npc.required
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
@@ -29,7 +28,6 @@ import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import java.util.*
 import lol.gito.radgyms.common.api.dto.trainer.TrainerModel as RGModel
 
 class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
@@ -57,9 +55,9 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
         val required = required()
         debug("Checking required: ${required?.uuid}")
 
-        when (required != null) {
-            false -> handleNoRequired()
-            true -> handleRequired(required)
+        when (required) {
+            null -> handleNoRequired()
+            else -> handleRequired(required)
         }
     }
 
@@ -125,12 +123,10 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
 
         if (shouldReturn) return
 
-
-
         with(RCT.battleManager) {
             // Check for being in battle just in case
             // Force all battles for player to end
-            states.forEach { state -> finalizeState(state, this) }
+            states.forEach { state -> finalizeDanglingState(state, this) }
             val trainer = event.trainer.rgModel()!!
             debug(
                 "Starting {} battle between player {} and trainer {}",
@@ -166,7 +162,7 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
         return@with playerTrainer to npcTrainer
     }
 
-    private fun finalizeState(state: BattleState, rctBattleManager: BattleManager) = with(state.battle) {
+    private fun finalizeDanglingState(state: BattleState, rctBattleManager: BattleManager) = with(state.battle) {
         val actor = actors.firstOrNull { actor -> actor.isForPlayer(event.player) }
         if (actor != null && this.ended) {
             debug("Uh-oh, found stuck battle for player actor, ending it")
@@ -189,14 +185,8 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
         player.giveOrDropItemStack(EXIT_ROPE.defaultInstance, true)
     }
 
-    private fun required(): NPCEntity? {
-        return when (val aspect = event.trainer.aspects.firstOrNull { it.startsWith(ASPECT_REQUIRED) }) {
-            null -> null
-            else -> {
-                val uuid: UUID = aspect.replace(ASPECT_REQUIRED, "").asUUID!!
-
-                (event.trainer.level() as ServerLevel).getEntity(uuid) as NPCEntity?
-            }
-        }
+    private fun required(): NPCEntity? = when (val required = event.trainer.required) {
+        null -> null
+        else -> (event.trainer.level() as ServerLevel).getEntity(required) as NPCEntity?
     }
 }

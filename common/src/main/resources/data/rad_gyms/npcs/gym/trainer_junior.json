@@ -16,9 +16,62 @@
     {
       "type": "apply_behaviours",
       "behaviours": [
-        "cobblemon:core",
-        "cobblemon:looks_in_one_direction"
+        "cobblemon:core"
       ]
     }
-  ]
+  ],
+  "variation": {
+    "skin": [
+      "aethergruntf",
+      "aethergruntm",
+      "aquagruntf",
+      "aquagruntm",
+      "arven_sv",
+      "barry_dppt",
+      "bianca_bw",
+      "blue_frlg",
+      "brendan_emerald",
+      "calem_xy",
+      "dawn_dp",
+      "elio_usum",
+      "flaregruntf",
+      "flaregruntm",
+      "galacticgruntf",
+      "galacticgruntm",
+      "gladion_sm",
+      "gloria_swsh",
+      "gold_gsc",
+      "hau_sm",
+      "hilbert_bw",
+      "hilda_bw",
+      "hop_swsh",
+      "kris_crystal",
+      "leaf_frlg",
+      "lillie_sm",
+      "lucas_platinum",
+      "lyra_hgss",
+      "magmagruntf",
+      "magmagruntm",
+      "marnie_swsh",
+      "may_rs",
+      "n_bw",
+      "nate_bw2",
+      "nemona_sv",
+      "penny_sv",
+      "plasmagruntf",
+      "plasmagruntm",
+      "red_frlg",
+      "rocketgruntf",
+      "rocketgruntm",
+      "rosa_bw2",
+      "selene_sunmoon",
+      "serena_xy",
+      "silver_hgss",
+      "skullgruntf",
+      "skullgruntm",
+      "stargruntf",
+      "stargruntm",
+      "victor_swsh"
+    ]
+  }
 }
