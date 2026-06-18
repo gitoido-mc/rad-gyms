@@ -23,7 +23,7 @@ const val COMMANDS_PREFIX = "rg"
 
 const val TELEPORT_PRELOAD_CHUNKS = 4
 const val WORLDGEN_FEATURE_RANDOM_SHIFT_BITS = 4
-const val GYM_SPACING_IN_DIMENSION = 128
+const val GYM_SPACING_IN_DIMENSION = 256
 
 // Cooldown of item use in ticks (20t = 5s)
 const val EXIT_ROPE_COOLDOWN = 100
