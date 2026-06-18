@@ -1,6 +1,9 @@
 {
   "initializationAction": [
-    "q.npc.rg_is_defeated() ? q.dialogue.set_page('can_battle')",
+    "v.is_defeated = q.npc.rg_is_defeated();",
+    "v.is_required_defeated = q.npc.rg_is_required_defeated();",
+    "v.landing_page = (v.is_defeated ? 'defeated' : (v.is_required_defeated ? 'can_battle' : 'cannot_battle'));",
+    "q.dialogue.set_page(v.landing_page);",
     "c.npc.set_chatting();"
   ],
   "speakers": {
@@ -22,26 +25,45 @@
   },
   "pages": [
     {
-      "id": "can_battle",
+      "id": "cannot_battle",
       "speaker": "npc",
       "clientActions": [
         "q.face.play_animation('win');"
       ],
-      "lines": ["Ready to fight?"],
+      "lines": ["rad_gyms.message.info.trainer_cannot_battle"],
       "input": {
         "type": "option",
         "vertical": false,
         "options": [
           {
-            "text": "Yes",
-            "value": "yes",
+            "text": "gui.proceed",
+            "value": "close",
+            "action": "q.dialogue.close();"
+          }
+        ]
+      }
+    },
+    {
+      "id": "can_battle",
+      "speaker": "npc",
+      "clientActions": [
+        "q.face.play_animation('win');"
+      ],
+      "lines": ["rad_gyms.message.info.trainer_can_battle"],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "gui.proceed",
+            "value": "proceed",
             "action": [
-              "c.npc.start_rg_battle(q.player);",
+              "c.npc.rg_start_battle(q.player);",
               "q.dialogue.close();"
             ]
           },
           {
-            "text": "No",
+            "text": "gui.cancel",
             "value": "no",
             "action": "q.dialogue.close();"
           }
@@ -54,14 +76,14 @@
       "clientActions": [
         "q.face.play_animation('lose');"
       ],
-      "lines": ["You defeated me already, go fight next trainer."],
+      "lines": ["rad_gyms.message.info.trainer_defeated"],
       "input": {
         "type": "option",
         "vertical": false,
         "options": [
           {
-            "text": "Proceed",
-            "value": "no",
+            "text": "gui.proceed",
+            "value": "close",
             "action": "q.dialogue.close();"
           }
         ]

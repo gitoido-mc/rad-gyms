@@ -82,6 +82,8 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         tlk(modId("message.info.gym_entrance_party_empty")) to
             "Your Pokemon party is not enough. Bring at least 3 Pokemon",
         tlk(modId("message.info.gym_entrance_party_fainted")) to "Your pokemon party requires healing",
+        tlk(modId("message.info.trainer_cannot_battle")) to "You need to defeat previous trainer first",
+        tlk(modId("message.info.trainer_can_battle")) to "Ready to fight?",
         tlk(modId("message.info.trainer_required")) to "Go fight %s before challenging me.",
         tlk(modId("message.info.trainer_defeated")) to "You won! Go challenge next trainer.",
         tlk(modId("message.info.leader_defeated")) to "Congratulations on beating the gym!",

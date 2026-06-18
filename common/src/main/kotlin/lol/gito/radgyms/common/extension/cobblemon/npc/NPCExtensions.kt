@@ -8,12 +8,20 @@
 package lol.gito.radgyms.common.extension.cobblemon.npc
 
 import com.cobblemon.mod.common.entity.npc.NPCEntity
-import lol.gito.radgyms.common.ASPECT_DEFEATED
-import lol.gito.radgyms.common.ASPECT_LEADER
+import lol.gito.radgyms.common.DATA_DEFEATED
+import lol.gito.radgyms.common.DATA_LEADER
+import lol.gito.radgyms.common.DATA_REQUIRED
+import java.util.*
 
 
 val NPCEntity.isDefeated: Boolean
-    get() = this.aspects.contains(ASPECT_DEFEATED)
+    get() = this.data.map.contains(DATA_DEFEATED) && this.data.map[DATA_DEFEATED]?.asDouble() == 1.0
 
 val NPCEntity.isLeader: Boolean
-    get() = this.aspects.contains(ASPECT_LEADER)
+    get() = this.data.map.contains(DATA_LEADER) && this.data.map[DATA_LEADER]?.asDouble() == 1.0
+
+val NPCEntity.required: UUID?
+    get() = when (this.data.map.contains(DATA_REQUIRED)) {
+        true -> UUID.fromString(this.data.map[DATA_REQUIRED]!!.asString())
+        false -> null
+    }
