@@ -64,6 +64,7 @@ object EventManager {
         debug("Registering event handlers")
         // Minecraft events
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStarting)
+        PlatformEvents.SERVER_STARTED.subscribe(Priority.NORMAL, ::onServerStarted)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
@@ -133,12 +134,16 @@ object EventManager {
         trainerRegistry.init(event.server)
     }
 
+    private fun onServerStarted(@Suppress("unused") ignored: ServerEvent.Started) {
+        debug("Warming up cache boosters")
+        RadGymsConfigs.server.warmupBoosters()
+    }
+
     private fun onPlayerJoin(event: ServerPlayerEvent) {
         debug("Sending server settings to player ${event.player.name}")
         ServerSettingsS2C(
             RadGymsConfigs.server.maxEntranceUses,
             RadGymsConfigs.server.shardRewards,
-            RadGymsConfigs.server.lapisBoostAmount,
             RadGymsConfigs.server.ignoredSpecies,
             RadGymsConfigs.server.minLevel,
             RadGymsConfigs.server.maxLevel,

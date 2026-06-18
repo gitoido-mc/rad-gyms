@@ -15,7 +15,6 @@ package lol.gito.radgyms.common
  * Exceptions are config versions
  */
 
-const val CONFIG_040 = 0.4
 const val CONFIG_050 = 0.5
 
 const val DEFAULT_GYM_TYPE = "default"
@@ -41,11 +40,6 @@ const val CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON = 300
 const val CACHE_DEFAULT_ENTRY_WEIGHT_RARE = 200
 const val CACHE_DEFAULT_ENTRY_WEIGHT_EPIC = 100
 
-const val REGISTRY_REWARD_TYPE_LOOT_TABLE = "rad_gyms:loot_table"
-const val REGISTRY_REWARD_TYPE_POKEMON = "rad_gyms:pokemon"
-const val REGISTRY_REWARD_TYPE_COMMAND = "rad_gyms:command"
-const val REGISTRY_REWARD_TYPE_ADVANCEMENT = "rad_gyms:advancement"
-
-const val ASPECT_DEFEATED = "rg-defeated"
-const val ASPECT_LEADER = "rg-leader"
-const val ASPECT_REQUIRED = "rg-required-"
+const val DATA_DEFEATED = "rg-defeated"
+const val DATA_LEADER = "rg-leader"
+const val DATA_REQUIRED = "rg-required"

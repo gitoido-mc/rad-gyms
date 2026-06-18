@@ -40,6 +40,10 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem =
         this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
+    override fun <E : Item> create(name: String, entry: E): E {
+        return super.create(modId(name), entry)
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Survival items">
@@ -96,6 +100,7 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     @JvmField
     val GYM_ENTRANCE = blockItem(modId("gym_entrance"), RadGymsBlocks.GYM_ENTRANCE)
 
+    @Suppress("unused")
     @JvmField
     val GYM_EXIT = blockItem(modId("gym_exit"), RadGymsBlocks.GYM_EXIT)
 

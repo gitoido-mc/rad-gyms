@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation
 class ServerSettingsS2C(
     val maxEntranceUses: Int,
     val shardRewards: Boolean,
-    val lapisBoostAmount: Int,
     val ignoredSpecies: List<String>,
     val minLevel: Int,
     val maxLevel: Int,
@@ -29,7 +28,6 @@ class ServerSettingsS2C(
         fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsS2C(
             ByteBufCodecs.INT.decode(buffer),
             ByteBufCodecs.BOOL.decode(buffer),
-            ByteBufCodecs.INT.decode(buffer),
             ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).decode(buffer),
             ByteBufCodecs.INT.decode(buffer),
             ByteBufCodecs.INT.decode(buffer),
@@ -39,7 +37,6 @@ class ServerSettingsS2C(
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         ByteBufCodecs.INT.encode(buffer, maxEntranceUses)
         ByteBufCodecs.BOOL.encode(buffer, shardRewards)
-        ByteBufCodecs.INT.encode(buffer, lapisBoostAmount)
         ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).encode(buffer, ignoredSpecies)
         ByteBufCodecs.INT.encode(buffer, minLevel)
         ByteBufCodecs.INT.encode(buffer, maxLevel)
