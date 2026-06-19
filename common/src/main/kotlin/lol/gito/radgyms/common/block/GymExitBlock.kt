@@ -45,6 +45,7 @@ class GymExitBlock(properties: Properties) : BaseEntityBlock(properties) {
         var result: InteractionResult = InteractionResult.SUCCESS_NO_ITEM_USED
         when (level.isClientSide) {
             true -> result = InteractionResult.PASS
+
             false -> {
                 (player as ServerPlayer).also {
                     debug("Gym exit block used by player ${it.uuid} at $pos in ${level.dimension()}")

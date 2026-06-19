@@ -39,8 +39,7 @@ fun tlc(key: String, vararg args: Any?): MC = translatable(cobblemonResource(key
 
 object ElementalTypeTranslationHelper {
     @Suppress("unused")
-    fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): C =
-        buildPrefixedSuffixedTypeText(elementalType?.showdownId)
+    fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): C = buildPrefixedSuffixedTypeText(elementalType?.showdownId)
 
     fun buildPrefixedSuffixedTypeText(elementalType: String? = null): C = tl(
         modId("item.component.gym_type"),
@@ -48,8 +47,7 @@ object ElementalTypeTranslationHelper {
     )
 
     @Suppress("unused")
-    fun buildSuffixedTypeText(elementalType: ElementalType? = null): C =
-        buildSuffixedTypeText(elementalType?.showdownId)
+    fun buildSuffixedTypeText(elementalType: ElementalType? = null): C = buildSuffixedTypeText(elementalType?.showdownId)
 
     fun buildSuffixedTypeText(elementalType: String? = null): C = tlc(
         "type.suffix",

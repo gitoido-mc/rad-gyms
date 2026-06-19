@@ -30,8 +30,11 @@ class TrainerFactory(private val battleConfigBuilder: BattleConfigFactory = Batt
     fun create(trainer: Trainer, level: Int, player: ServerPlayer?): RGTrainerModel {
         val ai = when (trainer.ai.type) {
             "rct" -> RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))
+
             "cbl" -> StrongBattleAI(trainer.ai.data?.skillLevel ?: StrongBattleAIConfig().skill())
+
             "sd5" -> SelfdotGen5AI()
+
             else -> throw RadGymsUnknownBattleAIException(
                 "Unknown battle AI type for trainer {}, passed {}, supports only 'rct', 'cbl', 'sd5'"
                     .format(trainer.id, trainer.ai.type),
@@ -41,7 +44,9 @@ class TrainerFactory(private val battleConfigBuilder: BattleConfigFactory = Batt
         val possibleFormats = trainer.possibleFormats.toMutableList()
         val team = when (trainer.teamType) {
             GymTeamType.FIXED -> FixedTeamGenerator.generateTeam(player, trainer, level)
+
             GymTeamType.POOL -> PoolTeamGenerator.generateTeam(player, trainer, level)
+
             GymTeamType.GENERATED ->
                 trainer.teamGenerator.instance.generateTeam(
                     trainer,

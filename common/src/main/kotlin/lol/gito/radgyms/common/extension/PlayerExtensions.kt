@@ -24,5 +24,4 @@ fun ServerPlayer.averagePokePartyLevel(): Int = Cobblemon.storage
         Cobblemon.config.maxPokemonLevel,
     )
 
-fun Player.displayClientMessage(component: Component, maybeOverlay: Boolean = true) =
-    this.displayClientMessage(component, maybeOverlay)
+fun Player.displayClientMessage(component: Component, maybeOverlay: Boolean = true) = this.displayClientMessage(component, maybeOverlay)

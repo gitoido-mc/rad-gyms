@@ -93,7 +93,7 @@ object GymTeardownService {
 
         server.getLevel(RadGymsDimensions.GYM_DIMENSION)?.destroyBlock(
             pos,
-            false
+            false,
         )
         server.getLevel(RadGymsDimensions.GYM_DIMENSION)?.setBlockAndUpdate(
             pos,

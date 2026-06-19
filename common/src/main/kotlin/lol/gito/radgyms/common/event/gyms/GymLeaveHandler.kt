@@ -41,7 +41,9 @@ object GymLeaveHandler {
 
         when (event.completed) {
             true -> event.player.awardStat(getStat(RadGyms.statistics.GYMS_BEATEN))
+
             null -> Unit
+
             false -> {
                 GymTeardownService.destructGym(event.player, removeCoords = false)
                 event.player.awardStat(getStat(RadGyms.statistics.GYMS_FAILED))

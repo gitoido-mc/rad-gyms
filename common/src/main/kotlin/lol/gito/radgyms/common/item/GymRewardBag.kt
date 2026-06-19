@@ -23,8 +23,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.BundleContents
 import net.minecraft.world.level.Level
 
-class GymRewardBag :
-    BundleItem(Properties().stacksTo(1).component(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY)) {
+class GymRewardBag : BundleItem(Properties().stacksTo(1).component(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY)) {
     companion object {
         const val DROP_SOUND_VOLUME = 0.8f
         const val DROP_SOUND_PITCH = 0.4f

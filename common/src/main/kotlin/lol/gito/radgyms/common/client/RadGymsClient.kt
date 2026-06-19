@@ -39,7 +39,7 @@ object RadGymsClient {
             RadGymsBlocks.GYM_ENTRANCE,
         )
         this.implementation.registerBlockRenderType(
-            RenderType.endGateway(),
+            RenderType.endPortal(),
             RadGymsBlocks.DECORATIVE_END_PORTAL,
         )
     }

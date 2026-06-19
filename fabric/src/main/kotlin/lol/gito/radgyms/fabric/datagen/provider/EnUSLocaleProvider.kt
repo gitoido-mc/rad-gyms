@@ -38,8 +38,7 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.world.item.Rarity
 import java.util.concurrent.CompletableFuture
 
-class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: CompletableFuture<HolderLookup.Provider>) :
-    FabricLanguageProvider(dataOutput, "en_us", registryLookup) {
+class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: CompletableFuture<HolderLookup.Provider>) : FabricLanguageProvider(dataOutput, "en_us", registryLookup) {
     private fun provideTranslations(): Map<String, String> {
         val translations = mutableMapOf<String, String>()
 
@@ -69,7 +68,8 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         SHARD_EPIC.descriptionId to "Epic cache shard",
         tlk(modId("item.component.type.chaos")) to "Chaos",
         tlk(modId("item.component.gym_type")) to "Attuned to %s",
-        tlk(modId("item.component.shiny_boost")) to "Shiny chance boosted x%s time(s)",
+        tlk(modId("item.component.shiny_boost")) to "Shiny chance rate is x%s",
+        tlk(modId("item.component.shiny_boost.guaranteed")) to "guaranteed",
         tlk("item", modId("gym_reward")) to "Level %s %s gym reward cache",
     )
 

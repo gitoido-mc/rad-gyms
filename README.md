@@ -7,9 +7,6 @@
   <img alt="GitHub License" src="https://img.shields.io/github/license/gitoido-mc/rad-gyms?style=for-the-badge&logoSize=auto&labelColor=%23222222">
 </div>
 
-### Quick links
-*
-
 ### About
 Spiritual successor to [CobGyms](https://github.com/Gensir017/cobgyms).
 
