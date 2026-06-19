@@ -4,7 +4,6 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
 import pl.allegro.tech.build.axion.release.domain.properties.VersionProperties
@@ -19,8 +18,7 @@ plugins {
     id("dev.architectury.loom") version "1.14-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("pl.allegro.tech.build.axion-release") version "1.21.1"
-    id("dev.detekt") version "2.0.0-alpha.2"
-
+    id("com.diffplug.spotless") version "8.7.0"
 }
 
 scmVersion {
@@ -97,15 +95,10 @@ modProjects.forEach {
     project(it) {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
-        apply(plugin = "dev.detekt")
+        apply(plugin = "com.diffplug.spotless")
 
         group = property("maven_group")!!
         version = rootProject.version
-
-        detekt {
-            config.setFrom(rootProject.file("detekt.yml"))
-            buildUponDefaultConfig = true
-        }
 
         repositories {
             mavenCentral()
@@ -138,8 +131,15 @@ modProjects.forEach {
             }
         }
 
-        dependencies {
-            detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.2")
+        spotless {
+            kotlin {
+                // version, editorConfigPath, editorConfigOverride and customRuleSets are all optional
+                ktlint("1.8.0")
+                suppressLintsFor {
+                    step = "ktlint"
+                    shortCode = "standard:no-wildcard-imports"
+                }
+            }
         }
 
         tasks {
@@ -164,15 +164,13 @@ modProjects.forEach {
                     freeCompilerArgs.add("-Xcontext-parameters")
                 }
             }
-
-            withType<Detekt>().configureEach {
-                exclude("**/build/**")
-            }
         }
     }
 }
 
-val buildMod by project.tasks.registering {
+val buildMod = project.tasks.register("buildMod") {
+    description = "Assemble the jars"
+
     dependsOn(":common:build")
     dependsOn(":fabric:build")
     dependsOn(":neoforge:build")

@@ -11,8 +11,7 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import lol.gito.radgyms.common.DATA_DEFEATED
 import lol.gito.radgyms.common.DATA_LEADER
 import lol.gito.radgyms.common.DATA_REQUIRED
-import java.util.*
-
+import java.util.UUID
 
 val NPCEntity.isDefeated: Boolean
     get() = this.data.map.contains(DATA_DEFEATED) && this.data.map[DATA_DEFEATED]?.asDouble() == 1.0

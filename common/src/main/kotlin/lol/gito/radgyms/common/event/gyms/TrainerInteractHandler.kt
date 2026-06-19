@@ -151,7 +151,7 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
         val npcTrainer: TrainerNPC = try {
             registerNPC(
                 event.trainer.stringUUID,
-                model.trainer
+                model.trainer,
             )
         } catch (_: IllegalArgumentException) {
             getById(event.trainer.stringUUID, TrainerNPC::class.java)

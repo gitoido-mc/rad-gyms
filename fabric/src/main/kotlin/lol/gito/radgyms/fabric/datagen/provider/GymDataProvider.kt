@@ -37,10 +37,9 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
     ) {
     override fun getName(): String = "Gym data"
 
-    override fun configure(provider: BiConsumer<ResourceLocation, GymJson>, lookup: HolderLookup.Provider) =
-        ElementalTypes.all().forEach {
-            provider.accept(modId(it.showdownId), getDefaultElementalGymDto(it))
-        }
+    override fun configure(provider: BiConsumer<ResourceLocation, GymJson>, lookup: HolderLookup.Provider) = ElementalTypes.all().forEach {
+        provider.accept(modId(it.showdownId), getDefaultElementalGymDto(it))
+    }
 
     @Suppress("LongMethod", "MagicNumber")
     private fun getDefaultElementalGymDto(type: ElementalType): GymJson = GymJson(
@@ -93,7 +92,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 requires = "trainer_senior",
                 leader = true,
                 spawnRelative = EntityCoordsAndYaw(
-                    Coords(15.5, 2.0, 7.5),
+                    Coords(15.5, if (type == ElementalTypes.FIGHTING) 4.0 else 2.0, 7.5),
                     yaw = 0.0,
                 ),
                 possibleFormats = listOf(

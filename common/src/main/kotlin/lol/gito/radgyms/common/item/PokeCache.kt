@@ -38,7 +38,9 @@ import net.minecraft.world.level.Level
 open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().rarity(rarity)) {
     override fun use(level: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> = when {
         level.isClientSide -> sidedSuccess(user.getItemInHand(hand), true)
+
         (hand != InteractionHand.MAIN_HAND) -> fail(user.getItemInHand(hand))
+
         else -> {
             val stack = user.getItemInHand(hand)
 
@@ -47,7 +49,7 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
                 val stackBoost = stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)
                 stack.set(
                     RG_CACHE_SHINY_BOOST_COMPONENT,
-                    stackBoost.plus(boosterAmount).coerceAtMost(Cobblemon.config.shinyRate.toInt().dec())
+                    stackBoost.plus(boosterAmount).coerceAtMost(Cobblemon.config.shinyRate.toInt().dec()),
                 )
                 user.offhandItem.shrink(1)
                 return sidedSuccess(user.getItemInHand(hand), true)
@@ -73,9 +75,14 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
         type: TooltipFlag,
     ) = with(stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)) {
         if (this > 0) {
+            val intermediate = when (this.coerceAtLeast(1) == 1) {
+                true -> tl(modId("item.component.shiny_boost.guaranteed")).withStyle(ChatFormatting.UNDERLINE)
+                else -> "1/${(Cobblemon.config.shinyRate.toInt() - this)}"
+            }
+
             val tooltipText = tl(
                 modId("item.component.shiny_boost"),
-                "1/${(Cobblemon.config.shinyRate.toInt() - this).coerceAtLeast(1)}",
+                intermediate,
             )
 
             tooltip.add(tooltipText.withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD))

@@ -85,15 +85,14 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         return getPokemon(derived, level)
     }
 
-    protected fun getPokemon(speciesWithForm: SpeciesWithForm, level: Int) =
-        with(speciesWithForm.species.create(level)) {
-            form = speciesWithForm.form
-            forcedAspects = speciesWithForm.form.aspects.toSet()
-            shiny = (Random.nextInt(1, GENERATOR_SHINY_ODDS) == 1)
-            updateAspects()
+    protected fun getPokemon(speciesWithForm: SpeciesWithForm, level: Int) = with(speciesWithForm.species.create(level)) {
+        form = speciesWithForm.form
+        forcedAspects = speciesWithForm.form.aspects.toSet()
+        shiny = (Random.nextInt(1, GENERATOR_SHINY_ODDS) == 1)
+        updateAspects()
 
-            return@with this
-        }
+        return@with this
+    }
 
     protected fun createPokemonModel(properties: PokemonProperties) = createPokemonModel(properties.create())
 

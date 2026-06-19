@@ -15,7 +15,7 @@ import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.trainer.TrainerModel
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import java.util.*
+import java.util.UUID
 
 object TrainerSpawner {
     fun spawnAll(template: GymTemplate, gymDimension: ServerLevel, coords: BlockPos): Map<UUID, TrainerModel> {
@@ -47,7 +47,7 @@ object TrainerSpawner {
         npc.moveTo(
             coords.x + trainer.npc.relativePosition.x,
             coords.y + trainer.npc.relativePosition.y,
-            coords.z + trainer.npc.relativePosition.z
+            coords.z + trainer.npc.relativePosition.z,
         )
         npc.npc = npcClass
         npc.isNoGravity = true

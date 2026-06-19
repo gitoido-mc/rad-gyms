@@ -64,7 +64,6 @@ object EventManager {
         debug("Registering event handlers")
         // Minecraft events
         PlatformEvents.SERVER_STARTING.subscribe(Priority.NORMAL, ::onServerStarting)
-        PlatformEvents.SERVER_STARTED.subscribe(Priority.NORMAL, ::onServerStarted)
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(Priority.NORMAL, ::onPlayerJoin)
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(Priority.HIGHEST, ::onPlayerDisconnect)
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onBlockInteract)
@@ -132,11 +131,6 @@ object EventManager {
         val trainerRegistry = RCT.trainerRegistry
         debug("initializing RCT trainer mod registry")
         trainerRegistry.init(event.server)
-    }
-
-    private fun onServerStarted(@Suppress("unused") ignored: ServerEvent.Started) {
-        debug("Warming up cache boosters")
-        RadGymsConfigs.server.warmupBoosters()
     }
 
     private fun onPlayerJoin(event: ServerPlayerEvent) {

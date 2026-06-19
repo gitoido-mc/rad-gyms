@@ -69,6 +69,7 @@ data class Trainer(
         teamType.let {
             when (teamType) {
                 GymTeamType.GENERATED -> {}
+
                 GymTeamType.FIXED -> {
                     requireNotNull(team)
                     require(team.count() in 1..MAX_PARTY_SIZE)

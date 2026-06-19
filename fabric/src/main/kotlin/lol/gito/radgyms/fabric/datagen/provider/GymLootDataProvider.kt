@@ -54,8 +54,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 
-class GymLootDataProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>) :
-    SimpleFabricLootTableProvider(output, lookup, LootContextParamSets.ALL_PARAMS) {
+class GymLootDataProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>) : SimpleFabricLootTableProvider(output, lookup, LootContextParamSets.ALL_PARAMS) {
     companion object {
         const val COMMON_ROLLS = 5f
         const val COMMON_BONUS_ROLLS = .5f

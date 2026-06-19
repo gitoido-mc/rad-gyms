@@ -149,6 +149,7 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
 
         when (event.rewards.count() > BundleItem.DEFAULT_MAX_STACK_SIZE) {
             false -> createBundle(bundle, bundleContents, event.rewards)
+
             true -> {
                 LOGGER.warn(
                     "Reward bundle default stack size (%d) overflow (passed %d stacks of items), splitting...".format(

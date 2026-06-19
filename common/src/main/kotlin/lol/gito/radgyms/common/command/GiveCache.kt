@@ -42,38 +42,79 @@ object GiveCache : CommandInterface {
 
     @Suppress("LongMethod", "CheckedExceptionsKotlin")
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val selfCommand =
-            literal(COMMANDS_PREFIX).then(
-                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                    literal(SUB).then(
-                        argument(TYPE, ElementalTypeArgumentType.type()).then(
-                            argument(RARITY, RarityArgumentType.rarity())
-                                .executes {
-                                    execute(
-                                        it,
-                                        it.source.playerOrException,
-                                        ElementalTypeArgumentType.getType(it, TYPE),
-                                        RarityArgumentType.getRarity(it, RARITY),
-                                    )
-                                },
+        val selfCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                literal(SUB).then(
+                    argument(TYPE, ElementalTypeArgumentType.type()).then(
+                        argument(RARITY, RarityArgumentType.rarity())
+                            .executes {
+                                execute(
+                                    it,
+                                    it.source.playerOrException,
+                                    ElementalTypeArgumentType.getType(it, TYPE),
+                                    RarityArgumentType.getRarity(it, RARITY),
+                                )
+                            },
+                    ),
+                ),
+            ),
+        )
+
+        val selfBoostCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                literal(SUB).then(
+                    argument(TYPE, ElementalTypeArgumentType.type()).then(
+                        argument(RARITY, RarityArgumentType.rarity()).then(
+                            argument(
+                                BOOST,
+                                IntegerArgumentType.integer(1, Cobblemon.config.shinyRate.toInt()),
+                            ).executes {
+                                execute(
+                                    it,
+                                    it.source.playerOrException,
+                                    ElementalTypeArgumentType.getType(it, TYPE),
+                                    RarityArgumentType.getRarity(it, RARITY),
+                                    IntegerArgumentType.getInteger(it, BOOST),
+                                )
+                            },
                         ),
                     ),
                 ),
-            )
+            ),
+        )
 
-        val selfBoostCommand =
-            literal(COMMANDS_PREFIX).then(
-                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                    literal(SUB).then(
-                        argument(TYPE, ElementalTypeArgumentType.type()).then(
-                            argument(RARITY, RarityArgumentType.rarity()).then(
-                                argument(
-                                    BOOST,
-                                    IntegerArgumentType.integer(1, Cobblemon.config.shinyRate.toInt()),
-                                ).executes {
+        val otherCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                literal(SUB).then(
+                    argument(TYPE, ElementalTypeArgumentType.type()).then(
+                        argument(RARITY, RarityArgumentType.rarity()).then(
+                            argument(PLAYER, EntityArgument.player()).executes {
+                                execute(
+                                    it,
+                                    it.player(),
+                                    ElementalTypeArgumentType.getType(it, TYPE),
+                                    RarityArgumentType.getRarity(it, RARITY),
+                                )
+                            },
+                        ),
+                    ),
+                ),
+            ),
+        )
+
+        val otherBoostCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                literal(SUB).then(
+                    argument(TYPE, ElementalTypeArgumentType.type()).then(
+                        argument(RARITY, RarityArgumentType.rarity()).then(
+                            argument(
+                                BOOST,
+                                IntegerArgumentType.integer(1, Cobblemon.config.shinyRate.toInt()),
+                            ).then(
+                                argument(PLAYER, EntityArgument.player()).executes {
                                     execute(
                                         it,
-                                        it.source.playerOrException,
+                                        EntityArgument.getPlayer(it, PLAYER),
                                         ElementalTypeArgumentType.getType(it, TYPE),
                                         RarityArgumentType.getRarity(it, RARITY),
                                         IntegerArgumentType.getInteger(it, BOOST),
@@ -83,53 +124,8 @@ object GiveCache : CommandInterface {
                         ),
                     ),
                 ),
-            )
-
-        val otherCommand =
-            literal(COMMANDS_PREFIX).then(
-                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                    literal(SUB).then(
-                        argument(TYPE, ElementalTypeArgumentType.type()).then(
-                            argument(RARITY, RarityArgumentType.rarity()).then(
-                                argument(PLAYER, EntityArgument.player()).executes {
-                                    execute(
-                                        it,
-                                        it.player(),
-                                        ElementalTypeArgumentType.getType(it, TYPE),
-                                        RarityArgumentType.getRarity(it, RARITY),
-                                    )
-                                },
-                            ),
-                        ),
-                    ),
-                ),
-            )
-
-        val otherBoostCommand =
-            literal(COMMANDS_PREFIX).then(
-                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                    literal(SUB).then(
-                        argument(TYPE, ElementalTypeArgumentType.type()).then(
-                            argument(RARITY, RarityArgumentType.rarity()).then(
-                                argument(
-                                    BOOST,
-                                    IntegerArgumentType.integer(1, Cobblemon.config.shinyRate.toInt()),
-                                ).then(
-                                    argument(PLAYER, EntityArgument.player()).executes {
-                                        execute(
-                                            it,
-                                            EntityArgument.getPlayer(it, PLAYER),
-                                            ElementalTypeArgumentType.getType(it, TYPE),
-                                            RarityArgumentType.getRarity(it, RARITY),
-                                            IntegerArgumentType.getInteger(it, BOOST),
-                                        )
-                                    },
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            )
+            ),
+        )
 
         dispatcher.register(selfCommand)
         dispatcher.register(selfBoostCommand)

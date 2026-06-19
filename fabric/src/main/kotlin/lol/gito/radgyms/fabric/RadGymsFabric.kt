@@ -162,6 +162,7 @@ object RadGymsFabric : RadGymsImplementation {
 
         return@with when (state.block == RadGymsBlocks.GYM_ENTRANCE && !player.isShiftKeyDown) {
             false -> true
+
             true -> {
                 player.displayClientMessage(tl("message.info.gym_entrance_breaking"))
                 player.displayClientMessage(tl("message.error.gym_entrance.not-sneaking"))
@@ -198,8 +199,7 @@ object RadGymsFabric : RadGymsImplementation {
         override fun getFabricDependencies(): MutableCollection<ResourceLocation> = this.dependencies.toMutableList()
     }
 
-    private class FabricItemGroupInjector(private val fabricItemGroupEntries: FabricItemGroupEntries) :
-        RadGymsItemGroups.Injector {
+    private class FabricItemGroupInjector(private val fabricItemGroupEntries: FabricItemGroupEntries) : RadGymsItemGroups.Injector {
         override fun putFirst(item: ItemLike) = this.fabricItemGroupEntries.prepend(item)
 
         override fun putBefore(item: ItemLike, target: ItemLike) = this.fabricItemGroupEntries.addBefore(target, item)
