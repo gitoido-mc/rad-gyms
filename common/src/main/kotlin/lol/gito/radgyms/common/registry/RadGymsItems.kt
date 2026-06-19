@@ -32,21 +32,18 @@ import net.minecraft.world.level.block.Block
 import com.cobblemon.mod.common.util.cobblemonResource as cobble
 
 object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item>() {
-    //<editor-fold desc="Bootstrap and helpers">
+    // <editor-fold desc="Bootstrap and helpers">
 
     override val registry: Registry<Item> = BuiltInRegistries.ITEM
     override val resourceKey: ResourceKey<Registry<Item>> = Registries.ITEM
 
-    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem =
-        this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
+    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
-    override fun <E : Item> create(name: String, entry: E): E {
-        return super.create(modId(name), entry)
-    }
+    override fun <E : Item> create(name: String, entry: E): E = super.create(modId(name), entry)
 
-    //</editor-fold>
+    // </editor-fold>
 
-    //<editor-fold desc="Survival items">
+    // <editor-fold desc="Survival items">
 
     @JvmField
     val GYM_KEY: GymKey = this.create(modId("gym_key"), GymKey())
@@ -93,9 +90,9 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     @JvmField
     val SHARD_BLOCK_EPIC = blockItem(modId("shard_block_epic"), RadGymsBlocks.SHARD_BLOCK_EPIC)
 
-    //</editor-fold>
+    // </editor-fold>
 
-    //<editor-fold desc="Operator items">
+    // <editor-fold desc="Operator items">
 
     @JvmField
     val GYM_ENTRANCE = blockItem(modId("gym_entrance"), RadGymsBlocks.GYM_ENTRANCE)
@@ -104,9 +101,9 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     @JvmField
     val GYM_EXIT = blockItem(modId("gym_exit"), RadGymsBlocks.GYM_EXIT)
 
-    //</editor-fold>
+    // </editor-fold>
 
-    //<editor-fold desc="Decorative blocks">
+    // <editor-fold desc="Decorative blocks">
 
     @JvmField
     val DECORATIVE_END_PORTAL = blockItem(modId("decorative_end_portal"), RadGymsBlocks.DECORATIVE_END_PORTAL)
@@ -168,5 +165,5 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     @JvmField
     val TYPE_GEM_BLOCK_WATER = blockItem(cobble("type_gem_block_water"), RadGymsBlocks.TYPE_GEM_BLOCK_WATER)
 
-    //</editor-fold>
+    // </editor-fold>
 }

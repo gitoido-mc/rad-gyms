@@ -31,8 +31,7 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 
-class GymKey :
-    CobblemonItem(Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)) {
+class GymKey : CobblemonItem(Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)) {
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 

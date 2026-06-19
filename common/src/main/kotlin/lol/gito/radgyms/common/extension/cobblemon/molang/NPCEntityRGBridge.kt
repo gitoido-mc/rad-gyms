@@ -22,7 +22,7 @@ import lol.gito.radgyms.common.extension.cobblemon.npc.isLeader
 import lol.gito.radgyms.common.extension.cobblemon.npc.required
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import java.util.*
+import java.util.UUID
 import java.util.function.Function as Fn
 
 object NPCEntityRGBridge {
@@ -31,7 +31,7 @@ object NPCEntityRGBridge {
             return@add hashMapOf(
                 "rg_is_defeated" to Fn { _ ->
                     RadGyms.LOGGER.info("checking trainer defeat: ${entity.isDefeated}")
-                    return@Fn when(entity.isDefeated) {
+                    return@Fn when (entity.isDefeated) {
                         true -> DoubleValue.ONE
                         false -> DoubleValue.ZERO
                     }
@@ -40,13 +40,13 @@ object NPCEntityRGBridge {
                     RadGyms.LOGGER.info("checking required trainer defeat, required uuid is: ${entity.required}")
                     if (entity.required == null) return@Fn DoubleValue.ONE
                     val required = (entity.level() as ServerLevel).getEntity(entity.required!!) as NPCEntity
-                    return@Fn when(required.isDefeated) {
+                    return@Fn when (required.isDefeated) {
                         true -> DoubleValue.ONE
                         false -> DoubleValue.ZERO
                     }
                 },
                 "rg_is_leader" to Fn { _ ->
-                    return@Fn when(entity.isLeader) {
+                    return@Fn when (entity.isLeader) {
                         true -> DoubleValue.ONE
                         false -> DoubleValue.ZERO
                     }
@@ -56,6 +56,7 @@ object NPCEntityRGBridge {
 
                     val player = when (value) {
                         is ObjectValue<*> -> value.obj as ServerPlayer
+
                         is StringValue -> {
                             RadGyms.implementation.server()?.playerList?.getPlayer(UUID.fromString(value.value))!!
                         }

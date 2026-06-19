@@ -13,11 +13,10 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceLocation
-import java.util.*
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class GymEnterC2S(val key: Boolean, val level: Int, val type: String? = null, val pos: BlockPos? = null) :
-    NetworkPacket<GymEnterC2S> {
+class GymEnterC2S(val key: Boolean, val level: Int, val type: String? = null, val pos: BlockPos? = null) : NetworkPacket<GymEnterC2S> {
     override val id: ResourceLocation = ID
 
     companion object {

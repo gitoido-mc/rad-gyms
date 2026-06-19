@@ -43,16 +43,36 @@ object GiveReward : CommandInterface {
 
     @Suppress("CheckedExceptionsKotlin")
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val selfCommand =
-            literal(COMMANDS_PREFIX).then(
-                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                    literal(SUB).then(
-                        argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
-                            argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
-                                argument(TYPE, ElementalTypeArgumentType.type()).executes {
+        val selfCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                literal(SUB).then(
+                    argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
+                        argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
+                            argument(TYPE, ElementalTypeArgumentType.type()).executes {
+                                execute(
+                                    it,
+                                    it.player(),
+                                    GymTemplateArgumentType.getTemplate(it, TEMPLATE),
+                                    IntegerArgumentType.getInteger(it, LEVEL),
+                                    ElementalTypeArgumentType.getType(it, TYPE),
+                                )
+                            },
+                        ),
+                    ),
+                ),
+            ),
+        )
+
+        val otherCommand = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                literal(SUB).then(
+                    argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
+                        argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
+                            argument(TYPE, ElementalTypeArgumentType.type()).then(
+                                argument(PLAYER, EntityArgument.player()).executes {
                                     execute(
                                         it,
-                                        it.player(),
+                                        EntityArgument.getPlayer(it, PLAYER),
                                         GymTemplateArgumentType.getTemplate(it, TEMPLATE),
                                         IntegerArgumentType.getInteger(it, LEVEL),
                                         ElementalTypeArgumentType.getType(it, TYPE),
@@ -62,30 +82,8 @@ object GiveReward : CommandInterface {
                         ),
                     ),
                 ),
-            )
-
-        val otherCommand =
-            literal(COMMANDS_PREFIX).then(
-                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                    literal(SUB).then(
-                        argument(TEMPLATE, GymTemplateArgumentType.templates()).then(
-                            argument(LEVEL, IntegerArgumentType.integer(1, Cobblemon.config.maxPokemonLevel)).then(
-                                argument(TYPE, ElementalTypeArgumentType.type()).then(
-                                    argument(PLAYER, EntityArgument.player()).executes {
-                                        execute(
-                                            it,
-                                            EntityArgument.getPlayer(it, PLAYER),
-                                            GymTemplateArgumentType.getTemplate(it, TEMPLATE),
-                                            IntegerArgumentType.getInteger(it, LEVEL),
-                                            ElementalTypeArgumentType.getType(it, TYPE),
-                                        )
-                                    },
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            )
+            ),
+        )
 
         dispatcher.register(selfCommand)
         dispatcher.register(otherCommand)

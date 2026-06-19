@@ -5,6 +5,8 @@
   "minVersion": "0.8.5",
   "server": [
     "server.block.SafeLavaFluidMixin",
+    "server.entity.AbstractWindChargeMixin",
+    "server.entity.WindChargeMixin",
     "server.event.OnServerPlayerEntityDeathMixin",
     "server.worldBorder.CollisionGetterMixin",
     "server.worldBorder.EntityMixin",

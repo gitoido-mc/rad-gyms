@@ -53,7 +53,6 @@ class GymTemplateArgumentType : ArgumentType<GymJson> {
 
         fun templates() = GymTemplateArgumentType()
 
-        fun <S> getTemplate(context: CommandContext<S>, name: String): GymJson =
-            context.getArgument(name, GymJson::class.java)
+        fun <S> getTemplate(context: CommandContext<S>, name: String): GymJson = context.getArgument(name, GymJson::class.java)
     }
 }

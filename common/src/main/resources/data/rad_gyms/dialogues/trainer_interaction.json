@@ -1,8 +1,6 @@
 {
   "initializationAction": [
-    "v.is_defeated = q.npc.rg_is_defeated();",
-    "v.is_required_defeated = q.npc.rg_is_required_defeated();",
-    "v.landing_page = (v.is_defeated ? 'defeated' : (v.is_required_defeated ? 'can_battle' : 'cannot_battle'));",
+    "v.landing_page = q.npc.rg_is_defeated() ? 'defeated' : (q.npc.rg_is_required_defeated() ? 'can_battle' : 'cannot_battle');",
     "q.dialogue.set_page(v.landing_page);",
     "c.npc.set_chatting();"
   ],

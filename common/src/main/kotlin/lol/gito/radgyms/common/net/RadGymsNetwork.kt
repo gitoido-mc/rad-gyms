@@ -40,11 +40,9 @@ object RadGymsNetwork {
     )
 
     @JvmStatic
-    fun sendPacketToPlayers(players: Iterable<ServerPlayer>, packet: NetworkPacket<*>) =
-        players.forEach { sendPacketToPlayer(it, packet) }
+    fun sendPacketToPlayers(players: Iterable<ServerPlayer>, packet: NetworkPacket<*>) = players.forEach { sendPacketToPlayer(it, packet) }
 
-    fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) =
-        RadGyms.implementation.networkManager.sendPacketToPlayer(player, packet)
+    fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) = RadGyms.implementation.networkManager.sendPacketToPlayer(player, packet)
 
     val s2cPayloads = generateS2CPacketInfoList()
     val c2sPayloads = generateC2SPacketInfoList()

@@ -13,13 +13,14 @@ import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 
-class DecorativeEndPortal : Block(
-    Properties.ofFullCopy(Blocks.COBBLESTONE)
-        .mapColor(MapColor.COLOR_BLACK)
-        .lightLevel {
-            @Suppress("MagicNumber")
-            15
-        }
-) {
+class DecorativeEndPortal :
+    Block(
+        Properties.ofFullCopy(Blocks.COBBLESTONE)
+            .mapColor(MapColor.COLOR_BLACK)
+            .lightLevel {
+                @Suppress("MagicNumber")
+                15
+            },
+    ) {
     override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
 }

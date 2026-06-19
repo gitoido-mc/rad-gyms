@@ -32,7 +32,7 @@ object RadGymsBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<Bl
 
     private fun typeGemBlock(name: String): Block = this.create(
         cobblemonResource(name),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
@@ -84,78 +84,78 @@ object RadGymsBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<Bl
     @JvmField
     val TYPE_GEM_BLOCK_FIGHTING = this.create(
         cobblemonResource("type_gem_block_fighting"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_FIRE = this.create(
         cobblemonResource("type_gem_block_fire"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_FLYING = this.create(
         cobblemonResource("type_gem_block_flying"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_GHOST = this.create(
         cobblemonResource("type_gem_block_ghost"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_GRASS = this.create(
         cobblemonResource("type_gem_block_grass"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_GROUND = this.create(
         cobblemonResource("type_gem_block_ground"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_ICE = this.create(
         cobblemonResource("type_gem_block_ice"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_NORMAL = this.create(
         cobblemonResource("type_gem_block_normal"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_POISON = this.create(
         cobblemonResource("type_gem_block_poison"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_PSYCHIC = this.create(
         cobblemonResource("type_gem_block_psychic"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_ROCK = this.create(
         cobblemonResource("type_gem_block_rock"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_STEEL = this.create(
         cobblemonResource("type_gem_block_steel"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 
     @JvmField
     val TYPE_GEM_BLOCK_WATER = this.create(
         cobblemonResource("type_gem_block_water"),
-        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK))
+        Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)),
     )
 }

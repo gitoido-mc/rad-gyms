@@ -57,7 +57,7 @@ import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import java.nio.file.Path
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
 
 @Mod(MOD_ID)
@@ -96,8 +96,7 @@ class RadGymsNeoForge : RadGymsImplementation {
 
     override fun configDir(): Path = FMLPaths.CONFIGDIR.get()
 
-    override fun environment(): Environment =
-        if (FMLEnvironment.dist.isClient) Environment.CLIENT else Environment.SERVER
+    override fun environment(): Environment = if (FMLEnvironment.dist.isClient) Environment.CLIENT else Environment.SERVER
 
     override fun registerDataComponents() {
         MOD_BUS.addListener<RegisterEvent> { event ->
@@ -247,8 +246,7 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
-    private class ForgeItemGroupInject(@Suppress("unused") private val entries: BuildCreativeModeTabContentsEvent) :
-        RadGymsItemGroups.Injector {
+    private class ForgeItemGroupInject(@Suppress("unused") private val entries: BuildCreativeModeTabContentsEvent) : RadGymsItemGroups.Injector {
         override fun putFirst(item: ItemLike) {
             this.entries.insertFirst(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
         }
@@ -265,10 +263,8 @@ class RadGymsNeoForge : RadGymsImplementation {
             CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS,
         )
 
-        override fun putLast(item: ItemLike) =
-            this.entries.accept(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
+        override fun putLast(item: ItemLike) = this.entries.accept(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
 
-        override fun putLast(item: ItemStack) =
-            this.entries.accept(item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
+        override fun putLast(item: ItemStack) = this.entries.accept(item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
     }
 }
