@@ -12,12 +12,12 @@ import java.net.URI
 
 plugins {
     id("java")
-    kotlin("jvm") version "2.3.20"
+    kotlin("jvm") version "2.4.0"
 
     id("com.gradleup.shadow") version "9.4.1" apply false
     id("dev.architectury.loom") version "1.14-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("pl.allegro.tech.build.axion-release") version "1.21.1"
+    id("pl.allegro.tech.build.axion-release") version "1.21.2"
     id("com.diffplug.spotless") version "8.7.0"
 }
 
