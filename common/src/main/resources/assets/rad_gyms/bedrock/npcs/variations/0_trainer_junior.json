@@ -5,7 +5,7 @@
     {
       "aspects": [],
       "poser": "cobblemon:standard",
-      "model": "cobblemon:steve.geo",
+      "model": "cobblemon:alex.geo",
       "texture": "cobblemon:textures/npcs/standard/trainer.png",
       "layers": []
     },
