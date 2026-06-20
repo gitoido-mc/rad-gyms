@@ -18,6 +18,9 @@ class ServerConfig(
     // Debug logging
     val debug: Boolean = false,
 
+    // Gym entrance max uses per player
+    val maxEntranceUses: Int = 3,
+
     // Should average team level be derived automatically
     val deriveAverageGymLevel: Boolean = true,
 
@@ -25,17 +28,14 @@ class ServerConfig(
     val minLevel: Int = 10,
     val maxLevel: Int = 100,
 
-    // Gym entrance max uses per player
-    val maxEntranceUses: Int = 3,
+    // Add shard rewards
+    val shardRewards: Boolean = true,
 
     // Cache shiny boost amount per unit of lapis
     val cacheBoosters: MutableMap<String, Int> = mutableMapOf(
         "minecraft:lapis_lazuli" to 1,
         "minecraft:lapis_block" to 9,
     ),
-
-    // Add shard rewards
-    val shardRewards: Boolean = true,
 
     // Ignored species
     val ignoredSpecies: List<String> = listOf(
@@ -44,6 +44,8 @@ class ServerConfig(
         "mega-y",
         "gmax",
     ),
+
+    val trainerTeamShinyChance: Int = 10,
 ) {
     val boosterMap: Map<Item, Int> by lazy {
         this.cacheBoosters.mapKeys {
