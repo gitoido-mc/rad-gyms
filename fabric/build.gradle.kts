@@ -52,34 +52,30 @@ dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
 
-    // Fabric
+    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-fabric")
+
+    modImplementation("dev.architectury:architectury-fabric:${property("architectury_api_version")}")
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
-    modImplementation("dev.architectury:architectury-fabric:${property("architectury_api_version")}")
-    if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
-        modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") {
-            isTransitive = false
-        }
-    } else {
-        modImplementation("com.cobblemon:fabric:${property("cobblemon_snapshot_version")}+${property("minecraft_version")}-SNAPSHOT") {
-            isTransitive = false
-        }
+    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_fabric_version")}")
+    modImplementation("mod.azure.azurelib:azurelib-common-${rootProject.property("minecraft_version")}:${property("azurelib_version")}")
+
+    with("maven.modrinth:sSdng0L4:${rootProject.property("structure_placer_api_fabric_version")}"){
+        modImplementation(this)
+        include(this)
     }
 
-    // Common code
+    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") {
+        isTransitive = false
+    }
+
+
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
-
-    //
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_fabric_version")}")
-    modImplementation("mod.azure.azurelib:azurelib-common-${rootProject.property("minecraft_version")}:${property("azurelib_version")}")
-
-    // Compat
-    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-fabric")
 }
 
 tasks {
@@ -118,14 +114,16 @@ tasks {
         inputs.property("version", project.version)
 
         filesMatching("fabric.mod.json") {
-            expand(mapOf(
-                "version" to project.version,
-                "mod_id" to project.property("mod_id"),
-                "minecraft_version" to project.property("minecraft_version"),
-                "fabric_loader_version" to project.property("fabric_loader_version"),
-                "cobblemon_version" to project.property("cobblemon_version"),
-                "rctapi_min_version" to project.property("rctapi_min_version"),
-            ))
+            expand(
+                mapOf(
+                    "version" to project.version,
+                    "mod_id" to project.property("mod_id"),
+                    "minecraft_version" to project.property("minecraft_version"),
+                    "fabric_loader_version" to project.property("fabric_loader_version"),
+                    "cobblemon_version" to project.property("cobblemon_version"),
+                    "rctapi_min_version" to project.property("rctapi_min_version"),
+                ),
+            )
         }
     }
 

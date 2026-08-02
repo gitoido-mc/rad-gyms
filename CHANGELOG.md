@@ -8,14 +8,22 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ## [Unreleased]
 
 ### <!-- 0 -->🚀 Features
+- Added npc variations and more molang code
+- Added customizable shiny chance boosters for caches
 - Cobblemon npcs in gyms
 - Backported type gem block
 - Added new interiors
 
+### <!-- 1 -->🐛 Bug Fixes
+- Add spacing in world border for dimension
+
 ### <!-- 2 -->🚜 Refactor
+- Removal of trainer entity class and continuance of cobblemon npcs integration, structure rework
 - Changed serialization to gson and refactored config load in [#133](https://github.com/gitoido-mc/rad-gyms/pull/133)
 
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
+- Updated gradle, replaced detekt with spotless+ktlint
+- Missing npc code
 - Updated gradle, deps and removed kotlinx.serialization
 
 ## [1.7.3+0.4.4] - 2026-02-25

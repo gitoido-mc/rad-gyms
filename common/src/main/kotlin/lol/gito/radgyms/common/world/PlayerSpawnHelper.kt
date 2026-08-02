@@ -12,13 +12,14 @@ import lol.gito.radgyms.common.GYM_SPACING_IN_DIMENSION
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.registry.RadGymsDimensions
+import lol.gito.radgyms.common.threading.ThreadManager
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.portal.DimensionTransition
 import net.minecraft.world.phys.Vec3
-import java.util.*
+import java.util.UUID
 import kotlin.random.Random
 
 object PlayerSpawnHelper {
@@ -26,7 +27,8 @@ object PlayerSpawnHelper {
         val border = serverWorld.worldBorder
         val seed = Random(serverPlayer.uuid.mostSignificantBits and border.absoluteMaxSize.toLong())
 
-        val playerX: Int = seed.nextInt(border.minZ.toInt() + GYM_SPACING_IN_DIMENSION, border.maxZ.toInt() - GYM_SPACING_IN_DIMENSION)
+        val playerX: Int =
+            seed.nextInt(border.minZ.toInt() + GYM_SPACING_IN_DIMENSION, border.maxZ.toInt() - GYM_SPACING_IN_DIMENSION)
         // get uniq z coord based on player uuid
         val playerZ: Int = RadGymsState
             .getPlayerState(serverPlayer)
@@ -50,7 +52,7 @@ object PlayerSpawnHelper {
         }
     }
 
-    fun teleportPlayer(serverPlayer: ServerPlayer, serverWorld: ServerLevel, pos: BlockPos, yaw: Float, pitch: Float) {
+    fun teleportPlayer(serverPlayer: ServerPlayer, serverWorld: ServerLevel, pos: BlockPos, yaw: Float, pitch: Float) = ThreadManager.teleportExecutor.execute {
         // Fix experience just in case
         val xpLevels: Int = serverPlayer.experienceLevel
         val xpProgress: Float = serverPlayer.experienceProgress
