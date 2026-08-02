@@ -70,7 +70,6 @@ class GymInitializer(
                 playerGymCoords.z + gymTemplate.relativePlayerSpawn.z,
             )
 
-        structureManager.placeStructure(gymDimension, playerGymCoords, gymTemplate.structure)
         gymDimension.chunkSource.addRegionTicket(
             TicketType.PORTAL,
             ChunkPos(dest),
@@ -78,35 +77,36 @@ class GymInitializer(
             dest,
         )
 
-        val trainers = trainerSpawner.spawnAll(gymTemplate, gymDimension, playerGymCoords)
+        if (structureManager.placeStructure(gymDimension, playerGymCoords, gymTemplate.structure)) {
+            val trainers = trainerSpawner.spawnAll(gymTemplate, gymDimension, playerGymCoords)
 
-        val gymInstance =
-            Gym(
-                gymTemplate,
-                trainers.keys.toList(),
-                playerGymCoords,
-                gymLevel,
-                type,
+            val gymInstance =
+                Gym(
+                    gymTemplate,
+                    trainers.keys.toList(),
+                    playerGymCoords,
+                    gymLevel,
+                    type,
+                )
+
+            RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
+
+            trainers.forEach { (uuid, entity) ->
+                RCT.trainerRegistry.registerNPC(uuid.toString(), entity.trainer)
+            }
+
+            GYM_ENTER.emit(
+                GymEvents.GymEnterEvent(
+                    serverPlayer,
+                    gymInstance,
+                    type,
+                    gymLevel,
+                    usedKey,
+                ),
             )
 
-        RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
-
-        trainers.forEach { (uuid, entity) ->
-            RCT.trainerRegistry.registerNPC(uuid.toString(), entity.trainer)
+            serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))
+            PlayerSpawnHelper.teleportPlayer(serverPlayer, gymDimension, dest, gymTemplate.playerYaw, 0.0F)
         }
-
-        GYM_ENTER.emit(
-            GymEvents.GymEnterEvent(
-                serverPlayer,
-                gymInstance,
-                type,
-                gymLevel,
-                usedKey,
-            ),
-        )
-
-        serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))
-
-        PlayerSpawnHelper.teleportPlayer(serverPlayer, gymDimension, dest, gymTemplate.playerYaw, 0.0F)
     }
 }

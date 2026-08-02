@@ -48,16 +48,19 @@ dependencies {
     implementation("thedarkcolour:kotlinforforge-neoforge:${property("kotlin_for_forge_version")}") {
         exclude("net.neoforged.fancymodloader", "loader")
     }
+
+    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-neoforge")
+
     modImplementation("dev.architectury:architectury-neoforge:${property("architectury_api_version")}")
-    // Cobblemon
-    if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
-        modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
-            isTransitive = false
-        }
-    } else {
-        modImplementation("com.cobblemon:neoforge:${property("cobblemon_snapshot_version")}+${property("minecraft_version")}-SNAPSHOT") {
-            isTransitive = false
-        }
+    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_neoforge_version")}")
+
+    with("maven.modrinth:sSdng0L4:${rootProject.property("structure_placer_api_neoforge_version")}") {
+        modImplementation(this)
+        include(this)
+    }
+
+    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
+        isTransitive = false
     }
 
     implementation(project(":common", configuration = "namedElements"))
@@ -65,9 +68,6 @@ dependencies {
         isTransitive = false
     }
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
-
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_neoforge_version")}")
-    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-neoforge")
 }
 
 tasks {
@@ -99,14 +99,16 @@ tasks {
         inputs.property("version", project.version)
 
         filesMatching("META-INF/neoforge.mods.toml") {
-            expand(mapOf(
-                "version" to project.version,
-                "mod_id" to project.property("mod_id"),
-                "minecraft_version" to project.property("minecraft_version"),
-                "neoforge_version" to project.property("neoforge_version"),
-                "cobblemon_version" to project.property("cobblemon_version"),
-                "rctapi_min_version" to project.property("rctapi_min_version"),
-            ))
+            expand(
+                mapOf(
+                    "version" to project.version,
+                    "mod_id" to project.property("mod_id"),
+                    "minecraft_version" to project.property("minecraft_version"),
+                    "neoforge_version" to project.property("neoforge_version"),
+                    "cobblemon_version" to project.property("cobblemon_version"),
+                    "rctapi_min_version" to project.property("rctapi_min_version"),
+                ),
+            )
         }
     }
 
