@@ -31,24 +31,15 @@ dependencies {
     minecraft("com.mojang:minecraft:${rootProject.property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
 
-    // for Architectury EnvType annotations
-    modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
-
-    // Cobblemon
     modApi("local.com.bedrockk:molang:1.1.20")
-    if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
-        modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") {
-            isTransitive = false
-        }
-    } else {
-        modImplementation("com.cobblemon:mod:${property("cobblemon_snapshot_version")}+${property("minecraft_version")}-SNAPSHOT") {
-            isTransitive = false
-        }
-    }
 
-    // Project deps
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
     modCompileOnly("mod.azure.azurelib:azurelib-common-${rootProject.property("minecraft_version")}:${property("azurelib_version")}")
+
+    modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
+    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
+    modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") {
+        isTransitive = false
+    }
 }
 
 tasks {
