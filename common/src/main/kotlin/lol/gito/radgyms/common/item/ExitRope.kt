@@ -8,8 +8,8 @@
 package lol.gito.radgyms.common.item
 
 import com.cobblemon.mod.common.item.CobblemonItem
-import lol.gito.radgyms.common.EXIT_ROPE_COOLDOWN
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.TELEPORT_COOLDOWN
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.helper.tlr
@@ -37,7 +37,7 @@ class ExitRope : CobblemonItem(Properties()) {
             else -> player.displayClientMessage(tl(modId("${EXIT_ROPE.descriptionId}.failed")))
         }
 
-        player.cooldowns.addCooldown(this, EXIT_ROPE_COOLDOWN)
+        player.cooldowns.addCooldown(this, TELEPORT_COOLDOWN)
         return super.use(level, player, hand)
     }
 
