@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-@file:JvmName("RadGymsConstant")
+@file:JvmName("RadGymsConstants")
 
 package lol.gito.radgyms.common
 
@@ -22,11 +22,10 @@ const val DEFAULT_GYM_TYPE = "default"
 const val COMMANDS_PREFIX = "rg"
 
 const val TELEPORT_PRELOAD_CHUNKS = 4
-const val WORLDGEN_FEATURE_RANDOM_SHIFT_BITS = 4
 const val GYM_SPACING_IN_DIMENSION = 256
 
 // Cooldown of item use in ticks (20t = 5s)
-const val EXIT_ROPE_COOLDOWN = 100
+const val TELEPORT_COOLDOWN = 100
 
 const val MIN_POKE_LEVEL = 1
 const val MAX_POKE_LEVEL = 100

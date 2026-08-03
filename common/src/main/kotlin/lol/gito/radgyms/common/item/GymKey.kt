@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.TELEPORT_COOLDOWN
 import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
@@ -65,6 +66,8 @@ class GymKey : CobblemonItem(Properties().rarity(Rarity.UNCOMMON).component(Data
                 )
 
                 OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(player)
+
+                player.cooldowns.addCooldown(this, TELEPORT_COOLDOWN)
 
                 InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), true)
             }
