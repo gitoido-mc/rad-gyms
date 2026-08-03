@@ -58,7 +58,7 @@
         "location": "rad_gyms:entrance/side2c",
         "element_type": "minecraft:single_pool_element",
         "override_liquid_settings": "apply_waterlogging",
-        "processors": "rad_gyms:entrance/side_b",
+        "processors": "rad_gyms:entrance/side_c",
         "projection": "rigid"
       }
     },
