@@ -106,7 +106,7 @@ class GymInitializer(
             )
 
             serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))
-            PlayerSpawnHelper.teleportPlayer(serverPlayer, gymDimension, dest, gymTemplate.playerYaw, 0.0F)
+            GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, gymDimension, dest, gymTemplate.playerYaw)
         }
     }
 }

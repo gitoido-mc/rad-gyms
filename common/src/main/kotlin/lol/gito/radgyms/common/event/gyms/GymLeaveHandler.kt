@@ -12,31 +12,28 @@ import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.gym.GymTeardownService
-import lol.gito.radgyms.common.gym.GymTeleportScheduler
 import lol.gito.radgyms.common.registry.RadGymsStats.getStat
 import net.minecraft.world.level.levelgen.structure.BoundingBox
 import net.minecraft.world.phys.AABB
 
 object GymLeaveHandler {
-    const val AABB_OFFSET = 64
-
     @JvmStatic
     fun execute(event: GymEvents.GymLeaveEvent) {
         debug("gym leave triggered")
 
-        if (event.gym != null) {
-            val bounds = AABB.of(
-                BoundingBox.encapsulatingPositions(
-                    listOf(
-                        event.gym.coords,
-                        event.gym.coords.north(AABB_OFFSET).east(AABB_OFFSET).above(AABB_OFFSET),
-                    ),
-                ).get(),
+        event.gym?.let {
+            val bounds = 128
+            val corners = listOf(
+                event.gym.coords,
+                event.gym.coords.north(bounds).east(bounds).above(bounds),
             )
 
-            event.player
-                .level()
-                .getEntitiesOfClass(NPCEntity::class.java, bounds).forEach { it.discard() }
+            event.player.level()
+                .getEntitiesOfClass(
+                    NPCEntity::class.java,
+                    AABB.of(BoundingBox.encapsulatingPositions(corners).get()),
+                ) { entity -> event.gym.npcList.contains(entity.uuid) }
+                .forEach { it.discard() }
         }
 
         when (event.completed) {
@@ -51,8 +48,6 @@ object GymLeaveHandler {
             }
         }
 
-        GymTeardownService
-            .withTeleportScheduler(GymTeleportScheduler())
-            .handleGymLeave(event.player)
+        GymTeardownService.handleGymLeave(event.player)
     }
 }
