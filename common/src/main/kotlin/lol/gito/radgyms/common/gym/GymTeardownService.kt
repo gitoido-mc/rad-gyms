@@ -22,13 +22,6 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
 
 object GymTeardownService {
-    private var teleportScheduler: GymTeleportScheduler? = null
-
-    fun withTeleportScheduler(teleportScheduler: GymTeleportScheduler): GymTeardownService {
-        this.teleportScheduler = teleportScheduler
-        return this
-    }
-
     fun destructGym(serverPlayer: ServerPlayer, removeCoords: Boolean = true) {
         if (!RadGymsState.hasGymForPlayer(serverPlayer)) return
         if (removeCoords) RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
@@ -45,13 +38,6 @@ object GymTeardownService {
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayer) {
-        try {
-            assert(teleportScheduler != null)
-        } catch (_: AssertionError) {
-            debug("Teleport scheduler not set")
-            return
-        }
-
         val state = RadGymsState.getPlayerState(serverPlayer)
         var preloadPos: BlockPos
         var preloadDim: ServerLevel
@@ -79,7 +65,7 @@ object GymTeardownService {
             preloadPos,
         )
 
-        teleportScheduler!!.scheduleReturnWithCountdown(serverPlayer, preloadDim, preloadPos)
+        GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, preloadDim, preloadPos)
     }
 
     fun spawnExitBlock(server: MinecraftServer, gym: Gym) {
