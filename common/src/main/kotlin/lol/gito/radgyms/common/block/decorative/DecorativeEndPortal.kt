@@ -7,14 +7,17 @@
 
 package lol.gito.radgyms.common.block.decorative
 
-import net.minecraft.world.level.block.Block
+import com.mojang.serialization.MapCodec
+import lol.gito.radgyms.common.block.entity.DecorativeEndPortalEntity
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 
 class DecorativeEndPortal :
-    Block(
+    BaseEntityBlock(
         Properties.ofFullCopy(Blocks.COBBLESTONE)
             .mapColor(MapColor.COLOR_BLACK)
             .lightLevel {
@@ -23,4 +26,11 @@ class DecorativeEndPortal :
             },
     ) {
     override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
+
+    override fun codec(): MapCodec<out BaseEntityBlock> = simpleCodec { DecorativeEndPortal() }
+
+    override fun newBlockEntity(
+        blockPos: BlockPos,
+        blockState: BlockState,
+    ) = DecorativeEndPortalEntity(blockPos, blockState)
 }
