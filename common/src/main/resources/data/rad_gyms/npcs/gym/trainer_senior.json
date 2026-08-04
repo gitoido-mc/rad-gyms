@@ -20,6 +20,28 @@
       ]
     }
   ],
+  "config": [
+    {
+      "variableName": "required_trainer",
+      "displayName": "Required trainer",
+      "description": "The resource identifier or UUID of required trainer",
+      "type": "TEXT"
+    },
+    {
+      "variableName": "leader",
+      "displayName": "Is Leader?",
+      "description": "",
+      "type": "BOOLEAN",
+      "defaultValue": "false"
+    },
+    {
+      "variableName": "defeated",
+      "displayName": "Is Defeated?",
+      "description": "",
+      "type": "BOOLEAN",
+      "defaultValue": "false"
+    }
+  ],
   "variation": {
     "skin": [
       "aethergruntf",
