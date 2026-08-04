@@ -15,11 +15,9 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.getOrNull
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.TRAINER_INTERACT
-import lol.gito.radgyms.common.extension.cobblemon.npc.isDefeated
-import lol.gito.radgyms.common.extension.cobblemon.npc.isLeader
-import lol.gito.radgyms.common.extension.cobblemon.npc.required
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import java.util.UUID
@@ -30,26 +28,35 @@ object NPCEntityRGBridge {
         npcFunctions.add { entity ->
             return@add hashMapOf(
                 "rg_is_defeated" to Fn { _ ->
-                    RadGyms.LOGGER.info("checking trainer defeat: ${entity.isDefeated}")
-                    return@Fn when (entity.isDefeated) {
-                        true -> DoubleValue.ONE
-                        false -> DoubleValue.ZERO
+                    if (!entity.config.map.contains("defeated")) {
+                        debug("no defeated flag in trainer config")
+                        return@Fn DoubleValue.ZERO
                     }
+                    val defeated = entity.config.map["defeated"]!!
+                    debug("trainer defeat flag value: $defeated")
+                    return@Fn defeated
                 },
                 "rg_is_required_defeated" to Fn { _ ->
-                    RadGyms.LOGGER.info("checking required trainer defeat, required uuid is: ${entity.required}")
-                    if (entity.required == null) return@Fn DoubleValue.ONE
-                    val required = (entity.level() as ServerLevel).getEntity(entity.required!!) as NPCEntity
-                    return@Fn when (required.isDefeated) {
-                        true -> DoubleValue.ONE
-                        false -> DoubleValue.ZERO
+                    if (!entity.config.map.contains("required_trainer")) return@Fn DoubleValue.ONE
+
+                    val requiredUuid = entity.config.map["required_trainer"]!!.let {
+                        runCatching { return@runCatching UUID.fromString(it.value() as String) }.getOrNull()
+                    }
+
+                    if (requiredUuid == null) return@Fn DoubleValue.ONE
+
+                    debug("this trainer has required trainer linked, uuid is: $requiredUuid")
+                    val required = (entity.level() as ServerLevel).getEntity(requiredUuid) as? NPCEntity?
+                        ?: return@Fn DoubleValue.ONE
+
+                    return@Fn when (required.config.map.contains("defeated")) {
+                        true -> required.config.map["defeated"]!!
+                        else -> DoubleValue.ZERO
                     }
                 },
                 "rg_is_leader" to Fn { _ ->
-                    return@Fn when (entity.isLeader) {
-                        true -> DoubleValue.ONE
-                        false -> DoubleValue.ZERO
-                    }
+                    if (!entity.config.map.contains("leader")) return@Fn DoubleValue.ZERO
+                    return@Fn entity.config.map["leader"]!!
                 },
                 "rg_start_battle" to Fn { params ->
                     val value = params.getOrNull<MoValue>(0) ?: return@Fn DoubleValue.ZERO

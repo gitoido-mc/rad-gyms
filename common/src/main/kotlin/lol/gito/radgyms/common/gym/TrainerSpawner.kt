@@ -7,9 +7,10 @@
 
 package lol.gito.radgyms.common.gym
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.entity.npc.NPCEntity
-import lol.gito.radgyms.common.DATA_REQUIRED
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.trainer.TrainerModel
@@ -22,7 +23,6 @@ object TrainerSpawner {
         val trainerIds = mutableMapOf<String, Pair<UUID, TrainerModel>>()
 
         template.trainers.forEach { trainer ->
-            val uuid = UUID.randomUUID()
             val requiredUUID = trainer.requires?.let { trainerIds[it]?.first }
             val pair = buildTrainerEntity(trainer, gymDimension, coords, requiredUUID)
             trainerIds[trainer.id] = pair
@@ -31,7 +31,6 @@ object TrainerSpawner {
         return trainerIds.values.associate { it.first to it.second }
     }
 
-    @Suppress("UnusedParameter")
     private fun buildTrainerEntity(
         trainer: TrainerModel,
         gymDimension: ServerLevel,
@@ -42,16 +41,28 @@ object TrainerSpawner {
             NPCClasses.getByIdentifier(modId(trainer.id)) ?: error("Cannot find NPC with id: ${modId(trainer.id)}")
 
         val npc = NPCEntity(gymDimension)
-        if (trainer.leader) npc.appliedAspects.add("leader")
-        if (requiredUUID != null) npc.appliedAspects.add(DATA_REQUIRED.plus(requiredUUID.toString()))
+
+        npc.config.map.putIfAbsent("defeated", DoubleValue.ZERO)
+
+        if (requiredUUID != null) {
+            npc.config.map.putIfAbsent("required_trainer", StringValue(requiredUUID.toString()))
+        }
+
+        if (trainer.leader) {
+            npc.config.map.putIfAbsent("leader", DoubleValue.ONE)
+        }
+
+        npc.isNoGravity = true
+
         npc.moveTo(
             coords.x + trainer.npc.relativePosition.x,
             coords.y + trainer.npc.relativePosition.y,
             coords.z + trainer.npc.relativePosition.z,
+            trainer.npc.yaw,
+            npc.xRot,
         )
-        npc.npc = npcClass
-        npc.isNoGravity = true
         npc.setYBodyRot(trainer.npc.yaw)
+        npc.npc = npcClass
         npc.initialize(trainer.trainer.team.first().level)
         gymDimension.addFreshEntity(npc)
 
