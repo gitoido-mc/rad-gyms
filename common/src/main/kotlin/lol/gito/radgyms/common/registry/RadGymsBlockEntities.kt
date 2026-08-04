@@ -9,6 +9,7 @@ package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.block.entity.DecorativeEndPortalEntity
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.block.entity.GymExitEntity
 import net.minecraft.core.Registry
@@ -34,5 +35,11 @@ object RadGymsBlockEntities : PlatformRegistry<BETRegistry, BETRegistryKey, Bloc
         this.create(
             modId("gym_exit_entity"),
             BlockEntityType.Builder.of(::GymExitEntity, RadGymsBlocks.GYM_EXIT).build(null),
+        )
+
+    val DECORATIVE_END_PORTAL_ENTITY: BlockEntityType<DecorativeEndPortalEntity> =
+        this.create(
+            modId("decorative_end_portal"),
+            BlockEntityType.Builder.of(::DecorativeEndPortalEntity, RadGymsBlocks.DECORATIVE_END_PORTAL).build(null),
         )
 }
