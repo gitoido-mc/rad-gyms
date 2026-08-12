@@ -36,7 +36,7 @@ class RadGymsState : SavedData() {
             null,
         )
 
-        @Suppress("UnusedParameter", "unused")
+        @Suppress("unused")
         @JvmStatic
         fun load(nbt: CompoundTag, registryLookup: HolderLookup.Provider): RadGymsState {
             val state = RadGymsState()

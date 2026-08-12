@@ -3,7 +3,7 @@
   "id": "${mod_id}",
   "version": "${version}",
   "name": "Rad Gyms",
-  "description": "Adds roguelike gyms in Cobblemon. RCT Api based mod.",
+  "description": "Roguelike datapackable gyms in Cobblemon!",
   "authors": [
     "Gitoido <corpa@gito.lol>"
   ],
@@ -46,7 +46,7 @@
   "depends": {
     "java": ">=21",
     "minecraft": "~${minecraft_version}",
-    "fabricloader": ">=${fabric_loader_version}",
+    "fabricloader": ">=0.17.2",
     "fabric": "*",
     "fabric-api": "*",
     "fabric-language-kotlin": "*",

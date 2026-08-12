@@ -1,0 +1,25 @@
+{
+  "output_path": "../../docs/rad_gyms/wiki_exporter/output",
+  "enabled": [
+    "metadata",
+    "render"
+  ],
+  "modules": {
+    "metadata": {
+      "namespaces": [
+        "minecraft",
+        "cobblemon",
+        "rad_gyms"
+      ]
+    },
+    "render": {
+      "namespaces": [
+        "minecraft",
+        "cobblemon",
+        "rad_gyms"
+      ],
+      "resolution": 128,
+      "png": true
+    }
+  }
+}
