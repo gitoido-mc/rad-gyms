@@ -44,10 +44,10 @@ docs/src/pages/.vault-nickname
 /.ignored/
 /.architectury-transformer/
 /*/run/
+/*/runClient/
+/*/runServer/
 
-/common/jars/
-/fabric/jars/
-/neoforge/jars/
+/*/jars/
 
 /common/src/generated/.cache/
 /fabric/src/generated/

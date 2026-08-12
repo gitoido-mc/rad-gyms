@@ -4,30 +4,27 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-@file:Suppress("MaxLineLength")
-
 plugins {
-    id("dev.architectury.loom")
-    id("architectury-plugin")
-    id("com.gradleup.shadow")
-}
-
-val shadowCommon: Configuration = configurations.create("shadowCommon") {
-    isCanBeResolved = true
-    isCanBeConsumed = false
+    alias(libs.plugins.rg.common)
+    alias(libs.plugins.shadow)
 }
 
 architectury {
     platformSetupLoomIde()
     neoForge()
 }
+
 loom {
     silentMojangMappingsLicense()
     enableTransitiveAccessWideners.set(true)
 
     runs {
+        getByName("server") {
+            runDirectory.set(file("runServer"))
+        }
         getByName("client") {
-            programArgs(
+            runDirectory.set(file("runClient"))
+            programArguments.addAll(
                 "--username=Gitoido",
                 "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b",
             )
@@ -35,39 +32,43 @@ loom {
     }
 }
 
+val shadowCommon: Configuration = configurations.create("shadowCommon") {
+    isCanBeResolved = true
+    isCanBeConsumed = false
+}
+
 repositories {
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
     maven("https://thedarkcolour.github.io/KotlinForForge/")
-    maven("https://maven.neoforged.net/releases/")
+    maven("https://maven.neoforged.net/releases")
 }
 
 dependencies {
-    minecraft("net.minecraft:minecraft:${property("minecraft_version")}")
+    minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
-    neoForge("net.neoforged:neoforge:${property("neoforge_version")}")
-    implementation("thedarkcolour:kotlinforforge-neoforge:${property("kotlin_for_forge_version")}") {
+    neoForge(libs.neoforge.loader)
+    implementation(libs.neoforge.kotlin) {
         exclude("net.neoforged.fancymodloader", "loader")
     }
 
-    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-neoforge")
-
-    modImplementation("dev.architectury:architectury-neoforge:${property("architectury_api_version")}")
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_neoforge_version")}")
-
-    with("maven.modrinth:sSdng0L4:${rootProject.property("structure_placer_api_neoforge_version")}") {
-        modImplementation(this)
-        include(this)
+    libs.structurePlacerApi.neoforge.let {
+        modImplementation(it)
+        include(it)
     }
 
-    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}+${property("minecraft_version")}") {
+    modCompileOnly(libs.aether.neoforge)
+
+    modImplementation(libs.architectury.neoforge)
+    modImplementation(libs.rctapi.neoforge)
+    modImplementation(libs.cobblemon.neoforge) {
         isTransitive = false
     }
 
-    implementation(project(":common", configuration = "namedElements"))
-    "developmentNeoForge"(project(":common", configuration = "namedElements")) {
-        isTransitive = false
+    shadowCommon(project(":common", configuration = "transformProductionNeoForge"))
+    project(":common", configuration = "namedElements").let {
+        implementation(it)
+        "developmentNeoForge"(it)
     }
-    shadowCommon(project(":common", configuration = "transformProductionFabric"))
 }
 
 tasks {
