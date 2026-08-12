@@ -8,8 +8,6 @@ axionRelease = "1.21.2"
 spotless = "8.9.0"
 
 # Mod dev plugin version
-loom = "1.17-SNAPSHOT"
-moddev = "2.0.143"
 wikiToolkit = "0.4.1"
 wiki-exporter-fabric = "2.2.1+1.21.1"
 
@@ -41,8 +39,8 @@ structure-placer-api-neoforge = "j18R83Er"
 [libraries]
 # Minecraft libraries
 minecraft = { module = "net.minecraft:minecraft", version.ref = "minecraft" }
-architectury-fabric = {module = "dev.architectury:architectury-fabric", version.ref = "architectury-api"}
-architectury-neoforge = {module = "dev.architectury:architectury-neoforge", version.ref = "architectury-api"}
+architectury-fabric = { module = "dev.architectury:architectury-fabric", version.ref = "architectury-api" }
+architectury-neoforge = { module = "dev.architectury:architectury-neoforge", version.ref = "architectury-api" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 fabric-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin" }
@@ -62,11 +60,11 @@ rctapi-fabric = { module = "curse.maven:radical-cobblemon-trainers-api-1152792",
 rctapi-neoforge = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-neoforge" }
 azurelib-common = { module = "mod.azure.azurelib:azurelib-common-1.21.1", version.ref = "azurelib" }
 azurelib-fabric = { module = "mod.azure.azurelib:azurelib-fabric-1.21.1", version.ref = "azurelib" }
-azurelib-neoforge = { module = "mod.azure.azurelib:azurelib-neoforge-1.21.1", version.ref = "azurelib" }
-aether-fabric = { module = "com.aetherteam.aether:aether", version.ref="aether-fabric"}
-aether-neoforge = { module = "com.aetherteam.aether:aether", version.ref="aether-neoforge"}
-structurePlacerApi-fabric = { module = "maven.modrinth:sSdng0L4", version.ref = "structure-placer-api-fabric"}
-structurePlacerApi-neoforge = { module = "maven.modrinth:sSdng0L4", version.ref = "structure-placer-api-neoforge"}
+azurelib-neoforge = { module = "mod.azure.azurelib:azurelib-neo-1.21.1", version.ref = "azurelib" }
+aether-fabric = { module = "com.aetherteam.aether:aether", version.ref = "aether-fabric" }
+aether-neoforge = { module = "com.aetherteam.aether:aether", version.ref = "aether-neoforge" }
+structurePlacerApi-fabric = { module = "maven.modrinth:sSdng0L4", version.ref = "structure-placer-api-fabric" }
+structurePlacerApi-neoforge = { module = "maven.modrinth:sSdng0L4", version.ref = "structure-placer-api-neoforge" }
 
 
 
@@ -78,11 +76,8 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 rg-root = { id = "rg.root-convention" }
 rg-shared = { id = "rg.shared-convention" }
 rg-common = { id = "rg.common-convention" }
-rg-platform = { id = "rg.platform-convention" }
 
 # Minecraft plugins
-loom = { id = "net.fabricmc.fabric-loom-remap", version.ref = "loom" }
-moddev = { id = "net.neoforged.moddev", version.ref = "moddev" }
 wikiToolkit = { id = "org.moddedmc.wiki.toolkit", version.ref = "wikiToolkit" }
 architectury-dev = { id = "dev.architectury.loom-remap", version.ref = "architectury-dev" }
 architectury-plugin = { id = "architectury-plugin", version.ref = "architectury-plugin" }
