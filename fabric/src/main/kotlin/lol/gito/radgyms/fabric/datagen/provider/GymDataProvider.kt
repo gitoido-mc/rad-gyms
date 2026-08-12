@@ -92,7 +92,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 requires = "trainer_senior",
                 leader = true,
                 spawnRelative = EntityCoordsAndYaw(
-                    Coords(15.5, if (type == ElementalTypes.FIGHTING) 4.0 else 2.0, 7.5),
+                    Coords(15.5, if (type == ElementalTypes.FIGHTING) 3.0 else 2.0, 7.5),
                     yaw = 0.0,
                 ),
                 possibleFormats = listOf(

@@ -1,0 +1,9 @@
+{
+  "schema": "1",
+  "id": "rad-gyms",
+  "modid": "rad_gyms",
+  "platforms": {
+    "curseforge": "rad-gyms-cobblemon",
+    "modrinth": "rad-gyms"
+  }
+}
