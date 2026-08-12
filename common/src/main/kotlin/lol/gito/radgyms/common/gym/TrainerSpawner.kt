@@ -7,24 +7,24 @@
 
 package lol.gito.radgyms.common.gym
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.npc.NPCClasses
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import lol.gito.radgyms.common.RadGyms.debug
-import lol.gito.radgyms.common.api.dto.trainer.TrainerConfiguration
+import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.dto.trainer.TrainerModel
-import lol.gito.radgyms.common.entity.Trainer
-import lol.gito.radgyms.common.registry.RadGymsEntities
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.phys.Vec3
-import java.util.*
+import java.util.UUID
 
 object TrainerSpawner {
     fun spawnAll(template: GymTemplate, gymDimension: ServerLevel, coords: BlockPos): Map<UUID, TrainerModel> {
         val trainerIds = mutableMapOf<String, Pair<UUID, TrainerModel>>()
 
         template.trainers.forEach { trainer ->
-            val uuid = UUID.randomUUID()
             val requiredUUID = trainer.requires?.let { trainerIds[it]?.first }
-            val pair = buildTrainerEntity(trainer, gymDimension, coords, uuid, requiredUUID)
+            val pair = buildTrainerEntity(trainer, gymDimension, coords, requiredUUID)
             trainerIds[trainer.id] = pair
         }
 
@@ -35,39 +35,39 @@ object TrainerSpawner {
         trainer: TrainerModel,
         gymDimension: ServerLevel,
         coords: BlockPos,
-        trainerUUID: UUID,
         requiredUUID: UUID?,
     ): Pair<UUID, TrainerModel> {
-        val trainerEntity = Trainer(RadGymsEntities.GYM_TRAINER, gymDimension).apply {
-            uuid = trainerUUID
-            gymId = trainer.id
-            leader = trainer.leader
-            format = trainer.format.name
-            trainerId = trainerUUID
-            requires = requiredUUID
-            yHeadRot = trainer.npc.yaw
-            yBodyRot = trainer.npc.yaw
-            customName = trainer.npc.name
-            configuration =
-                TrainerConfiguration(
-                    trainer.battleRules,
-                    trainer.trainer.bag,
-                    trainer.trainer.team,
-                )
-            isCustomNameVisible = true
-            setPersistenceRequired()
-            setPos(
-                Vec3(
-                    coords.x + trainer.npc.relativePosition.x,
-                    coords.y + trainer.npc.relativePosition.y,
-                    coords.z + trainer.npc.relativePosition.z,
-                ),
-            )
+        val npcClass =
+            NPCClasses.getByIdentifier(modId(trainer.id)) ?: error("Cannot find NPC with id: ${modId(trainer.id)}")
+
+        val npc = NPCEntity(gymDimension)
+
+        npc.config.map.putIfAbsent("defeated", DoubleValue.ZERO)
+
+        if (requiredUUID != null) {
+            npc.config.map.putIfAbsent("required_trainer", StringValue(requiredUUID.toString()))
         }
 
-        debug("Spawning trainer ${trainerEntity.id} at ${trainerEntity.x} ${trainerEntity.y} ${trainerEntity.z}")
-        gymDimension.tryAddFreshEntityWithPassengers(trainerEntity)
+        if (trainer.leader) {
+            npc.config.map.putIfAbsent("leader", DoubleValue.ONE)
+        }
 
-        return Pair(trainerEntity.uuid, trainer)
+        npc.isNoGravity = true
+
+        npc.moveTo(
+            coords.x + trainer.npc.relativePosition.x,
+            coords.y + trainer.npc.relativePosition.y,
+            coords.z + trainer.npc.relativePosition.z,
+            trainer.npc.yaw,
+            npc.xRot,
+        )
+        npc.setYBodyRot(trainer.npc.yaw)
+        npc.npc = npcClass
+        npc.initialize(trainer.trainer.team.first().level)
+        gymDimension.addFreshEntity(npc)
+
+        debug("Spawned trainer ${npc.id} at ${npc.x} ${npc.y} ${npc.z}")
+
+        return Pair(npc.uuid, trainer)
     }
 }

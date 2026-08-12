@@ -37,27 +37,26 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
     ) {
     override fun getName(): String = "Gym data"
 
-    override fun configure(provider: BiConsumer<ResourceLocation, GymJson>, lookup: HolderLookup.Provider) =
-        ElementalTypes.all().forEach {
-            provider.accept(modId(it.showdownId), getDefaultElementalGymDto(it))
-        }
+    override fun configure(provider: BiConsumer<ResourceLocation, GymJson>, lookup: HolderLookup.Provider) = ElementalTypes.all().forEach {
+        provider.accept(modId(it.showdownId), getDefaultElementalGymDto(it))
+    }
 
     @Suppress("LongMethod", "MagicNumber")
     private fun getDefaultElementalGymDto(type: ElementalType): GymJson = GymJson(
         id = type.showdownId,
-        template = "rad_gyms:gym_interior_default",
-        exitBlockPos = Coords(16.0, 2.0, 16.0),
+        template = "rad_gyms:interior/${type.showdownId}",
+        exitBlockPos = Coords(15.0, 3.0, 1.0),
         playerSpawnRelative = EntityCoordsAndYaw(
-            Coords(16.5, 2.0, 27.0),
+            Coords(15.0, 2.0, 53.0),
             yaw = -180.0,
         ),
         trainers = listOf(
             Trainer(
-                id = "default_trainer_junior",
+                id = "trainer_junior",
                 name = modId("npc.trainer_junior").toLanguageKey(),
                 spawnRelative = EntityCoordsAndYaw(
-                    Coords(26.5, 2.0, 15.5),
-                    yaw = 42.5,
+                    Coords(27.5, 2.0, 41.5),
+                    yaw = 90.0,
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES),
                 possibleElementalTypes = listOf(type),
@@ -66,16 +65,16 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(2, 25),
                     TeamLevelThreshold(3, 50),
-                    TeamLevelThreshold(4, 100),
+                    TeamLevelThreshold(4),
                 ),
             ),
             Trainer(
-                id = "default_trainer_senior",
+                id = "trainer_senior",
                 name = modId("npc.trainer_senior").toLanguageKey(),
-                requires = "default_trainer_junior",
+                requires = "trainer_junior",
                 spawnRelative = EntityCoordsAndYaw(
-                    Coords(5.5, 2.0, 15.5),
-                    yaw = -42.5,
+                    Coords(3.5, 2.0, 31.5),
+                    yaw = -90.0,
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES, GymBattleFormat.DOUBLES),
                 possibleElementalTypes = listOf(type),
@@ -84,17 +83,17 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(3, 25),
                     TeamLevelThreshold(4, 50),
-                    TeamLevelThreshold(5, 100),
+                    TeamLevelThreshold(5),
                 ),
             ),
             Trainer(
-                id = "default_trainer_leader",
+                id = "trainer_leader",
                 name = modId("npc.leader").toLanguageKey(),
-                requires = "default_trainer_senior",
+                requires = "trainer_senior",
                 leader = true,
                 spawnRelative = EntityCoordsAndYaw(
-                    Coords(16.0, 2.0, 6.0),
-                    yaw = 0.01,
+                    Coords(15.5, if (type == ElementalTypes.FIGHTING) 3.0 else 2.0, 7.5),
+                    yaw = 0.0,
                 ),
                 possibleFormats = listOf(
                     GymBattleFormat.SINGLES,
@@ -107,7 +106,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 countPerLevelThreshold = listOf(
                     TeamLevelThreshold(4, 25),
                     TeamLevelThreshold(5, 50),
-                    TeamLevelThreshold(6, 100),
+                    TeamLevelThreshold(6),
                 ),
             ),
         ),

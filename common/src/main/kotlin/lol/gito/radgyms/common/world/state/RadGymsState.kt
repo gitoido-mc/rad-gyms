@@ -21,7 +21,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.saveddata.SavedData
-import java.util.*
+import java.util.UUID
 
 class RadGymsState : SavedData() {
     val playerDataMap: MutableMap<UUID, PlayerData> = mutableMapOf()
@@ -36,7 +36,7 @@ class RadGymsState : SavedData() {
             null,
         )
 
-        @Suppress("UnusedParameter", "unused")
+        @Suppress("unused")
         @JvmStatic
         fun load(nbt: CompoundTag, registryLookup: HolderLookup.Provider): RadGymsState {
             val state = RadGymsState()
@@ -101,8 +101,7 @@ class RadGymsState : SavedData() {
         }
 
         @JvmStatic
-        fun hasGymForPlayer(player: ServerPlayer): Boolean =
-            getServerState(player.server).gymInstanceMap.keys.contains(player.uuid)
+        fun hasGymForPlayer(player: ServerPlayer): Boolean = getServerState(player.server).gymInstanceMap.keys.contains(player.uuid)
 
         @JvmStatic
         fun getGymForPlayer(player: ServerPlayer): Gym? = getServerState(player.server).gymInstanceMap[player.uuid]

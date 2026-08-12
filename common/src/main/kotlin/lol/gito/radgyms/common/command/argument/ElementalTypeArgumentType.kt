@@ -48,7 +48,6 @@ class ElementalTypeArgumentType : ArgumentType<ElementalType> {
 
         fun type() = ElementalTypeArgumentType()
 
-        fun <S> getType(context: CommandContext<S>, name: String): ElementalType =
-            context.getArgument(name, ElementalType::class.java)
+        fun <S> getType(context: CommandContext<S>, name: String): ElementalType = context.getArgument(name, ElementalType::class.java)
     }
 }

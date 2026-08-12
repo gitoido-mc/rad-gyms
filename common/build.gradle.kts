@@ -4,22 +4,18 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-@file:Suppress("MaxLineLength")
 
 plugins {
-    id("dev.architectury.loom")
-    id("architectury-plugin")
+    alias(libs.plugins.rg.common)
 }
 
 architectury {
     common("neoforge", "fabric")
 }
 
-val generatedResources = file("src/generated")
-
 sourceSets {
     main {
-        resources.srcDir(generatedResources)
+        resources.srcDir(file("src/generated"))
     }
 }
 
@@ -30,40 +26,15 @@ loom {
 
 dependencies {
     // Core deps
-    minecraft("com.mojang:minecraft:${rootProject.property("minecraft_version")}")
+    minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
+    compileOnly(libs.bundles.common.mixin)
+    annotationProcessor(libs.mixin.extras)
 
-    // for Architectury EnvType annotations
-    modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
-
-    // Cobblemon
-    if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
-        modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") {
-            isTransitive = false
-        }
-    } else {
-        modImplementation("com.cobblemon:mod:${property("cobblemon_snapshot_version")}+${property("minecraft_version")}-SNAPSHOT") {
-            isTransitive = false
-        }
-    }
-
-    // Project deps
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
-}
-
-tasks {
-    processResources {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    }
-
-    remapJar {
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
-    }
-
-    remapSourcesJar {
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
-        archiveClassifier.set("sources")
+    modApi(libs.molang)
+    modCompileOnly(libs.azurelib.common)
+    modImplementation(libs.rctapi.common)
+    modImplementation(libs.cobblemon.common) {
+        isTransitive = false
     }
 }

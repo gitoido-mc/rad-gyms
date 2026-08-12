@@ -8,7 +8,7 @@
 package lol.gito.radgyms.neoforge.mixin.compat;
 
 import com.aetherteam.aether.event.listeners.EntityListener;
-import lol.gito.radgyms.common.entity.Trainer;
+import com.cobblemon.mod.common.entity.npc.NPCEntity;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +21,7 @@ class OnAetherEntityInteract {
     private static void RadGyms$onEntityInteract(
             PlayerInteractEvent.EntityInteractSpecific event, CallbackInfo ci
     ) {
-        if (event.getTarget() instanceof Trainer) {
+        if (event.getTarget() instanceof NPCEntity) {
             ci.cancel();
         }
     }

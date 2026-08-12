@@ -52,7 +52,10 @@ object RadGymsNeoForgeNetworkManager : NetworkManager {
         }
     }
 
-    override fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) = player.connection.send(packet)
+    override fun sendPacketToPlayer(
+        player: ServerPlayer,
+        packet: NetworkPacket<*>,
+    ) = player.connection.send(packet)
 
     override fun sendToServer(packet: NetworkPacket<*>) {
         Minecraft.getInstance().connection?.send(packet)

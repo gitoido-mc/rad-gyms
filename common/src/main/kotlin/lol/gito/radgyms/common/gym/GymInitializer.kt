@@ -10,6 +10,7 @@ package lol.gito.radgyms.common.gym
 import com.cobblemon.mod.common.util.toBlockPos
 import lol.gito.radgyms.common.DEFAULT_GYM_TYPE
 import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.RCT
 import lol.gito.radgyms.common.TELEPORT_PRELOAD_CHUNKS
 import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.api.event.GymEvents
@@ -27,6 +28,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
 import net.minecraft.world.level.ChunkPos
+import net.minecraft.world.level.GameType
 
 class GymInitializer(
     private val templateRegistry: RadGymsTemplates,
@@ -69,7 +71,6 @@ class GymInitializer(
                 playerGymCoords.z + gymTemplate.relativePlayerSpawn.z,
             )
 
-        structureManager.placeStructure(gymDimension, playerGymCoords, gymTemplate.structure)
         gymDimension.chunkSource.addRegionTicket(
             TicketType.PORTAL,
             ChunkPos(dest),
@@ -77,31 +78,38 @@ class GymInitializer(
             dest,
         )
 
-        val trainers = trainerSpawner.spawnAll(gymTemplate, gymDimension, playerGymCoords)
+        if (structureManager.placeStructure(gymDimension, playerGymCoords, gymTemplate.structure)) {
+            val trainers = trainerSpawner.spawnAll(gymTemplate, gymDimension, playerGymCoords)
 
-        val gymInstance =
-            Gym(
-                gymTemplate,
-                trainers.keys.toList(),
-                playerGymCoords,
-                gymLevel,
-                type,
+            val gymInstance =
+                Gym(
+                    gymTemplate,
+                    trainers.keys.toList(),
+                    playerGymCoords,
+                    gymLevel,
+                    type,
+                )
+
+            RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
+
+            trainers.forEach { (uuid, entity) ->
+                RCT.trainerRegistry.registerNPC(uuid.toString(), entity.trainer)
+            }
+
+            GYM_ENTER.emit(
+                GymEvents.GymEnterEvent(
+                    serverPlayer,
+                    gymInstance,
+                    type,
+                    gymLevel,
+                    usedKey,
+                ),
             )
 
-        RadGymsState.addGymForPlayer(serverPlayer, gymInstance)
-
-        GYM_ENTER.emit(
-            GymEvents.GymEnterEvent(
-                serverPlayer,
-                gymInstance,
-                type,
-                gymLevel,
-                usedKey,
-            ),
-        )
-
-        serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))
-
-        PlayerSpawnHelper.teleportPlayer(serverPlayer, gymDimension, dest, gymTemplate.playerYaw, 0.0F)
+            serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))
+            GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, gymDimension, dest, gymTemplate.playerYaw) { player ->
+                player.setGameMode(GameType.ADVENTURE)
+            }
+        }
     }
 }

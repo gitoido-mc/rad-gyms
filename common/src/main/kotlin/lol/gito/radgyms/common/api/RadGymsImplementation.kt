@@ -40,10 +40,6 @@ interface RadGymsImplementation {
 
     fun registerBlocks()
 
-    fun registerEntityTypes()
-
-    fun registerEntityAttributes()
-
     fun registerBlockEntityTypes()
 
     fun registerResourceReloader(

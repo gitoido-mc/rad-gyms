@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "multi_bench",
+  "ingredients": [
+    {
+      "item": "cobblemon:type_gem_block_bug"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "cobblemon:bug_gem"
+  }
+}

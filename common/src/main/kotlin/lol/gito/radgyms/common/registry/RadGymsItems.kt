@@ -29,10 +29,21 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.block.Block
+import com.cobblemon.mod.common.util.cobblemonResource as cobble
 
 object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item>() {
+    // <editor-fold desc="Bootstrap and helpers">
+
     override val registry: Registry<Item> = BuiltInRegistries.ITEM
     override val resourceKey: ResourceKey<Registry<Item>> = Registries.ITEM
+
+    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
+
+    override fun <E : Item> create(name: String, entry: E): E = super.create(modId(name), entry)
+
+    // </editor-fold>
+
+    // <editor-fold desc="Survival items">
 
     @JvmField
     val GYM_KEY: GymKey = this.create(modId("gym_key"), GymKey())
@@ -68,12 +79,6 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     val CACHE_EPIC: EpicPokeCache = this.create(modId("cache_epic"), EpicPokeCache())
 
     @JvmField
-    val GYM_ENTRANCE = blockItem(modId("gym_entrance"), RadGymsBlocks.GYM_ENTRANCE)
-
-    @JvmField
-    val GYM_EXIT = blockItem(modId("gym_exit"), RadGymsBlocks.GYM_ENTRANCE)
-
-    @JvmField
     val SHARD_BLOCK_COMMON = blockItem(modId("shard_block_common"), RadGymsBlocks.SHARD_BLOCK_COMMON)
 
     @JvmField
@@ -85,6 +90,80 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     @JvmField
     val SHARD_BLOCK_EPIC = blockItem(modId("shard_block_epic"), RadGymsBlocks.SHARD_BLOCK_EPIC)
 
-    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem =
-        this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
+    // </editor-fold>
+
+    // <editor-fold desc="Operator items">
+
+    @JvmField
+    val GYM_ENTRANCE = blockItem(modId("gym_entrance"), RadGymsBlocks.GYM_ENTRANCE)
+
+    @Suppress("unused")
+    @JvmField
+    val GYM_EXIT = blockItem(modId("gym_exit"), RadGymsBlocks.GYM_EXIT)
+
+    // </editor-fold>
+
+    // <editor-fold desc="Decorative blocks">
+
+    @JvmField
+    val DECORATIVE_END_PORTAL = blockItem(modId("decorative_end_portal"), RadGymsBlocks.DECORATIVE_END_PORTAL)
+
+    @JvmField
+    val DECORATIVE_WET_SPONGE = blockItem(modId("decorative_wet_sponge"), RadGymsBlocks.DECORATIVE_WET_SPONGE)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_BUG = blockItem(cobble("type_gem_block_bug"), RadGymsBlocks.TYPE_GEM_BLOCK_BUG)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_DARK = blockItem(cobble("type_gem_block_dark"), RadGymsBlocks.TYPE_GEM_BLOCK_DARK)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_DRAGON = blockItem(cobble("type_gem_block_dragon"), RadGymsBlocks.TYPE_GEM_BLOCK_DRAGON)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_ELECTRIC = blockItem(cobble("type_gem_block_electric"), RadGymsBlocks.TYPE_GEM_BLOCK_ELECTRIC)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_FAIRY = blockItem(cobble("type_gem_block_fairy"), RadGymsBlocks.TYPE_GEM_BLOCK_FAIRY)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_FIGHTING = blockItem(cobble("type_gem_block_fighting"), RadGymsBlocks.TYPE_GEM_BLOCK_FIGHTING)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_FIRE = blockItem(cobble("type_gem_block_fire"), RadGymsBlocks.TYPE_GEM_BLOCK_FIRE)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_FLYING = blockItem(cobble("type_gem_block_flying"), RadGymsBlocks.TYPE_GEM_BLOCK_FLYING)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_GHOST = blockItem(cobble("type_gem_block_ghost"), RadGymsBlocks.TYPE_GEM_BLOCK_GHOST)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_GRASS = blockItem(cobble("type_gem_block_grass"), RadGymsBlocks.TYPE_GEM_BLOCK_GRASS)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_GROUND = blockItem(cobble("type_gem_block_ground"), RadGymsBlocks.TYPE_GEM_BLOCK_GROUND)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_ICE = blockItem(cobble("type_gem_block_ice"), RadGymsBlocks.TYPE_GEM_BLOCK_ICE)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_NORMAL = blockItem(cobble("type_gem_block_normal"), RadGymsBlocks.TYPE_GEM_BLOCK_NORMAL)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_POISON = blockItem(cobble("type_gem_block_poison"), RadGymsBlocks.TYPE_GEM_BLOCK_POISON)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_PSYCHIC = blockItem(cobble("type_gem_block_psychic"), RadGymsBlocks.TYPE_GEM_BLOCK_PSYCHIC)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_ROCK = blockItem(cobble("type_gem_block_rock"), RadGymsBlocks.TYPE_GEM_BLOCK_ROCK)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_STEEL = blockItem(cobble("type_gem_block_steel"), RadGymsBlocks.TYPE_GEM_BLOCK_STEEL)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_WATER = blockItem(cobble("type_gem_block_water"), RadGymsBlocks.TYPE_GEM_BLOCK_WATER)
+
+    // </editor-fold>
 }

@@ -28,8 +28,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 
-class StructureLootDataProvider(output: FabricDataOutput, registryLookup: CompletableFuture<HolderLookup.Provider>) :
-    SimpleFabricLootTableProvider(output, registryLookup, LootContextParamSets.ARCHAEOLOGY) {
+class StructureLootDataProvider(output: FabricDataOutput, registryLookup: CompletableFuture<HolderLookup.Provider>) : SimpleFabricLootTableProvider(output, registryLookup, LootContextParamSets.ARCHAEOLOGY) {
     companion object {
         const val FLINT_WEIGHT = 50
         const val RAW_COPPER_WEIGHT = 25

@@ -1,0 +1,313 @@
+{
+  "name": "rad_gyms:trainer_junior",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:standard",
+      "model": "cobblemon:alex.geo",
+      "texture": "cobblemon:textures/npcs/standard/trainer.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "aethergruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/aethergruntf.png"
+    },
+    {
+      "aspects": [
+        "aethergruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/aethergruntm.png"
+    },
+    {
+      "aspects": [
+        "aquagruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/aquagruntf.png"
+    },
+    {
+      "aspects": [
+        "aquagruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/aquagruntm.png"
+    },
+    {
+      "aspects": [
+        "arven_sv"
+      ],
+      "texture": "rad_gyms:textures/npc/arven_sv.png"
+    },
+    {
+      "aspects": [
+        "barry_dppt"
+      ],
+      "texture": "rad_gyms:textures/npc/barry_dppt.png"
+    },
+    {
+      "aspects": [
+        "bianca_bw"
+      ],
+      "texture": "rad_gyms:textures/npc/bianca_bw.png"
+    },
+    {
+      "aspects": [
+        "blue_frlg"
+      ],
+      "texture": "rad_gyms:textures/npc/blue_frlg.png"
+    },
+    {
+      "aspects": [
+        "brendan_emerald"
+      ],
+      "texture": "rad_gyms:textures/npc/brendan_emerald.png"
+    },
+    {
+      "aspects": [
+        "calem_xy"
+      ],
+      "texture": "rad_gyms:textures/npc/calem_xy.png"
+    },
+    {
+      "aspects": [
+        "dawn_dp"
+      ],
+      "texture": "rad_gyms:textures/npc/dawn_dp.png"
+    },
+    {
+      "aspects": [
+        "elio_usum"
+      ],
+      "texture": "rad_gyms:textures/npc/elio_usum.png"
+    },
+    {
+      "aspects": [
+        "flaregruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/flaregruntf.png"
+    },
+    {
+      "aspects": [
+        "flaregruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/flaregruntm.png"
+    },
+    {
+      "aspects": [
+        "galacticgruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/galacticgruntf.png"
+    },
+    {
+      "aspects": [
+        "galacticgruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/galacticgruntm.png"
+    },
+    {
+      "aspects": [
+        "gladion_sm"
+      ],
+      "texture": "rad_gyms:textures/npc/gladion_sm.png"
+    },
+    {
+      "aspects": [
+        "gloria_swsh"
+      ],
+      "texture": "rad_gyms:textures/npc/gloria_swsh.png"
+    },
+    {
+      "aspects": [
+        "gold_gsc"
+      ],
+      "texture": "rad_gyms:textures/npc/gold_gsc.png"
+    },
+    {
+      "aspects": [
+        "hau_sm"
+      ],
+      "texture": "rad_gyms:textures/npc/hau_sm.png"
+    },
+    {
+      "aspects": [
+        "hilbert_bw"
+      ],
+      "texture": "rad_gyms:textures/npc/hilbert_bw.png"
+    },
+    {
+      "aspects": [
+        "hilda_bw"
+      ],
+      "texture": "rad_gyms:textures/npc/hilda_bw.png"
+    },
+    {
+      "aspects": [
+        "hop_swsh"
+      ],
+      "texture": "rad_gyms:textures/npc/hop_swsh.png"
+    },
+    {
+      "aspects": [
+        "kris_crystal"
+      ],
+      "texture": "rad_gyms:textures/npc/kris_crystal.png"
+    },
+    {
+      "aspects": [
+        "leaf_frlg"
+      ],
+      "texture": "rad_gyms:textures/npc/leaf_frlg.png"
+    },
+    {
+      "aspects": [
+        "lillie_sm"
+      ],
+      "texture": "rad_gyms:textures/npc/lillie_sm.png"
+    },
+    {
+      "aspects": [
+        "lucas_platinum"
+      ],
+      "texture": "rad_gyms:textures/npc/lucas_platinum.png"
+    },
+    {
+      "aspects": [
+        "lyra_hgss"
+      ],
+      "texture": "rad_gyms:textures/npc/lyra_hgss.png"
+    },
+    {
+      "aspects": [
+        "magmagruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/magmagruntf.png"
+    },
+    {
+      "aspects": [
+        "magmagruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/magmagruntm.png"
+    },
+    {
+      "aspects": [
+        "marnie_swsh"
+      ],
+      "texture": "rad_gyms:textures/npc/marnie_swsh.png"
+    },
+    {
+      "aspects": [
+        "may_rs"
+      ],
+      "texture": "rad_gyms:textures/npc/may_rs.png"
+    },
+    {
+      "aspects": [
+        "n_bw"
+      ],
+      "texture": "rad_gyms:textures/npc/n_bw.png"
+    },
+    {
+      "aspects": [
+        "nate_bw2"
+      ],
+      "texture": "rad_gyms:textures/npc/nate_bw2.png"
+    },
+    {
+      "aspects": [
+        "nemona_sv"
+      ],
+      "texture": "rad_gyms:textures/npc/nemona_sv.png"
+    },
+    {
+      "aspects": [
+        "penny_sv"
+      ],
+      "texture": "rad_gyms:textures/npc/penny_sv.png"
+    },
+    {
+      "aspects": [
+        "plasmagruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/plasmagruntf.png"
+    },
+    {
+      "aspects": [
+        "plasmagruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/plasmagruntm.png"
+    },
+    {
+      "aspects": [
+        "red_frlg"
+      ],
+      "texture": "rad_gyms:textures/npc/red_frlg.png"
+    },
+    {
+      "aspects": [
+        "rocketgruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/rocketgruntf.png"
+    },
+    {
+      "aspects": [
+        "rocketgruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/rocketgruntm.png"
+    },
+    {
+      "aspects": [
+        "rosa_bw2"
+      ],
+      "texture": "rad_gyms:textures/npc/rosa_bw2.png"
+    },
+    {
+      "aspects": [
+        "selene_sunmoon"
+      ],
+      "texture": "rad_gyms:textures/npc/selene_sunmoon.png"
+    },
+    {
+      "aspects": [
+        "serena_xy"
+      ],
+      "texture": "rad_gyms:textures/npc/serena_xy.png"
+    },
+    {
+      "aspects": [
+        "silver_hgss"
+      ],
+      "texture": "rad_gyms:textures/npc/silver_hgss.png"
+    },
+    {
+      "aspects": [
+        "skullgruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/skullgruntf.png"
+    },
+    {
+      "aspects": [
+        "skullgruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/skullgruntm.png"
+    },
+    {
+      "aspects": [
+        "stargruntf"
+      ],
+      "texture": "rad_gyms:textures/npc/stargruntf.png"
+    },
+    {
+      "aspects": [
+        "stargruntm"
+      ],
+      "texture": "rad_gyms:textures/npc/stargruntm.png"
+    },
+    {
+      "aspects": [
+        "victor_swsh"
+      ],
+      "texture": "rad_gyms:textures/npc/victor_swsh.png"
+    }
+  ]
+}

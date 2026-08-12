@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.util.party
 import lol.gito.radgyms.common.MIN_PLAYER_TEAM_SIZE
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.TELEPORT_COOLDOWN
 import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.extension.averagePokePartyLevel
 import lol.gito.radgyms.common.extension.displayClientMessage
@@ -31,8 +32,7 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 
-class GymKey :
-    CobblemonItem(Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)) {
+class GymKey : CobblemonItem(Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)) {
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
@@ -66,6 +66,8 @@ class GymKey :
                 )
 
                 OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(player)
+
+                player.cooldowns.addCooldown(this, TELEPORT_COOLDOWN)
 
                 InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), true)
             }

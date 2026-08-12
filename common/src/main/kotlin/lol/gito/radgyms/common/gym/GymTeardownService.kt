@@ -20,15 +20,9 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
+import net.minecraft.world.level.GameType
 
 object GymTeardownService {
-    private var teleportScheduler: GymTeleportScheduler? = null
-
-    fun withTeleportScheduler(teleportScheduler: GymTeleportScheduler): GymTeardownService {
-        this.teleportScheduler = teleportScheduler
-        return this
-    }
-
     fun destructGym(serverPlayer: ServerPlayer, removeCoords: Boolean = true) {
         if (!RadGymsState.hasGymForPlayer(serverPlayer)) return
         if (removeCoords) RadGymsState.setReturnCoordsForPlayer(serverPlayer, null)
@@ -45,13 +39,6 @@ object GymTeardownService {
     }
 
     fun handleGymLeave(serverPlayer: ServerPlayer) {
-        try {
-            assert(teleportScheduler != null)
-        } catch (_: AssertionError) {
-            debug("Teleport scheduler not set")
-            return
-        }
-
         val state = RadGymsState.getPlayerState(serverPlayer)
         var preloadPos: BlockPos
         var preloadDim: ServerLevel
@@ -79,7 +66,9 @@ object GymTeardownService {
             preloadPos,
         )
 
-        teleportScheduler!!.scheduleReturnWithCountdown(serverPlayer, preloadDim, preloadPos)
+        GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, preloadDim, preloadPos, postTeleport = {
+            it.setGameMode(GameType.SURVIVAL)
+        })
     }
 
     fun spawnExitBlock(server: MinecraftServer, gym: Gym) {
@@ -90,6 +79,11 @@ object GymTeardownService {
         )
 
         debug("Derived exit block: $pos")
+
+        server.getLevel(RadGymsDimensions.GYM_DIMENSION)?.destroyBlock(
+            pos,
+            false,
+        )
         server.getLevel(RadGymsDimensions.GYM_DIMENSION)?.setBlockAndUpdate(
             pos,
             RadGymsBlocks.GYM_EXIT.defaultBlockState(),

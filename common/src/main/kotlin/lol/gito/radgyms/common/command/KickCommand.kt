@@ -33,12 +33,11 @@ object KickCommand : CommandInterface {
     private const val PLAYER_ARG = "player"
 
     override fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        val command =
-            literal(COMMANDS_PREFIX).then(
-                literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
-                    argument(PLAYER_ARG, EntityArgument.player()).executes(::execute),
-                ),
-            )
+        val command = literal(COMMANDS_PREFIX).then(
+            literal(NAME).requires { it.hasPermission(Commands.LEVEL_GAMEMASTERS) }.then(
+                argument(PLAYER_ARG, EntityArgument.player()).executes(::execute),
+            ),
+        )
 
         dispatcher.register(command)
     }

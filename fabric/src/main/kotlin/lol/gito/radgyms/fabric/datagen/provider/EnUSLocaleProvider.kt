@@ -38,8 +38,7 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.world.item.Rarity
 import java.util.concurrent.CompletableFuture
 
-class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: CompletableFuture<HolderLookup.Provider>) :
-    FabricLanguageProvider(dataOutput, "en_us", registryLookup) {
+class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: CompletableFuture<HolderLookup.Provider>) : FabricLanguageProvider(dataOutput, "en_us", registryLookup) {
     private fun provideTranslations(): Map<String, String> {
         val translations = mutableMapOf<String, String>()
 
@@ -69,7 +68,8 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         SHARD_EPIC.descriptionId to "Epic cache shard",
         tlk(modId("item.component.type.chaos")) to "Chaos",
         tlk(modId("item.component.gym_type")) to "Attuned to %s",
-        tlk(modId("item.component.shiny_boost")) to "Shiny chance boosted x%s time(s)",
+        tlk(modId("item.component.shiny_boost")) to "Shiny chance rate is x%s",
+        tlk(modId("item.component.shiny_boost.guaranteed")) to "guaranteed",
         tlk("item", modId("gym_reward")) to "Level %s %s gym reward cache",
     )
 
@@ -82,6 +82,8 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         tlk(modId("message.info.gym_entrance_party_empty")) to
             "Your Pokemon party is not enough. Bring at least 3 Pokemon",
         tlk(modId("message.info.gym_entrance_party_fainted")) to "Your pokemon party requires healing",
+        tlk(modId("message.info.trainer_cannot_battle")) to "You need to defeat previous trainer first",
+        tlk(modId("message.info.trainer_can_battle")) to "Ready to fight?",
         tlk(modId("message.info.trainer_required")) to "Go fight %s before challenging me.",
         tlk(modId("message.info.trainer_defeated")) to "You won! Go challenge next trainer.",
         tlk(modId("message.info.leader_defeated")) to "Congratulations on beating the gym!",
@@ -126,6 +128,7 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         tlk("itemGroup", modId("general")) to "Rad Gyms: General",
         tlk("itemGroup", modId("keys")) to "Rad Gyms: Keys",
         tlk("itemGroup", modId("caches")) to "Rad Gyms: Pokémon caches",
+        tlk("itemGroup", modId("decor")) to "Rad Gyms: Decorations",
         tlk("biome", modId("gym_biome")) to "Gym Trials",
         tlk(modId("label.rarity.${Rarity.COMMON.name.lowercase()}")) to "Common",
         tlk(modId("label.rarity.${Rarity.UNCOMMON.name.lowercase()}")) to "Uncommon",

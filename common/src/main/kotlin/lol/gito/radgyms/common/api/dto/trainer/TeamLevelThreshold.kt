@@ -12,5 +12,5 @@ import com.google.gson.annotations.SerializedName
 data class TeamLevelThreshold(
     val amount: Int,
     @SerializedName("until_level")
-    val untilLevel: Int,
+    val untilLevel: Int = 100,
 )

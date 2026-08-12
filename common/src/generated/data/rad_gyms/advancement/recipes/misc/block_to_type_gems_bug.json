@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bug_gem": {
+      "conditions": {
+        "items": [
+          {
+            "items": "cobblemon:type_gem_block_bug"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rad_gyms:block_to_type_gems_bug"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bug_gem"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rad_gyms:block_to_type_gems_bug"
+    ]
+  }
+}

@@ -5,7 +5,7 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
-@file:JvmName("RadGymsConstant")
+@file:JvmName("RadGymsConstants")
 
 package lol.gito.radgyms.common
 
@@ -15,7 +15,6 @@ package lol.gito.radgyms.common
  * Exceptions are config versions
  */
 
-const val CONFIG_040 = 0.4
 const val CONFIG_050 = 0.5
 
 const val DEFAULT_GYM_TYPE = "default"
@@ -23,11 +22,10 @@ const val DEFAULT_GYM_TYPE = "default"
 const val COMMANDS_PREFIX = "rg"
 
 const val TELEPORT_PRELOAD_CHUNKS = 4
-const val WORLDGEN_FEATURE_RANDOM_SHIFT_BITS = 4
-const val GYM_SPACING_IN_DIMENSION = 128
+const val GYM_SPACING_IN_DIMENSION = 256
 
 // Cooldown of item use in ticks (20t = 5s)
-const val EXIT_ROPE_COOLDOWN = 100
+const val TELEPORT_COOLDOWN = 100
 
 const val MIN_POKE_LEVEL = 1
 const val MAX_POKE_LEVEL = 100
@@ -41,7 +39,6 @@ const val CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON = 300
 const val CACHE_DEFAULT_ENTRY_WEIGHT_RARE = 200
 const val CACHE_DEFAULT_ENTRY_WEIGHT_EPIC = 100
 
-const val REGISTRY_REWARD_TYPE_LOOT_TABLE = "rad_gyms:loot_table"
-const val REGISTRY_REWARD_TYPE_POKEMON = "rad_gyms:pokemon"
-const val REGISTRY_REWARD_TYPE_COMMAND = "rad_gyms:command"
-const val REGISTRY_REWARD_TYPE_ADVANCEMENT = "rad_gyms:advancement"
+const val DATA_DEFEATED = "rg-defeated"
+const val DATA_LEADER = "rg-leader"
+const val DATA_REQUIRED = "rg-required"

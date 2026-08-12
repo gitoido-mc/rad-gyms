@@ -1,0 +1,99 @@
+{
+  "hitbox": "player",
+  "canDespawn": false,
+  "isMovable": false,
+  "isInvulnerable": true,
+  "isLeashable": false,
+  "allowProjectileHits": false,
+  "names": [
+    "rad_gyms.npc.trainer_senior"
+  ],
+  "interaction": {
+    "type": "dialogue",
+    "dialogue": "rad_gyms:trainer_interaction"
+  },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "behaviours": [
+        "cobblemon:core"
+      ]
+    }
+  ],
+  "config": [
+    {
+      "variableName": "required_trainer",
+      "displayName": "Required trainer",
+      "description": "The resource identifier or UUID of required trainer",
+      "type": "TEXT"
+    },
+    {
+      "variableName": "leader",
+      "displayName": "Is Leader?",
+      "description": "",
+      "type": "BOOLEAN",
+      "defaultValue": "false"
+    },
+    {
+      "variableName": "defeated",
+      "displayName": "Is Defeated?",
+      "description": "",
+      "type": "BOOLEAN",
+      "defaultValue": "false"
+    }
+  ],
+  "variation": {
+    "skin": [
+      "aethergruntf",
+      "aethergruntm",
+      "aquagruntf",
+      "aquagruntm",
+      "arven_sv",
+      "barry_dppt",
+      "bianca_bw",
+      "blue_frlg",
+      "brendan_emerald",
+      "calem_xy",
+      "dawn_dp",
+      "elio_usum",
+      "flaregruntf",
+      "flaregruntm",
+      "galacticgruntf",
+      "galacticgruntm",
+      "gladion_sm",
+      "gloria_swsh",
+      "gold_gsc",
+      "hau_sm",
+      "hilbert_bw",
+      "hilda_bw",
+      "hop_swsh",
+      "kris_crystal",
+      "leaf_frlg",
+      "lillie_sm",
+      "lucas_platinum",
+      "lyra_hgss",
+      "magmagruntf",
+      "magmagruntm",
+      "marnie_swsh",
+      "may_rs",
+      "n_bw",
+      "nate_bw2",
+      "nemona_sv",
+      "penny_sv",
+      "plasmagruntf",
+      "plasmagruntm",
+      "red_frlg",
+      "rocketgruntf",
+      "rocketgruntm",
+      "rosa_bw2",
+      "selene_sunmoon",
+      "serena_xy",
+      "silver_hgss",
+      "skullgruntf",
+      "skullgruntm",
+      "stargruntf",
+      "stargruntm",
+      "victor_swsh"
+    ]
+  }
+}

@@ -7,7 +7,6 @@
 
 package lol.gito.radgyms.common.mixin.server.worldBorder;
 
-
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.sugar.Local;
 import lol.gito.radgyms.common.RadGyms;
@@ -35,5 +34,4 @@ public class ServerLevelMixin {
         if (player.level().dimension() != RadGymsDimensions.GYM_DIMENSION) return defaultBorder;
         return RadGyms.dimensionWorldBorder;
     }
-
 }

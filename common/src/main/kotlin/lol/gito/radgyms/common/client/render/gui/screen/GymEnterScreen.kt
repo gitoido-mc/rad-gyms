@@ -216,6 +216,7 @@ class GymEnterScreen(
         val message =
             when (pos) {
                 null -> tl(modId("gui.common.set-gym-level"), buildTypeText(type))
+
                 else ->
                     tl(
                         modId("gui.common.set-gym-level-entry"),

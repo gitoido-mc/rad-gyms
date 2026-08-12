@@ -14,6 +14,7 @@ import com.gitlab.srcmc.rctapi.api.ai.experimental.SelfdotGen5AI
 import com.gitlab.srcmc.rctapi.api.battle.BattleRules
 import com.gitlab.srcmc.rctapi.api.models.BagItemModel
 import com.gitlab.srcmc.rctapi.api.util.JTO
+import com.gitlab.srcmc.rctapi.api.util.Text
 import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.dto.trainer.TrainerEntityData
 import lol.gito.radgyms.common.api.enumeration.GymTeamType
@@ -29,8 +30,11 @@ class TrainerFactory(private val battleConfigBuilder: BattleConfigFactory = Batt
     fun create(trainer: Trainer, level: Int, player: ServerPlayer?): RGTrainerModel {
         val ai = when (trainer.ai.type) {
             "rct" -> RCTBattleAI(battleConfigBuilder.createFromDto(trainer.ai))
+
             "cbl" -> StrongBattleAI(trainer.ai.data?.skillLevel ?: StrongBattleAIConfig().skill())
+
             "sd5" -> SelfdotGen5AI()
+
             else -> throw RadGymsUnknownBattleAIException(
                 "Unknown battle AI type for trainer {}, passed {}, supports only 'rct', 'cbl', 'sd5'"
                     .format(trainer.id, trainer.ai.type),
@@ -40,7 +44,9 @@ class TrainerFactory(private val battleConfigBuilder: BattleConfigFactory = Batt
         val possibleFormats = trainer.possibleFormats.toMutableList()
         val team = when (trainer.teamType) {
             GymTeamType.FIXED -> FixedTeamGenerator.generateTeam(player, trainer, level)
+
             GymTeamType.POOL -> PoolTeamGenerator.generateTeam(player, trainer, level)
+
             GymTeamType.GENERATED ->
                 trainer.teamGenerator.instance.generateTeam(
                     trainer,
@@ -59,7 +65,7 @@ class TrainerFactory(private val battleConfigBuilder: BattleConfigFactory = Batt
                 yaw = trainer.spawnRelative.yaw.toFloat(),
             ),
             RCTTrainerModel(
-                translatable(trainer.name).string,
+                Text.translatable(trainer.name),
                 JTO.of { ai },
                 trainer.bag.map { BagItemModel(it.item, it.quantity) },
                 team,

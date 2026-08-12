@@ -41,7 +41,6 @@ class RarityArgumentType : ArgumentType<Rarity> {
 
         fun rarity() = RarityArgumentType()
 
-        fun <S> getRarity(context: CommandContext<S>, name: String): Rarity =
-            context.getArgument(name, Rarity::class.java)
+        fun <S> getRarity(context: CommandContext<S>, name: String): Rarity = context.getArgument(name, Rarity::class.java)
     }
 }

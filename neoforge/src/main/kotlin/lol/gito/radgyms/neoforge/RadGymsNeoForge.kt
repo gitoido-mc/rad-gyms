@@ -22,7 +22,6 @@ import lol.gito.radgyms.common.registry.RadGymsBlockEntities
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
-import lol.gito.radgyms.common.registry.RadGymsEntities
 import lol.gito.radgyms.common.registry.RadGymsItemGroups
 import lol.gito.radgyms.common.registry.RadGymsItems
 import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
@@ -51,7 +50,6 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.OnDatapackSyncEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
-import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -59,7 +57,7 @@ import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import java.nio.file.Path
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
 
 @Mod(MOD_ID)
@@ -98,8 +96,7 @@ class RadGymsNeoForge : RadGymsImplementation {
 
     override fun configDir(): Path = FMLPaths.CONFIGDIR.get()
 
-    override fun environment(): Environment =
-        if (FMLEnvironment.dist.isClient) Environment.CLIENT else Environment.SERVER
+    override fun environment(): Environment = if (FMLEnvironment.dist.isClient) Environment.CLIENT else Environment.SERVER
 
     override fun registerDataComponents() {
         MOD_BUS.addListener<RegisterEvent> { event ->
@@ -154,24 +151,6 @@ class RadGymsNeoForge : RadGymsImplementation {
                 RadGymsBlockEntities.register { identifier, block ->
                     helper.register(identifier, block)
                 }
-            }
-        }
-    }
-
-    override fun registerEntityTypes() {
-        MOD_BUS.addListener<RegisterEvent> { event ->
-            event.register(RadGymsEntities.resourceKey) { helper ->
-                RadGymsEntities.register { identifier, block ->
-                    helper.register(identifier, block)
-                }
-            }
-        }
-    }
-
-    override fun registerEntityAttributes() {
-        MOD_BUS.addListener<EntityAttributeCreationEvent> { event ->
-            RadGymsEntities.registerAttributes { type, builder ->
-                event.put(type, builder.build())
             }
         }
     }
@@ -245,16 +224,16 @@ class RadGymsNeoForge : RadGymsImplementation {
     }
 
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
-        var canCancel: Boolean
-        canCancel = (e.level !is ServerLevel)
-        if (!canCancel && (e.level as ServerLevel).dimension() == GYM_DIMENSION) {
-            canCancel = RadGymsConfigs.server.debug
-            if (!canCancel) {
-                e.isCanceled = true
-            }
-        }
+        if (e.level is ServerLevel) return
 
-        if (canCancel) return
+        if (
+            (e.level as ServerLevel).dimension() == GYM_DIMENSION &&
+            RadGymsConfigs.server.debug &&
+            e.player.hasPermissions(2)
+        ) {
+            e.isCanceled = true
+            return
+        }
 
         if (e.state.block == RadGymsBlocks.GYM_ENTRANCE) {
             if (!e.player.isShiftKeyDown) {
@@ -267,8 +246,7 @@ class RadGymsNeoForge : RadGymsImplementation {
         }
     }
 
-    private class ForgeItemGroupInject(@Suppress("unused") private val entries: BuildCreativeModeTabContentsEvent) :
-        RadGymsItemGroups.Injector {
+    private class ForgeItemGroupInject(@Suppress("unused") private val entries: BuildCreativeModeTabContentsEvent) : RadGymsItemGroups.Injector {
         override fun putFirst(item: ItemLike) {
             this.entries.insertFirst(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
         }
@@ -285,10 +263,8 @@ class RadGymsNeoForge : RadGymsImplementation {
             CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS,
         )
 
-        override fun putLast(item: ItemLike) =
-            this.entries.accept(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
+        override fun putLast(item: ItemLike) = this.entries.accept(ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
 
-        override fun putLast(item: ItemStack) =
-            this.entries.accept(item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
+        override fun putLast(item: ItemStack) = this.entries.accept(item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
     }
 }

@@ -1,0 +1,91 @@
+{
+  "initializationAction": [
+    "v.landing_page = q.npc.rg_is_defeated() ? 'defeated' : (q.npc.rg_is_required_defeated() ? 'can_battle' : 'cannot_battle');",
+    "q.dialogue.set_page(v.landing_page);",
+    "c.npc.set_chatting();"
+  ],
+  "speakers": {
+    "npc": {
+      "name": {
+        "type": "expression",
+        "expression": "q.npc.name"
+      },
+      "face": "q.npc.face();",
+      "gibber": {}
+    },
+    "player": {
+      "face": "q.player.face();",
+      "name": {
+        "type": "expression",
+        "expression": "q.player.username"
+      }
+    }
+  },
+  "pages": [
+    {
+      "id": "cannot_battle",
+      "speaker": "npc",
+      "clientActions": [
+        "q.face.play_animation('win');"
+      ],
+      "lines": ["rad_gyms.message.info.trainer_cannot_battle"],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "gui.proceed",
+            "value": "close",
+            "action": "q.dialogue.close();"
+          }
+        ]
+      }
+    },
+    {
+      "id": "can_battle",
+      "speaker": "npc",
+      "clientActions": [
+        "q.face.play_animation('win');"
+      ],
+      "lines": ["rad_gyms.message.info.trainer_can_battle"],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "gui.proceed",
+            "value": "proceed",
+            "action": [
+              "c.npc.rg_start_battle(q.player);",
+              "q.dialogue.close();"
+            ]
+          },
+          {
+            "text": "gui.cancel",
+            "value": "no",
+            "action": "q.dialogue.close();"
+          }
+        ]
+      }
+    },
+    {
+      "id": "defeated",
+      "speaker": "npc",
+      "clientActions": [
+        "q.face.play_animation('lose');"
+      ],
+      "lines": ["rad_gyms.message.info.trainer_defeated"],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "gui.proceed",
+            "value": "close",
+            "action": "q.dialogue.close();"
+          }
+        ]
+      }
+    }
+  ]
+}

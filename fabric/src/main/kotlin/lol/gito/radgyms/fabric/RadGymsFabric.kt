@@ -20,7 +20,6 @@ import lol.gito.radgyms.common.registry.RadGymsBlockEntities
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDataComponents
 import lol.gito.radgyms.common.registry.RadGymsDimensions
-import lol.gito.radgyms.common.registry.RadGymsEntities
 import lol.gito.radgyms.common.registry.RadGymsItemGroups
 import lol.gito.radgyms.common.registry.RadGymsItems
 import lol.gito.radgyms.fabric.net.RadGymsFabricNetworkManager
@@ -32,7 +31,6 @@ import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.loader.api.FabricLoader
@@ -139,14 +137,6 @@ object RadGymsFabric : RadGymsImplementation {
         Registry.register(RadGymsBlockEntities.registry, identifier, entry)
     }
 
-    override fun registerEntityTypes() = RadGymsEntities.register { identifier, entry ->
-        Registry.register(RadGymsEntities.registry, identifier, entry)
-    }
-
-    override fun registerEntityAttributes() = RadGymsEntities.registerAttributes { entityType, builder ->
-        FabricDefaultAttributeRegistry.register(entityType, builder)
-    }
-
     override fun registerResourceReloader(
         identifier: ResourceLocation,
         reloader: PreparableReloadListener,
@@ -168,10 +158,11 @@ object RadGymsFabric : RadGymsImplementation {
     }
 
     fun onBeforeBlockBreak(world: Level, player: Player, state: BlockState): Boolean = with(world.dimension()) {
-        if (this == RadGymsDimensions.GYM_DIMENSION && RadGymsConfigs.server.debug) return@with true
+        if (this == RadGymsDimensions.GYM_DIMENSION) return@with RadGymsConfigs.server.debug && player.hasPermissions(2)
 
         return@with when (state.block == RadGymsBlocks.GYM_ENTRANCE && !player.isShiftKeyDown) {
             false -> true
+
             true -> {
                 player.displayClientMessage(tl("message.info.gym_entrance_breaking"))
                 player.displayClientMessage(tl("message.error.gym_entrance.not-sneaking"))
@@ -208,8 +199,7 @@ object RadGymsFabric : RadGymsImplementation {
         override fun getFabricDependencies(): MutableCollection<ResourceLocation> = this.dependencies.toMutableList()
     }
 
-    private class FabricItemGroupInjector(private val fabricItemGroupEntries: FabricItemGroupEntries) :
-        RadGymsItemGroups.Injector {
+    private class FabricItemGroupInjector(private val fabricItemGroupEntries: FabricItemGroupEntries) : RadGymsItemGroups.Injector {
         override fun putFirst(item: ItemLike) = this.fabricItemGroupEntries.prepend(item)
 
         override fun putBefore(item: ItemLike, target: ItemLike) = this.fabricItemGroupEntries.addBefore(target, item)

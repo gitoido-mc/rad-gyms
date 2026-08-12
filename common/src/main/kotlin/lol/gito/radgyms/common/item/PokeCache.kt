@@ -31,23 +31,32 @@ import net.minecraft.world.InteractionResultHolder.sidedSuccess
 import net.minecraft.world.InteractionResultHolder.success
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items.LAPIS_BLOCK
-import net.minecraft.world.item.Items.LAPIS_LAZULI
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 
-const val RG_CACHE_BLOCK_BOOST = 9
-
 open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().rarity(rarity)) {
     override fun use(level: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> = when {
         level.isClientSide -> sidedSuccess(user.getItemInHand(hand), true)
+
         (hand != InteractionHand.MAIN_HAND) -> fail(user.getItemInHand(hand))
-        (user.offhandItem.item in listOf(LAPIS_LAZULI, LAPIS_BLOCK)) -> sidedSuccess(user.getItemInHand(hand), true)
+
         else -> {
             val stack = user.getItemInHand(hand)
+
+            if (RadGymsConfigs.server.boosterMap.containsKey(user.offhandItem.item)) {
+                val boosterAmount = RadGymsConfigs.server.boosterMap[user.offhandItem.item]!!
+                val stackBoost = stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)
+                stack.set(
+                    RG_CACHE_SHINY_BOOST_COMPONENT,
+                    stackBoost.plus(boosterAmount).coerceAtMost(Cobblemon.config.shinyRate.toInt().dec()),
+                )
+                user.offhandItem.shrink(1)
+                return sidedSuccess(user.getItemInHand(hand), true)
+            }
+
             val rarity = stack.getOrDefault(RARITY, Rarity.COMMON)
-            val boost = calculateCacheBoost(stack, user.offhandItem, user)
+            val boost = stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)
             val type = when (stack.getOrDefault(RG_GYM_TYPE_COMPONENT, defaultElementalTypes.random())) {
                 "chaos" -> defaultElementalTypes.random()
                 else -> stack.getOrDefault(RG_GYM_TYPE_COMPONENT, defaultElementalTypes.random())
@@ -66,9 +75,14 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
         type: TooltipFlag,
     ) = with(stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)) {
         if (this > 0) {
+            val intermediate = when (this.coerceAtLeast(1) == 1) {
+                true -> tl(modId("item.component.shiny_boost.guaranteed")).withStyle(ChatFormatting.UNDERLINE)
+                else -> "1/${(Cobblemon.config.shinyRate.toInt() - this)}"
+            }
+
             val tooltipText = tl(
                 modId("item.component.shiny_boost"),
-                "1/${(Cobblemon.config.shinyRate.toInt() - this).coerceAtLeast(1)}",
+                intermediate,
             )
 
             tooltip.add(tooltipText.withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD))
@@ -86,27 +100,6 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
     }
 
     override fun isFoil(stack: ItemStack): Boolean = stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0) > 0
-
-    private fun calculateCacheBoost(stack: ItemStack, offhand: ItemStack, user: Player): Int =
-        with(stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)) {
-            if (equals(Cobblemon.config.shinyRate)) return@with this
-
-            return@with when (offhand.item) {
-                LAPIS_LAZULI -> this.plus(RadGymsConfigs.server.lapisBoostAmount).also {
-                    stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, it)
-                    offhand.consume(1, user)
-                }
-
-                LAPIS_BLOCK -> this.plus(RG_CACHE_BLOCK_BOOST * RadGymsConfigs.server.lapisBoostAmount)
-                    .coerceAtMost(Cobblemon.config.shinyRate.toInt().dec())
-                    .also {
-                        stack.set(RG_CACHE_SHINY_BOOST_COMPONENT, it)
-                        offhand.consume(1, user)
-                    }
-
-                else -> this
-            }
-        }
 }
 
 class CommonPokeCache : PokeCache(Rarity.COMMON)

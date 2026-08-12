@@ -66,9 +66,8 @@ object RadGymsConfigs {
 
     fun reload() = load()
 
-    fun reloadClient() {
-        loadClient()
-    }
+    @Suppress("unused")
+    fun reloadClient() = loadClient()
 
     fun sync(config: ServerConfig) {
         server = config
