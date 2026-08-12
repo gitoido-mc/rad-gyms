@@ -60,6 +60,7 @@ dependencies {
 
     modImplementation(libs.architectury.neoforge)
     modImplementation(libs.rctapi.neoforge)
+    modImplementation(libs.azurelib.neoforge)
     modImplementation(libs.cobblemon.neoforge) {
         isTransitive = false
     }
