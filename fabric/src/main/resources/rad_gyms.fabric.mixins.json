@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8.5",
   "mixins": ["compat.OnAetherEntityInteract", "entity.WindChargeMixin"],
+
   "injectors": {
     "defaultRequire": 1
   },

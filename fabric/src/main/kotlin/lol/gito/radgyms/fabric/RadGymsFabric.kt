@@ -158,7 +158,7 @@ object RadGymsFabric : RadGymsImplementation {
     }
 
     fun onBeforeBlockBreak(world: Level, player: Player, state: BlockState): Boolean = with(world.dimension()) {
-        if (this == RadGymsDimensions.GYM_DIMENSION && RadGymsConfigs.server.debug) return@with true
+        if (this == RadGymsDimensions.GYM_DIMENSION) return@with RadGymsConfigs.server.debug && player.hasPermissions(2)
 
         return@with when (state.block == RadGymsBlocks.GYM_ENTRANCE && !player.isShiftKeyDown) {
             false -> true

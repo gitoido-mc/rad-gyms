@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
 import net.minecraft.world.level.ChunkPos
+import net.minecraft.world.level.GameType
 
 class GymInitializer(
     private val templateRegistry: RadGymsTemplates,
@@ -106,7 +107,9 @@ class GymInitializer(
             )
 
             serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))
-            GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, gymDimension, dest, gymTemplate.playerYaw)
+            GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, gymDimension, dest, gymTemplate.playerYaw) { player ->
+                player.setGameMode(GameType.ADVENTURE)
+            }
         }
     }
 }

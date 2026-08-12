@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.mixin.server.entity;
 
 import lol.gito.radgyms.common.registry.RadGymsDimensions;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.projectile.windcharge.AbstractWindCharge;
 import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.phys.Vec3;
@@ -21,6 +22,6 @@ public class WindChargeMixin {
     @Inject(method = "explode", at = @At("HEAD"), cancellable = true)
     private void radGyms$explode(Vec3 vec3, CallbackInfo ci) {
         AbstractWindCharge entity = (AbstractWindCharge) (Object) this;
-        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) ci.cancel();
+        if (entity.level() instanceof ServerLevel && entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) ci.cancel();
     }
 }

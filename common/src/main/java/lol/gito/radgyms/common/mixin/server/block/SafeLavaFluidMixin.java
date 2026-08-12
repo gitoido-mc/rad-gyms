@@ -9,6 +9,7 @@ package lol.gito.radgyms.common.mixin.server.block;
 
 import lol.gito.radgyms.common.registry.RadGymsDimensions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
@@ -22,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SafeLavaFluidMixin {
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void radGyms$SafeLavaInDimension(Level level, BlockPos blockPos, FluidState fluidState, RandomSource randomSource, CallbackInfo ci) {
-        if (level.dimension() == RadGymsDimensions.GYM_DIMENSION) ci.cancel();
+        if (level instanceof ServerLevel && level.dimension() == RadGymsDimensions.GYM_DIMENSION) {
+            ci.cancel();
+        }
     }
 }

@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer
 
 object GymTeleportScheduler {
     @Suppress("MagicNumber")
-    fun scheduleTeleportWithCountdown(player: ServerPlayer, dim: ServerLevel, pos: BlockPos, yaw: Float? = null) {
+    fun scheduleTeleportWithCountdown(player: ServerPlayer, dim: ServerLevel, pos: BlockPos, yaw: Float? = null, postTeleport: (player: ServerPlayer) -> Unit = { }) {
         player.displayClientMessage(Component.nullToEmpty("5..."))
         afterOnServer(1f) {
             player.displayClientMessage(Component.nullToEmpty("4..."))
@@ -33,6 +33,7 @@ object GymTeleportScheduler {
         }
         afterOnServer(5f) {
             PlayerSpawnHelper.teleportPlayer(player.uuid, dim, pos, yaw = yaw ?: player.yRot, pitch = player.xRot)
+            postTeleport(player)
         }
     }
 }

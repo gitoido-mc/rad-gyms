@@ -20,6 +20,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
+import net.minecraft.world.level.GameType
 
 object GymTeardownService {
     fun destructGym(serverPlayer: ServerPlayer, removeCoords: Boolean = true) {
@@ -65,7 +66,9 @@ object GymTeardownService {
             preloadPos,
         )
 
-        GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, preloadDim, preloadPos)
+        GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, preloadDim, preloadPos, postTeleport = {
+            it.setGameMode(GameType.SURVIVAL)
+        })
     }
 
     fun spawnExitBlock(server: MinecraftServer, gym: Gym) {

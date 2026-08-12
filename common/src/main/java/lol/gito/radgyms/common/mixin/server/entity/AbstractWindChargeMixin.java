@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common.mixin.server.entity;
 
 import lol.gito.radgyms.common.registry.RadGymsDimensions;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.projectile.windcharge.AbstractWindCharge;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -21,7 +22,7 @@ public class AbstractWindChargeMixin {
     @Inject(method = "onHitBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;"), cancellable = true)
     private void radGyms$onHitBlock(BlockHitResult blockHitResult, CallbackInfo ci) {
         AbstractWindCharge entity = (AbstractWindCharge) (Object) this;
-        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) ci.cancel();
+        if (entity.level() instanceof ServerLevel && entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) ci.cancel();
     }
 
     @Inject(
@@ -35,6 +36,6 @@ public class AbstractWindChargeMixin {
     )
     private void radGyms$onHitEntity(EntityHitResult entityHitResult, CallbackInfo ci) {
         AbstractWindCharge entity = (AbstractWindCharge) (Object) this;
-        if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) ci.cancel();
+        if (entity.level() instanceof ServerLevel && entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) ci.cancel();
     }
 }

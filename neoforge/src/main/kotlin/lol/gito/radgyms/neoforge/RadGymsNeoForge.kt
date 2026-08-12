@@ -224,16 +224,16 @@ class RadGymsNeoForge : RadGymsImplementation {
     }
 
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
-        var canCancel: Boolean
-        canCancel = (e.level !is ServerLevel)
-        if (!canCancel && (e.level as ServerLevel).dimension() == GYM_DIMENSION) {
-            canCancel = RadGymsConfigs.server.debug
-            if (!canCancel) {
-                e.isCanceled = true
-            }
-        }
+        if (e.level is ServerLevel) return
 
-        if (canCancel) return
+        if (
+            (e.level as ServerLevel).dimension() == GYM_DIMENSION &&
+            RadGymsConfigs.server.debug &&
+            e.player.hasPermissions(2)
+        ) {
+            e.isCanceled = true
+            return
+        }
 
         if (e.state.block == RadGymsBlocks.GYM_ENTRANCE) {
             if (!e.player.isShiftKeyDown) {
