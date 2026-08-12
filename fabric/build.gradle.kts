@@ -7,13 +7,9 @@
 @file:Suppress("MaxLineLength")
 
 plugins {
-    id("dev.architectury.loom")
-    id("architectury-plugin")
-    id("com.gradleup.shadow")
-}
-
-repositories {
-    maven("https://maven.fabricmc.net/")
+    alias(libs.plugins.rg.common)
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.wikiToolkit)
 }
 
 architectury {
@@ -29,9 +25,11 @@ architectury {
     }
 }
 
-val shadowCommon = configurations.create("shadowCommon") {
-    isCanBeResolved = true
-    isCanBeConsumed = false
+wiki {
+    wikiAccessToken = providers.systemProperty("moddedmc_gh_token").get()
+    docs.create(project.property("mod_id") as String) {
+        root = file("../docs/rad_gyms")
+    }
 }
 
 loom {
@@ -39,43 +37,73 @@ loom {
     enableTransitiveAccessWideners.set(true)
 
     runs {
+        val wikiExporterParams = mapOf(
+            "wiki_exporter.config.path" to "../../docs/rad_gyms/wiki-exporter.config.json",
+            "wiki_exporter.enabled" to "true",
+        )
+
         getByName("client") {
-            programArgs(
+            runDirectory.set(file("runClient"))
+            programArguments.addAll(
                 "--username=Gitoido",
                 "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b",
             )
         }
+        getByName("server") {
+            runDirectory.set(file("runServer"))
+        }
+        create("exportClient") {
+            client()
+            runDirectory.set(file("runClient"))
+            systemProperties.putAll(wikiExporterParams)
+        }
+        create("exportServer") {
+            server()
+            runDirectory.set(file("runServer"))
+            programArguments.add("nogui")
+            systemProperties.putAll(wikiExporterParams)
+        }
     }
 }
 
+val shadowCommon = configurations.create("shadowCommon") {
+    isCanBeResolved = true
+    isCanBeConsumed = false
+}
+
+repositories {
+    maven("https://maven.fabricmc.net/")
+    maven("https://maven.su5ed.dev/releases") // wiki
+}
+
+@Suppress("AvoidDuplicateDependencies")
 dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
 
-    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-fabric")
+    modCompileOnly(libs.aether.fabric)
 
-    modImplementation("dev.architectury:architectury-fabric:${property("architectury_api_version")}")
-    modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_fabric_version")}")
-    modImplementation("mod.azure.azurelib:azurelib-common-${rootProject.property("minecraft_version")}:${property("azurelib_version")}")
+    modRuntimeOnly(libs.wikiExporter)
 
-    with("maven.modrinth:sSdng0L4:${rootProject.property("structure_placer_api_fabric_version")}"){
-        modImplementation(this)
-        include(this)
+    libs.structurePlacerApi.fabric.let {
+        modImplementation(it)
+        include(it)
     }
-
-    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") {
+    modImplementation(libs.architectury.fabric)
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
+    modImplementation(libs.fabric.kotlin)
+    modImplementation(libs.rctapi.fabric)
+    modImplementation(libs.azurelib.fabric)
+    modImplementation(libs.cobblemon.fabric) {
         isTransitive = false
     }
 
-
-    implementation(project(":common", configuration = "namedElements"))
-    "developmentFabric"(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
+    project(":common", configuration = "namedElements").let {
+        implementation(it)
+        "developmentFabric"(it) { isTransitive = false }
+    }
 }
 
 tasks {

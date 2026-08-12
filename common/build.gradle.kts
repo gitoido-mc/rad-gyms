@@ -4,11 +4,9 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-@file:Suppress("MaxLineLength")
 
 plugins {
-    id("dev.architectury.loom")
-    id("architectury-plugin")
+    alias(libs.plugins.rg.common)
 }
 
 architectury {
@@ -28,33 +26,15 @@ loom {
 
 dependencies {
     // Core deps
-    minecraft("com.mojang:minecraft:${rootProject.property("minecraft_version")}")
+    minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
+    compileOnly(libs.bundles.common.mixin)
+    annotationProcessor(libs.mixin.extras)
 
-    modApi("local.com.bedrockk:molang:1.1.20")
-
-    modCompileOnly("mod.azure.azurelib:azurelib-common-${rootProject.property("minecraft_version")}:${property("azurelib_version")}")
-
-    modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_common_version")}")
-    modImplementation("com.cobblemon:mod:${property("cobblemon_version")}+${property("minecraft_version")}") {
+    modApi(libs.molang)
+    modCompileOnly(libs.azurelib.common)
+    modImplementation(libs.rctapi.common)
+    modImplementation(libs.cobblemon.common) {
         isTransitive = false
-    }
-}
-
-tasks {
-    processResources {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    }
-
-    remapJar {
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
-    }
-
-    remapSourcesJar {
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
-        archiveClassifier.set("sources")
     }
 }

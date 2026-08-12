@@ -9,17 +9,21 @@ rootProject.name = "rad-gyms"
 
 pluginManagement {
     repositories {
-        mavenLocal()
+        @Suppress("UnstableApiUsage")
+        maven(layout.rootDirectory.dir("deps")) // cobbled molang
         mavenCentral()
-        maven("https://maven.fabricmc.net/")
-        maven("https://maven.architectury.dev/")
-        maven("https://maven.neoforged.net/releases/")
         gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
+        maven("https://maven.neoforged.net/releases/")
+        maven("https://maven.architectury.dev/")
     }
 }
 
-listOf(
-    "common",
-    "fabric",
-    "neoforge"
-).forEach { include(it) }
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
+includeBuild("build-logic")
+include("common")
+include("fabric")
+include("neoforge")
