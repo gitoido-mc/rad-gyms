@@ -23,13 +23,13 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ServerLevel.class)
 public class ServerLevelMixin {
     @ModifyReceiver(
-        method = "mayInteract(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;)Z",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/border/WorldBorder;isWithinBounds(Lnet/minecraft/core/BlockPos;)Z"
-        )
+            method = "mayInteract(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;)Z",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/border/WorldBorder;isWithinBounds(Lnet/minecraft/core/BlockPos;)Z"
+            )
     )
-    private WorldBorder RadGyms$modifyContains(WorldBorder defaultBorder, BlockPos pos, @Local(argsOnly = true) Player player) {
+    private WorldBorder RadGyms$modifyContains(WorldBorder defaultBorder, BlockPos blockPos, @Local(argsOnly = true, name = "player") Player player) {
         if (!(player instanceof ServerPlayer)) return defaultBorder;
         //noinspection resource
         if (player.level().dimension() != RadGymsDimensions.GYM_DIMENSION) return defaultBorder;

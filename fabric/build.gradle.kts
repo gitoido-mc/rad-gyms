@@ -7,16 +7,10 @@
 @file:Suppress("MaxLineLength")
 
 plugins {
-    id("dev.architectury.loom")
-    id("architectury-plugin")
-    id("com.gradleup.shadow")
+    alias(libs.plugins.rg.common)
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.wikiToolkit)
 }
-
-repositories {
-    maven("https://maven.fabricmc.net/")
-}
-
-val generatedResources: File = project(":common").file("src/generated")
 
 architectury {
     platformSetupLoomIde()
@@ -25,15 +19,17 @@ architectury {
             configureDataGeneration {
                 client = true
                 modId = rootProject.property("mod_id") as String
-                outputDirectory = generatedResources
+                outputDirectory = project(":common").file("src/generated")
             }
         }
     }
 }
 
-val shadowCommon: Configuration by configurations.creating {
-    isCanBeResolved = true
-    isCanBeConsumed = false
+wiki {
+    wikiAccessToken = providers.systemProperty("moddedmc_gh_token").get()
+    docs.create(project.property("mod_id") as String) {
+        root = file("../docs/rad_gyms")
+    }
 }
 
 loom {
@@ -41,70 +37,123 @@ loom {
     enableTransitiveAccessWideners.set(true)
 
     runs {
+        val wikiExporterParams =
+            mapOf(
+                "wiki_exporter.config.path" to "../../docs/rad_gyms/wiki-exporter.config.json",
+                "wiki_exporter.enabled" to "true",
+            )
+
         getByName("client") {
-            programArgs(
+            runDirectory.set(file(project.projectDir.resolve("runClient")))
+            programArguments.addAll(
                 "--username=Gitoido",
                 "--uuid=23131d78-9edb-48a4-902a-e22e572e9f2b",
             )
         }
+        getByName("server") {
+            runDirectory.set(file(project.projectDir.resolve("runServer")))
+        }
+        create("exportClient") {
+            client()
+            runDirectory.set(file(project.projectDir.resolve("runClient")))
+            systemProperties.putAll(wikiExporterParams)
+        }
+        create("exportServer") {
+            server()
+            runDirectory.set(file(project.projectDir.resolve("runServer")))
+            programArguments.add("nogui")
+            systemProperties.putAll(wikiExporterParams)
+        }
     }
 }
 
-dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
-
-    // Fabric
-    modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
-    modImplementation("dev.architectury:architectury-fabric:${property("architectury_api_version")}")
-    if (!property("use_cobbled_snapshot").toString().toBooleanStrict()) {
-        modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}+${property("minecraft_version")}") {
-            isTransitive = false
-        }
-    } else {
-        modImplementation("com.cobblemon:fabric:${property("cobblemon_snapshot_version")}+${property("minecraft_version")}-SNAPSHOT") {
-            isTransitive = false
-        }
+val shadowCommon =
+    configurations.create("shadowCommon") {
+        isCanBeResolved = true
+        isCanBeConsumed = false
     }
 
-    // Common code
-    implementation(project(":common", configuration = "namedElements"))
-    "developmentFabric"(project(":common", configuration = "namedElements"))
-    shadowCommon(project(":common", configuration = "transformProductionFabric"))
+repositories {
+    maven("https://maven.fabricmc.net/")
+    maven("https://maven.su5ed.dev/releases") // wiki
+}
 
-    modImplementation("curse.maven:radical-cobblemon-trainers-api-1152792:${property("rctapi_fabric_version")}")
-    modCompileOnly("com.aetherteam.aether:aether:${property("aether_version")}-fabric")
+@Suppress("AvoidDuplicateDependencies")
+dependencies {
+    minecraft(libs.minecraft)
+    mappings(loom.officialMojangMappings())
+
+    modCompileOnly(libs.aether.fabric)
+
+    modRuntimeOnly(libs.bundles.fabric.runtimeOnly)
+
+    modImplementation(libs.architectury.fabric)
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
+    modImplementation(libs.fabric.kotlin)
+    modImplementation(libs.rctapi.fabric)
+
+    modImplementation(libs.cobblemon.fabric) {
+        isTransitive = false
+    }
+
+    shadowCommon(project(":common", configuration = "transformProductionFabric"))
+    project(":common", configuration = "namedElements").let {
+        implementation(it)
+        "developmentFabric"(it) { isTransitive = false }
+    }
 }
 
 tasks {
-    val copyAccessWidener by registering(Copy::class) {
-        from(project(":common").file("src/main/resources/rad_gyms.accesswidener"))
-        into(file("src/main/resources").absolutePath)
-    }
-
-    val cleanupGenerated by registering(Delete::class) {
-        delete(file("src/generated"))
-    }
-
-    val copyGenerated by registering(Copy::class) {
-        dependsOn(cleanupGenerated)
-        mustRunAfter(cleanupGenerated)
-        from(project(":common").file("src/generated")) {
-            exclude(".cache/")
+    val copyAccessWidener =
+        register<Copy>("copyAccessWidener") {
+            description = "Copy accessWidener from common"
+            from(project(":common").file("src/main/resources/rad_gyms.accesswidener"))
+            into(file("src/main/resources").absolutePath)
         }
-        into(file("src/generated"))
-    }
+
+    val cleanupGenerated =
+        register<Delete>("cleanupGenerated") {
+            description = "Cleanup generated files"
+            dependsOn(copyAccessWidener)
+            delete(file("src/generated"))
+        }
+
+    val copyGenerated =
+        register<Copy>("copyGenerated") {
+            description = "Copy generated files from common"
+            dependsOn(cleanupGenerated)
+            from(project(":common").file("src/generated")) {
+                exclude(".cache/")
+            }
+            into(file("src/generated"))
+        }
+
+    val copyMixin =
+        register<Copy>("copyMixins") {
+            description = "Copy mixins from common"
+            dependsOn(copyGenerated)
+            from(project(":common").file("src/resources/${project.property("mod_id")}.client.mixins.json"))
+            from(project(":common").file("src/resources/${project.property("mod_id")}.mixins.json"))
+            into(file("src/resources"))
+        }
 
     processResources {
-        dependsOn(copyAccessWidener)
-        dependsOn(copyGenerated)
+        dependsOn(copyMixin)
 
         inputs.property("version", project.version)
 
         filesMatching("fabric.mod.json") {
-            expand(project.properties)
+            expand(
+                mapOf(
+                    "version" to project.version,
+                    "mod_id" to project.property("mod_id"),
+                    "minecraft_version" to project.property("minecraft_version"),
+                    "fabric_loader_version" to project.property("fabric_loader_version"),
+                    "cobblemon_version" to project.property("cobblemon_version"),
+                    "rctapi_min_version" to project.property("rctapi_min_version"),
+                ),
+            )
         }
     }
 

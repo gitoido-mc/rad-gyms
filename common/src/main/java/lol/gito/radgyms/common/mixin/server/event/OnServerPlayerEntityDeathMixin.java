@@ -29,11 +29,11 @@ public abstract class OnServerPlayerEntityDeathMixin {
         Gym gym = RadGymsState.Companion.getGymForPlayer(player);
         if (gym != null) {
             GYM_LEAVE.emit(new GymEvents.GymLeaveEvent(
-                GymLeaveReason.PLAYER_DEATH,
-                player,
-                false,
-                false,
-                gym
+                    GymLeaveReason.PLAYER_DEATH,
+                    player,
+                    false,
+                    false,
+                    gym
             ));
         }
     }

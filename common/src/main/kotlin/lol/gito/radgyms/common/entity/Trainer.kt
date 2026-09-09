@@ -26,9 +26,13 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import java.util.*
+import java.util.Optional.ofNullable
 import kotlin.jvm.optionals.getOrNull
 
-class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(entityType, level) {
+class Trainer(
+    entityType: EntityType<out Trainer>,
+    level: Level,
+) : Villager(entityType, level) {
     companion object {
         fun createAttributes(): AttributeSupplier.Builder = Villager.createAttributes()
 
@@ -66,11 +70,11 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(enti
 
     var trainerId: UUID?
         get() = entityData.get(TRAINER_ID)?.getOrNull()
-        set(value) = entityData.set(TRAINER_ID, Optional<UUID>.ofNullable(value))
+        set(value) = entityData.set(TRAINER_ID, ofNullable(value))
 
     var requires: UUID?
         get() = entityData.get(REQUIRES)?.getOrNull()
-        set(value) = entityData.set(REQUIRES, Optional<UUID>.ofNullable(value))
+        set(value) = entityData.set(REQUIRES, ofNullable(value))
 
     var defeated: Boolean
         get() = entityData.get(DEFEATED) ?: false
@@ -95,25 +99,32 @@ class Trainer(entityType: EntityType<out Trainer>, level: Level) : Villager(enti
 
     override fun isPushable(): Boolean = false
 
-    override fun hurt(source: DamageSource, amount: Float): Boolean = false
+    override fun hurt(
+        source: DamageSource,
+        amount: Float,
+    ): Boolean = false
 
-    override fun defineSynchedData(builder: SynchedEntityData.Builder) = super.defineSynchedData(
-        builder
-            .define(GYM_ID, "default_trainer")
-            .define(FORMAT, GymBattleFormat.SINGLES.name)
-            .define(TRAINER_ID, Optional<UUID>.ofNullable(null))
-            .define(REQUIRES, Optional<UUID>.ofNullable(null))
-            .define(DEFEATED, false)
-            .define(LEADER, false)
-            .define(CONFIGURATION, CompoundTag()),
-    )
+    override fun defineSynchedData(builder: SynchedEntityData.Builder) =
+        super.defineSynchedData(
+            builder
+                .define(GYM_ID, "default_trainer")
+                .define(FORMAT, GymBattleFormat.SINGLES.name)
+                .define(TRAINER_ID, ofNullable(null))
+                .define(REQUIRES, ofNullable(null))
+                .define(DEFEATED, false)
+                .define(LEADER, false)
+                .define(CONFIGURATION, CompoundTag()),
+        )
 
     override fun aiStep() {
         super.aiStep()
         deltaMovement = Vec3.ZERO
     }
 
-    override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
+    override fun mobInteract(
+        player: Player,
+        hand: InteractionHand,
+    ): InteractionResult {
         if (!level().isClientSide) {
             var result: InteractionResult = InteractionResult.FAIL
             TRAINER_INTERACT.postThen(

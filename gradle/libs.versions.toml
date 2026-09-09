@@ -1,0 +1,87 @@
+[versions]
+java = "21"
+kotlin = "2.4.0"
+shadow = "9.4.1"
+
+# Helpers
+axionRelease = "1.21.2"
+spotless = "8.9.0"
+
+# Mod dev plugin version
+wikiToolkit = "0.4.1"
+wiki-exporter-fabric = "2.2.1+1.21.1"
+
+# Minecraft and loader-related versions
+minecraft = "1.21.1"
+fabric-loader = "0.17.2"
+fabric-api = "0.116.6+1.21.1"
+fabric-kotlin = "1.13.12+kotlin.2.4.0"
+fabric-graal="22.3.0"
+fabric-icu4j="71.1"
+neoforge-loader = "21.1.51"
+neoforge-kotlin = "5.10.0"
+mixin-main = "0.17.3+mixin.0.8.7"
+mixin-extras = "0.5.4"
+architectury-dev = "1.17-SNAPSHOT"
+architectury-plugin = "3.5-SNAPSHOT"
+architectury-api = "13.0.8"
+
+# Mod dependencies
+cobblemon = "1.8.0+1.21.1"
+azurelib = "3.1.8"
+rctapi-minVersion = "0.16.0-beta"
+rctapi-common = "8826242"
+rctapi-neoforge = "8826267"
+rctapi-fabric = "8826280"
+aether-fabric = "1.21.1-1.5.8-fabric"
+aether-neoforge = "1.21.1-1.5.8-neoforge"
+
+[libraries]
+# Minecraft libraries
+minecraft = { module = "net.minecraft:minecraft", version.ref = "minecraft" }
+architectury-fabric = { module = "dev.architectury:architectury-fabric", version.ref = "architectury-api" }
+architectury-neoforge = { module = "dev.architectury:architectury-neoforge", version.ref = "architectury-api" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+fabric-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin" }
+neoforge-loader = { module = "net.neoforged:neoforge", version.ref = "neoforge-loader" }
+neoforge-kotlin = { module = "thedarkcolour:kotlinforforge-neoforge", version.ref = "neoforge-kotlin" }
+mixin-main = { module = "net.fabricmc:sponge-mixin", version.ref = "mixin-main" }
+mixin-extras = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
+
+# Mod dependencies
+wikiExporter = { module = "org.sinytra:wiki-exporter-fabric", version.ref = "wiki-exporter-fabric" }
+cobblemon-common = { module = "com.cobblemon:mod", version.ref = "cobblemon" }
+cobblemon-fabric = { module = "com.cobblemon:fabric", version.ref = "cobblemon" }
+cobblemon-neoforge = { module = "com.cobblemon:neoforge", version.ref = "cobblemon" }
+rctapi-common = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-common" }
+rctapi-fabric = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-fabric" }
+rctapi-neoforge = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-neoforge" }
+azurelib-common = { module = "mod.azure.azurelib:azurelib-common-1.21.1", version.ref = "azurelib" }
+azurelib-fabric = { module = "mod.azure.azurelib:azurelib-fabric-1.21.1", version.ref = "azurelib" }
+azurelib-neoforge = { module = "mod.azure.azurelib:azurelib-neo-1.21.1", version.ref = "azurelib" }
+aether-fabric = { module = "com.aetherteam.aether:aether", version.ref = "aether-fabric" }
+aether-neoforge = { module = "com.aetherteam.aether:aether", version.ref = "aether-neoforge" }
+graalvm-js = {module= "org.graalvm.js:js", version.ref="fabric-graal"}
+graalvm-sdk = {module= "org.graalvm.sdk:graal-sdk", version.ref="fabric-graal"}
+graalvm-regex = {module= "org.graalvm.regex:regex", version.ref="fabric-graal"}
+graalvm-truffle = {module= "org.graalvm.truffle:truffle-api", version.ref="fabric-graal"}
+graalvm-icu4j = {module= "com.ibm.icu:icu4j", version.ref="fabric-icu4j"}
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+axionRelease = { id = "pl.allegro.tech.build.axion-release", version.ref = "axionRelease" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+rg-root = { id = "rg.root-convention" }
+rg-shared = { id = "rg.shared-convention" }
+rg-common = { id = "rg.common-convention" }
+
+# Minecraft plugins
+wikiToolkit = { id = "org.moddedmc.wiki.toolkit", version.ref = "wikiToolkit" }
+architectury-dev = { id = "dev.architectury.loom-remap", version.ref = "architectury-dev" }
+architectury-plugin = { id = "architectury-plugin", version.ref = "architectury-plugin" }
+
+[bundles]
+common-mixin = ["mixin-main", "mixin-extras"]
+fabric-runtimeOnly = ["wikiExporter" ,"graalvm-js", "graalvm-sdk", "graalvm-regex", "graalvm-truffle", "graalvm-icu4j"]

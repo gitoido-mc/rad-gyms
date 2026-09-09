@@ -29,46 +29,47 @@ object RadGymsConfigs {
     fun load() {
         check(this::configDir.isInitialized)
 
-        server = loadJson(
-            configDir.resolve("${MOD_ID}_server.json"),
-            ServerConfig::class.java,
-            ServerConfig(),
-        )
+        server =
+            loadJson(
+                configDir.resolve("${MOD_ID}_server.json"),
+                ServerConfig::class.java,
+                ServerConfig(),
+            )
     }
 
     fun loadClient() {
         check(this::configDir.isInitialized)
 
-        client = loadJson(
-            configDir.resolve("${MOD_ID}_client.json"),
-            ClientConfig::class.java,
-            ClientConfig(),
-        )
+        client =
+            loadJson(
+                configDir.resolve("${MOD_ID}_client.json"),
+                ClientConfig::class.java,
+                ClientConfig(),
+            )
     }
 
-    private fun <T> loadJson(path: Path, type: Class<T>, defaults: T): T = try {
-        Files.createDirectories(path.parent)
+    private fun <T> loadJson(
+        path: Path,
+        type: Class<T>,
+        defaults: T,
+    ): T =
+        try {
+            Files.createDirectories(path.parent)
 
-        if (!Files.exists(path)) {
-            Files.newBufferedWriter(path).use { w ->
-                gson.toJson(defaults, w)
+            if (!Files.exists(path)) {
+                Files.newBufferedWriter(path).use { w ->
+                    gson.toJson(defaults, w)
+                }
+                return defaults
             }
+
+            Files.newBufferedReader(path).use { r ->
+                val parsed: T? = gson.fromJson(r, type)
+                return parsed ?: defaults
+            }
+        } catch (_: Exception) {
             return defaults
         }
-
-        Files.newBufferedReader(path).use { r ->
-            val parsed: T? = gson.fromJson(r, type)
-            return parsed ?: defaults
-        }
-    } catch (_: Exception) {
-        return defaults
-    }
-
-    fun reload() = load()
-
-    fun reloadClient() {
-        loadClient()
-    }
 
     fun sync(config: ServerConfig) {
         server = config

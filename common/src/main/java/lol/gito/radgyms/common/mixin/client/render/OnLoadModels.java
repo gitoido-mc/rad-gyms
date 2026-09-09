@@ -35,46 +35,46 @@ public abstract class OnLoadModels {
     private Map<ResourceLocation, BlockModel> modelResources;
 
     @Shadow
-    protected abstract void loadSpecialItemModelAndDependencies(ModelResourceLocation id);
+    protected abstract void loadSpecialItemModelAndDependencies(ModelResourceLocation modelResourceLocation);
 
     @Inject(
-        method = "<init>",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V",
-            ordinal = 0,
-            shift = At.Shift.AFTER
-        )
+            method = "<init>",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V",
+                    ordinal = 0,
+                    shift = At.Shift.AFTER
+            )
     )
     public void init(
-        BlockColors blockColors,
-        ProfilerFiller profiler,
-        Map<ResourceLocation, BlockModel> jsonUnbakedModels,
-        Map<ResourceLocation, List<ModelBakery.TextureGetter>> blockStates,
-        CallbackInfo ci
+            BlockColors blockColors,
+            ProfilerFiller profilerFiller,
+            Map<ResourceLocation, BlockModel> map,
+            Map<ResourceLocation, List<ModelBakery.TextureGetter>> map2,
+            CallbackInfo ci
     ) {
         this.modelResources.keySet().stream()
-            .filter(id -> {
-                String path = id.getPath();
-                boolean check = path.startsWith("models/item/gym_key") && path.endsWith(".json");
-                if (check) {
-                    debug("Loaded custom model {} for gym key", path);
-                }
-                return check;
-            })
-            .map(id -> id
-                .withPath(
-                    id.getPath()
-                        .substring(
-                            "models/item/".length(),
-                            id.getPath().length() - ".json".length()
+                .filter(id -> {
+                    String path = id.getPath();
+                    boolean check = path.startsWith("models/item/gym_key") && path.endsWith(".json");
+                    if (check) {
+                        debug("Loaded custom model {} for gym key", path);
+                    }
+                    return check;
+                })
+                .map(id -> id
+                        .withPath(
+                                id.getPath()
+                                        .substring(
+                                                "models/item/".length(),
+                                                id.getPath().length() - ".json".length()
+                                        )
                         )
                 )
-            )
-            .forEach(id -> Arrays.stream(ItemDisplayContext.values())
-                .forEach(item ->
-                    this.loadSpecialItemModelAndDependencies(RadGymsClient.modModelId(id, item.getSerializedName()))
-                )
-            );
+                .forEach(id -> Arrays.stream(ItemDisplayContext.values())
+                        .forEach(item ->
+                                this.loadSpecialItemModelAndDependencies(RadGymsClient.modModelId(id, item.getSerializedName()))
+                        )
+                );
     }
 }

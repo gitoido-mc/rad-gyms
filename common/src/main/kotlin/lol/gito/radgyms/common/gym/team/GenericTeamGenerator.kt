@@ -30,10 +30,14 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         const val GENERATOR_SHINY_ODDS = 10
     }
 
-    protected fun setLevel(level: Int, params: String): PokemonProperties = when (params.contains("level=")) {
-        true -> PokemonProperties.parse(params)
-        false -> PokemonProperties.parse("level=$level $params")
-    }
+    protected fun setLevel(
+        level: Int,
+        params: String,
+    ): PokemonProperties =
+        when (params.contains("level=")) {
+            true -> PokemonProperties.parse(params)
+            false -> PokemonProperties.parse("level=$level $params")
+        }
 
     override fun generateTeam(
         trainer: Trainer,
@@ -42,10 +46,11 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         possibleFormats: MutableList<GymBattleFormat>?,
         types: List<ElementalType>?,
     ): MutableList<PokemonModel> {
-        val pokemonCount = trainer.countPerLevelThreshold
-            .filter { it.untilLevel >= level }
-            .minByOrNull { it.untilLevel }
-            ?.amount ?: 1
+        val pokemonCount =
+            trainer.countPerLevelThreshold
+                .filter { it.untilLevel >= level }
+                .minByOrNull { it.untilLevel }
+                ?.amount ?: 1
 
         val rawTeam = mutableListOf<PokemonProperties>()
 
@@ -59,15 +64,16 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
             )
         }
 
-        val event = GymEvents.GenerateTeamEvent(
-            player,
-            types ?: defaultElementalTypes.shuffled().take(1).map { ElementalTypes.getOrException(it) },
-            level,
-            trainer.id,
-            trainer.leader,
-            rawTeam,
-            possibleFormats = mutableListOf(GymBattleFormat.SINGLES),
-        )
+        val event =
+            GymEvents.GenerateTeamEvent(
+                player,
+                types ?: defaultElementalTypes.shuffled().take(1).map { ElementalTypes.getOrException(it) },
+                level,
+                trainer.id,
+                trainer.leader,
+                rawTeam,
+                possibleFormats = mutableListOf(GymBattleFormat.SINGLES),
+            )
 
         val team = mutableListOf<PokemonModel>()
 
@@ -79,54 +85,65 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         return team
     }
 
-    override fun generatePokemon(level: Int, amount: Int, type: ElementalType): Pokemon {
+    override fun generatePokemon(
+        level: Int,
+        amount: Int,
+        type: ElementalType,
+    ): Pokemon {
         val derived = speciesByType[type.showdownId]!!.random()
 
         return getPokemon(derived, level)
     }
 
-    protected fun getPokemon(speciesWithForm: SpeciesWithForm, level: Int) =
-        with(speciesWithForm.species.create(level)) {
-            form = speciesWithForm.form
-            forcedAspects = speciesWithForm.form.aspects.toSet()
-            shiny = (Random.nextInt(1, GENERATOR_SHINY_ODDS) == 1)
-            updateAspects()
+    protected fun getPokemon(
+        speciesWithForm: SpeciesWithForm,
+        level: Int,
+    ) = with(speciesWithForm.species.create(level)) {
+        form = speciesWithForm.form
+        forcedAspects = speciesWithForm.form.aspects.toSet()
+        shiny = (Random.nextInt(1, GENERATOR_SHINY_ODDS) == 1)
+        updateAspects()
 
-            return@with this
-        }
+        return@with this
+    }
 
     protected fun createPokemonModel(properties: PokemonProperties) = createPokemonModel(properties.create())
 
-    protected fun createPokemonModel(poke: Pokemon) = PokemonModel(
-        poke.species.resourceIdentifier.path,
-        poke.gender.toString(),
-        poke.level,
-        poke.nature.name.path,
-        poke.ability.name,
-        poke.moveSet.map { it.name }.toSet(),
-        PokemonModel.StatsModel(
-            poke.ivs.getOrDefault(Stats.HP),
-            poke.ivs.getOrDefault(Stats.ATTACK),
-            poke.ivs.getOrDefault(Stats.DEFENCE),
-            poke.ivs.getOrDefault(Stats.SPECIAL_ATTACK),
-            poke.ivs.getOrDefault(Stats.SPECIAL_DEFENCE),
-            poke.ivs.getOrDefault(Stats.SPEED),
-        ),
-        PokemonModel.StatsModel(
-            poke.evs.getOrDefault(Stats.HP),
-            poke.evs.getOrDefault(Stats.ATTACK),
-            poke.evs.getOrDefault(Stats.DEFENCE),
-            poke.evs.getOrDefault(Stats.SPECIAL_ATTACK),
-            poke.evs.getOrDefault(Stats.SPECIAL_DEFENCE),
-            poke.evs.getOrDefault(Stats.SPEED),
-        ),
-        poke.shiny,
-        poke.heldItem().itemHolder.registeredName,
-        poke.aspects,
-    )
+    protected fun createPokemonModel(poke: Pokemon) =
+        PokemonModel(
+            poke.species.resourceIdentifier.path,
+            poke.gender.toString(),
+            poke.level,
+            poke.nature.name.path,
+            poke.ability.name,
+            poke.moveSet.map { it.name }.toSet(),
+            PokemonModel.StatsModel(
+                poke.ivs.getOrDefault(Stats.HP),
+                poke.ivs.getOrDefault(Stats.ATTACK),
+                poke.ivs.getOrDefault(Stats.DEFENCE),
+                poke.ivs.getOrDefault(Stats.SPECIAL_ATTACK),
+                poke.ivs.getOrDefault(Stats.SPECIAL_DEFENCE),
+                poke.ivs.getOrDefault(Stats.SPEED),
+            ),
+            PokemonModel.StatsModel(
+                poke.evs.getOrDefault(Stats.HP),
+                poke.evs.getOrDefault(Stats.ATTACK),
+                poke.evs.getOrDefault(Stats.DEFENCE),
+                poke.evs.getOrDefault(Stats.SPECIAL_ATTACK),
+                poke.evs.getOrDefault(Stats.SPECIAL_DEFENCE),
+                poke.evs.getOrDefault(Stats.SPEED),
+            ),
+            poke.shiny,
+            poke.heldItem().itemHolder.registeredName,
+            poke.aspects,
+        )
 
-    protected fun rawTeam(trainer: Trainer, level: Int): MutableList<PokemonProperties> = trainer.team!!
-        .map { setLevel(level, it) }
-        .apply { this.forEach { it.updateAspects() } }
-        .toMutableList()
+    protected fun rawTeam(
+        trainer: Trainer,
+        level: Int,
+    ): MutableList<PokemonProperties> =
+        trainer.team!!
+            .map { setLevel(level, it) }
+            .apply { this.forEach { it.updateAspects() } }
+            .toMutableList()
 }

@@ -29,15 +29,16 @@ object RadGymsTemplates : JsonDataRegistry<GymJson> {
     override val resourcePath: String = SLUG
     override val id: ResourceLocation = modId(SLUG)
     override val type: PackType = PackType.SERVER_DATA
-    override val observable: SimpleObservable<RadGymsTemplates> = SimpleObservable<RadGymsTemplates>()
+    override val observable: SimpleObservable<RadGymsTemplates> = SimpleObservable()
     override val typeToken: TypeToken<GymJson> = TypeToken.of(GymJson::class.java)
-    override val gson: Gson = GsonBuilder()
-        .disableHtmlEscaping()
-        .setPrettyPrinting()
-        .registerTypeAdapter(RewardInterface::class.java, RewardTypeAdapter)
-        .registerTypeAdapter(ElementalType::class.java, ElementalTypeAdapter)
-        .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
-        .create()
+    override val gson: Gson =
+        GsonBuilder()
+            .disableHtmlEscaping()
+            .setPrettyPrinting()
+            .registerTypeAdapter(RewardInterface::class.java, RewardTypeAdapter)
+            .registerTypeAdapter(ElementalType::class.java, ElementalTypeAdapter)
+            .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
+            .create()
 
     val templates = mutableMapOf<String, GymJson>()
 

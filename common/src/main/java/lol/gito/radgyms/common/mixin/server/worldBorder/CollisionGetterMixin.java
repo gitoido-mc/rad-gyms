@@ -26,30 +26,30 @@ import java.util.stream.Stream;
 @Mixin(CollisionGetter.class)
 public interface CollisionGetterMixin {
     @WrapOperation(
-        method = "borderCollision",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/CollisionGetter;getWorldBorder()Lnet/minecraft/world/level/border/WorldBorder;"
-        )
+            method = "borderCollision",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/CollisionGetter;getWorldBorder()Lnet/minecraft/world/level/border/WorldBorder;"
+            )
     )
-    private WorldBorder sendModifiedBorder(CollisionGetter instance, Operation<WorldBorder> original, @Local(argsOnly = true) Entity entity) {
+    private WorldBorder sendModifiedBorder(CollisionGetter instance, Operation<WorldBorder> original, @Local(argsOnly = true, name = "entity") Entity entity) {
         if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return original.call(instance);
     }
 
     @SuppressWarnings("rawtypes")
     @WrapOperation(
-        method = "findFreePosition(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/shapes/VoxelShape;Lnet/minecraft/world/phys/Vec3;DDD)Ljava/util/Optional;",
-        at = @At(
-            value = "INVOKE",
-            target = "Ljava/util/stream/Stream;filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;"
-        )
+            method = "findFreePosition(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/shapes/VoxelShape;Lnet/minecraft/world/phys/Vec3;DDD)Ljava/util/Optional;",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/stream/Stream;filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;"
+            )
     )
-    private Stream sendModifiedBorder(Stream instance, Predicate predicate, Operation<Stream> original, @Local(argsOnly = true) Entity entity) {
+    private Stream sendModifiedBorder(Stream instance, Predicate predicate, Operation<Stream> original, @Local(argsOnly = true, name = "entity") Entity entity) {
         if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) {
             Predicate newPredicate = voxelShape -> RadGyms
-                .dimensionWorldBorder
-                .isWithinBounds(((VoxelShape)voxelShape).bounds());
+                    .dimensionWorldBorder
+                    .isWithinBounds(((VoxelShape) voxelShape).bounds());
             return original.call(instance, newPredicate);
         }
         return original.call(instance, predicate);

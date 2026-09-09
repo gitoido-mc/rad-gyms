@@ -35,7 +35,7 @@ object ReloadCommand : CommandInterface {
     }
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
-        RadGymsConfigs.reload()
+        RadGymsConfigs.load()
         context.source.player?.displayClientMessage(tl(modId("message.info.command.config_reloaded")))
         return Command.SINGLE_SUCCESS
     }

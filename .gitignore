@@ -43,7 +43,8 @@ docs/src/pages/.vault-nickname
 # project specific
 /.ignored/
 /.architectury-transformer/
-/*/run/
+/*/runClient/
+/*/runServer/
 
 /common/jars/
 /fabric/jars/

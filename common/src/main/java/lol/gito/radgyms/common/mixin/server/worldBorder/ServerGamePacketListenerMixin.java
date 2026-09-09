@@ -20,13 +20,13 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ServerGamePacketListenerImpl.class)
 public class ServerGamePacketListenerMixin {
     @ModifyReceiver(
-        method = "handleInteract(Lnet/minecraft/network/protocol/game/ServerboundInteractPacket;)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/border/WorldBorder;isWithinBounds(Lnet/minecraft/core/BlockPos;)Z"
-        )
+            method = "handleInteract(Lnet/minecraft/network/protocol/game/ServerboundInteractPacket;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/border/WorldBorder;isWithinBounds(Lnet/minecraft/core/BlockPos;)Z"
+            )
     )
-    private WorldBorder modifyContains(WorldBorder defaultBorder, BlockPos pos) {
+    private WorldBorder modifyContains(WorldBorder defaultBorder, BlockPos blockPos) {
         ServerPlayer player = ((ServerGamePacketListenerImpl) (Object) this).player;
         //noinspection resource
         if (player.level().dimension() != RadGymsDimensions.GYM_DIMENSION) return defaultBorder;

@@ -44,24 +44,24 @@ public abstract class OnRenderItemModel {
     final private DataComponentType<String> RadGyms$typeComponent = RadGymsDataComponents.RG_GYM_TYPE_COMPONENT;
 
     @Inject(
-        method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z",
-            shift = At.Shift.AFTER
-        )
+            method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z",
+                    shift = At.Shift.AFTER
+            )
     )
     private void RadGyms$overrideKeyModel(
-        ItemStack stack,
-        ItemDisplayContext renderMode,
-        boolean leftHanded,
-        PoseStack matrices,
-        MultiBufferSource vertexConsumers,
-        int light,
-        int overlay,
-        BakedModel model,
-        CallbackInfo ci,
-        @Local(argsOnly = true) LocalRef<BakedModel> override
+            ItemStack stack,
+            ItemDisplayContext renderMode,
+            boolean leftHanded,
+            PoseStack matrices,
+            MultiBufferSource vertexConsumers,
+            int light,
+            int overlay,
+            BakedModel model,
+            CallbackInfo ci,
+            @Local(argsOnly = true, name = "bakedModel") LocalRef<BakedModel> override
     ) {
         if (stack.is(RadGymsItems.GYM_KEY) && stack.get(RadGyms$typeComponent) != null) {
             String type = stack.get(RadGyms$typeComponent);

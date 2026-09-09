@@ -20,11 +20,11 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Entity.class)
 public class EntityMixin {
     @WrapOperation(
-        method = "collectColliders(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/Level;Ljava/util/List;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/Level;getWorldBorder()Lnet/minecraft/world/level/border/WorldBorder;"
-        )
+            method = "collectColliders(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/Level;Ljava/util/List;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/Level;getWorldBorder()Lnet/minecraft/world/level/border/WorldBorder;"
+            )
     )
     private static WorldBorder sendModifiedBorder(Level instance, Operation<WorldBorder> original, Entity entity, Level level) {
         if (level.dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;

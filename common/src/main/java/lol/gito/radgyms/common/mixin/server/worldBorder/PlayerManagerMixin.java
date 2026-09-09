@@ -20,14 +20,14 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(PlayerList.class)
 public class PlayerManagerMixin {
     @ModifyExpressionValue(
-        method = "sendLevelInfo(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/server/level/ServerLevel;)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/server/level/ServerLevel;getWorldBorder()Lnet/minecraft/world/level/border/WorldBorder;"
-        )
+            method = "sendLevelInfo(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/server/level/ServerLevel;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/server/level/ServerLevel;getWorldBorder()Lnet/minecraft/world/level/border/WorldBorder;"
+            )
     )
-    private WorldBorder sendModifiedBorder(WorldBorder original, ServerPlayer player, ServerLevel level) {
-        if (level.dimension() != RadGymsDimensions.GYM_DIMENSION) return original;
+    private WorldBorder sendModifiedBorder(WorldBorder original, ServerPlayer serverPlayer, ServerLevel serverLevel) {
+        if (serverLevel.dimension() != RadGymsDimensions.GYM_DIMENSION) return original;
         return RadGyms.dimensionWorldBorder;
     }
 }

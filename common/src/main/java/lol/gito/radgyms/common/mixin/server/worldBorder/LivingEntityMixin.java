@@ -21,24 +21,24 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
     @ModifyReceiver(
-        method = "baseTick()V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/border/WorldBorder;isWithinBounds(Lnet/minecraft/world/phys/AABB;)Z"
-        )
+            method = "baseTick()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/border/WorldBorder;isWithinBounds(Lnet/minecraft/world/phys/AABB;)Z"
+            )
     )
-    private WorldBorder modifyContains(WorldBorder defaultBorder, AABB box) {
-        LivingEntity entity = ((LivingEntity)(Object)this);
+    private WorldBorder modifyContains(WorldBorder defaultBorder, AABB aABB) {
+        LivingEntity entity = ((LivingEntity) (Object) this);
         if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return defaultBorder;
     }
 
     @ModifyReceiver(
-        method = "baseTick()V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/border/WorldBorder;getDistanceToBorder(Lnet/minecraft/world/entity/Entity;)D"
-        )
+            method = "baseTick()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/border/WorldBorder;getDistanceToBorder(Lnet/minecraft/world/entity/Entity;)D"
+            )
     )
     private WorldBorder modifyDistanceInsideBorder(WorldBorder defaultBorder, Entity entity) {
         if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
@@ -46,27 +46,27 @@ public class LivingEntityMixin {
     }
 
     @ModifyReceiver(
-        method = "baseTick()V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/border/WorldBorder;getDamageSafeZone()D"
-        )
+            method = "baseTick()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/border/WorldBorder;getDamageSafeZone()D"
+            )
     )
     private WorldBorder modifySafeZone(WorldBorder defaultBorder) {
-        LivingEntity entity = ((LivingEntity)(Object)this);
+        LivingEntity entity = ((LivingEntity) (Object) this);
         if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return defaultBorder;
     }
 
     @ModifyReceiver(
-        method = "baseTick()V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/border/WorldBorder;getDamagePerBlock()D"
-        )
+            method = "baseTick()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/border/WorldBorder;getDamagePerBlock()D"
+            )
     )
     private WorldBorder modifyDamagePerBlock(WorldBorder defaultBorder) {
-        LivingEntity entity = ((LivingEntity)(Object)this);
+        LivingEntity entity = ((LivingEntity) (Object) this);
         if (entity.level().dimension() == RadGymsDimensions.GYM_DIMENSION) return RadGyms.dimensionWorldBorder;
         return defaultBorder;
     }

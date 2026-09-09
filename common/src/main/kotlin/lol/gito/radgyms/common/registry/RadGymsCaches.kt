@@ -24,12 +24,13 @@ object RadGymsCaches : JsonDataRegistry<CacheDTO> {
     override val resourcePath: String = SLUG
     override val id: ResourceLocation = modId(SLUG)
     override val type: PackType = PackType.SERVER_DATA
-    override val observable: SimpleObservable<RadGymsCaches> = SimpleObservable<RadGymsCaches>()
+    override val observable: SimpleObservable<RadGymsCaches> = SimpleObservable()
     override val typeToken: TypeToken<CacheDTO> = TypeToken.of(CacheDTO::class.java)
-    override val gson: Gson = GsonBuilder()
-        .disableHtmlEscaping()
-        .setPrettyPrinting()
-        .create()
+    override val gson: Gson =
+        GsonBuilder()
+            .disableHtmlEscaping()
+            .setPrettyPrinting()
+            .create()
 
     val caches = mutableMapOf<ResourceLocation, CacheDTO>()
 
