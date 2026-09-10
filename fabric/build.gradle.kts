@@ -27,7 +27,7 @@ architectury {
 
 wiki {
     wikiAccessToken = providers.systemProperty("moddedmc_gh_token").get()
-    docs.create(project.property("mod_id") as String) {
+    docs.create(rootProject.property("mod_id") as String) {
         root = file("../docs/rad_gyms")
     }
 }
@@ -147,11 +147,24 @@ tasks {
             expand(
                 mapOf(
                     "version" to project.version,
-                    "mod_id" to project.property("mod_id"),
-                    "minecraft_version" to project.property("minecraft_version"),
-                    "fabric_loader_version" to project.property("fabric_loader_version"),
-                    "cobblemon_version" to project.property("cobblemon_version"),
-                    "rctapi_min_version" to project.property("rctapi_min_version"),
+                    "mod_id" to rootProject.property("mod_id"),
+                    "minecraft_version" to libs.versions.minecraft.get(),
+                    "architectury_version" to
+                        libs.versions.architectury.api
+                            .get(),
+                    "fabric_loader_version" to
+                        libs.versions.fabric.loader
+                            .get(),
+                    "cobblemon_version" to
+                        libs.versions.cobblemon
+                            .get()
+                            .split("+")
+                            .first(),
+                    "rctapi_min_version" to
+                        libs.versions.rctapi.minVersion
+                            .get(),
+                    "cf_id" to rootProject.property("cf_id"),
+                    "mr_id" to rootProject.property("mr_id"),
                 ),
             )
         }

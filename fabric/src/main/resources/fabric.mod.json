@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "rad_gyms",
+  "id": "${mod_id}",
   "version": "${version}",
   "name": "Rad Gyms",
   "description": "Adds roguelike gyms in Cobblemon. RCT Api based mod.",
@@ -12,7 +12,7 @@
     "sources": "https://github.com/gitoido-mc/rad-gyms"
   },
   "license": "GPL-3.0-only",
-  "icon": "assets/rad_gyms/icon.png",
+  "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -35,29 +35,29 @@
     ]
   },
   "mixins": [
-    "rad_gyms.fabric.mixins.json",
-    "rad_gyms.mixins.json",
+    "${mod_id}.fabric.mixins.json",
+    "${mod_id}.mixins.json",
     {
-      "config": "rad_gyms.client.mixins.json",
+      "config": "${mod_id}.client.mixins.json",
       "environment": "client"
     }
   ],
-  "accessWidener": "rad_gyms.accesswidener",
+  "accessWidener": "${mod_id}.accesswidener",
   "depends": {
     "java": ">=21",
-    "minecraft": "~1.21.1",
-    "fabricloader": ">=0.17.2",
+    "minecraft": "~${minecraft_version}",
+    "fabricloader": ">=${fabric_loader_version}",
     "fabric": "*",
     "fabric-api": "*",
     "fabric-language-kotlin": "*",
-    "architectury": ">=13.0.8",
+    "architectury": ">=${architectury_version}",
     "rctapi": ">=${rctapi_min_version}",
-    "cobblemon": ">=${cobblemon_version}+1.21.1 <1.8.0+1.21.1"
+    "cobblemon": ">=${cobblemon_version} <1.9.0"
   },
   "custom": {
     "mc-publish": {
-      "modrinth": "eF8kqlHd",
-      "curseforge": "1196570"
+      "modrinth": "${mr_id}",
+      "curseforge": "${cf_id}"
     }
   }
 }

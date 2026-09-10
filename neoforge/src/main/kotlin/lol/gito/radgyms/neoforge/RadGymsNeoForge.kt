@@ -245,6 +245,8 @@ class RadGymsNeoForge : RadGymsImplementation {
     }
 
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
+        if (!RadGymsConfigs::server.isInitialized)
+
         var canCancel: Boolean
         canCancel = (e.level !is ServerLevel)
         if (!canCancel && (e.level as ServerLevel).dimension() == GYM_DIMENSION) {

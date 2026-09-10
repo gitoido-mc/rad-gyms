@@ -19,7 +19,7 @@ fabric-kotlin = "1.13.12+kotlin.2.4.0"
 fabric-graal="22.3.0"
 fabric-icu4j="71.1"
 neoforge-loader = "21.1.51"
-neoforge-kotlin = "5.10.0"
+neoforge-kotlin = "5.11.0"
 mixin-main = "0.17.3+mixin.0.8.7"
 mixin-extras = "0.5.4"
 architectury-dev = "1.17-SNAPSHOT"
@@ -28,7 +28,6 @@ architectury-api = "13.0.8"
 
 # Mod dependencies
 cobblemon = "1.8.0+1.21.1"
-azurelib = "3.1.8"
 rctapi-minVersion = "0.16.0-beta"
 rctapi-common = "8826242"
 rctapi-neoforge = "8826267"
@@ -45,7 +44,10 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 fabric-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin" }
 neoforge-loader = { module = "net.neoforged:neoforge", version.ref = "neoforge-loader" }
-neoforge-kotlin = { module = "thedarkcolour:kotlinforforge-neoforge", version.ref = "neoforge-kotlin" }
+neoforge-kotlin-pack = { module = "thedarkcolour:kotlinforforge-neoforge", version.ref = "neoforge-kotlin" }
+neoforge-kotlin-kfflang = { module = "thedarkcolour:kfflang-neoforge", version.ref = "neoforge-kotlin" }
+neoforge-kotlin-kfflib = { module = "thedarkcolour:kfflib-neoforge", version.ref = "neoforge-kotlin" }
+neoforge-kotlin-kffmod = { module = "thedarkcolour:kffmod-neoforge", version.ref = "neoforge-kotlin" }
 mixin-main = { module = "net.fabricmc:sponge-mixin", version.ref = "mixin-main" }
 mixin-extras = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
 
@@ -57,9 +59,6 @@ cobblemon-neoforge = { module = "com.cobblemon:neoforge", version.ref = "cobblem
 rctapi-common = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-common" }
 rctapi-fabric = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-fabric" }
 rctapi-neoforge = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-neoforge" }
-azurelib-common = { module = "mod.azure.azurelib:azurelib-common-1.21.1", version.ref = "azurelib" }
-azurelib-fabric = { module = "mod.azure.azurelib:azurelib-fabric-1.21.1", version.ref = "azurelib" }
-azurelib-neoforge = { module = "mod.azure.azurelib:azurelib-neo-1.21.1", version.ref = "azurelib" }
 aether-fabric = { module = "com.aetherteam.aether:aether", version.ref = "aether-fabric" }
 aether-neoforge = { module = "com.aetherteam.aether:aether", version.ref = "aether-neoforge" }
 graalvm-js = {module= "org.graalvm.js:js", version.ref="fabric-graal"}
@@ -85,3 +84,4 @@ architectury-plugin = { id = "architectury-plugin", version.ref = "architectury-
 [bundles]
 common-mixin = ["mixin-main", "mixin-extras"]
 fabric-runtimeOnly = ["wikiExporter" ,"graalvm-js", "graalvm-sdk", "graalvm-regex", "graalvm-truffle", "graalvm-icu4j"]
+neoforge-kotlin = ["neoforge-kotlin-kfflang", "neoforge-kotlin-kfflib", "neoforge-kotlin-kffmod"]

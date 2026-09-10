@@ -74,4 +74,8 @@ object RadGymsConfigs {
     fun sync(config: ServerConfig) {
         server = config
     }
+
+    fun isServerLoaded() = this::server.isInitialized
+
+    fun isClientLoaded() = this::client.isInitialized
 }

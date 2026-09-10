@@ -50,7 +50,7 @@
         {
           "type": "minecraft:item",
           "name": "cobblemon:bug_gem",
-          "weight": 5
+          "weight": 0
         }
       ],
       "rolls": 1.0

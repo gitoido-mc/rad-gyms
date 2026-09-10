@@ -1,14 +1,14 @@
 modLoader="kotlinforforge"
-loaderVersion="[5.10,)"
+loaderVersion="[5,)"
 license='''GPL-3.0-only'''
 
 
 [[mods]]
-modId="${mod_id}"
-version="${version}"
+modId="rad_gyms"
+version="0.4.5"
 displayName="Rad Gyms"
-credits="Thanks to thedarkcolour and all the contributors for making Kotlin for Forge"
-authors="Gitoido <corpa@gito.lol>"
+credits="Thanks to Cobblemon team for a great mod, hd42 for RCT Api, Gensir017 for original CobGyms mod!"
+authors="Gito <corpa@gito.lol>"
 description='''Adds roguelike gyms in Cobblemon. RCT Api based mod.'''
 
 
@@ -20,30 +20,30 @@ config = "rad_gyms.client.mixins.json"
 config = "rad_gyms.neoforge.mixins.json"
 
 
-[[dependencies.${mod_id}]]
+[[dependencies.rad_gyms]]
 modId="minecraft"
 type="required"
-versionRange="[${minecraft_version}]"
+versionRange="[1.21.1]"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.rad_gyms]]
 modId="neoforge"
 type="required"
-versionRange="[${neoforge_version},)"
+versionRange="[21.1.51,)"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.rad_gyms]]
 modId = "cobblemon"
 mandatory = true
-versionRange = "[${cobblemon_version},)"
+versionRange = "[1.8.0,)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.rad_gyms]]
 modId="rctapi"
 mandatory=true
-versionRange="[${rctapi_min_version},)"
-ordering="NONE"
+versionRange="[0.16.0-beta,)"
+ordering="AFTER"
 side="BOTH"

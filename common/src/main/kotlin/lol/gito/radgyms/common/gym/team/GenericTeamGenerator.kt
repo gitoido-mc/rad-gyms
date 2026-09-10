@@ -90,7 +90,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         amount: Int,
         type: ElementalType,
     ): Pokemon {
-        val derived = speciesByType[type.showdownId]!!.random()
+        val derived = speciesByType[type]!!.random()
 
         return getPokemon(derived, level)
     }

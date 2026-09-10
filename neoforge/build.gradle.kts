@@ -54,7 +54,7 @@ dependencies {
     minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
     neoForge(libs.neoforge.loader)
-    implementation(libs.neoforge.kotlin) {
+    implementation(libs.neoforge.kotlin.pack) {
         exclude("net.neoforged.fancymodloader", "loader")
     }
 
@@ -68,8 +68,12 @@ dependencies {
 
     shadowCommon(project(":common", configuration = "transformProductionNeoForge"))
     project(":common", configuration = "namedElements").let {
-        implementation(it)
-        "developmentNeoForge"(it)
+        implementation(it) {
+            exclude("org.jetbrains.kotlin", "kotlin-stdlib")
+        }
+        "developmentNeoForge"(it) {
+            exclude("org.jetbrains.kotlin", "kotlin-stdlib")
+        }
     }
 }
 
@@ -113,14 +117,25 @@ tasks {
             filesMatching("META-INF/neoforge.mods.toml") {
                 expand(
                     mapOf(
-                        "version" to version,
-                        "mod_id" to modId,
+                        "version" to project.version,
+                        "mod_id" to rootProject.property("mod_id"),
                         "minecraft_version" to libs.versions.minecraft.get(),
+                        "architectury_version" to
+                            libs.versions.architectury.api
+                                .get(),
                         "neoforge_version" to
                             libs.versions.neoforge.loader
                                 .get(),
-                        "cobblemon_version" to cobblemonVersion,
-                        "rctapi_min_version" to rctApiVersion,
+                        "cobblemon_version" to
+                            libs.versions.cobblemon
+                                .get()
+                                .split("+")
+                                .first(),
+                        "rctapi_min_version" to
+                            libs.versions.rctapi.minVersion
+                                .get(),
+                        "cf_id" to rootProject.property("cf_id"),
+                        "mr_id" to rootProject.property("mr_id"),
                     ),
                 )
             }

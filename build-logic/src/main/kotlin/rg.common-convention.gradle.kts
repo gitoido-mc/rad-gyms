@@ -48,12 +48,12 @@ tasks {
 
     remapJar {
         archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
+        archiveVersion.set("${rootProject.version}")
     }
 
     remapSourcesJar {
         archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
+        archiveVersion.set("${rootProject.version}")
         archiveClassifier.set("sources")
     }
 }

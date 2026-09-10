@@ -21,65 +21,14 @@ import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
 
 private typealias SpeciesWithForms = List<SpeciesWithForm>
 
-private fun PokemonProperties.matchesSimplified(other: SpeciesWithForm): Boolean {
-    if ((this.species != null && this.species != "random") && this.aspects.isNotEmpty()) {
-        return this.species == other.species.resourceIdentifier.path && other.form.aspects.containsAll(this.aspects)
-    }
-
-    if (this.species == null && this.aspects.isNotEmpty()) {
-        return other.form.aspects.containsAll(this.aspects)
-    }
-
-    return this.species == other.species.resourceIdentifier.path
-}
-
-private fun mapToSpeciesWithForms(list: List<Species>, type: ElementalType? = null): SpeciesWithForms {
-    val ignored = RadGymsConfigs.server.ignoredSpecies.map { PokemonProperties.parse(it) }
-
-    val filtered =
-        list // Make a copy
-            .filterNot { it.resourceIdentifier.path in RadGymsConfigs.server.ignoredSpecies }
-            .associateWith { associateSpecies ->
-                val forms = mutableListOf<FormData>()
-                forms.addAll(associateSpecies.forms)
-                forms.add(associateSpecies.standardForm)
-                return@associateWith forms.toMutableSet()
-            }.flatMap { (flatMapSpecies, forms) ->
-                forms.map {
-                    SpeciesWithForm(flatMapSpecies, it)
-                }
-            }.filter { speciesPair ->
-                if (type != null && !speciesPair.form.types.contains(type)) return@filter false
-
-                val poke = speciesPair.species.create()
-                poke.form = speciesPair.form
-                poke.updateAspects()
-
-                if (ignored.any { it.matchesSimplified(speciesPair) }) {
-                    debug(
-                        "Excluding {} with aspects: {}",
-                        poke.species.name,
-                        poke.form.aspects.joinToString(" "),
-                    )
-                    return@filter false
-                }
-
-                return@filter true
-            }.sortedBy {
-                it.form.baseStats
-                    .filterKeys { key -> key.type == Stat.Type.PERMANENT }
-                    .values
-                    .sum()
-            }
-
-    return filtered
-}
-
 object RadGymsSpeciesRegistry {
-    var speciesByType: HashMap<String, SpeciesWithForms> = HashMap(ElementalTypes.count())
+    var speciesByType: HashMap<ElementalType, SpeciesWithForms> = HashMap(ElementalTypes.count())
     var speciesByRarity: Map<String, CacheDTO> = mutableMapOf()
 
-    fun speciesOfType(species: List<Species>, elementalType: ElementalType): SpeciesWithForms {
+    fun speciesOfType(
+        species: List<Species>,
+        elementalType: ElementalType,
+    ): SpeciesWithForms {
         val filtered = mapToSpeciesWithForms(species, elementalType)
 
         when (filtered.isNotEmpty()) {
@@ -90,5 +39,62 @@ object RadGymsSpeciesRegistry {
 
     fun register() {
         debug("Initializing SpeciesManager instance")
+    }
+
+    private fun PokemonProperties.matchesSimplified(other: SpeciesWithForm): Boolean {
+        if ((this.species != null && this.species != "random") && this.aspects.isNotEmpty()) {
+            return this.species == other.species.resourceIdentifier.path && other.form.aspects.containsAll(this.aspects)
+        }
+
+        if (this.species == null && this.aspects.isNotEmpty()) {
+            return other.form.aspects.containsAll(this.aspects)
+        }
+
+        return this.species == other.species.resourceIdentifier.path
+    }
+
+    private fun mapToSpeciesWithForms(
+        list: List<Species>,
+        type: ElementalType? = null,
+    ): SpeciesWithForms {
+        val ignored = RadGymsConfigs.server.ignoredSpecies.map { PokemonProperties.parse(it) }
+
+        val filtered =
+            list // Make a copy
+                .filterNot { it.resourceIdentifier.path in RadGymsConfigs.server.ignoredSpecies }
+                .associateWith { associateSpecies ->
+                    val forms = mutableListOf<FormData>()
+                    forms.addAll(associateSpecies.forms)
+                    forms.add(associateSpecies.standardForm)
+                    return@associateWith forms.toMutableSet()
+                }.flatMap { (flatMapSpecies, forms) ->
+                    forms.map {
+                        SpeciesWithForm(flatMapSpecies, it)
+                    }
+                }.filter { speciesPair ->
+                    if (type != null && !speciesPair.form.types.contains(type)) return@filter false
+
+                    val poke = speciesPair.species.create()
+                    poke.form = speciesPair.form
+                    poke.updateAspects()
+
+                    if (ignored.any { it.matchesSimplified(speciesPair) }) {
+                        debug(
+                            "Excluding {} with aspects: {}",
+                            poke.species.name,
+                            poke.form.aspects.joinToString(" "),
+                        )
+                        return@filter false
+                    }
+
+                    return@filter true
+                }.sortedBy {
+                    it.form.baseStats
+                        .filterKeys { key -> key.type == Stat.Type.PERMANENT }
+                        .values
+                        .sum()
+                }
+
+        return filtered
     }
 }

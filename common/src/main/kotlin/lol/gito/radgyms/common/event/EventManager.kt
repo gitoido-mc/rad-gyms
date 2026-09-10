@@ -164,9 +164,8 @@ object EventManager {
     private fun onSpeciesUpdate(species: PokemonSpecies) {
         speciesByType.clear()
 
-        defaultElementalTypes.forEach {
-            val type = ElementalTypes.get(it) ?: throw RadGymsSpeciesListEmptyException("Cannot get type $it")
-            speciesByType[it] = speciesOfType(species.implemented.toList(), type)
+        ElementalTypes.all().forEach {
+            speciesByType[it] = speciesOfType(species.implemented.toList(), it)
             debug("Added ${speciesByType[it]?.size} $it entries to species map")
         }
     }
