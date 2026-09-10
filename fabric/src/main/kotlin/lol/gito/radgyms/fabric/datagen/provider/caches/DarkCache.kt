@@ -56,7 +56,6 @@ val DARK_CACHE =
                 mapOf(
                     "absol" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     "bisharp" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
-                    "greninja battle_bond=bond" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     "grimmsnarl" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     "guzzlord" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     "honchkrow" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
@@ -79,7 +78,6 @@ val DARK_CACHE =
                     "chienpao" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "chiyu" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "darkrai" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
-                    "greninja battle_bond=ash" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "hoopa unbound" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "hydreigon" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "ironjugulis" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
