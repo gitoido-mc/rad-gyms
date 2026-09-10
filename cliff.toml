@@ -81,7 +81,8 @@ commit_parsers = [
     { message = "^feat", group = "<!-- 0 --> Features" },
     { message = "^fix", group = "<!-- 1 --> Bug Fixes" },
     { message = "^perf", group = "<!-- 2 --> Optimizations" },
-    { message = "^chore", group = "<!-- 3 --> Misc" },
+    { message = "^balance", group = "<!-- 3 --> Balancing" },
+    { message = "^chore", group = "<!-- 4 --> Misc" },
     { message = ".*", skip = true },
 ]
 
