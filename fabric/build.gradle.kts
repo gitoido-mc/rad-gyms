@@ -54,6 +54,12 @@ dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
 
+    modRuntimeOnly("org.graalvm.js:js:${property("graalvm_version")}")
+    modRuntimeOnly("org.graalvm.sdk:graal-sdk:${property("graalvm_version")}")
+    modRuntimeOnly("org.graalvm.regex:regex:${property("graalvm_version")}")
+    modRuntimeOnly("org.graalvm.truffle:truffle-api:${property("graalvm_version")}")
+    modRuntimeOnly("com.ibm.icu:icu4j:${property("icu4j_version")}")
+
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
