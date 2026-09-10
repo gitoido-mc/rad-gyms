@@ -16,7 +16,7 @@ repositories {
     maven("https://maven.fabricmc.net/")
 }
 
-val generatedResources: File = project(":common").file("src/generated")!!
+val generatedResources: File = project(":common").file("src/generated")
 
 architectury {
     platformSetupLoomIde()
