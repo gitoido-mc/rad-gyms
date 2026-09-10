@@ -28,7 +28,6 @@ val FIRE_CACHE =
                 ),
             Rarity.UNCOMMON.serializedName.lowercase() to
                 mapOf(
-                    "castform forecast_form=sunny" to CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON,
                     "darumaka" to CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON,
                     "fletchinder" to CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON,
                     "growlithe" to CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON,
@@ -83,7 +82,6 @@ val FIRE_CACHE =
                     "hooh" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "ironmoth" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "moltres" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
-                    "ogerpon embody_aspect ogre_mask=hearthflame" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "ogerpon ogre_mask=hearthflame" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "silvally rks_memory=fire" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "volcanion" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
