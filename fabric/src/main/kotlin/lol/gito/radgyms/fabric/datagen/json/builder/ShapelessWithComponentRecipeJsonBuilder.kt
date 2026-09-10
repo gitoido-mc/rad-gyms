@@ -35,15 +35,17 @@ class ShapelessWithComponentRecipeJsonBuilder(
     private var itemStack: ItemStack = ItemStack(this.output, this.count)
     private var group: String? = null
 
-    private fun validate(recipeId: ResourceLocation) = check(advancementBuilder.isNotEmpty()) {
-        "No way of obtaining recipe $recipeId"
-    }
+    private fun validate(recipeId: ResourceLocation) =
+        check(advancementBuilder.isNotEmpty()) {
+            "No way of obtaining recipe $recipeId"
+        }
 
     override fun getResult(): Item = this.output
 
-    override fun group(string: String?): ShapelessWithComponentRecipeJsonBuilder = this.apply {
-        group = string
-    }
+    override fun group(string: String?): ShapelessWithComponentRecipeJsonBuilder =
+        this.apply {
+            group = string
+        }
 
     @Suppress("unused")
     fun define(tag: TagKey<Item>): ShapelessWithComponentRecipeJsonBuilder = this.define(Ingredient.of(tag))
@@ -52,33 +54,50 @@ class ShapelessWithComponentRecipeJsonBuilder(
 
     fun define(ingredient: Ingredient): ShapelessWithComponentRecipeJsonBuilder = this.define(ingredient, 1)
 
-    fun define(itemProvider: ItemLike?, size: Int): ShapelessWithComponentRecipeJsonBuilder = this.apply {
-        repeat(size) {
-            define(Ingredient.of(itemProvider))
+    fun define(
+        itemProvider: ItemLike?,
+        size: Int,
+    ): ShapelessWithComponentRecipeJsonBuilder =
+        this.apply {
+            repeat(size) {
+                define(Ingredient.of(itemProvider))
+            }
         }
-    }
 
-    fun define(ingredient: Ingredient, size: Int): ShapelessWithComponentRecipeJsonBuilder = this.apply {
-        repeat(size) {
-            inputs.add(ingredient)
+    fun define(
+        ingredient: Ingredient,
+        size: Int,
+    ): ShapelessWithComponentRecipeJsonBuilder =
+        this.apply {
+            repeat(size) {
+                inputs.add(ingredient)
+            }
         }
-    }
 
-    fun withComponentMap(map: DataComponentMap): ShapelessWithComponentRecipeJsonBuilder = this.apply {
-        itemStack.applyComponents(map)
-    }
+    fun withComponentMap(map: DataComponentMap): ShapelessWithComponentRecipeJsonBuilder =
+        this.apply {
+            itemStack.applyComponents(map)
+        }
 
-    override fun unlockedBy(string: String, criterion: Criterion<*>): RecipeBuilder = this.apply {
-        advancementBuilder[string] = criterion
-    }
+    override fun unlockedBy(
+        string: String,
+        criterion: Criterion<*>,
+    ): RecipeBuilder =
+        this.apply {
+            advancementBuilder[string] = criterion
+        }
 
-    override fun save(exporter: RecipeOutput, recipeId: ResourceLocation) {
+    override fun save(
+        exporter: RecipeOutput,
+        recipeId: ResourceLocation,
+    ) {
         this.validate(recipeId)
-        val builder = exporter
-            .advancement()
-            .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId))
-            .rewards(AdvancementRewards.Builder.recipe(recipeId))
-            .requirements(AdvancementRequirements.Strategy.OR)
+        val builder =
+            exporter
+                .advancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId))
+                .rewards(AdvancementRewards.Builder.recipe(recipeId))
+                .requirements(AdvancementRequirements.Strategy.OR)
 
         advancementBuilder.forEach { (name: String?, criterion: Criterion<*>?) ->
             builder.addCriterion(

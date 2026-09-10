@@ -85,6 +85,9 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     @JvmField
     val SHARD_BLOCK_EPIC = blockItem(modId("shard_block_epic"), RadGymsBlocks.SHARD_BLOCK_EPIC)
 
-    private fun blockItem(name: ResourceLocation, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem =
-        this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
+    private fun blockItem(
+        name: ResourceLocation,
+        block: Block,
+        rarity: Rarity = Rarity.COMMON,
+    ): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 }

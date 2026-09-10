@@ -37,8 +37,10 @@ import net.minecraft.resources.ResourceLocation
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 
-class CacheDataProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>) :
-    FabricCodecDataProvider<CacheDTO>(
+class CacheDataProvider(
+    output: FabricDataOutput,
+    lookup: CompletableFuture<HolderLookup.Provider>,
+) : FabricCodecDataProvider<CacheDTO>(
         output,
         lookup,
         PackOutput.Target.DATA_PACK,
@@ -47,27 +49,31 @@ class CacheDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Hold
     ) {
     override fun getName(): String = "Pokemon Caches"
 
-    override fun configure(provider: BiConsumer<ResourceLocation, CacheDTO>, lookup: HolderLookup.Provider) {
-        val caches = mapOf(
-            ElementalTypes.BUG to BUG_CACHE,
-            ElementalTypes.DARK to DARK_CACHE,
-            ElementalTypes.DRAGON to DRAGON_CACHE,
-            ElementalTypes.ELECTRIC to ELECTRIC_CACHE,
-            ElementalTypes.FAIRY to FAIRY_CACHE,
-            ElementalTypes.FIGHTING to FIGHTING_CACHE,
-            ElementalTypes.FIRE to FIRE_CACHE,
-            ElementalTypes.FLYING to FLYING_CACHE,
-            ElementalTypes.GHOST to GHOST_CACHE,
-            ElementalTypes.GRASS to GRASS_CACHE,
-            ElementalTypes.GROUND to GROUND_CACHE,
-            ElementalTypes.ICE to ICE_CACHE,
-            ElementalTypes.NORMAL to NORMAL_CACHE,
-            ElementalTypes.POISON to POISON_CACHE,
-            ElementalTypes.PSYCHIC to PSYCHIC_CACHE,
-            ElementalTypes.ROCK to ROCK_CACHE,
-            ElementalTypes.STEEL to STEEL_CACHE,
-            ElementalTypes.WATER to WATER_CACHE,
-        )
+    override fun configure(
+        provider: BiConsumer<ResourceLocation, CacheDTO>,
+        lookup: HolderLookup.Provider,
+    ) {
+        val caches =
+            mapOf(
+                ElementalTypes.BUG to BUG_CACHE,
+                ElementalTypes.DARK to DARK_CACHE,
+                ElementalTypes.DRAGON to DRAGON_CACHE,
+                ElementalTypes.ELECTRIC to ELECTRIC_CACHE,
+                ElementalTypes.FAIRY to FAIRY_CACHE,
+                ElementalTypes.FIGHTING to FIGHTING_CACHE,
+                ElementalTypes.FIRE to FIRE_CACHE,
+                ElementalTypes.FLYING to FLYING_CACHE,
+                ElementalTypes.GHOST to GHOST_CACHE,
+                ElementalTypes.GRASS to GRASS_CACHE,
+                ElementalTypes.GROUND to GROUND_CACHE,
+                ElementalTypes.ICE to ICE_CACHE,
+                ElementalTypes.NORMAL to NORMAL_CACHE,
+                ElementalTypes.POISON to POISON_CACHE,
+                ElementalTypes.PSYCHIC to PSYCHIC_CACHE,
+                ElementalTypes.ROCK to ROCK_CACHE,
+                ElementalTypes.STEEL to STEEL_CACHE,
+                ElementalTypes.WATER to WATER_CACHE,
+            )
 
         caches.forEach {
             provider.accept(modId(it.key.showdownId), it.value)

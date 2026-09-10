@@ -77,13 +77,22 @@ object RadGyms {
     fun modId(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, name)
 
     @JvmStatic
-    fun info(message: String, vararg params: Any): Unit = LOGGER.info(message, *params)
+    fun info(
+        message: String,
+        vararg params: Any,
+    ): Unit = LOGGER.info(message, *params)
 
     @JvmStatic
-    fun warn(message: String, vararg params: Any): Unit = LOGGER.warn(message, *params)
+    fun warn(
+        message: String,
+        vararg params: Any,
+    ): Unit = LOGGER.warn(message, *params)
 
     @JvmStatic
-    fun debug(message: String, vararg params: Any) {
+    fun debug(
+        message: String,
+        vararg params: Any,
+    ) {
         if (config.debug == true) LOGGER.info(message, *params)
     }
 
@@ -114,17 +123,20 @@ object RadGyms {
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun saveConfig(new: Boolean = false) = with(File(CONFIG_PATH).outputStream()) {
-        val prettify = Json {
-            prettyPrint = true
+    fun saveConfig(new: Boolean = false) =
+        with(File(CONFIG_PATH).outputStream()) {
+            val prettify =
+                Json {
+                    prettyPrint = true
+                }
+            val config =
+                when (new) {
+                    true -> RadGymsConfig.DEFAULT
+                    false -> config
+                }
+            prettify.encodeToStream(config, this)
+            debug("Saving config")
         }
-        val config = when (new) {
-            true -> RadGymsConfig.DEFAULT
-            false -> config
-        }
-        prettify.encodeToStream(config, this)
-        debug("Saving config")
-    }
 
     private fun registerArgumentTypes() {
         this.implementation.registerCommandArgument(

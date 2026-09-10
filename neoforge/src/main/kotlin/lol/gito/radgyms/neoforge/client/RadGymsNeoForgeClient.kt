@@ -27,16 +27,21 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 object RadGymsNeoForgeClient : RadGymsClientImplementation {
-    fun init() = with(MOD_BUS) {
-        addListener(::onClientSetup)
-    }
+    fun init() =
+        with(MOD_BUS) {
+            addListener(::onClientSetup)
+        }
 
-    private fun onClientSetup(event: FMLClientSetupEvent) = event.enqueueWork {
-        RadGymsClient.initialize(this)
-    }
+    private fun onClientSetup(event: FMLClientSetupEvent) =
+        event.enqueueWork {
+            RadGymsClient.initialize(this)
+        }
 
     @Suppress("DEPRECATION")
-    override fun registerBlockRenderType(layer: RenderType, vararg blocks: Block) = blocks.forEach { block ->
+    override fun registerBlockRenderType(
+        layer: RenderType,
+        vararg blocks: Block,
+    ) = blocks.forEach { block ->
         ItemBlockRenderTypes.setRenderLayer(block, layer)
     }
 
@@ -45,8 +50,10 @@ object RadGymsNeoForgeClient : RadGymsClientImplementation {
         factory: BlockEntityRendererProvider<T>,
     ) = BlockEntityRenderers.register(type, factory)
 
-    override fun <T : Entity> registerEntityRenderer(type: EntityType<out T>, factory: EntityRendererProvider<T>) =
-        EntityRenderers.register(type, factory)
+    override fun <T : Entity> registerEntityRenderer(
+        type: EntityType<out T>,
+        factory: EntityRendererProvider<T>,
+    ) = EntityRenderers.register(type, factory)
 
     internal fun registerResourceReloader(reloader: PreparableReloadListener) =
         (Minecraft.getInstance().resourceManager as ReloadableResourceManager).registerReloadListener(reloader)

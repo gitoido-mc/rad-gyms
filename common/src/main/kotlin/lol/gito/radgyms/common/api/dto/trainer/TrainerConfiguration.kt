@@ -24,11 +24,12 @@ data class TrainerConfiguration(
     val team: MutableList<PokemonModel> = mutableListOf(),
 ) {
     companion object {
-        fun fromCompoundTag(tag: CompoundTag): TrainerConfiguration = TrainerConfiguration(
-            tag.getRadGymsBattleRules("BattleRules"),
-            tag.getRadGymsTrainerBag("Bag"),
-            tag.getRadGymsTrainerTeam("Team"),
-        )
+        fun fromCompoundTag(tag: CompoundTag): TrainerConfiguration =
+            TrainerConfiguration(
+                tag.getRadGymsBattleRules("BattleRules"),
+                tag.getRadGymsTrainerBag("Bag"),
+                tag.getRadGymsTrainerTeam("Team"),
+            )
     }
 
     fun toCompoundTag(): CompoundTag {

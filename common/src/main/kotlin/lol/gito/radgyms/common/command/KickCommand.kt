@@ -46,13 +46,14 @@ object KickCommand : CommandInterface {
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         var shouldReturn = false
 
-        val player = try {
-            context.getArgument(PLAYER_ARG, EntitySelector::class.java).findSinglePlayer(context.source)
-        } catch (_: CommandSyntaxException) {
-            context.source.sendFailure(tl(modId("message.error.command.kick.no_player"), context.source.player!!.name))
-            shouldReturn = true
-            null
-        }
+        val player =
+            try {
+                context.getArgument(PLAYER_ARG, EntitySelector::class.java).findSinglePlayer(context.source)
+            } catch (_: CommandSyntaxException) {
+                context.source.sendFailure(tl(modId("message.error.command.kick.no_player"), context.source.player!!.name))
+                shouldReturn = true
+                null
+            }
 
         if (player != null && player.level().dimension() != GYM_DIMENSION) {
             if (context.source.isPlayer) {

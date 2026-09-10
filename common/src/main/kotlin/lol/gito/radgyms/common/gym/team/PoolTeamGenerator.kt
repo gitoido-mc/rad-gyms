@@ -14,25 +14,32 @@ import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.level.ServerPlayer
 
 object PoolTeamGenerator : GenericTeamGenerator() {
-    fun generateTeam(player: ServerPlayer?, trainer: Trainer, level: Int): MutableList<PokemonModel> {
-        val initialAmount = trainer
-            .possibleFormats
-            .maxOfOrNull {
-                it.format.cobblemonBattleFormat.battleType.slotsPerActor
-            } ?: 1
+    fun generateTeam(
+        player: ServerPlayer?,
+        trainer: Trainer,
+        level: Int,
+    ): MutableList<PokemonModel> {
+        val initialAmount =
+            trainer
+                .possibleFormats
+                .maxOfOrNull {
+                    it.format.cobblemonBattleFormat.battleType.slotsPerActor
+                } ?: 1
 
-        val amount = trainer
-            .countPerLevelThreshold
-            .filter { it.untilLevel >= level }
-            .minByOrNull { it.untilLevel }
-            ?.amount ?: initialAmount
+        val amount =
+            trainer
+                .countPerLevelThreshold
+                .filter { it.untilLevel >= level }
+                .minByOrNull { it.untilLevel }
+                ?.amount ?: initialAmount
 
-        val rawTeam = trainer.team!!
-            .shuffled()
-            .take(amount)
-            .map { setLevel(level, it) }
-            .apply { this.forEach { it.updateAspects() } }
-            .toMutableList()
+        val rawTeam =
+            trainer.team!!
+                .shuffled()
+                .take(amount)
+                .map { setLevel(level, it) }
+                .apply { this.forEach { it.updateAspects() } }
+                .toMutableList()
 
         @Suppress("DuplicatedCode")
         val team = mutableListOf<PokemonModel>()

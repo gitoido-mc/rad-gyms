@@ -23,22 +23,28 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
 object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
-    override fun handle(packet: GymEnterC2S, server: MinecraftServer, player: ServerPlayer) {
+    override fun handle(
+        packet: GymEnterC2S,
+        server: MinecraftServer,
+        player: ServerPlayer,
+    ) {
         RadGyms.debug("Using key? : ${packet.key}")
         var message = tl(modId("message.info.gym_init"), ElementalTypeTranslationHelper.buildTypeText(packet.type))
 
-        val type: String = when (packet.type) {
-            "chaos", null -> defaultElementalTypes.random()
-            else -> packet.type
-        }
+        val type: String =
+            when (packet.type) {
+                "chaos", null -> defaultElementalTypes.random()
+                else -> packet.type
+            }
 
         if (packet.key) {
             val stack = player.mainHandItem
 
             if (stack.item == RadGymsItems.GYM_KEY) {
-                val stackType = stack.components
-                    .getOrDefault(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, "chaos")
-                    .let { it ?: packet.type }
+                val stackType =
+                    stack.components
+                        .getOrDefault(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, "chaos")
+                        .let { it ?: packet.type }
                 RadGyms.debug("Gym key type : $stackType")
 
                 message = tl(modId("message.info.gym_init"), ElementalTypeTranslationHelper.buildTypeText(stackType))

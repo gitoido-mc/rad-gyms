@@ -47,7 +47,10 @@ interface JsonDataRegistry<T> : DataRegistry {
         reload(data)
     }
 
-    fun parse(stream: InputStream, identifier: ResourceLocation): T
+    fun parse(
+        stream: InputStream,
+        identifier: ResourceLocation,
+    ): T
 
     fun reload(data: Map<ResourceLocation, T>)
 }

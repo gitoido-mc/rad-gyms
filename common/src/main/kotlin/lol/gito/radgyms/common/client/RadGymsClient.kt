@@ -25,7 +25,10 @@ import net.minecraft.resources.ResourceLocation
 
 object RadGymsClient {
     @JvmStatic
-    fun modModelId(id: ResourceLocation, variant: String): ModelResourceLocation = ModelResourceLocation(id, variant)
+    fun modModelId(
+        id: ResourceLocation,
+        variant: String,
+    ): ModelResourceLocation = ModelResourceLocation(id, variant)
 
     lateinit var implementation: RadGymsClientImplementation
 

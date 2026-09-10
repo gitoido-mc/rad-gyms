@@ -31,9 +31,12 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 
-class GymKey :
-    CobblemonItem(Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)) {
-    override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+class GymKey : CobblemonItem(Properties().rarity(Rarity.UNCOMMON).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)) {
+    override fun use(
+        level: Level,
+        player: Player,
+        hand: InteractionHand,
+    ): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
         val party = (player as ServerPlayer).party()
@@ -56,14 +59,16 @@ class GymKey :
             }
 
             else -> {
-                val derivedLevel = when (RadGyms.config.deriveAverageGymLevel!!) {
-                    true -> player.averagePokePartyLevel()
-                    false -> RadGyms.config.minLevel!!
-                }
-                val type = player.getItemInHand(hand).getOrDefault(
-                    RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,
-                    "chaos",
-                )
+                val derivedLevel =
+                    when (RadGyms.config.deriveAverageGymLevel!!) {
+                        true -> player.averagePokePartyLevel()
+                        false -> RadGyms.config.minLevel!!
+                    }
+                val type =
+                    player.getItemInHand(hand).getOrDefault(
+                        RadGymsDataComponents.RG_GYM_TYPE_COMPONENT,
+                        "chaos",
+                    )
 
                 OpenGymEnterScreenS2C(derivedLevel, true, type).sendToPlayer(player)
 
@@ -82,7 +87,8 @@ class GymKey :
         tooltip.add(buildPrefixedSuffixedTypeText(attuned))
     }
 
-    override fun getDefaultInstance(): ItemStack = ItemStack(this).apply {
-        set(DataComponents.RARITY, Rarity.UNCOMMON)
-    }
+    override fun getDefaultInstance(): ItemStack =
+        ItemStack(this).apply {
+            set(DataComponents.RARITY, Rarity.UNCOMMON)
+        }
 }

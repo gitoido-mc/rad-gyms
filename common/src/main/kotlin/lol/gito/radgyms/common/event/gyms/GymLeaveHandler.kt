@@ -25,23 +25,35 @@ object GymLeaveHandler {
         debug("gym leave triggered")
 
         if (event.gym != null) {
-            val bounds = AABB.of(
-                BoundingBox.encapsulatingPositions(
-                    listOf(
-                        event.gym.coords,
-                        event.gym.coords.north(AABB_OFFSET).east(AABB_OFFSET).above(AABB_OFFSET),
-                    ),
-                ).get(),
-            )
+            val bounds =
+                AABB.of(
+                    BoundingBox
+                        .encapsulatingPositions(
+                            listOf(
+                                event.gym.coords,
+                                event.gym.coords
+                                    .north(AABB_OFFSET)
+                                    .east(AABB_OFFSET)
+                                    .above(AABB_OFFSET),
+                            ),
+                        ).get(),
+                )
 
             event.player
                 .level()
-                .getEntitiesOfClass(Trainer::class.java, bounds).forEach { it.discard() }
+                .getEntitiesOfClass(Trainer::class.java, bounds)
+                .forEach { it.discard() }
         }
 
         when (event.completed) {
-            true -> event.player.awardStat(getStat(RadGyms.statistics.GYMS_BEATEN))
-            null -> Unit
+            true -> {
+                event.player.awardStat(getStat(RadGyms.statistics.GYMS_BEATEN))
+            }
+
+            null -> {
+                Unit
+            }
+
             false -> {
                 GymTeardownService.destructGym(event.player, removeCoords = false)
                 event.player.awardStat(getStat(RadGyms.statistics.GYMS_FAILED))

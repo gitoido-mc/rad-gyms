@@ -22,33 +22,38 @@ import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
 
 class ElementalTypeArgumentType : ArgumentType<ElementalType> {
-    override fun parse(reader: StringReader): ElementalType = try {
-        val cacheToken = reader.readString()
-        return ElementalTypes.getOrException(cacheToken)
-    } catch (_: Exception) {
-        throw SimpleCommandExceptionType(INVALID_TYPE).createWithContext(reader)
-    }
+    override fun parse(reader: StringReader): ElementalType =
+        try {
+            val cacheToken = reader.readString()
+            return ElementalTypes.getOrException(cacheToken)
+        } catch (_: Exception) {
+            throw SimpleCommandExceptionType(INVALID_TYPE).createWithContext(reader)
+        }
 
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
         builder: SuggestionsBuilder,
-    ): CompletableFuture<Suggestions> = SharedSuggestionProvider.suggest(
-        defaultElementalTypes,
-        builder,
-    )
+    ): CompletableFuture<Suggestions> =
+        SharedSuggestionProvider.suggest(
+            defaultElementalTypes,
+            builder,
+        )
 
-    override fun getExamples(): Collection<String> = listOf(
-        ElementalTypes.WATER.showdownId,
-        ElementalTypes.FIRE.showdownId,
-        ElementalTypes.GRASS.showdownId,
-    )
+    override fun getExamples(): Collection<String> =
+        listOf(
+            ElementalTypes.WATER.showdownId,
+            ElementalTypes.FIRE.showdownId,
+            ElementalTypes.GRASS.showdownId,
+        )
 
     companion object {
         val INVALID_TYPE = tl(modId("message.error.argument.invalid_elemental_type"))
 
         fun type() = ElementalTypeArgumentType()
 
-        fun <S> getType(context: CommandContext<S>, name: String): ElementalType =
-            context.getArgument(name, ElementalType::class.java)
+        fun <S> getType(
+            context: CommandContext<S>,
+            name: String,
+        ): ElementalType = context.getArgument(name, ElementalType::class.java)
     }
 }

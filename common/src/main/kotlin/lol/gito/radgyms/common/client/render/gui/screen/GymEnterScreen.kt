@@ -35,15 +35,19 @@ class GymEnterScreen(
     val pos: BlockPos? = null,
     val usesLeft: Int? = null,
 ) : AbstractGymScreen(
-    when (type) {
-        null, "chaos", in defaultElementalTypes -> tl(
-            modId("gui.common.set-gym-level"),
-            buildTypeText(type),
-        )
+        when (type) {
+            null, "chaos", in defaultElementalTypes -> {
+                tl(
+                    modId("gui.common.set-gym-level"),
+                    buildTypeText(type),
+                )
+            }
 
-        else -> tl(modId("gui.common.set-custom-gym-level"), buildTypeText(type))
-    },
-) {
+            else -> {
+                tl(modId("gui.common.set-custom-gym-level"), buildTypeText(type))
+            }
+        },
+    ) {
     companion object {
         // Screen root widget params
         const val BASE_WIDTH = 300
@@ -202,7 +206,11 @@ class GymEnterScreen(
         )
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(
+        keyCode: Int,
+        scanCode: Int,
+        modifiers: Int,
+    ): Boolean {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
             this.onClose(GuiScreenCloseChoice.CANCEL)
             return true
@@ -210,18 +218,27 @@ class GymEnterScreen(
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(
+        context: GuiGraphics,
+        mouseX: Int,
+        mouseY: Int,
+        delta: Float,
+    ) {
         super.preRender(context, panelResource)
 
         val message =
             when (pos) {
-                null -> tl(modId("gui.common.set-gym-level"), buildTypeText(type))
-                else ->
+                null -> {
+                    tl(modId("gui.common.set-gym-level"), buildTypeText(type))
+                }
+
+                else -> {
                     tl(
                         modId("gui.common.set-gym-level-entry"),
                         buildTypeText(type),
                         usesLeft,
                     )
+                }
             }
 
         // Box Label

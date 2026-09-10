@@ -4,7 +4,6 @@
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
 import pl.allegro.tech.build.axion.release.domain.properties.VersionProperties
@@ -20,8 +19,7 @@ plugins {
     id("dev.architectury.loom") version "1.13-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
-    id("dev.detekt") version "2.0.0-alpha.2"
-
+    id("com.diffplug.spotless") version "8.9.0"
 }
 
 scmVersion {
@@ -30,7 +28,7 @@ scmVersion {
 
     tag {
         prefix = "${project.property("cobblemon_version")}+"
-        fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+")
+        fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+", "1.7.3+")
     }
 
     branchVersionCreator.put("bugfix/.*", "simple")
@@ -46,6 +44,7 @@ scmVersion {
             "main" to "incrementPatch",
             "develop" to "incrementPrerelease",
             "feature/.*" to "incrementPrerelease",
+            "release/.*" to "incrementPrerelease",
             "hotfix/.*" to "incrementPrerelease",
             "refactor/.*" to "incrementPrerelease",
         ),
@@ -87,25 +86,32 @@ repositories {
     }
 }
 
-val modProjects = listOf(
-    "common",
-    "fabric",
-    "neoforge",
-)
+val modProjects =
+    listOf(
+        "common",
+        "fabric",
+        "neoforge",
+    )
 
 modProjects.forEach {
     project(it) {
         apply(plugin = "java")
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
-        apply(plugin = "dev.detekt")
+        apply(plugin = "com.diffplug.spotless")
 
         group = property("maven_group")!!
         version = rootProject.version
 
-        detekt {
-            config.setFrom(rootProject.file("detekt.yml"))
-            buildUponDefaultConfig = true
+        spotless {
+            kotlin {
+                // version, editorConfigPath, editorConfigOverride and customRuleSets are all optional
+                ktlint("1.8.0")
+                suppressLintsFor {
+                    step = "ktlint"
+                    shortCode = "standard:no-wildcard-imports"
+                }
+            }
         }
 
         repositories {
@@ -137,10 +143,6 @@ modProjects.forEach {
             }
         }
 
-        dependencies {
-            detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.2")
-        }
-
         tasks {
             jar {
                 from("LICENSE")
@@ -163,10 +165,6 @@ modProjects.forEach {
                     freeCompilerArgs.add("-Xcontext-parameters")
                 }
             }
-
-            withType<Detekt>().configureEach {
-                exclude("**/build/**")
-            }
         }
     }
 }
@@ -184,20 +182,33 @@ val buildMod by project.tasks.registering {
     doLast {
         logger.info("Preparing $version jars")
 
-        layout.buildDirectory.file("libs").get().asFile.delete()
+        layout.buildDirectory
+            .file("libs")
+            .get()
+            .asFile
+            .delete()
 
         listOf(":common", ":fabric", ":neoforge").forEach { mod ->
             val modProject = project(mod)
-            val jars = listOf(
-                "${project.name}-${modProject.name}-${modProject.version}.jar",
-                "${project.name}-${modProject.name}-${modProject.version}-sources.jar",
-            )
+            val jars =
+                listOf(
+                    "${project.name}-${modProject.name}-${modProject.version}.jar",
+                    "${project.name}-${modProject.name}-${modProject.version}-sources.jar",
+                )
 
             jars.forEach {
-                val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
+                val dest =
+                    project.layout.buildDirectory
+                        .file("libs/$it")
+                        .get()
+                        .asFile
                 dest.ensureParentDirsCreated()
 
-                modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
+                modProject.layout.buildDirectory
+                    .file("libs/$it")
+                    .get()
+                    .asFile
+                    .renameTo(dest)
             }
         }
     }

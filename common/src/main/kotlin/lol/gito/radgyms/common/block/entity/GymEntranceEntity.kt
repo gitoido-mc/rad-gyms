@@ -21,8 +21,10 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
-class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
-    BlockEntity(
+class GymEntranceEntity(
+    val pos: BlockPos,
+    state: BlockState,
+) : BlockEntity(
         RadGymsBlockEntities.GYM_ENTRANCE_ENTITY,
         pos,
         state,
@@ -33,10 +35,11 @@ class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
     var gymType: String = defaultElementalTypes.random()
 
     fun incrementPlayerUseCount(player: Player) {
-        playerUseCounter[player.uuid.toString()] = playerUseCounter
-            .getOrDefault(player.uuid.toString(), 0)
-            .inc()
-            .coerceIn(0, config.maxEntranceUses!!)
+        playerUseCounter[player.uuid.toString()] =
+            playerUseCounter
+                .getOrDefault(player.uuid.toString(), 0)
+                .inc()
+                .coerceIn(0, config.maxEntranceUses!!)
 
         setChanged()
         debug(
@@ -54,7 +57,10 @@ class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
 
     override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag = saveWithoutMetadata(registryLookup)
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+    override fun saveAdditional(
+        nbt: CompoundTag,
+        registryLookup: HolderLookup.Provider,
+    ) {
         val playerEntries = nbt.getCompound(playerUsageDataKey)
         for ((key, value) in playerUseCounter) {
             playerEntries.putInt(key, value)
@@ -66,7 +72,10 @@ class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
         super.saveAdditional(nbt, registryLookup)
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+    override fun loadAdditional(
+        nbt: CompoundTag,
+        registryLookup: HolderLookup.Provider,
+    ) {
         super.loadAdditional(nbt, registryLookup)
 
         gymType = nbt.getString(gymTypeKey)
@@ -80,9 +89,10 @@ class GymEntranceEntity(val pos: BlockPos, state: BlockState) :
     }
 
     fun usesLeftForPlayer(player: Player): Int {
-        val playerCounter = playerUseCounter
-            .getOrDefault(player.uuid.toString(), 0)
-            .coerceIn(0, config.maxEntranceUses!!)
+        val playerCounter =
+            playerUseCounter
+                .getOrDefault(player.uuid.toString(), 0)
+                .coerceIn(0, config.maxEntranceUses!!)
 
         debug(
             "Uses left for {} for {} gym entrance: {} (config max: {})",

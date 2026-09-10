@@ -23,8 +23,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.BundleContents
 import net.minecraft.world.level.Level
 
-class GymRewardBag :
-    BundleItem(Properties().stacksTo(1).component(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY)) {
+class GymRewardBag : BundleItem(Properties().stacksTo(1).component(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY)) {
     companion object {
         const val DROP_SOUND_VOLUME = 0.8f
         const val DROP_SOUND_PITCH = 0.4f
@@ -62,7 +61,10 @@ class GymRewardBag :
 
     override fun isBarVisible(itemStack: ItemStack): Boolean = false
 
-    private fun dropContents(stack: ItemStack, player: Player): Boolean {
+    private fun dropContents(
+        stack: ItemStack,
+        player: Player,
+    ): Boolean {
         val bundleContents = stack.get<BundleContents>(DataComponents.BUNDLE_CONTENTS)
         if (bundleContents != null && !bundleContents.isEmpty) {
             if (player is ServerPlayer) {
@@ -74,9 +76,10 @@ class GymRewardBag :
         return false
     }
 
-    private fun playDropContentsSound(entity: Entity) = entity.playSound(
-        SoundEvents.BUNDLE_DROP_CONTENTS,
-        DROP_SOUND_VOLUME,
-        DROP_SOUND_VOLUME + entity.level().getRandom().nextFloat() * DROP_SOUND_PITCH,
-    )
+    private fun playDropContentsSound(entity: Entity) =
+        entity.playSound(
+            SoundEvents.BUNDLE_DROP_CONTENTS,
+            DROP_SOUND_VOLUME,
+            DROP_SOUND_VOLUME + entity.level().getRandom().nextFloat() * DROP_SOUND_PITCH,
+        )
 }

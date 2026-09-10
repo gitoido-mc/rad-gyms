@@ -10,8 +10,14 @@ package lol.gito.radgyms.common.world.state.dto
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 
-data class PlayerData(var visits: Int = 0, var returnCoords: ReturnCoords? = null) {
-    data class ReturnCoords(val dimension: ResourceLocation, val position: BlockPos)
+data class PlayerData(
+    var visits: Int = 0,
+    var returnCoords: ReturnCoords? = null,
+) {
+    data class ReturnCoords(
+        val dimension: ResourceLocation,
+        val position: BlockPos,
+    )
 
     fun incrementVisits() {
         visits++

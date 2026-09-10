@@ -55,7 +55,10 @@ object RadGymsStats {
         return stat ?: throw NullPointerException("Could not find stat with id $resourceLocation")
     }
 
-    data class RadGymsStat(val path: String, val formatter: StatFormatter = StatFormatter.DEFAULT) {
+    data class RadGymsStat(
+        val path: String,
+        val formatter: StatFormatter = StatFormatter.DEFAULT,
+    ) {
         val resourceLocation: ResourceLocation = modId(path)
     }
 }

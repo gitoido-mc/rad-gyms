@@ -19,7 +19,10 @@ fun CompoundTag.getRadGymsTrainerBag(key: String): MutableList<BagItemModel> {
         }.toMutableList()
 }
 
-fun CompoundTag.putRadGymsTrainerBag(key: String, value: MutableList<BagItemModel>) {
+fun CompoundTag.putRadGymsTrainerBag(
+    key: String,
+    value: MutableList<BagItemModel>,
+) {
     val nbt = CompoundTag()
 
     value.forEach {

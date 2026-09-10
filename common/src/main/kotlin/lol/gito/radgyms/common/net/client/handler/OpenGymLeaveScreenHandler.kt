@@ -16,5 +16,8 @@ import net.minecraft.client.Minecraft
  * Emits open gym entrance screen event in mod bus
  */
 object OpenGymLeaveScreenHandler : ClientNetworkPacketHandler<OpenGymLeaveScreenS2C> {
-    override fun handle(packet: OpenGymLeaveScreenS2C, client: Minecraft) = client.setScreen(GymLeaveScreen())
+    override fun handle(
+        packet: OpenGymLeaveScreenS2C,
+        client: Minecraft,
+    ) = client.setScreen(GymLeaveScreen())
 }

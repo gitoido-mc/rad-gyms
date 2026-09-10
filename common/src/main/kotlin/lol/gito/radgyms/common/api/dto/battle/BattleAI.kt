@@ -10,4 +10,7 @@ package lol.gito.radgyms.common.api.dto.battle
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BattleAI(val type: String = "rct", val data: BattleAIConfig? = null)
+data class BattleAI(
+    val type: String = "rct",
+    val data: BattleAIConfig? = null,
+)

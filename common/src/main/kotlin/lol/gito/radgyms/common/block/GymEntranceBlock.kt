@@ -57,12 +57,15 @@ import kotlin.random.Random
 
 private val gymEntranceHorizontalFacing: DirectionProperty = HORIZONTAL_FACING
 
-class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
+class GymEntranceBlock(
+    properties: Properties,
+) : BaseEntityBlock(properties) {
     @Suppress("MagicNumber")
-    private val bounds = Shapes.or(
-        box(3.75, 1.75, 3.75, 12.25, 10.25, 12.25),
-        box(6.5, 10.0, 6.5, 9.5, 11.0, 9.5),
-    )
+    private val bounds =
+        Shapes.or(
+            box(3.75, 1.75, 3.75, 12.25, 10.25, 12.25),
+            box(6.5, 10.0, 6.5, 9.5, 11.0, 9.5),
+        )
 
     init {
         registerDefaultState(
@@ -72,7 +75,10 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
 
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 
-    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymEntranceEntity(pos, state)
+    override fun newBlockEntity(
+        pos: BlockPos,
+        state: BlockState,
+    ): BlockEntity = GymEntranceEntity(pos, state)
 
     override fun codec(): MapCodec<out BaseEntityBlock> = simpleCodec { GymEntranceBlock(it) }
 
@@ -94,10 +100,11 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         builder.add(HORIZONTAL_FACING)
     }
 
-    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState = this.defaultBlockState().setValue(
-        gymEntranceHorizontalFacing,
-        ctx.horizontalDirection.opposite,
-    )
+    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState =
+        this.defaultBlockState().setValue(
+            gymEntranceHorizontalFacing,
+            ctx.horizontalDirection.opposite,
+        )
 
     override fun useWithoutItem(
         state: BlockState,
@@ -109,7 +116,10 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         if (level.getBlockEntity(pos) !is GymEntranceEntity) return super.useWithoutItem(state, level, pos, player, hit)
         var result: InteractionResult = InteractionResult.SUCCESS_NO_ITEM_USED
         when (level.isClientSide) {
-            true -> result = InteractionResult.PASS
+            true -> {
+                result = InteractionResult.PASS
+            }
+
             false -> {
                 (player as ServerPlayer).let { player ->
                     if (player.party().occupied() < MIN_PLAYER_TEAM_SIZE) {
@@ -179,22 +189,30 @@ class GymEntranceBlock(properties: Properties) : BaseEntityBlock(properties) {
         }
     }
 
-    override fun animateTick(blockState: BlockState, level: Level, blockPos: BlockPos, randomSource: RandomSource) {
+    override fun animateTick(
+        blockState: BlockState,
+        level: Level,
+        blockPos: BlockPos,
+        randomSource: RandomSource,
+    ) {
         val entranceEntity = level.getBlockEntity(blockPos) ?: return
         if (entranceEntity !is GymEntranceEntity) return
 
-        val bounds = AABB.of(
-            BoundingBox.encapsulatingPositions(
-                listOf(
-                    blockPos.north(BLOCK_REACT_RANGE).above(BLOCK_REACT_RANGE).west(BLOCK_REACT_RANGE),
-                    blockPos.south(BLOCK_REACT_RANGE).below(BLOCK_REACT_RANGE).east(BLOCK_REACT_RANGE),
-                ),
-            ).get(),
-        )
+        val bounds =
+            AABB.of(
+                BoundingBox
+                    .encapsulatingPositions(
+                        listOf(
+                            blockPos.north(BLOCK_REACT_RANGE).above(BLOCK_REACT_RANGE).west(BLOCK_REACT_RANGE),
+                            blockPos.south(BLOCK_REACT_RANGE).below(BLOCK_REACT_RANGE).east(BLOCK_REACT_RANGE),
+                        ),
+                    ).get(),
+            )
 
-        val nearestPlayers = level.getEntitiesOfClass(Player::class.java, bounds) {
-            entranceEntity.usesLeftForPlayer(it) > 0
-        }
+        val nearestPlayers =
+            level.getEntitiesOfClass(Player::class.java, bounds) {
+                entranceEntity.usesLeftForPlayer(it) > 0
+            }
 
         nearestPlayers.forEach { _ ->
             repeat(PARTICLE_AMOUNT) {

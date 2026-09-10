@@ -40,19 +40,24 @@ object RadGymsTemplates : JsonDataRegistry<GymJson> {
 
     @OptIn(ExperimentalSerializationApi::class)
     @Throws(ExecutionException::class)
-    override fun parse(stream: InputStream, identifier: ResourceLocation): GymJson {
-        val module = SerializersModule {
-            polymorphic(RewardInterface::class) {
-                subclass(CommandReward::class)
-                subclass(LootTableReward::class)
-                subclass(PokemonReward::class)
-                subclass(AdvancementReward::class)
+    override fun parse(
+        stream: InputStream,
+        identifier: ResourceLocation,
+    ): GymJson {
+        val module =
+            SerializersModule {
+                polymorphic(RewardInterface::class) {
+                    subclass(CommandReward::class)
+                    subclass(LootTableReward::class)
+                    subclass(PokemonReward::class)
+                    subclass(AdvancementReward::class)
+                }
             }
-        }
 
-        val format = Json {
-            serializersModule = module
-        }
+        val format =
+            Json {
+                serializersModule = module
+            }
 
         return format.decodeFromStream<GymJson>(stream)
     }

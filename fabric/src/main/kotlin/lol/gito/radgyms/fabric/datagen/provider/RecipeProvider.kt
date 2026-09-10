@@ -49,6 +49,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes.ROCK
 import com.cobblemon.mod.common.api.types.ElementalTypes.STEEL
 import com.cobblemon.mod.common.api.types.ElementalTypes.WATER
 import com.cobblemon.mod.common.item.CobblemonItem
+import com.cobblemon.mod.common.item.GemItem
 import com.cobblemon.mod.common.item.PokeBallItem
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
@@ -92,9 +93,10 @@ import net.minecraft.world.item.Rarity
 import oshi.util.tuples.Quartet
 import java.util.concurrent.CompletableFuture
 
-class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>) :
-    FabricRecipeProvider(output, lookup) {
-
+class RecipeProvider(
+    output: FabricDataOutput,
+    lookup: CompletableFuture<HolderLookup.Provider>,
+) : FabricRecipeProvider(output, lookup) {
     override fun buildRecipes(recipeExporter: RecipeOutput) {
         buildShapedGymKey(recipeExporter)
         buildExitRope(recipeExporter)
@@ -110,7 +112,10 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
         }
     }
 
-    private fun buildShapedPokeCaches(rarity: Rarity, recipeExporter: RecipeOutput) {
+    private fun buildShapedPokeCaches(
+        rarity: Rarity,
+        recipeExporter: RecipeOutput,
+    ) {
         val cachePair = cacheConfig(rarity)
         val cacheParts = cachePair.first
 
@@ -142,7 +147,10 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
         }
     }
 
-    private fun buildShardRecipes(rarity: Rarity, recipeExporter: RecipeOutput) {
+    private fun buildShardRecipes(
+        rarity: Rarity,
+        recipeExporter: RecipeOutput,
+    ) {
         val shardPair = shardConfig(rarity)
         ShapedRecipeBuilder
             .shaped(RecipeCategory.MISC, shardPair.second, 1)
@@ -161,7 +169,10 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
             .save(recipeExporter, modId("block_to_shards_${rarity.serializedName}"))
     }
 
-    private fun buildAttunedPokeCaches(type: ElementalType, recipeExporter: RecipeOutput) = Rarity.entries
+    private fun buildAttunedPokeCaches(
+        type: ElementalType,
+        recipeExporter: RecipeOutput,
+    ) = Rarity.entries
         .forEach { rarity ->
             val cache = cacheForRarity(rarity)
             val attunedCachePair = elementalTypeCacheConfig(cache, type)
@@ -180,7 +191,10 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
                 .save(recipeExporter, modId("cache_${rarity.serializedName}_${type.showdownId}"))
         }
 
-    private fun buildAttunedGymKey(type: ElementalType, recipeExporter: RecipeOutput) = try {
+    private fun buildAttunedGymKey(
+        type: ElementalType,
+        recipeExporter: RecipeOutput,
+    ) = try {
         val pair = elementalTypeKeyConfig(type)
 
         val keyComponents =
@@ -200,80 +214,194 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
         debug("No keys found for $type")
     }
 
-    private fun buildExitRope(recipeExporter: RecipeOutput) = ShapedRecipeBuilder
-        .shaped(RecipeCategory.MISC, RadGymsItems.EXIT_ROPE, 1)
-        .pattern("l")
-        .pattern("b")
-        .define('l', LEAD)
-        .define('b', BINDING_BAND)
-        .group("multi_bench")
-        .unlockedBy(getHasName(BINDING_BAND), has(BINDING_BAND))
-        .save(recipeExporter)
+    private fun buildExitRope(recipeExporter: RecipeOutput) =
+        ShapedRecipeBuilder
+            .shaped(RecipeCategory.MISC, RadGymsItems.EXIT_ROPE, 1)
+            .pattern("l")
+            .pattern("b")
+            .define('l', LEAD)
+            .define('b', BINDING_BAND)
+            .group("multi_bench")
+            .unlockedBy(getHasName(BINDING_BAND), has(BINDING_BAND))
+            .save(recipeExporter)
 
-    private fun buildShapedGymKey(recipeExporter: RecipeOutput) = ShapedRecipeBuilder
-        .shaped(RecipeCategory.MISC, GYM_KEY, 1)
-        .pattern(" g")
-        .pattern("b ")
-        .define('g', GOLD_INGOT)
-        .define('b', POKE_BALL.item())
-        .group("multi_bench")
-        .unlockedBy(getHasName(POKE_BALL.item()), has(CRAFTING_TABLE))
-        .save(recipeExporter)
+    private fun buildShapedGymKey(recipeExporter: RecipeOutput) =
+        ShapedRecipeBuilder
+            .shaped(RecipeCategory.MISC, GYM_KEY, 1)
+            .pattern(" g")
+            .pattern("b ")
+            .define('g', GOLD_INGOT)
+            .define('b', POKE_BALL.item())
+            .group("multi_bench")
+            .unlockedBy(getHasName(POKE_BALL.item()), has(CRAFTING_TABLE))
+            .save(recipeExporter)
 
-    private fun cacheForRarity(rarity: Rarity): PokeCache = when (rarity) {
-        Rarity.COMMON -> CACHE_COMMON
-        Rarity.UNCOMMON -> CACHE_UNCOMMON
-        Rarity.RARE -> CACHE_RARE
-        Rarity.EPIC -> CACHE_EPIC
-    }
+    private fun cacheForRarity(rarity: Rarity): PokeCache =
+        when (rarity) {
+            Rarity.COMMON -> CACHE_COMMON
+            Rarity.UNCOMMON -> CACHE_UNCOMMON
+            Rarity.RARE -> CACHE_RARE
+            Rarity.EPIC -> CACHE_EPIC
+        }
 
     @Suppress("CyclomaticComplexMethod")
     @Throws(NotImplementedError::class)
-    private fun elementalTypeKeyConfig(type: ElementalType): Pair<GymKey, CobblemonItem> = when (type) {
-        BUG -> GYM_KEY to BUG_GEM
-        DARK -> GYM_KEY to DARK_GEM
-        DRAGON -> GYM_KEY to DRAGON_GEM
-        ELECTRIC -> GYM_KEY to ELECTRIC_GEM
-        FAIRY -> GYM_KEY to FAIRY_GEM
-        FIGHTING -> GYM_KEY to FIGHTING_GEM
-        FIRE -> GYM_KEY to FIRE_GEM
-        FLYING -> GYM_KEY to FLYING_GEM
-        GHOST -> GYM_KEY to GHOST_GEM
-        GRASS -> GYM_KEY to GRASS_GEM
-        GROUND -> GYM_KEY to GROUND_GEM
-        ICE -> GYM_KEY to ICE_GEM
-        NORMAL -> GYM_KEY to NORMAL_GEM
-        POISON -> GYM_KEY to POISON_GEM
-        PSYCHIC -> GYM_KEY to PSYCHIC_GEM
-        ROCK -> GYM_KEY to ROCK_GEM
-        STEEL -> GYM_KEY to STEEL_GEM
-        WATER -> GYM_KEY to WATER_GEM
-        else -> {
-            throw NotImplementedError("No keys found for $type")
+    private fun elementalTypeKeyConfig(type: ElementalType): Pair<GymKey, GemItem> =
+        when (type) {
+            BUG -> {
+                GYM_KEY to BUG_GEM
+            }
+
+            DARK -> {
+                GYM_KEY to DARK_GEM
+            }
+
+            DRAGON -> {
+                GYM_KEY to DRAGON_GEM
+            }
+
+            ELECTRIC -> {
+                GYM_KEY to ELECTRIC_GEM
+            }
+
+            FAIRY -> {
+                GYM_KEY to FAIRY_GEM
+            }
+
+            FIGHTING -> {
+                GYM_KEY to FIGHTING_GEM
+            }
+
+            FIRE -> {
+                GYM_KEY to FIRE_GEM
+            }
+
+            FLYING -> {
+                GYM_KEY to FLYING_GEM
+            }
+
+            GHOST -> {
+                GYM_KEY to GHOST_GEM
+            }
+
+            GRASS -> {
+                GYM_KEY to GRASS_GEM
+            }
+
+            GROUND -> {
+                GYM_KEY to GROUND_GEM
+            }
+
+            ICE -> {
+                GYM_KEY to ICE_GEM
+            }
+
+            NORMAL -> {
+                GYM_KEY to NORMAL_GEM
+            }
+
+            POISON -> {
+                GYM_KEY to POISON_GEM
+            }
+
+            PSYCHIC -> {
+                GYM_KEY to PSYCHIC_GEM
+            }
+
+            ROCK -> {
+                GYM_KEY to ROCK_GEM
+            }
+
+            STEEL -> {
+                GYM_KEY to STEEL_GEM
+            }
+
+            WATER -> {
+                GYM_KEY to WATER_GEM
+            }
+
+            else -> {
+                throw NotImplementedError("No keys found for $type")
+            }
         }
-    }
 
     @Suppress("CyclomaticComplexMethod")
-    private fun elementalTypeCacheConfig(cache: PokeCache, type: ElementalType): Pair<PokeCache, CobblemonItem> =
+    private fun elementalTypeCacheConfig(
+        cache: PokeCache,
+        type: ElementalType,
+    ): Pair<PokeCache, GemItem> =
         when (type) {
-            BUG -> cache to BUG_GEM
-            DARK -> cache to DARK_GEM
-            DRAGON -> cache to DRAGON_GEM
-            ELECTRIC -> cache to ELECTRIC_GEM
-            FAIRY -> cache to FAIRY_GEM
-            FIGHTING -> cache to FIGHTING_GEM
-            FIRE -> cache to FIRE_GEM
-            FLYING -> cache to FLYING_GEM
-            GHOST -> cache to GHOST_GEM
-            GRASS -> cache to GRASS_GEM
-            GROUND -> cache to GROUND_GEM
-            ICE -> cache to ICE_GEM
-            NORMAL -> cache to NORMAL_GEM
-            POISON -> cache to POISON_GEM
-            PSYCHIC -> cache to PSYCHIC_GEM
-            ROCK -> cache to ROCK_GEM
-            STEEL -> cache to STEEL_GEM
-            WATER -> cache to WATER_GEM
+            BUG -> {
+                cache to BUG_GEM
+            }
+
+            DARK -> {
+                cache to DARK_GEM
+            }
+
+            DRAGON -> {
+                cache to DRAGON_GEM
+            }
+
+            ELECTRIC -> {
+                cache to ELECTRIC_GEM
+            }
+
+            FAIRY -> {
+                cache to FAIRY_GEM
+            }
+
+            FIGHTING -> {
+                cache to FIGHTING_GEM
+            }
+
+            FIRE -> {
+                cache to FIRE_GEM
+            }
+
+            FLYING -> {
+                cache to FLYING_GEM
+            }
+
+            GHOST -> {
+                cache to GHOST_GEM
+            }
+
+            GRASS -> {
+                cache to GRASS_GEM
+            }
+
+            GROUND -> {
+                cache to GROUND_GEM
+            }
+
+            ICE -> {
+                cache to ICE_GEM
+            }
+
+            NORMAL -> {
+                cache to NORMAL_GEM
+            }
+
+            POISON -> {
+                cache to POISON_GEM
+            }
+
+            PSYCHIC -> {
+                cache to PSYCHIC_GEM
+            }
+
+            ROCK -> {
+                cache to ROCK_GEM
+            }
+
+            STEEL -> {
+                cache to STEEL_GEM
+            }
+
+            WATER -> {
+                cache to WATER_GEM
+            }
 
             else -> {
                 debug("No caches found for $type")
@@ -281,12 +409,13 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
             }
         }
 
-    private fun shardConfig(rarity: Rarity): Pair<PokeShardBase, Item> = when (rarity) {
-        Rarity.COMMON -> SHARD_COMMON to SHARD_BLOCK_COMMON
-        Rarity.UNCOMMON -> SHARD_UNCOMMON to SHARD_BLOCK_UNCOMMON
-        Rarity.RARE -> SHARD_RARE to SHARD_BLOCK_RARE
-        Rarity.EPIC -> SHARD_EPIC to SHARD_BLOCK_EPIC
-    }
+    private fun shardConfig(rarity: Rarity): Pair<PokeShardBase, Item> =
+        when (rarity) {
+            Rarity.COMMON -> SHARD_COMMON to SHARD_BLOCK_COMMON
+            Rarity.UNCOMMON -> SHARD_UNCOMMON to SHARD_BLOCK_UNCOMMON
+            Rarity.RARE -> SHARD_RARE to SHARD_BLOCK_RARE
+            Rarity.EPIC -> SHARD_EPIC to SHARD_BLOCK_EPIC
+        }
 
     private fun cacheConfig(rarity: Rarity): Pair<Quartet<out PokeShardBase, Item, PokeBallItem, Item>, PokeCache> =
         when (rarity) {

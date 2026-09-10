@@ -27,12 +27,17 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 
-class GymExitBlock(properties: Properties) : BaseEntityBlock(properties) {
+class GymExitBlock(
+    properties: Properties,
+) : BaseEntityBlock(properties) {
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 
     override fun codec(): MapCodec<out BaseEntityBlock> = simpleCodec { GymExitBlock(it) }
 
-    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = GymExitEntity(pos, state)
+    override fun newBlockEntity(
+        pos: BlockPos,
+        state: BlockState,
+    ): BlockEntity = GymExitEntity(pos, state)
 
     override fun useWithoutItem(
         state: BlockState,
@@ -44,7 +49,10 @@ class GymExitBlock(properties: Properties) : BaseEntityBlock(properties) {
         if (level.getBlockEntity(pos) !is GymExitEntity) return super.useWithoutItem(state, level, pos, player, hit)
         var result: InteractionResult = InteractionResult.SUCCESS_NO_ITEM_USED
         when (level.isClientSide) {
-            true -> result = InteractionResult.PASS
+            true -> {
+                result = InteractionResult.PASS
+            }
+
             false -> {
                 (player as ServerPlayer).also {
                     debug("Gym exit block used by player ${it.uuid} at $pos in ${level.dimension()}")

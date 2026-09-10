@@ -13,7 +13,9 @@ import lol.gito.radgyms.common.extension.shinyRoll
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 
-class ShinyCharmCheckHandler(event: GymEvents.CacheRollPokeEvent) {
+class ShinyCharmCheckHandler(
+    event: GymEvents.CacheRollPokeEvent,
+) {
     init {
         var hasShinyCharm =
             event.player.inventory.contains(

@@ -31,7 +31,10 @@ fun CompoundTag.getRadGymsPlayerData(key: String): PlayerData? {
     return playerData
 }
 
-fun CompoundTag.putRadGymsPlayerData(key: String, value: PlayerData) {
+fun CompoundTag.putRadGymsPlayerData(
+    key: String,
+    value: PlayerData,
+) {
     val nbt = CompoundTag()
 
     nbt.putInt("Visits", value.visits)

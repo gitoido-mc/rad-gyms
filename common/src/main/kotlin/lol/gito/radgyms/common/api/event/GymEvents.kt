@@ -58,9 +58,13 @@ object GymEvents {
     )
 
     // Gyms
-    data class GymLeaveScreenCloseEvent(val choice: GuiScreenCloseChoice)
+    data class GymLeaveScreenCloseEvent(
+        val choice: GuiScreenCloseChoice,
+    )
 
-    data class GymLeaveScreenOpenEvent(val id: ResourceLocation)
+    data class GymLeaveScreenOpenEvent(
+        val id: ResourceLocation,
+    )
 
     data class GenerateRewardEvent(
         val player: ServerPlayer,
@@ -111,7 +115,10 @@ object GymEvents {
         val battle: PokemonBattle,
     ) : Cancelable()
 
-    data class TrainerInteractEvent(val player: ServerPlayer, val trainer: Trainer) : Cancelable()
+    data class TrainerInteractEvent(
+        val player: ServerPlayer,
+        val trainer: Trainer,
+    ) : Cancelable()
 
     @JvmField
     val CACHE_ROLL_POKE = EventObservable<CacheRollPokeEvent>()

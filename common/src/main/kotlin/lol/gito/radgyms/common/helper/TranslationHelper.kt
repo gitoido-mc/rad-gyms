@@ -21,63 +21,98 @@ private typealias RL = ResourceLocation
 private typealias MC = MutableComponent
 private typealias C = Component
 
-fun tl(key: String, vararg args: Any?): MC = translatable(RL.parse(key).toLanguageKey(), *args)
-fun tl(key: RL, vararg args: Any?): MC = translatable(key.toLanguageKey(), *args)
+fun tl(
+    key: String,
+    vararg args: Any?,
+): MC = translatable(RL.parse(key).toLanguageKey(), *args)
 
-fun tl(prefix: String, key: String, vararg args: Any?): MC = translatable(RL.parse(key).toLanguageKey(prefix), *args)
-fun tl(prefix: String, key: RL, vararg args: Any?): MC = translatable(key.toLanguageKey(prefix), *args)
+fun tl(
+    key: RL,
+    vararg args: Any?,
+): MC = translatable(key.toLanguageKey(), *args)
 
-fun tlr(key: String, vararg args: Any?): MC = translatable(key, *args)
+fun tl(
+    prefix: String,
+    key: String,
+    vararg args: Any?,
+): MC = translatable(RL.parse(key).toLanguageKey(prefix), *args)
+
+fun tl(
+    prefix: String,
+    key: RL,
+    vararg args: Any?,
+): MC = translatable(key.toLanguageKey(prefix), *args)
+
+fun tlr(
+    key: String,
+    vararg args: Any?,
+): MC = translatable(key, *args)
 
 fun tlk(key: String): String = RL.parse(key).toLanguageKey()
+
 fun tlk(key: ResourceLocation): String = key.toLanguageKey()
 
-fun tlk(prefix: String, key: String): String = RL.parse(key).toLanguageKey(prefix)
-fun tlk(prefix: String, key: RL): String = key.toLanguageKey(prefix)
+fun tlk(
+    prefix: String,
+    key: String,
+): String = RL.parse(key).toLanguageKey(prefix)
 
-fun tlc(key: String, vararg args: Any?): MC = translatable(cobblemonResource(key).toLanguageKey(), *args)
+fun tlk(
+    prefix: String,
+    key: RL,
+): String = key.toLanguageKey(prefix)
+
+fun tlc(
+    key: String,
+    vararg args: Any?,
+): MC = translatable(cobblemonResource(key).toLanguageKey(), *args)
 
 object ElementalTypeTranslationHelper {
     @Suppress("unused")
-    fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): C =
-        buildPrefixedSuffixedTypeText(elementalType?.showdownId)
+    fun buildPrefixedSuffixedTypeText(elementalType: ElementalType? = null): C = buildPrefixedSuffixedTypeText(elementalType?.showdownId)
 
-    fun buildPrefixedSuffixedTypeText(elementalType: String? = null): C = tl(
-        modId("item.component.gym_type"),
-        buildSuffixedTypeText(elementalType),
-    )
+    fun buildPrefixedSuffixedTypeText(elementalType: String? = null): C =
+        tl(
+            modId("item.component.gym_type"),
+            buildSuffixedTypeText(elementalType),
+        )
 
     @Suppress("unused")
-    fun buildSuffixedTypeText(elementalType: ElementalType? = null): C =
-        buildSuffixedTypeText(elementalType?.showdownId)
+    fun buildSuffixedTypeText(elementalType: ElementalType? = null): C = buildSuffixedTypeText(elementalType?.showdownId)
 
-    fun buildSuffixedTypeText(elementalType: String? = null): C = tlc(
-        "type.suffix",
-        buildTypeText(elementalType),
-    )
+    fun buildSuffixedTypeText(elementalType: String? = null): C =
+        tlc(
+            "type.suffix",
+            buildTypeText(elementalType),
+        )
 
     @Suppress("unused")
     fun buildTypeText(elementalType: ElementalType? = null): C = buildTypeText(elementalType?.showdownId)
 
-    fun buildTypeText(type: String? = null): C = when {
-        (type == null) ->
-            tl(modId("item.component.type.chaos")).withStyle {
-                it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
+    fun buildTypeText(type: String? = null): C =
+        when {
+            (type == null) -> {
+                tl(modId("item.component.type.chaos")).withStyle {
+                    it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
+                }
             }
 
-        (ElementalTypes.get(type) != null) ->
-            tlc("type.$type").withStyle {
-                it.applyFormat(ChatFormatting.DARK_PURPLE)
+            (ElementalTypes.get(type) != null) -> {
+                tlc("type.$type").withStyle {
+                    it.applyFormat(ChatFormatting.DARK_PURPLE)
+                }
             }
 
-        (type == "chaos") ->
-            tl(modId("item.component.type.chaos")).withStyle {
-                it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
+            (type == "chaos") -> {
+                tl(modId("item.component.type.chaos")).withStyle {
+                    it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
+                }
             }
 
-        else ->
-            tl(modId("item.component.type.$type")).withStyle {
-                it.applyFormat(ChatFormatting.GOLD)
+            else -> {
+                tl(modId("item.component.type.$type")).withStyle {
+                    it.applyFormat(ChatFormatting.GOLD)
+                }
             }
-    }
+        }
 }

@@ -20,19 +20,21 @@ import net.minecraft.world.item.Rarity
 import java.util.concurrent.CompletableFuture
 
 class RarityArgumentType : ArgumentType<Rarity> {
-    override fun parse(reader: StringReader): Rarity = try {
-        return Rarity.valueOf(reader.readString().uppercase())
-    } catch (_: Exception) {
-        throw SimpleCommandExceptionType(INVALID_RARITY).createWithContext(reader)
-    }
+    override fun parse(reader: StringReader): Rarity =
+        try {
+            return Rarity.valueOf(reader.readString().uppercase())
+        } catch (_: Exception) {
+            throw SimpleCommandExceptionType(INVALID_RARITY).createWithContext(reader)
+        }
 
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
         builder: SuggestionsBuilder,
-    ): CompletableFuture<Suggestions> = SharedSuggestionProvider.suggest(
-        Rarity.entries.map { it.name.lowercase() },
-        builder,
-    )
+    ): CompletableFuture<Suggestions> =
+        SharedSuggestionProvider.suggest(
+            Rarity.entries.map { it.name.lowercase() },
+            builder,
+        )
 
     override fun getExamples(): Collection<String> = Rarity.entries.map { it.name.lowercase() }
 
@@ -41,7 +43,9 @@ class RarityArgumentType : ArgumentType<Rarity> {
 
         fun rarity() = RarityArgumentType()
 
-        fun <S> getRarity(context: CommandContext<S>, name: String): Rarity =
-            context.getArgument(name, Rarity::class.java)
+        fun <S> getRarity(
+            context: CommandContext<S>,
+            name: String,
+        ): Rarity = context.getArgument(name, Rarity::class.java)
     }
 }

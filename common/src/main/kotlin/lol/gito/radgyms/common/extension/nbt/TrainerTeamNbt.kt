@@ -23,7 +23,10 @@ fun CompoundTag.getRadGymsTrainerTeam(key: String): MutableList<PokemonModel> {
         }.toMutableList()
 }
 
-fun CompoundTag.putRadGymsTrainerTeam(key: String, value: MutableList<PokemonModel>) {
+fun CompoundTag.putRadGymsTrainerTeam(
+    key: String,
+    value: MutableList<PokemonModel>,
+) {
     val nbt = CompoundTag()
 
     with(RCTErrors.create()) {

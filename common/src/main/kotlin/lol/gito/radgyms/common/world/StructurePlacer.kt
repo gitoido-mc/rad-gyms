@@ -22,17 +22,22 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 object StructurePlacer {
     const val STRUCTURE_FLAGS = 18
 
-    fun placeStructure(world: WorldGenLevel, pos: BlockPos, structureId: String) {
+    fun placeStructure(
+        world: WorldGenLevel,
+        pos: BlockPos,
+        structureId: String,
+    ) {
         val structureResource = ResourceLocation.parse(structureId)
         val structTemplateManager = world.server?.structureManager
         val structureTemplate = structTemplateManager?.get(structureResource)
 
         if (structureTemplate != null) {
-            val structPlacementData = StructurePlaceSettings()
-                .setIgnoreEntities(true)
-                .setMirror(Mirror.NONE)
-                .setRotation(Rotation.NONE)
-                .setKnownShape(true)
+            val structPlacementData =
+                StructurePlaceSettings()
+                    .setIgnoreEntities(true)
+                    .setMirror(Mirror.NONE)
+                    .setRotation(Rotation.NONE)
+                    .setKnownShape(true)
 
             val random = WorldgenRandom(LegacyRandomSource(0L))
             random.setLargeFeatureSeed(

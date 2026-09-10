@@ -22,7 +22,10 @@ fun CompoundTag.getRadGymsBattleRules(key: String): BattleRules {
         .build()
 }
 
-fun CompoundTag.putRadGymsBattleRules(key: String, value: BattleRules) {
+fun CompoundTag.putRadGymsBattleRules(
+    key: String,
+    value: BattleRules,
+) {
     val nbt = CompoundTag()
 
     nbt.putInt("MaxItemUses", value.maxItemUses)

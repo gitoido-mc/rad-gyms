@@ -17,8 +17,9 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.resources.ResourceLocation
 import java.io.FileNotFoundException
 
-class TrainerEntityRenderer(val ctx: EntityRendererProvider.Context) :
-    LivingEntityRenderer<Trainer, PlayerModel<Trainer>>(
+class TrainerEntityRenderer(
+    val ctx: EntityRendererProvider.Context,
+) : LivingEntityRenderer<Trainer, PlayerModel<Trainer>>(
         ctx,
         PlayerModel(ctx.bakeLayer(ModelLayers.PLAYER), false),
         SHADOW_RADIUS,
@@ -29,18 +30,19 @@ class TrainerEntityRenderer(val ctx: EntityRendererProvider.Context) :
         val DEFAULT_TEXTURE: ResourceLocation = modId("textures/npc/default_trainer.png")
     }
 
-    override fun getTextureLocation(entity: Trainer): ResourceLocation = try {
-        val id = modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png")
-        ctx.resourceManager.getResourceOrThrow(id)
+    override fun getTextureLocation(entity: Trainer): ResourceLocation =
+        try {
+            val id = modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png")
+            ctx.resourceManager.getResourceOrThrow(id)
 
-        debug(
-            "Cannot find texture {}, falling back to {}",
-            modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png").toString(),
-            DEFAULT_TEXTURE.toString(),
-        )
+            debug(
+                "Cannot find texture {}, falling back to {}",
+                modId("textures/npc/${entity.entityData.get(Trainer.GYM_ID)}.png").toString(),
+                DEFAULT_TEXTURE.toString(),
+            )
 
-        id
-    } catch (_: FileNotFoundException) {
-        DEFAULT_TEXTURE
-    }
+            id
+        } catch (_: FileNotFoundException) {
+            DEFAULT_TEXTURE
+        }
 }

@@ -54,8 +54,7 @@ object RadGymsDataProvider : DataProvider {
         return registry
     }
 
-    override fun fromIdentifier(identifier: ResourceLocation): DataRegistry? =
-        this.registries.find { it.id == identifier }
+    override fun fromIdentifier(identifier: ResourceLocation): DataRegistry? = this.registries.find { it.id == identifier }
 
     override fun sync(player: ServerPlayer) {
         if (!player.connection.connection.isMemoryConnection) {
@@ -65,7 +64,9 @@ object RadGymsDataProvider : DataProvider {
         }
     }
 
-    private class SimpleResourceReloader(private val type: PackType) : ResourceManagerReloadListener {
+    private class SimpleResourceReloader(
+        private val type: PackType,
+    ) : ResourceManagerReloadListener {
         override fun onResourceManagerReload(manager: ResourceManager) {
             registries
                 .filter { it.type == this.type }

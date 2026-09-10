@@ -24,7 +24,9 @@ import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.server.level.ServerPlayer
 
-class TrainerBattleEndHandler(val event: GymEvents.TrainerBattleEndEvent) {
+class TrainerBattleEndHandler(
+    val event: GymEvents.TrainerBattleEndEvent,
+) {
     init {
         debug("Trainer battle end triggered")
 
@@ -48,9 +50,10 @@ class TrainerBattleEndHandler(val event: GymEvents.TrainerBattleEndEvent) {
             }
 
         if (defeatedLeader != null) {
-            val winnerPlayers = event.winners
-                .filterIsInstance<PlayerBattleActor>()
-                .map { it.entity as ServerPlayer }
+            val winnerPlayers =
+                event.winners
+                    .filterIsInstance<PlayerBattleActor>()
+                    .map { it.entity as ServerPlayer }
 
             val firstPlayer = winnerPlayers.first()
             val gym = RadGymsState.getGymForPlayer(firstPlayer)!!
@@ -66,13 +69,14 @@ class TrainerBattleEndHandler(val event: GymEvents.TrainerBattleEndEvent) {
         }
     }
 
-    private fun handleGymLeave() = event
-        .battle
-        .players
-        .filter { it.level().dimension() == GYM_DIMENSION }
-        .forEach {
-            GymTeardownService
-                .withTeleportScheduler(GymTeleportScheduler())
-                .handleGymLeave(it)
-        }
+    private fun handleGymLeave() =
+        event
+            .battle
+            .players
+            .filter { it.level().dimension() == GYM_DIMENSION }
+            .forEach {
+                GymTeardownService
+                    .withTeleportScheduler(GymTeleportScheduler())
+                    .handleGymLeave(it)
+            }
 }

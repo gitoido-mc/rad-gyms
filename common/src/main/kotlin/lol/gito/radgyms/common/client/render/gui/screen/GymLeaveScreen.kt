@@ -79,7 +79,11 @@ class GymLeaveScreen : AbstractGymScreen(tl(modId("gui.common.leave"))) {
 
     override fun onClose() = LEAVE_SCREEN_CLOSE.emit(GymEvents.GymLeaveScreenCloseEvent(this.closeReason))
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(
+        keyCode: Int,
+        scanCode: Int,
+        modifiers: Int,
+    ): Boolean {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
             this.onClose(GuiScreenCloseChoice.CANCEL)
             return true
@@ -87,7 +91,12 @@ class GymLeaveScreen : AbstractGymScreen(tl(modId("gui.common.leave"))) {
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(
+        context: GuiGraphics,
+        mouseX: Int,
+        mouseY: Int,
+        delta: Float,
+    ) {
         super.preRender(context, panelResource)
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
