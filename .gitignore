@@ -45,6 +45,7 @@ docs/src/pages/.vault-nickname
 /.architectury-transformer/
 /*/runClient/
 /*/runServer/
+/*/run/
 
 /common/jars/
 /fabric/jars/
