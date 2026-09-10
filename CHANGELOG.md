@@ -8,6 +8,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ## [Unreleased]
 
 ### <!-- 3 --> Balancing
+- Fairy cache rebalance - remove active form Xerneas
 - Fairy cache rebalance - remove busted form mimikyu
 - Electric cache rebalance - add alola bias pichu (fixed that one), pikachu and raichu, remove league cap pikachu
 - Removed Eternatus-Eternamax and Necrozma-Ultra from dragon cache
