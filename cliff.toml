@@ -80,8 +80,8 @@ commit_parsers = [
     { message = "^Upload", skip = true },
     { message = "^feat", group = "<!-- 0 --> Features" },
     { message = "^fix", group = "<!-- 1 --> Bug Fixes" },
-    { message = "^perf", group = "<!-- 3 --> Optimizations" },
-    { message = "^balance", group = "<!-- 2 --> Balancing" },
+    { message = "^perf", group = "<!-- 2 --> Optimizations" },
+    { message = "^chore", group = "<!-- 3 --> Misc" },
     { message = ".*", skip = true },
 ]
 
