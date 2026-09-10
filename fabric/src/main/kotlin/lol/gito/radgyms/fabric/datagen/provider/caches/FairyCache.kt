@@ -63,7 +63,6 @@ val FAIRY_CACHE =
                             "florges flower=white" to CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON,
                             "florges flower=yellow" to CACHE_DEFAULT_ENTRY_WEIGHT_UNCOMMON,
                             "granbull" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
-                            "mimikyu disguise_form=busted" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                             "mimikyu" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                             "slurpuff" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                             "sylveon" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
