@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [ZeroVer](https://0ver.org).
 
+## [Unreleased]
+
+### <!-- 3 --> Balancing
+- Fairy cache rebalance - remove busted form mimikyu
+- Electric cache rebalance - add alola bias pichu (fixed that one), pikachu and raichu, remove league cap pikachu
+- Removed Eternatus-Eternamax and Necrozma-Ultra from dragon cache
+- Removed battle bond greninja from dark cache
+
+### <!-- 4 --> Misc
+- Add prek config for changelog gen
+
 ## [1.7.3+0.4.4] - 2026-02-25
 
 ### <!-- 0 --> Features
@@ -20,7 +31,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Fix translations defaulting to minecraft namespace after TranslationHelper update
 - Ensure i18n provider generates translation keys in proper namespace
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Unused library versions cleanup
 - Changelog update
 
@@ -55,7 +66,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - SCM versioning via gradle plugin, proper mixin and aw propagation, updated docs build, added pull request workflow in [#113](https://github.com/gitoido-mc/rad-gyms/pull/113)
 - New `Fixed` and `Pool` type team generators. Serialization codecs for most of the gym classes. in [#112](https://github.com/gitoido-mc/rad-gyms/pull/112)
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Remove artifacts from main
 
 ### New Contributors
@@ -75,7 +86,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 1 --> Bug Fixes
 - GymEnterScreen now uses proper translation string
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Alot of stuff
 - Tidy up code, resolve deprecated usage and bump dependency versions
 - Tidy up resources
@@ -108,7 +119,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Caches creative item group was showing incorrect items
 - OnLoadModels mixin target fix
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Gh-action fix regex cause silly take one thousand minus 7
 - Gh-action fix regex cause silly
 - Gh-action build on tag
@@ -126,7 +137,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 1 --> Bug Fixes
 - Added another lowercase transform on clientside just in case
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Updated deps in CI publish action and in fabric.mod.json
 
 ## [1.6.1+0.3.0-alpha1] - 2025-11-22
@@ -139,7 +150,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Broken build
 - Added loot tables and mineable tag for shard blocks
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Datagen
 - 1.7.0 build support
 - Serialization update and additions
@@ -159,7 +170,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 1 --> Bug Fixes
 - Fixed shardReward config
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Removed dead code
 - Accessors for RCTBattleAI, persistence groundwork
 
@@ -185,7 +196,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Prevent use of cache in offhand (kudos Cobblemon Academy)
 - Missing access widener declaration in fabric.mod.json
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Code cleanup
 
 ## [1.6.1+0.2.0-beta3] - 2025-09-19
@@ -210,7 +221,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - I18n
 - Invalid fire entrance variation structure name fix
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Steel entrance structure center variation fix
 - .gitignore: datagen folder
 - Readme update
@@ -224,7 +235,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 1 --> Bug Fixes
 - Cache poke names not fetching on client side when playing on server
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Version bump
 - Update changelog
 - Broken badges
@@ -234,7 +245,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 0 --> Features
 - Typed entrance loot tables
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Update changelog
 
 ## [1.6.1+0.2.0-alpha1] - 2025-07-16
@@ -267,7 +278,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Localization
 - Aether compat mixin
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Code style and copyrights
 - License headers, stonehenge gym entrance progress
 - License headers, formatting
@@ -284,7 +295,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 
 ## [1.6.1+0.1.13-stable1] - 2025-05-22
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - CHANGELOG.md workflow
 
 ## [1.6.1+0.1.13-stable] - 2025-05-20
@@ -295,14 +306,14 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 1 --> Bug Fixes
 - Config generation
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Update gradle.properties
 - Code quality
 - Dependency update
 
 ## [1.6.1+0.1.12-stable] - 2025-04-20
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Github-actions update
 
 ## [1.6.1+0.1.11-stable] - 2025-04-05
@@ -315,7 +326,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Mixin server bias, misc localization fixes
 - Dying in gym breaks its instance
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Added changelog generation workflow
 - Added CHANGELOG.md
 - Additional checks whether gym instance exists
@@ -336,7 +347,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Preload chunks correctly
 - Chunk loading for teleport position
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Cleanup imports
 - Set trainer entity persistent
 - Lower chunk update radius
@@ -378,7 +389,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Creative checks and additional player notifications when Gym key being used by player
 - Default values in trainer DTO
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Localization update
 - Version bump
 - Updated rarities for gym keys
@@ -398,7 +409,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 0 --> Features
 - Boot player from gym on team fainted
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Readme and build update
 
 ## [1.6.1+0.1.2-stable] - 2025-02-11
@@ -422,7 +433,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Gym level slider now sets internal level value correctly
 - Publish only on release created
 
-### <!-- 3 --> Misc
+### <!-- 4 --> Misc
 - Version bump
 
 ## [1.6.1+0.1.1-beta] - 2025-02-09
@@ -435,6 +446,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### New Contributors
 * @gitoido made their first contribution
 
+[unreleased]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.4...HEAD
 [1.7.3+0.4.4]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.3...1.7.3+0.4.4
 [1.7.3+0.4.3]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.2...1.7.3+0.4.3
 [1.7.3+0.4.2]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.1...1.7.3+0.4.2

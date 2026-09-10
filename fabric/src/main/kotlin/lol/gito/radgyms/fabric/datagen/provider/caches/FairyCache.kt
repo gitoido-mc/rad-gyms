@@ -112,7 +112,6 @@ val FAIRY_CACHE =
                     "magearna" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "screamtail" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "silvally rks_memory=fairy" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
-                    "xerneas life_mode=active" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "xerneas" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                     "zacian" to CACHE_DEFAULT_ENTRY_WEIGHT_EPIC,
                 ),
