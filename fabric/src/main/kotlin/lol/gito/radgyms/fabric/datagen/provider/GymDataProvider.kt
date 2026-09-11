@@ -51,11 +51,11 @@ class GymDataProvider(
         GymJson(
             id = type.showdownId,
             template = "rad_gyms:gym_interior_default",
-            exitBlockPos = Coords(16.0, 2.0, 16.0),
+            exitBlockPos = Coords(18.0, 2.0, 17.0),
             playerSpawnRelative =
                 EntityCoordsAndYaw(
-                    Coords(16.5, 2.0, 27.0),
-                    yaw = -180.0,
+                    Coords(18.5, 2.0, 8.5),
+                    yaw = 0.0,
                 ),
             trainers =
                 listOf(
@@ -64,8 +64,8 @@ class GymDataProvider(
                         name = modId("npc.trainer_junior").toLanguageKey(),
                         spawnRelative =
                             EntityCoordsAndYaw(
-                                Coords(26.5, 2.0, 15.5),
-                                yaw = 42.5,
+                                Coords(12.5, 3.0, 12.5),
+                                yaw = -42.5,
                             ),
                         possibleFormats = listOf(GymBattleFormat.SINGLES),
                         possibleElementalTypes = listOf(type),
@@ -84,8 +84,8 @@ class GymDataProvider(
                         requires = "default_trainer_junior",
                         spawnRelative =
                             EntityCoordsAndYaw(
-                                Coords(5.5, 2.0, 15.5),
-                                yaw = -42.5,
+                                Coords(24.5, 3.0, 12.5),
+                                yaw = 42.5,
                             ),
                         possibleFormats = listOf(GymBattleFormat.SINGLES, GymBattleFormat.DOUBLES),
                         possibleElementalTypes = listOf(type),
@@ -105,8 +105,8 @@ class GymDataProvider(
                         leader = true,
                         spawnRelative =
                             EntityCoordsAndYaw(
-                                Coords(16.0, 2.0, 6.0),
-                                yaw = 0.01,
+                                Coords(18.5, 3.0, 24.5),
+                                yaw = 180.0,
                             ),
                         possibleFormats =
                             listOf(

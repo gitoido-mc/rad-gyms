@@ -1,18 +1,18 @@
 {
   "exit_block_pos": {
-    "x": 16.0,
+    "x": 18.0,
     "y": 2.0,
-    "z": 16.0
+    "z": 17.0
   },
   "id": "poison",
   "interior_template": "rad_gyms:gym_interior_default",
   "player_spawn_relative": {
     "pos": {
-      "x": 16.5,
+      "x": 18.5,
       "y": 2.0,
-      "z": 27.0
+      "z": 8.5
     },
-    "yaw": -180.0
+    "yaw": 0.0
   },
   "rewards": [
     {
@@ -87,11 +87,11 @@
       "name": "rad_gyms.npc.trainer_junior",
       "spawn_relative": {
         "pos": {
-          "x": 26.5,
-          "y": 2.0,
-          "z": 15.5
+          "x": 12.5,
+          "y": 3.0,
+          "z": 12.5
         },
-        "yaw": 42.5
+        "yaw": -42.5
       }
     },
     {
@@ -136,11 +136,11 @@
       "requires": "default_trainer_junior",
       "spawn_relative": {
         "pos": {
-          "x": 5.5,
-          "y": 2.0,
-          "z": 15.5
+          "x": 24.5,
+          "y": 3.0,
+          "z": 12.5
         },
-        "yaw": -42.5
+        "yaw": 42.5
       }
     },
     {
@@ -186,11 +186,11 @@
       "requires": "default_trainer_senior",
       "spawn_relative": {
         "pos": {
-          "x": 16.0,
-          "y": 2.0,
-          "z": 6.0
+          "x": 18.5,
+          "y": 3.0,
+          "z": 24.5
         },
-        "yaw": 0.01
+        "yaw": 180.0
       }
     }
   ]
