@@ -65,6 +65,7 @@ val FIRE_CACHE =
                     "scorbunny" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     "fuecoco" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     // Starters
+                    "tauros paldean bull_breed=blaze" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     "simisear" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     "talonflame" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
                     "houndoom" to CACHE_DEFAULT_ENTRY_WEIGHT_RARE,
