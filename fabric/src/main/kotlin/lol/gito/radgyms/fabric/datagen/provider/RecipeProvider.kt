@@ -48,7 +48,6 @@ import com.cobblemon.mod.common.api.types.ElementalTypes.PSYCHIC
 import com.cobblemon.mod.common.api.types.ElementalTypes.ROCK
 import com.cobblemon.mod.common.api.types.ElementalTypes.STEEL
 import com.cobblemon.mod.common.api.types.ElementalTypes.WATER
-import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.GemItem
 import com.cobblemon.mod.common.item.PokeBallItem
 import lol.gito.radgyms.common.RadGyms.debug
@@ -216,7 +215,7 @@ class RecipeProvider(
 
     private fun buildExitRope(recipeExporter: RecipeOutput) =
         ShapedRecipeBuilder
-            .shaped(RecipeCategory.MISC, RadGymsItems.EXIT_ROPE, 1)
+            .shaped(RecipeCategory.MISC, RadGymsItems.ESCAPE_ROPE, 1)
             .pattern("l")
             .pattern("b")
             .define('l', LEAD)

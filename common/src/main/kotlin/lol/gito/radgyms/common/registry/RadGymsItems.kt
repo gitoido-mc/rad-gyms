@@ -13,7 +13,7 @@ import lol.gito.radgyms.common.item.CommonPokeCache
 import lol.gito.radgyms.common.item.CommonPokeShard
 import lol.gito.radgyms.common.item.EpicPokeCache
 import lol.gito.radgyms.common.item.EpicPokeShard
-import lol.gito.radgyms.common.item.ExitRope
+import lol.gito.radgyms.common.item.EscapeRope
 import lol.gito.radgyms.common.item.GymKey
 import lol.gito.radgyms.common.item.GymRewardBag
 import lol.gito.radgyms.common.item.RarePokeCache
@@ -41,7 +41,7 @@ object RadGymsItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item
     val GYM_REWARD: GymRewardBag = this.create(modId("gym_reward"), GymRewardBag())
 
     @JvmField
-    val EXIT_ROPE: ExitRope = this.create(modId("exit_rope"), ExitRope())
+    val ESCAPE_ROPE: EscapeRope = this.create(modId("escape_rope"), EscapeRope())
 
     @JvmField
     val SHARD_COMMON: CommonPokeShard = this.create(modId("shard_common"), CommonPokeShard())

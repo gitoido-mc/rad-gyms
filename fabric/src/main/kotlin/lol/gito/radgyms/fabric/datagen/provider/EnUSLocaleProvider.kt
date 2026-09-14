@@ -19,7 +19,7 @@ import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_COMMON
 import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_EPIC
 import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_RARE
 import lol.gito.radgyms.common.registry.RadGymsItems.CACHE_UNCOMMON
-import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
+import lol.gito.radgyms.common.registry.RadGymsItems.ESCAPE_ROPE
 import lol.gito.radgyms.common.registry.RadGymsItems.GYM_KEY
 import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_COMMON
 import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_EPIC
@@ -57,9 +57,9 @@ class EnUSLocaleProvider(
 
     private fun itemTranslations(): Map<String, String> =
         mapOf(
-            EXIT_ROPE.descriptionId to "Exit rope",
-            EXIT_ROPE.descriptionId.plus(".tooltip") to "Single-use rope to escape the gym trial",
-            EXIT_ROPE.descriptionId.plus(".failed") to "It cannot be used here",
+            ESCAPE_ROPE.descriptionId to "Exit rope",
+            ESCAPE_ROPE.descriptionId.plus(".tooltip") to "Single-use rope to escape the gym trial",
+            ESCAPE_ROPE.descriptionId.plus(".failed") to "It cannot be used here",
             GYM_KEY.descriptionId to "Gym key",
             GYM_KEY.descriptionId.plus(".attuned") to "Attuned to %s",
             CACHE_COMMON.descriptionId to "Common Pokemon cache",

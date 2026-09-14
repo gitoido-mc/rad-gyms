@@ -25,7 +25,7 @@ import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.entity.Trainer
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
-import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
+import lol.gito.radgyms.common.registry.RadGymsItems.ESCAPE_ROPE
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -188,6 +188,6 @@ class TrainerInteractHandler(
         player: ServerPlayer,
     ) {
         player.displayClientMessage(tl(message))
-        player.giveOrDropItemStack(EXIT_ROPE.defaultInstance, true)
+        player.giveOrDropItemStack(ESCAPE_ROPE.defaultInstance, true)
     }
 }

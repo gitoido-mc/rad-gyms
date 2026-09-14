@@ -41,7 +41,7 @@ object GymLeaveC2SHandler : ServerNetworkPacketHandler<GymLeaveC2S> {
         }
 
         when (stack.item) {
-            RadGymsItems.EXIT_ROPE -> {
+            RadGymsItems.ESCAPE_ROPE -> {
                 debug("Player used exit rope")
                 stack.consume(1, player)
 
