@@ -15,6 +15,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Removed battle bond greninja from dark cache
 
 ### <!-- 4 --> Misc
+- Frick you prek
 - Add prek config for changelog gen
 
 ## [1.7.3+0.4.4] - 2026-02-25

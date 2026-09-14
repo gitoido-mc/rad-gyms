@@ -57,7 +57,7 @@ class EnUSLocaleProvider(
 
     private fun itemTranslations(): Map<String, String> =
         mapOf(
-            ESCAPE_ROPE.descriptionId to "Exit rope",
+            ESCAPE_ROPE.descriptionId to "Escape rope",
             ESCAPE_ROPE.descriptionId.plus(".tooltip") to "Single-use rope to escape the gym trial",
             ESCAPE_ROPE.descriptionId.plus(".failed") to "It cannot be used here",
             GYM_KEY.descriptionId to "Gym key",
