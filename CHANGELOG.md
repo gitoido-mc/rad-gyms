@@ -2,21 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on modified [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [ZeroVer](https://0ver.org).
 
 ## [Unreleased]
 
-### <!-- 3 --> Balancing
-- Fairy cache rebalance - remove active form Xerneas
-- Fairy cache rebalance - remove busted form mimikyu
-- Electric cache rebalance - add alola bias pichu (fixed that one), pikachu and raichu, remove league cap pikachu
-- Removed Eternatus-Eternamax and Necrozma-Ultra from dragon cache
-- Removed battle bond greninja from dark cache
+### <!-- 0 --> Features
+- New interim generic interior until issues with new interior set are resolved
 
-### <!-- 4 --> Misc
-- Frick you prek
-- Add prek config for changelog gen
+### <!-- 3 --> Balancing
+- Fire cache rebalance
+- Fighting cache rebalance
+- Fairy cache rebalance
+- Electric cache rebalance
+- Dragon cache rebalance
+- Dark cache rebalance
+- Bug cache rebalance
 
 ## [1.7.3+0.4.4] - 2026-02-25
 
