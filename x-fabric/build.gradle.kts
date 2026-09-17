@@ -25,21 +25,21 @@ architectury {
     }
 }
 
-wiki {
-    wikiAccessToken = providers.systemProperty("moddedmc_gh_token").get()
-    docs.create(project.property("mod_id") as String) {
-        root = file("../docs/rad_gyms")
-    }
-}
+// wiki {
+//    wikiAccessToken = providers.systemProperty("moddedmc_gh_token").get()
+//    docs.create(project.property("mod_id") as String) {
+//        root = file("../docs/rad_gyms")
+//    }
+// }
 
 loom {
     enableTransitiveAccessWideners.set(true)
 
     runs {
-        val wikiExporterParams = mapOf(
-            "wiki_exporter.config.path" to "../../docs/rad_gyms/wiki-exporter.config.json",
-            "wiki_exporter.enabled" to "true",
-        )
+//        val wikiExporterParams = mapOf(
+//            "wiki_exporter.config.path" to "../../docs/rad_gyms/wiki-exporter.config.json",
+//            "wiki_exporter.enabled" to "true",
+//        )
 
         getByName("client") {
             runDirectory.set(file("runClient"))
@@ -51,17 +51,17 @@ loom {
         getByName("server") {
             runDirectory.set(file("runServer"))
         }
-        create("exportClient") {
-            client()
-            runDirectory.set(file("runClient"))
-            systemProperties.putAll(wikiExporterParams)
-        }
-        create("exportServer") {
-            server()
-            runDirectory.set(file("runServer"))
-            programArguments.add("nogui")
-            systemProperties.putAll(wikiExporterParams)
-        }
+//        create("exportClient") {
+//            client()
+//            runDirectory.set(file("runClient"))
+//            systemProperties.putAll(wikiExporterParams)
+//        }
+//        create("exportServer") {
+//            server()
+//            runDirectory.set(file("runServer"))
+//            programArguments.add("nogui")
+//            systemProperties.putAll(wikiExporterParams)
+//        }
     }
 }
 
