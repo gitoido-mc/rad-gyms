@@ -35,7 +35,7 @@ public abstract class OnLoadModels {
     private Map<ResourceLocation, BlockModel> modelResources;
 
     @Shadow
-    protected abstract void loadSpecialItemModelAndDependencies(ModelResourceLocation id);
+    protected abstract void loadSpecialItemModelAndDependencies(ModelResourceLocation modelResourceLocation);
 
     @Inject(
         method = "<init>",
@@ -48,9 +48,9 @@ public abstract class OnLoadModels {
     )
     public void init(
         BlockColors blockColors,
-        ProfilerFiller profiler,
-        Map<ResourceLocation, BlockModel> jsonUnbakedModels,
-        Map<ResourceLocation, List<ModelBakery.TextureGetter>> blockStates,
+        ProfilerFiller profilerFiller,
+        Map<ResourceLocation, BlockModel> map,
+        Map<ResourceLocation, List<ModelBakery.TextureGetter>> map2,
         CallbackInfo ci
     ) {
         this.modelResources.keySet().stream()
