@@ -12,7 +12,7 @@ scmVersion {
     versionCreator("simple")
 
     tag {
-        prefix = libs.versions.cobblemon.get().split("+").first()
+        prefix = libs.versions.cobblemon.get().split("+").first().plus("+")
         fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+", "1.7.3+")
     }
 
