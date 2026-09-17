@@ -1,13 +1,10 @@
+
 /*
  * Copyright (c) 2025-2026. gitoido-mc
  * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
  * If a copy of the GNU General Public License v3.0 was not distributed with this file,
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
-
-plugins {
-    alias(libs.plugins.rg.root)
-}
 
 // architectury {
 //    minecraft = project.property("minecraft_version") as String
@@ -101,36 +98,36 @@ plugins {
 
 // }
 //
-// val buildMod = project.tasks.register("buildMod") {
-//    description = "Assemble the jars"
-//
-//    dependsOn(":common:build")
-//    dependsOn(":fabric:build")
-//    dependsOn(":neoforge:build")
-//    mustRunAfter(
-//        ":fabric:build",
-//        ":neoforge:build",
-//        "build",
-//    )
-//
-//    doLast {
-//        logger.info("Preparing $version jars")
-//
-//        layout.buildDirectory.file("libs").get().asFile.delete()
-//
-//        listOf(":common", ":fabric", ":neoforge").forEach { mod ->
-//            val modProject = project(mod)
-//            val jars = listOf(
-//                "${project.name}-${modProject.name}-${modProject.version}.jar",
-//                "${project.name}-${modProject.name}-${modProject.version}-sources.jar",
-//            )
-//
-//            jars.forEach {
-//                val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
-//                dest.ensureParentDirsCreated()
-//
-//                modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
-//            }
-//        }
-//    }
-// }
+
+val buildMod = project.tasks.register("buildMod") {
+    description = "Assemble the jars"
+
+    dependsOn(":x-common:assemble")
+//    dependsOn(":x-fabric:assemble")
+//    dependsOn(":x-neoforge:assemble")
+
+    doLast {
+        logger.info("Preparing $version jars")
+
+        layout.buildDirectory.file("libs").get().asFile.delete()
+
+        listOf(
+            ":x-common",
+//            ":x-fabric",
+//            ":x-neoforge"
+        ).forEach { mod ->
+            val modProject = project(mod)
+            val jars = listOf(
+                "${project.name}-${modProject.name}-${modProject.version}.jar",
+                "${project.name}-${modProject.name}-${modProject.version}-sources.jar",
+            )
+
+            jars.forEach {
+                val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
+                dest.createNewFile()
+
+                modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
+            }
+        }
+    }
+}
