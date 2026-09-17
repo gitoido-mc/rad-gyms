@@ -15,18 +15,27 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Added customizable shiny chance boosters for caches
 - Cobblemon npcs in gyms
 
-### <!-- 1 --> Bug Fixes
+### <!-- 1 --> Balancing
+- Lowered default chances to roll shiny species for gym trainer team
+
+### <!-- 2 --> Bug Fixes
 - Add spacing in world border for dimension
 
-### <!-- 3 --> Balancing
-- Lowered default chances to roll shiny species for gym trainer team
+### <!-- 3 --> Optimizations
+- Fixed boosted cache tooltip
+- Renamed exit rope to escape rope
+- Added new shard block assets
+- Added new generic gym key model
+- Added new generic gym interior
+- Simplified teleport logic
+- Changed serialization to gson and refactored config load in [#133](https://github.com/gitoido-mc/rad-gyms/pull/133)
 
 ## [1.7.3+0.4.4] - 2026-02-25
 
 ### <!-- 0 --> Features
 - Added particles and sounds for gym entrance block
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Rollback mirrored gradle repo for cobblemon
 - Fix translations defaulting to minecraft namespace again
 - Add missing fairy type to defaultElementalTypes in [#128](https://github.com/gitoido-mc/rad-gyms/pull/128)
@@ -36,9 +45,12 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Fix translations defaulting to minecraft namespace after TranslationHelper update
 - Ensure i18n provider generates translation keys in proper namespace
 
+### <!-- 3 --> Optimizations
+- Detekt checks, code flow optimizations, reintroduced snapshot switch in [#126](https://github.com/gitoido-mc/rad-gyms/pull/126)
+
 ## [1.7.3+0.4.3] - 2026-02-20
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - More detekt cleanup + msd compat fixes in [#125](https://github.com/gitoido-mc/rad-gyms/pull/125)
 
 ## [1.7.3+0.4.2] - 2026-02-18
@@ -46,20 +58,26 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 0 --> Features
 - Added missing translations
 
+### <!-- 3 --> Optimizations
+- Changed custom stats registration on world init in [#124](https://github.com/gitoido-mc/rad-gyms/pull/124)
+
 ## [1.7.3+0.4.1] - 2026-02-17
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Change how gym species registry filled to evade mutation of cobblemon species registry
 
 ## [1.7.3+0.4.0] - 2026-02-17
 
 ### <!-- 0 --> Features
-- 0.4.0 in [#120](https://github.com/gitoido-mc/rad-gyms/pull/120)
 - Implemented custom gym stats in [#119](https://github.com/gitoido-mc/rad-gyms/pull/119)
 - Implement gym persistence in [#115](https://github.com/gitoido-mc/rad-gyms/pull/115)
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Added missing mega aspect to ignored species
+
+### <!-- 3 --> Optimizations
+- Small optimizations
+- Reintroduce datagen resources
 
 ## [1.7.0+0.4.0-alpha] - 2026-02-04
 
@@ -67,6 +85,9 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Implement custom fabric datagen in [#114](https://github.com/gitoido-mc/rad-gyms/pull/114)
 - SCM versioning via gradle plugin, proper mixin and aw propagation, updated docs build, added pull request workflow in [#113](https://github.com/gitoido-mc/rad-gyms/pull/113)
 - New `Fixed` and `Pool` type team generators. Serialization codecs for most of the gym classes. in [#112](https://github.com/gitoido-mc/rad-gyms/pull/112)
+
+### <!-- 3 --> Optimizations
+- DX - annotate logger methods, modId helper and RadGymsState companion object methods as @JvmStatic
 
 ### New Contributors
 * @github-actions[bot] made their first contribution
@@ -82,8 +103,12 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - NeoForge + 0.3.1 fixes
 - Multiplatform initial push
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - GymEnterScreen now uses proper translation string
+
+### <!-- 3 --> Optimizations
+- Humanize level thresholds in gym definitions in [#111](https://github.com/gitoido-mc/rad-gyms/pull/111)
+- Alot of updates
 
 ### New Contributors
 * @landonjw made their first contribution
@@ -91,14 +116,13 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ## [1.7.0+0.3.0-stable] - 2025-12-04
 
 ### <!-- 0 --> Features
-- 0.3-stable
 - Disabled worldborder for gym dimension
 - License update
 - PlayerJoin event now properly handles edge case of player being already present in gym trainers registry
 - Server settings are now properly applied to client
 - AbstractGymScreen preRender helper function. Fixes missing text labels render because it was rendered on wrong stack "layer"
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Teleportation now respects world borders
 - Server state not picking up changes
 - Proper gym instance teardown when server stops or crashes
@@ -113,21 +137,42 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Caches creative item group was showing incorrect items
 - OnLoadModels mixin target fix
 
+### <!-- 3 --> Optimizations
+- Use serverPlayer.server link where possible, at some times global server may be empty
+- Use different method to spawn entities to prevent "no entity found" error
+- Moved fabric-specific data loader to fabric package
+- Misc utility func/classes changes
+- Renamed StructureManager to StructurePlacer to better reflect purpose
+- More multiplatform logic and missing calls to gym management classes
+- Proper implementation of platform agnostic network
+- Gym manager separation of concerns
+- Fabric client logic separation, proper implementation of multiplatform common class
+- Deduplication of GUI screen code
+- Architectury preparation
+- Pass uses left for player via net packet when opening gym entrance interface
+- Mojmap
+
 ## [1.6.1+0.3.0-beta1] - 2025-11-25
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Added another lowercase transform on clientside just in case
+
+### <!-- 3 --> Optimizations
+- Removed RCTApi mixin, because it was fixed on their side
 
 ## [1.6.1+0.3.0-alpha1] - 2025-11-22
 
 ### <!-- 0 --> Features
-- 1.7.0 initial support
 - 1.7 initial support
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Broken build???
 - Broken build
 - Added loot tables and mineable tag for shard blocks
+
+### <!-- 3 --> Optimizations
+- Moved alot of code around
+- Moved code around
 
 ## [1.6.1+0.2.0-beta6] - 2025-11-12
 
@@ -139,12 +184,32 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Custom models for gym keys
 - GymBattleEndReason enumeration
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Fixed shardReward config
+
+### <!-- 3 --> Optimizations
+- TrainerBattleEndHandler now handles reasoning too
+- Removed TrainerBattleStart subscription
+- Removed TrainerBattleStartHandler (it was for testing)
+- Moved evn more more code around
+- Cleaned up imports in SpeciesManager
+- Added preload chunk tickers to spawn positions between gym and player dimensions
+- Refactored PokeCache onUse override to event emit instead of packet send
+- Cleaned up GymKey class from client code
+- Moved even more code to common namespace
+- Moved more code to common namespace
+- Moved code to common namespace
+- Moved mod event handlers to common namespace
+- Added reason parameter to TrainerBattleEnd event
+- Remove client code from common source set
+- Gym key model scale and position tuning
+- Separate source sets for client and server
+- Mixin separation of concerns between client and server side
+- Client side refactoring
 
 ## [1.6.1+0.2.0-beta5] - 2025-11-05
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Event handling early bailout, fixes RCTMod compa
 
 ## [1.6.1+0.2.0-beta4] - 2025-10-29
@@ -160,18 +225,29 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - NBT extensions for BlockPos and Vec3d
 - RCTBattleAIAccessor accessor mixin
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Prevent use of cache in offhand (kudos Cobblemon Academy)
 - Missing access widener declaration in fabric.mod.json
 
+### <!-- 3 --> Optimizations
+- Moved render stuff around
+- Moved code around for better segregation, added ServerPlayerUtil.kt for misc extension functions
+- Make gym instances spawn at x:0 in designated dimension
+- Dead code cleanup
+- Gradle shenanigans - client run config deps bump
+- Copyrights, moved entity registry to registry package
+
 ## [1.6.1+0.2.0-beta3] - 2025-09-19
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Fix(dep+npc)+chore(docs): Update RCT Api version. Fix doubling battle init. Added player in battle check for somehow stuck battles
+
+### <!-- 3 --> Optimizations
+- Remove compat plugins for now
 
 ## [1.6.1+0.2.0-beta2] - 2025-08-26
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Lower fabric loader dependency version
 - Fixed gym exit block interaction
 
@@ -180,18 +256,22 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 0 --> Features
 - Removal of owo-lib and big refactor
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Fixed aether mod maven repo
 - I18n + separate gym exit screen texture
 - I18n
 - Invalid fire entrance variation structure name fix
+
+### <!-- 3 --> Optimizations
+- Networking done right
+- Separation of concerns, owo-lib dep removal, refactor registries
 
 ## [1.6.1+0.2.0-alpha3] - 2025-07-21
 
 ### <!-- 0 --> Features
 - Move starters to rare caches with lower weight, remove starter evolutions for cache rewards
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Cache poke names not fetching on client side when playing on server
 
 ## [1.6.1+0.2.0-alpha2] - 2025-07-18
@@ -226,9 +306,12 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Pokecache item translations and assets
 - Cache and shard items, also blocks, minor datagen reorganization
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Localization
 - Aether compat mixin
+
+### <!-- 3 --> Optimizations
+- DataSaver player mixin slight refactor
 
 ### New Contributors
 * @KaptainWutax made their first contribution
@@ -238,7 +321,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 0 --> Features
 - Aether compat
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Config generation
 
 ## [1.6.1+0.1.11-stable] - 2025-04-05
@@ -246,24 +329,24 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 0 --> Features
 - Working debug flag, bundle gym rewards
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Misc localization fixes
 - Mixin server bias, misc localization fixes
 - Dying in gym breaks its instance
 
 ## [1.6.1+0.1.10-stable] - 2025-03-23
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Trainer registration in RCT, entity type fix
 
 ## [1.6.1+0.1.9-stable] - 2025-02-28
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Scheduled tasks for gym init
 
 ## [1.6.1+0.1.8-stableb] - 2025-02-19
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Preload chunks correctly
 - Chunk loading for teleport position
 
@@ -273,7 +356,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Preload chunk where player will be teleported to. Add 1 second delay before teleport. Use Cobblemon scheduler for executing teleport
 - Es_es localization added by FOXz
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Species were mapped to forms incorrectly
 
 ## [1.6.1+0.1.7-stable] - 2025-02-17
@@ -282,7 +365,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Sparse entrance generation, exclude beaches and oceans from allowed biomes
 - Add player party check when using gym entrance
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Fix forms and aspects not being applied correctly
 - Use TeleportTarget instead of player.teleport
 
@@ -294,7 +377,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 0 --> Features
 - Exit Rope item
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Gym trainer names in cobblemon battlelog
 - Cleaning up player gym instances after disconnect
 - Exiting the gym after restart
@@ -310,7 +393,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Major code cleanup
 - Dynamic keys
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - OnBattleFainted condition fix
 
 ## [1.6.1+0.1.3-stable] - 2025-02-11
@@ -327,7 +410,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Pt_BR localization
 - Auto build for CurseForge
 
-### <!-- 1 --> Bug Fixes
+### <!-- 2 --> Bug Fixes
 - Gym rewards only after beating leader
 - Generated cache files ignore
 - Fixed gym entrance NBT data persistence and shiny param for generated teams
@@ -342,11 +425,8 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ## [1.6.1+0.1.1-beta] - 2025-02-09
 
 ### <!-- 0 --> Features
-- Beta 0.1.1
 - Gym exit stub
 - Gym entrances functionality and nbt in structures, misc reworks
-- 0.1.0-alpha
-- Alpha version
 - Player NBT data, gym generation progress
 
 ### New Contributors

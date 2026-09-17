@@ -79,11 +79,11 @@ commit_parsers = [
     { message = ".*skip-cl", skip = true },
     { message = "^Upload", skip = true },
     { message = "^chore", skip = true },
-    { message = "^release", group = "<!-- 0 --> Features" },
     { message = "^feat", group = "<!-- 0 --> Features" },
-    { message = "^fix", group = "<!-- 1 --> Bug Fixes" },
-    { message = "^perf", group = "<!-- 2 --> Optimizations" },
-    { message = "^balance", group = "<!-- 3 --> Balancing" },
+    { message = "^balance", group = "<!-- 1 --> Balancing" },
+    { message = "^fix", group = "<!-- 2 --> Bug Fixes" },
+    { message = "^refactor", group = "<!-- 3 --> Optimizations" },
+    { message = "^perf", group = "<!-- 3 --> Optimizations" },
     { message = ".*", skip = true },
 ]
 
