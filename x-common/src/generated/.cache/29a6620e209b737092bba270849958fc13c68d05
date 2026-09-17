@@ -1,0 +1,6 @@
+// 1.21.1	2026-09-07T03:08:16.386900018	Rad Gyms/minecraft:generic Loot Table
+ebc0966e7b30dfd200b329d82c74b410e71da6fe data/rad_gyms/loot_table/gyms/default/rare_loot_table.json
+dab1ea754dcacef9465f083394444fc8809b78aa data/rad_gyms/loot_table/gyms/default/common_loot_table.json
+6d1f418fd92d73a772799a096b7872262b51adbc data/rad_gyms/loot_table/gyms/default/epic_loot_table.json
+b3074fa7aff1af61fad895297de17cafe2dbf081 data/rad_gyms/loot_table/gyms/default/shared_loot_table.json
+42aee736bae1411ba2166c79c029ff00eda2ad09 data/rad_gyms/loot_table/gyms/default/uncommon_loot_table.json

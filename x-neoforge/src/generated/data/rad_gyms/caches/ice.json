@@ -1,0 +1,60 @@
+{
+  "pools": {
+    "common": {
+      "bergmite region_bias=hisui": 400,
+      "darmanitan galarian": 400,
+      "darmanitan galarian blazing_mode=zen": 400,
+      "darumaka galarian": 400,
+      "mrmime galarian": 400,
+      "ninetales alolan": 400,
+      "sandshrew alolan": 400,
+      "sandslash alolan": 400,
+      "smoochum": 400,
+      "snom": 400,
+      "spheal": 400,
+      "swinub": 400,
+      "vulpix alolan": 400
+    },
+    "epic": {
+      "arceus multitype=ice": 100,
+      "articuno": 100,
+      "calyrex king_steed=ice": 100,
+      "glastrier": 100,
+      "ironbundle": 100,
+      "kyurem absofusion=black": 100,
+      "kyurem absofusion=white": 100,
+      "regice": 100,
+      "silvally rks_memory=ice": 100
+    },
+    "rare": {
+      "avalugg": 200,
+      "beartic": 200,
+      "cetitan": 200,
+      "cryogonal": 200,
+      "eiscue": 200,
+      "eiscue penguin_head=noice_face": 200,
+      "froslass": 200,
+      "frosmoth": 200,
+      "glaceon": 200,
+      "glalie": 200,
+      "jynx": 200,
+      "mamoswine": 200,
+      "mrrime": 200,
+      "piloswine": 200,
+      "rotom appliance=frost": 200,
+      "vanilluxe": 200,
+      "walrein": 200
+    },
+    "uncommon": {
+      "bergmite": 300,
+      "castform forecast_form=snowy": 300,
+      "cetoddle": 300,
+      "cubchoo": 300,
+      "delibird": 300,
+      "sealeo": 300,
+      "snorunt": 300,
+      "vanillish": 300,
+      "vanillite": 300
+    }
+  }
+}

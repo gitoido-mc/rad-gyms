@@ -44,12 +44,12 @@ docs/
 
 /*/jars/
 
-/common/src/generated/.cache/
-/fabric/src/generated/
-/neoforge/src/generated/
+/x-common/src/generated/.cache/
+/x-fabric/src/generated/
+/x-neoforge/src/generated/
 
-/neoforge/src/main/resources/rad_gyms.accesswidener
-/fabric/src/main/resources/rad_gyms.accesswidener
+/x-neoforge/src/main/resources/rad_gyms.accesswidener
+/x-fabric/src/main/resources/rad_gyms.accesswidener
 
 /tools
 /intermediate
