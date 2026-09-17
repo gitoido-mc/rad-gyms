@@ -33,12 +33,7 @@ replay_*.log
 .kotlin
 
 # docs
-docs/.cache/
-docs/.wrangler/
-docs/dist/
-docs/node_modules/
-docs/src/pages/.obsidian
-docs/src/pages/.vault-nickname
+docs/
 
 # project specific
 /.ignored/
@@ -55,3 +50,6 @@ docs/src/pages/.vault-nickname
 
 /neoforge/src/main/resources/rad_gyms.accesswidener
 /fabric/src/main/resources/rad_gyms.accesswidener
+
+/tools
+/intermediate
