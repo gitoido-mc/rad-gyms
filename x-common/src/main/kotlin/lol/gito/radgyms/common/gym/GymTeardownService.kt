@@ -10,6 +10,7 @@ package lol.gito.radgyms.common.gym
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.api.dto.gym.Gym
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.registry.RadGymsBlocks
 import lol.gito.radgyms.common.registry.RadGymsDimensions
 import lol.gito.radgyms.common.world.state.RadGymsState
@@ -67,7 +68,7 @@ object GymTeardownService {
         )
 
         GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, preloadDim, preloadPos, postTeleport = {
-            it.setGameMode(GameType.SURVIVAL)
+            if (!RadGymsConfigs.server.debug) it.setGameMode(GameType.SURVIVAL)
         })
     }
 

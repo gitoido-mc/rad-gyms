@@ -45,7 +45,8 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
             val stack = user.getItemInHand(hand)
 
             if (RadGymsConfigs.server.boosterMap.containsKey(user.offhandItem.item)) {
-                val boosterAmount = RadGymsConfigs.server.boosterMap[user.offhandItem.item]!!
+                val boosterAmount =
+                    RadGymsConfigs.server.boosterMap[user.offhandItem.item] ?: return fail(user.getItemInHand(hand))
                 val stackBoost = stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)
                 stack.set(
                     RG_CACHE_SHINY_BOOST_COMPONENT,

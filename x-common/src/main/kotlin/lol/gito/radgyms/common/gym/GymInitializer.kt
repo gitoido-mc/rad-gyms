@@ -107,8 +107,13 @@ class GymInitializer(
             )
 
             serverPlayer.awardStat(getStat(RadGyms.statistics.GYMS_VISITED))
-            GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, gymDimension, dest, gymTemplate.playerYaw) { player ->
-                player.setGameMode(GameType.ADVENTURE)
+            GymTeleportScheduler.scheduleTeleportWithCountdown(
+                serverPlayer,
+                gymDimension,
+                dest,
+                gymTemplate.playerYaw,
+            ) { player ->
+                if (!RadGymsConfigs.server.debug) player.setGameMode(GameType.ADVENTURE)
             }
         }
     }
