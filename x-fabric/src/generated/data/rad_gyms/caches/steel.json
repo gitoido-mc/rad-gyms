@@ -1,0 +1,64 @@
+{
+  "pools": {
+    "common": {
+      "diglett alolan": 400,
+      "dugtrio alolan": 400,
+      "goodra hisuian": 400,
+      "meowth galarian": 400,
+      "sliggoo hisuian": 400,
+      "stunfisk galarian": 400
+    },
+    "epic": {
+      "arceus multitype=steel": 100,
+      "archaludon": 100,
+      "cobalion": 100,
+      "dialga": 100,
+      "genesect techno_drive=electric": 100,
+      "genesect techno_drive=fire": 100,
+      "genesect techno_drive=ice": 100,
+      "genesect techno_drive=water": 100,
+      "ironcrown": 100,
+      "jirachi": 100,
+      "magearna": 100,
+      "melmetal": 100,
+      "meltan": 100,
+      "metagross": 100,
+      "necrozma prism_fusion=dusk": 100,
+      "registeel": 100,
+      "silvally rks_memory=steel": 100,
+      "zacian crowned": 100,
+      "zamazenta crowned": 100
+    },
+    "rare": {
+      "aegislash": 200,
+      "aggron": 200,
+      "bronzong": 200,
+      "celesteela": 200,
+      "copperajah": 200,
+      "duraludon": 200,
+      "gholdengo": 200,
+      "klefki": 200,
+      "klinklang": 200,
+      "orthworm": 200,
+      "revavroom": 200,
+      "skarmory": 200,
+      "steelix": 200
+    },
+    "uncommon": {
+      "aron": 300,
+      "beldum": 300,
+      "bronzor": 300,
+      "cufant": 300,
+      "doublade": 300,
+      "honedge": 300,
+      "klang": 300,
+      "klink": 300,
+      "lairon": 300,
+      "mawile": 300,
+      "metang": 300,
+      "perrserker": 300,
+      "varoom": 300,
+      "wormadam bagworm_cloak=trash": 300
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.5,
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:tier_4_poke_balls"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "name": "cobblemon:tier_4_poke_ball_materials"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon:max_potion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon:max_elixir"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon:max_revive"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 5.0,
+        "min": 1.0
+      }
+    },
+    {
+      "bonus_rolls": 0.5,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "rad_gyms:shard_epic"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 5.0,
+        "min": 1.0
+      }
+    }
+  ]
+}
