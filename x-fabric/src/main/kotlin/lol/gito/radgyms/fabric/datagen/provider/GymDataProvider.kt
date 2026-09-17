@@ -94,7 +94,7 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 leader = true,
                 spawnRelative = EntityCoordsAndYaw(
                     Coords(18.5, 3.0, 24.5),
-                    yaw = 180.0,
+                    yaw = 179.9,
                 ),
                 possibleFormats = listOf(
                     GymBattleFormat.SINGLES,
