@@ -58,8 +58,8 @@ jobs:
         with:
           name: artifacts-${{ matrix.loader }}
           path: |
-            ${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
-            ${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+            x-${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            x-${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
 
   publish:
     if: github.event_name == 'release'
@@ -75,8 +75,6 @@ jobs:
     steps:
       - name: Retrieve build artifacts
         uses: actions/download-artifact@v8
-        with:
-          name: artifacts-${{ matrix.loader }}
       - name: Publish ${{ matrix.loader }} version (CurseForge/Modrinth)
         uses: Kira-NT/mc-publish@v3.3
         with:
@@ -86,8 +84,8 @@ jobs:
           loaders: ${{ matrix.loader }}
 
           files: |
-            ${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
-            ${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar
+            x-${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
+            x-${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar
 
           version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
           version-type: release
