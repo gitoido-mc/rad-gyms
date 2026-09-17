@@ -15,7 +15,7 @@ import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.helper.tlr
 import lol.gito.radgyms.common.net.server.payload.OpenGymLeaveScreenS2C
 import lol.gito.radgyms.common.registry.RadGymsDimensions
-import lol.gito.radgyms.common.registry.RadGymsItems.EXIT_ROPE
+import lol.gito.radgyms.common.registry.RadGymsItems.ESCAPE_ROPE
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
@@ -28,13 +28,13 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 
-class ExitRope : CobblemonItem(Properties()) {
+class EscapeRope : CobblemonItem(Properties()) {
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) return InteractionResultHolder.pass(player.getItemInHand(hand))
 
         when (level.dimension()) {
             RadGymsDimensions.GYM_DIMENSION -> OpenGymLeaveScreenS2C().sendToPlayer(player as ServerPlayer)
-            else -> player.displayClientMessage(tl(modId("${EXIT_ROPE.descriptionId}.failed")))
+            else -> player.displayClientMessage(tl(modId("${ESCAPE_ROPE.descriptionId}.failed")))
         }
 
         player.cooldowns.addCooldown(this, TELEPORT_COOLDOWN)
@@ -47,7 +47,7 @@ class ExitRope : CobblemonItem(Properties()) {
         tooltip: MutableList<Component>,
         tooltipFlag: TooltipFlag,
     ) {
-        tooltip.add(tlr("${EXIT_ROPE.descriptionId}.tooltip").withStyle(ChatFormatting.GRAY))
+        tooltip.add(tlr("${ESCAPE_ROPE.descriptionId}.tooltip").withStyle(ChatFormatting.GRAY))
     }
 
     override fun getDefaultInstance(): ItemStack = ItemStack(this).apply {

@@ -312,7 +312,7 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
     }
 
     private fun buildExitRope(recipeExporter: RecipeOutput) = ShapedRecipeBuilder
-        .shaped(RecipeCategory.MISC, RadGymsItems.EXIT_ROPE, 1)
+        .shaped(RecipeCategory.MISC, RadGymsItems.ESCAPE_ROPE, 1)
         .pattern("l")
         .pattern("b")
         .define('l', LEAD)

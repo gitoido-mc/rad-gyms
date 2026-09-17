@@ -31,7 +31,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "rad_gyms:exit_rope",
+          "name": "rad_gyms:escape_rope",
           "weight": 10
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "minecraft:item",
           "name": "cobblemon:dragon_gem",
-          "weight": 5
+          "weight": 0
         }
       ],
       "rolls": 1.0
