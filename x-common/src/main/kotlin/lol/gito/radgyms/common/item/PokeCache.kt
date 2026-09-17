@@ -57,7 +57,8 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
             }
 
             val rarity = stack.getOrDefault(RARITY, Rarity.COMMON)
-            val boost = stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)
+            val boost =
+                stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0).coerceIn(0, Cobblemon.config.shinyRate.toInt())
             val type = when (stack.getOrDefault(RG_GYM_TYPE_COMPONENT, defaultElementalTypes.random())) {
                 "chaos" -> defaultElementalTypes.random()
                 else -> stack.getOrDefault(RG_GYM_TYPE_COMPONENT, defaultElementalTypes.random())
@@ -76,9 +77,12 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
         type: TooltipFlag,
     ) = with(stack.getOrDefault(RG_CACHE_SHINY_BOOST_COMPONENT, 0)) {
         if (this > 0) {
-            val intermediate = when (this.coerceAtLeast(1) == 1) {
+            val shinyChance = Cobblemon.config.shinyRate.toInt()
+            val coerced = this.coerceIn(0, shinyChance)
+
+            val intermediate = when (coerced == shinyChance) {
                 true -> tl(modId("item.component.shiny_boost.guaranteed")).withStyle(ChatFormatting.UNDERLINE)
-                else -> "1/${(Cobblemon.config.shinyRate.toInt() - this)}"
+                else -> "1/${(Cobblemon.config.shinyRate.toInt() - coerced)}"
             }
 
             val tooltipText = tl(
