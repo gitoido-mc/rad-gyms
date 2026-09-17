@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on modified [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [ZeroVer](https://0ver.org).
 
-## [Unreleased]
+## [1.8.1+0.5.0] - 2026-09-17
 
 ### <!-- 0 --> Features
 - Updated worldgen and structure nbts
@@ -432,7 +432,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### New Contributors
 * @gitoido made their first contribution
 
-[unreleased]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.4...HEAD
+[1.8.1+0.5.0]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.4...1.8.1+0.5.0
 [1.7.3+0.4.4]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.3...1.7.3+0.4.4
 [1.7.3+0.4.3]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.2...1.7.3+0.4.3
 [1.7.3+0.4.2]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.1...1.7.3+0.4.2

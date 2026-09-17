@@ -20,7 +20,7 @@ The initial vision was to add randomness, and by design, replayability. But, wha
 * 18 elemental typed gym configurations out of the box
 * Ability to add pooled or static configurations via datapacks
 * Dynamically added gym keys, based on the available configurations. Check your creative tab!
-* Exit rope, an instrument to escape the instance (be prepared, [RCT Api](https://gitlab.com/srcmc/rct/api) AI doesn't joke around)
+* Escape rope, an instrument to run away (be prepared, [RCT Api](https://gitlab.com/srcmc/rct/api) AI doesn't joke around)
 * Poke Caches, configurable with datapacks
 * Multiple reward types (bundles with loot tables, commands, advancements)
 * Customizable shiny chance boosters for caches
@@ -32,7 +32,7 @@ The initial vision was to add randomness, and by design, replayability. But, wha
 ### Kudos and thanks
 * [Gensir017](https://github.com/Gensir017), who made original [CobGyms mod](https://github.com/Gensir017/cobgyms)
 * [HDainester](https://gitlab.com/hdainester1), who made [Radical Cobblemon Trainers API](https://modrinth.com/mod/rctapi)
-* [Wundati](https://modrinth.com/user/wundati), who made amazing interiors and was just being a bro
+* [Wundati](https://modrinth.com/user/wundati), who is making amazing interiors currently and just a bro
 * [Jakotens](https://modrinth.com/user/Jakotens), who allowed me to use his amazing [Pokemon Trainer Cosmetics](https://modrinth.com/resourcepack/jakotens-pokmon-trainer-cosmetics) resourcepack for npc skins 
 
 ### Modpack usage
