@@ -52,12 +52,12 @@ dependencies {
 
     modImplementation(libs.architectury.neoforge)
     modImplementation(libs.rctapi.neoforge)
-    modImplementation(libs.azurelib.neoforge)
     modImplementation(libs.cobblemon.neoforge) {
         isTransitive = false
     }
 
     shadowCommon(project(":x-common", configuration = "transformProductionNeoForge"))
+    @Suppress("AvoidDuplicateDependencies")
     project(":x-common", configuration = "namedElements").let {
         implementation(it)
         "developmentNeoForge"(it)

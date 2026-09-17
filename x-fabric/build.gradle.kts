@@ -86,15 +86,15 @@ dependencies {
     modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.kotlin)
     modImplementation(libs.rctapi.fabric)
-    modImplementation(libs.azurelib.fabric)
     modImplementation(libs.cobblemon.fabric) {
         isTransitive = false
     }
 
     shadowCommon(project(":x-common", configuration = "transformProductionFabric"))
+    @Suppress("AvoidDuplicateDependencies")
     project(":x-common", configuration = "namedElements").let {
         implementation(it)
-        "developmentFabric"(it) { isTransitive = false }
+        "developmentFabric"(it)
     }
 }
 

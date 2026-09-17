@@ -24,8 +24,7 @@ dependencies {
     compileOnly(libs.bundles.common.mixin)
     annotationProcessor(libs.mixin.extras)
 
-    modApi(libs.molang)
-    modCompileOnly(libs.azurelib.common)
+    compileOnly(libs.molang) { isTransitive = false }
     modImplementation(libs.rctapi.common)
     modImplementation(libs.cobblemon.common) {
         isTransitive = false

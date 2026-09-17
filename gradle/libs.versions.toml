@@ -27,7 +27,6 @@ architectury-api = "13.0.8"
 # Mod dependencies
 molang = "1.1.20"
 cobblemon = "1.8.1+1.21.1"
-azurelib = "3.1.8"
 
 rctapi-common = "8826242"
 rctapi-neoforge = "8826267"
@@ -64,9 +63,6 @@ cobblemon-neoforge = { module = "com.cobblemon:neoforge", version.ref = "cobblem
 rctapi-common = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-common" }
 rctapi-fabric = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-fabric" }
 rctapi-neoforge = { module = "curse.maven:radical-cobblemon-trainers-api-1152792", version.ref = "rctapi-neoforge" }
-azurelib-common = { module = "mod.azure.azurelib:azurelib-common-1.21.1", version.ref = "azurelib" }
-azurelib-fabric = { module = "mod.azure.azurelib:azurelib-fabric-1.21.1", version.ref = "azurelib" }
-azurelib-neoforge = { module = "mod.azure.azurelib:azurelib-neo-1.21.1", version.ref = "azurelib" }
 aether-fabric = { module = "com.aetherteam.aether:aether", version.ref = "aether-fabric" }
 aether-neoforge = { module = "com.aetherteam.aether:aether", version.ref = "aether-neoforge" }
 
