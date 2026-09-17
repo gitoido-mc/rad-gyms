@@ -44,19 +44,20 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
     @Suppress("LongMethod", "MagicNumber")
     private fun getDefaultElementalGymDto(type: ElementalType): GymJson = GymJson(
         id = type.showdownId,
-        template = "rad_gyms:interior/${type.showdownId}",
-        exitBlockPos = Coords(15.0, 3.0, 1.0),
-        playerSpawnRelative = EntityCoordsAndYaw(
-            Coords(15.0, 2.0, 53.0),
-            yaw = -180.0,
+        template = "rad_gyms:interior/default",
+        exitBlockPos = Coords(18.0, 2.0, 17.0),
+        playerSpawnRelative =
+        EntityCoordsAndYaw(
+            Coords(18.5, 2.0, 8.5),
+            yaw = 0.0,
         ),
         trainers = listOf(
             Trainer(
                 id = "trainer_junior",
                 name = modId("npc.trainer_junior").toLanguageKey(),
                 spawnRelative = EntityCoordsAndYaw(
-                    Coords(27.5, 2.0, 41.5),
-                    yaw = 90.0,
+                    Coords(12.5, 3.0, 12.5),
+                    yaw = -42.5,
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES),
                 possibleElementalTypes = listOf(type),
@@ -73,8 +74,8 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 name = modId("npc.trainer_senior").toLanguageKey(),
                 requires = "trainer_junior",
                 spawnRelative = EntityCoordsAndYaw(
-                    Coords(3.5, 2.0, 31.5),
-                    yaw = -90.0,
+                    Coords(24.5, 3.0, 12.5),
+                    yaw = 42.5,
                 ),
                 possibleFormats = listOf(GymBattleFormat.SINGLES, GymBattleFormat.DOUBLES),
                 possibleElementalTypes = listOf(type),
@@ -92,8 +93,8 @@ class GymDataProvider(output: FabricDataOutput, lookup: CompletableFuture<Holder
                 requires = "trainer_senior",
                 leader = true,
                 spawnRelative = EntityCoordsAndYaw(
-                    Coords(15.5, if (type == ElementalTypes.FIGHTING) 3.0 else 2.0, 7.5),
-                    yaw = 0.0,
+                    Coords(18.5, 3.0, 24.5),
+                    yaw = 180.0,
                 ),
                 possibleFormats = listOf(
                     GymBattleFormat.SINGLES,
