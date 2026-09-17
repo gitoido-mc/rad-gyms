@@ -76,7 +76,7 @@ object RadGymsItemGroups {
         @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
         entries: CreativeModeTab.Output,
     ) {
-        entries.accept(RadGymsItems.EXIT_ROPE)
+        entries.accept(RadGymsItems.ESCAPE_ROPE)
         entries.accept(RadGymsItems.SHARD_COMMON)
         entries.accept(RadGymsItems.SHARD_UNCOMMON)
         entries.accept(RadGymsItems.SHARD_RARE)

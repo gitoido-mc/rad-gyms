@@ -47,7 +47,7 @@ class StructureLootDataProvider(output: FabricDataOutput, registryLookup: Comple
             Items.LAPIS_LAZULI,
             Items.RAW_COPPER,
             Items.RAW_GOLD,
-            RadGymsItems.EXIT_ROPE,
+            RadGymsItems.ESCAPE_ROPE,
             RadGymsItems.GYM_KEY,
         )
 
@@ -141,7 +141,7 @@ class StructureLootDataProvider(output: FabricDataOutput, registryLookup: Comple
         val weight =
             when (item) {
                 RadGymsItems.GYM_KEY -> GYM_KEY_WEIGHT
-                RadGymsItems.EXIT_ROPE -> EXIT_ROPE_WEIGHT
+                RadGymsItems.ESCAPE_ROPE -> EXIT_ROPE_WEIGHT
                 Items.FLINT -> FLINT_WEIGHT
                 Items.RAW_IRON -> RAW_IRON_WEIGHT
                 Items.RAW_COPPER -> RAW_COPPER_WEIGHT

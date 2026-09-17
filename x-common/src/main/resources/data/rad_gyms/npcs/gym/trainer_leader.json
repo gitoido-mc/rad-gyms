@@ -17,7 +17,6 @@
       "type": "apply_behaviours",
       "behaviours": [
         "cobblemon:core",
-        "cobblemon:looks_around",
         "cobblemon:looks_at_players"
       ]
     }

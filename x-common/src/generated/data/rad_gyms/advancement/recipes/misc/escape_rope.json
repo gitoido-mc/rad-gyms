@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rad_gyms:exit_rope"
+        "recipe": "rad_gyms:escape_rope"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "rad_gyms:exit_rope"
+      "rad_gyms:escape_rope"
     ]
   }
 }

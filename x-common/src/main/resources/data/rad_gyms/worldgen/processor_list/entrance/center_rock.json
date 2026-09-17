@@ -56,7 +56,7 @@
             "predicate_type": "minecraft:always_true"
           },
           "output_state": {
-            "Name": "minecraft:air"
+            "Name": "minecraft:dirt"
           }
         },
         {
@@ -1228,7 +1228,7 @@
             "predicate_type": "minecraft:always_true"
           },
           "output_state": {
-            "Name": "minecraft:air"
+            "Name": "minecraft:dirt"
           }
         },
         {
