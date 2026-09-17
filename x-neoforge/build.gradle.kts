@@ -15,7 +15,6 @@ architectury {
 }
 
 loom {
-    silentMojangMappingsLicense()
     enableTransitiveAccessWideners.set(true)
 
     runs {
@@ -44,8 +43,6 @@ repositories {
 }
 
 dependencies {
-    minecraft(libs.minecraft)
-    mappings(loom.officialMojangMappings())
     neoForge(libs.neoforge.loader)
     implementation(libs.neoforge.kotlin) {
         exclude("net.neoforged.fancymodloader", "loader")

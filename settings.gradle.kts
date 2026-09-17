@@ -9,8 +9,6 @@ rootProject.name = "rad-gyms"
 
 pluginManagement {
     repositories {
-        @Suppress("UnstableApiUsage")
-        maven(layout.rootDirectory.dir("deps")) // cobbled molang
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.fabricmc.net/")
@@ -25,5 +23,5 @@ plugins {
 
 includeBuild("gradle/build-logic")
 include("x-common")
-// include("x-fabric")
+include("x-fabric")
 include("x-neoforge")

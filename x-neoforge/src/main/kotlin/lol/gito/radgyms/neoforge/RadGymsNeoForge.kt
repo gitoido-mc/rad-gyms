@@ -28,6 +28,8 @@ import lol.gito.radgyms.neoforge.client.RadGymsNeoForgeClient
 import lol.gito.radgyms.neoforge.net.RadGymsNeoForgeNetworkManager
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -65,7 +67,7 @@ class RadGymsNeoForge : RadGymsImplementation {
     override val modAPI: ModAPI = ModAPI.NEOFORGE
     private val hasBeenSynced = hashSetOf<UUID>()
     private val commandArgumentTypes = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, MOD_ID)
-    private val reloadableResources = arrayListOf<PreparableReloadListener>()
+    private val reloadableResources = arrayListOf<QueuedReloadListener>()
     private val queuedWork = arrayListOf<() -> Unit>()
     override val networkManager = RadGymsNeoForgeNetworkManager
 
@@ -167,14 +169,14 @@ class RadGymsNeoForge : RadGymsImplementation {
 
     override fun registerResourceReloader(
         identifier: ResourceLocation,
-        reloader: PreparableReloadListener,
         type: PackType,
         dependencies: Collection<ResourceLocation>,
+        reloaderFactory: (HolderLookup.Provider) -> PreparableReloadListener,
     ) {
         if (type == PackType.SERVER_DATA) {
-            this.reloadableResources += reloader
+            this.reloadableResources += QueuedReloadListener(identifier, reloaderFactory, dependencies)
         } else {
-            RadGymsNeoForgeClient.registerResourceReloader(reloader)
+            RadGymsNeoForgeClient.registerResourceReloader(reloaderFactory.invoke(RegistryAccess.EMPTY))
         }
     }
 
@@ -215,7 +217,9 @@ class RadGymsNeoForge : RadGymsImplementation {
     }
 
     private fun onReload(e: AddReloadListenerEvent) {
-        this.reloadableResources.forEach(e::addListener)
+        this.reloadableResources.forEach { queued ->
+            e.addListener(queued.listener.invoke(e.serverResources.registryLookup))
+        }
     }
 
     private fun onBuildContents(e: BuildCreativeModeTabContentsEvent) {
@@ -267,4 +271,10 @@ class RadGymsNeoForge : RadGymsImplementation {
 
         override fun putLast(item: ItemStack) = this.entries.accept(item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
     }
+
+    private data class QueuedReloadListener(
+        val identifier: ResourceLocation,
+        val listener: (HolderLookup.Provider) -> PreparableReloadListener,
+        val dependencies: Collection<ResourceLocation>,
+    )
 }

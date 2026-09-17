@@ -10,8 +10,10 @@ package lol.gito.radgyms.common
 import com.cobblemon.mod.common.Environment
 import lol.gito.radgyms.common.api.data.DataProvider
 import lol.gito.radgyms.common.api.data.DataRegistry
+import lol.gito.radgyms.common.api.data.ServerJsonDataRegistry
 import lol.gito.radgyms.common.registry.RadGymsCaches
 import lol.gito.radgyms.common.registry.RadGymsTemplates
+import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -20,6 +22,7 @@ import net.minecraft.server.packs.resources.ResourceManagerReloadListener
 
 object RadGymsDataProvider : DataProvider {
     private val registries = linkedSetOf<DataRegistry>()
+    private val reloadableRegistries = linkedSetOf<DataRegistry>()
 
     fun registerDefaults() {
         this.register(RadGymsTemplates)
@@ -28,18 +31,16 @@ object RadGymsDataProvider : DataProvider {
         if (RadGyms.implementation.environment() == Environment.CLIENT) {
             RadGyms.implementation.registerResourceReloader(
                 RadGyms.modId("client_resources"),
-                SimpleResourceReloader(PackType.CLIENT_RESOURCES),
                 PackType.CLIENT_RESOURCES,
                 emptyList(),
-            )
+            ) { ClientResourceReloader() }
         }
 
         RadGyms.implementation.registerResourceReloader(
             RadGyms.modId("data_resources"),
-            SimpleResourceReloader(PackType.SERVER_DATA),
             PackType.SERVER_DATA,
             emptyList(),
-        )
+        ) { ServerResourceReloader(it) }
     }
 
     override fun <T : DataRegistry> register(registry: T): T {
@@ -64,10 +65,22 @@ object RadGymsDataProvider : DataProvider {
         }
     }
 
-    private class SimpleResourceReloader(private val type: PackType) : ResourceManagerReloadListener {
+    private class ClientResourceReloader : ResourceManagerReloadListener {
         override fun onResourceManagerReload(manager: ResourceManager) {
+            registries.filter { it.type == PackType.CLIENT_RESOURCES }.forEach { it.reload(manager) }
+        }
+    }
+
+    private class ServerResourceReloader(private val registryAccess: HolderLookup.Provider) : ResourceManagerReloadListener {
+        override fun onResourceManagerReload(manager: ResourceManager) {
+            // Check for a server running, this is due to the create a world screen triggering datapack reloads, these are fine to happen as many times as needed as players may be in the process of adding their datapacks.
+            val reloadAllowed = server()?.isReady != true
             registries
-                .filter { it.type == this.type }
+                .filter { it.type == PackType.SERVER_DATA && (reloadAllowed || it in reloadableRegistries) }
+                .filterIsInstance<ServerJsonDataRegistry<*>>()
+                .forEach { it.reload(manager, registryAccess) }
+            registries
+                .filter { it.type == PackType.SERVER_DATA && (reloadAllowed || it in reloadableRegistries) }
                 .forEach { it.reload(manager) }
         }
     }

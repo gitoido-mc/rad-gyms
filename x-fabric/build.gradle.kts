@@ -33,7 +33,6 @@ wiki {
 }
 
 loom {
-    silentMojangMappingsLicense()
     enableTransitiveAccessWideners.set(true)
 
     runs {
@@ -78,9 +77,6 @@ repositories {
 
 @Suppress("AvoidDuplicateDependencies")
 dependencies {
-    minecraft(libs.minecraft)
-    mappings(loom.officialMojangMappings())
-
     modCompileOnly(libs.aether.fabric)
 
     modRuntimeOnly(libs.wikiExporter)
@@ -107,15 +103,8 @@ dependencies {
 }
 
 tasks {
-    val copyAccessWidener = register<Copy>("copyAccessWidener") {
-        description = "Copy accessWidener from common"
-        from(project(":x-common").file("src/main/resources/rad_gyms.accesswidener"))
-        into(file("src/main/resources").absolutePath)
-    }
-
     val cleanupGenerated = register<Delete>("cleanupGenerated") {
         description = "Cleanup generated files"
-        dependsOn(copyAccessWidener)
         delete(file("src/generated"))
     }
 
@@ -153,10 +142,6 @@ tasks {
                 ),
             )
         }
-    }
-
-    sourcesJar {
-        dependsOn(copyAccessWidener)
     }
 
     shadowJar {

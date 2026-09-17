@@ -15,23 +15,26 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import lol.gito.radgyms.common.RadGyms.info
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.api.data.JsonDataRegistry
+import lol.gito.radgyms.common.api.data.ServerJsonDataRegistry
 import lol.gito.radgyms.common.api.dto.gym.GymJson
 import lol.gito.radgyms.common.api.dto.reward.RewardInterface
 import lol.gito.radgyms.common.api.serialization.RewardTypeAdapter
+import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.util.LowerCaseEnumTypeAdapterFactory
 
-object RadGymsTemplates : JsonDataRegistry<GymJson> {
+object RadGymsTemplates : ServerJsonDataRegistry<GymJson> {
     const val SLUG = "gyms"
     override val resourcePath: String = SLUG
     override val id: ResourceLocation = modId(SLUG)
     override val type: PackType = PackType.SERVER_DATA
-    override val observable: SimpleObservable<RadGymsTemplates> = SimpleObservable<RadGymsTemplates>()
+    override val observable: SimpleObservable<RadGymsTemplates> = SimpleObservable()
     override val typeToken: TypeToken<GymJson> = TypeToken.of(GymJson::class.java)
-    override val gson: Gson = GsonBuilder()
+    val templates = mutableMapOf<String, GymJson>()
+
+    override fun setupParser(registry: HolderLookup.Provider): Gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .registerTypeAdapter(RewardInterface::class.java, RewardTypeAdapter)
@@ -39,9 +42,7 @@ object RadGymsTemplates : JsonDataRegistry<GymJson> {
         .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
         .create()
 
-    val templates = mutableMapOf<String, GymJson>()
-
-    override fun reload(data: Map<ResourceLocation, GymJson>) {
+    override fun reload(data: Map<ResourceLocation, GymJson>, registry: HolderLookup.Provider) {
         templates.clear()
         data.forEach { (key, value) ->
             templates[key.path] = value

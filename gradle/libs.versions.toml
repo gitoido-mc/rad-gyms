@@ -50,7 +50,7 @@ mixin-main = { module = "net.fabricmc:sponge-mixin", version.ref = "mixin-main" 
 mixin-extras = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
 
 # Mod dependencies
-molang = { module = "local.com.bedrockk:molang", version.ref = "molang" }
+molang = { module = "com.bedrockk:molang", version.ref = "molang" }
 wikiExporter = { module = "org.sinytra:wiki-exporter-fabric", version.ref = "wiki-exporter-fabric" }
 cobblemon-common = { module = "com.cobblemon:mod", version.ref = "cobblemon" }
 cobblemon-fabric = { module = "com.cobblemon:fabric", version.ref = "cobblemon" }
@@ -74,7 +74,8 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 axionRelease = { id = "pl.allegro.tech.build.axion-release", version.ref = "axionRelease" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 rg-root = { id = "rg.root-convention" }
-rg-shared = { id = "rg.shared-convention" }
+rg-repositories = { id = "rg.repositories-convention" }
+rg-base = { id = "rg.base-convention" }
 rg-common = { id = "rg.common-convention" }
 
 # Minecraft plugins
