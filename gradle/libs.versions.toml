@@ -17,7 +17,7 @@ fabric-loader = "0.17.2"
 fabric-api = "0.116.6+1.21.1"
 fabric-kotlin = "1.13.12+kotlin.2.4.0"
 neoforge-loader = "21.1.51"
-neoforge-kotlin = "5.10.0"
+neoforge-kotlin = "5.12.0"
 mixin-main = "0.17.3+mixin.0.8.7"
 mixin-extras = "0.5.4"
 architectury-dev = "1.17-SNAPSHOT"
@@ -26,15 +26,16 @@ architectury-api = "13.0.8"
 
 # Mod dependencies
 molang = "1.1.20"
-cobblemon = "1.7.3+1.21.1"
+cobblemon = "1.8.1+1.21.1"
 azurelib = "3.1.8"
-rctapi-common = "7952418"
-rctapi-neoforge = "7952419"
-rctapi-fabric = "7952421"
+
+rctapi-common = "8826242"
+rctapi-neoforge = "8826267"
+rctapi-fabric = "8826280"
 aether-fabric = "1.21.1-1.5.8-fabric"
 aether-neoforge = "1.21.1-1.5.8-neoforge"
-structure-placer-api-fabric = "Tl86aiIE"
-structure-placer-api-neoforge = "j18R83Er"
+graalvm = "22.3.0"
+icu4j = "71.1"
 
 [libraries]
 # Minecraft libraries
@@ -48,6 +49,11 @@ neoforge-loader = { module = "net.neoforged:neoforge", version.ref = "neoforge-l
 neoforge-kotlin = { module = "thedarkcolour:kotlinforforge-neoforge", version.ref = "neoforge-kotlin" }
 mixin-main = { module = "net.fabricmc:sponge-mixin", version.ref = "mixin-main" }
 mixin-extras = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
+graalvm-js = { module = "org.graalvm.js:js", version.ref = "graalvm" }
+graalvm-sdk = { module = "org.graalvm.sdk:graal-sdk", version.ref = "graalvm" }
+graalvm-regex = { module = "org.graalvm.regex:regex", version.ref = "graalvm" }
+graalvm-truffle = { module = "org.graalvm.truffle:truffle-api", version.ref = "graalvm" }
+icu4j = { module = "com.ibm.icu:icu4j", version.ref = "icu4j" }
 
 # Mod dependencies
 molang = { module = "com.bedrockk:molang", version.ref = "molang" }
@@ -63,10 +69,6 @@ azurelib-fabric = { module = "mod.azure.azurelib:azurelib-fabric-1.21.1", versio
 azurelib-neoforge = { module = "mod.azure.azurelib:azurelib-neo-1.21.1", version.ref = "azurelib" }
 aether-fabric = { module = "com.aetherteam.aether:aether", version.ref = "aether-fabric" }
 aether-neoforge = { module = "com.aetherteam.aether:aether", version.ref = "aether-neoforge" }
-structurePlacerApi-fabric = { module = "maven.modrinth:sSdng0L4", version.ref = "structure-placer-api-fabric" }
-structurePlacerApi-neoforge = { module = "maven.modrinth:sSdng0L4", version.ref = "structure-placer-api-neoforge" }
-
-
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -85,3 +87,4 @@ architectury-plugin = { id = "architectury-plugin", version.ref = "architectury-
 
 [bundles]
 common-mixin = ["mixin-main", "mixin-extras"]
+fabric-dev = ["graalvm-js", "graalvm-sdk", "graalvm-regex", "graalvm-truffle", "icu4j", "wikiExporter"]

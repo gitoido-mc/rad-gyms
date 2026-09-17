@@ -1,5 +1,5 @@
 modLoader="kotlinforforge"
-loaderVersion="[5.10,)"
+loaderVersion="[5.12,)"
 license='''GPL-3.0-only'''
 
 
@@ -7,9 +7,9 @@ license='''GPL-3.0-only'''
 modId="${mod_id}"
 version="${version}"
 displayName="Rad Gyms"
-credits="Thanks to thedarkcolour and all the contributors for making Kotlin for Forge"
-authors="Gitoido <corpa@gito.lol>"
-description='''Adds roguelike gyms in Cobblemon. RCT Api based mod.'''
+credits="Big thanks to Cobblemon team, hd42 for RCT Api and Gensir for CobGyms!"
+authors="Gito <corpa@gito.lol>"
+description='''Roguelike gyms for Cobblemon!'''
 
 
 [[mixins]]
@@ -45,5 +45,5 @@ side = "BOTH"
 modId="rctapi"
 mandatory=true
 versionRange="[${rctapi_min_version},)"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
