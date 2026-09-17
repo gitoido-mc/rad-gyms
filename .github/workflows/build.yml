@@ -4,13 +4,23 @@ on:
   release:
     types:
       - published
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - *
   workflow_dispatch:
 
 env:
-  cobblemon: 1.7.3
+  project_slug: rad-gyms
+  curseforge_id: 1196570
+  modrinth_id: eF8kqlHd
+  cobblemon: 1.8.1
+  rctapi: 0.16.0-beta
 
 jobs:
   build:
+    name: "Build mod jars"
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -20,6 +30,11 @@ jobs:
         java: [
           21,    # Current Java LTS
         ]
+        loader: [
+          fabric,
+          neoforge,
+          common,
+        ]
     outputs:
       version: ${{ steps.version.outputs.MOD_VERSION }}
     steps:
@@ -28,7 +43,7 @@ jobs:
       - name: Validate gradle wrapper
         uses: gradle/actions/wrapper-validation@v6
       - name: Setup jdk ${{ matrix.java }}
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           java-version: ${{ matrix.java }}
           distribution: 'temurin'
@@ -36,22 +51,23 @@ jobs:
         uses: burrunan/gradle-cache-action@v3
         with:
           read-only: true
-          arguments: buildMod
-      - name: Capture build artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: artifacts
-          path: build/libs/
+          arguments: :x-${{ matrix.loader }}:build
       - name: Save version output
         id: version
         run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
+      - name: Capture build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: artifacts-${{ matrix.loader }}
+          path: |
+            ${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            ${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
 
   publish:
+    if: github.event_name == 'release'
+    name: "Publish artifacts on platforms"
     needs: build
     runs-on: ubuntu-22.04
-    env:
-      curseforge_id: 1196570
-      modrinth_id: eF8kqlHd
     strategy:
       matrix:
         loader: [
@@ -62,14 +78,24 @@ jobs:
       - name: Retrieve build artifacts
         uses: actions/download-artifact@v8
         with:
-          name: artifacts
-          path: build/libs/
+          name: artifacts-${{ matrix.loader }}
       - name: Publish ${{ matrix.loader }} version (CurseForge/Modrinth)
-        uses: Kira-NT/mc-publish@v3
+        uses: Kira-NT/mc-publish@v3.3
         with:
           name: "Rad Gyms ${{ needs.build.outputs.version }} for Cobblemon ${{ env.cobblemon }}"
+          java: 21
+          game-versions: 1.21.1
+          loaders: ${{ matrix.loader }}
+
+          files: |
+            ${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
+            ${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar
+
           version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
           version-type: release
+          environment: client | server
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
           curseforge-id: ${{ env.curseforge_id }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -77,17 +103,7 @@ jobs:
           modrinth-id: ${{ env.modrinth_id }}
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-          files: |
-            build/libs/rad-gyms-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
-            build/libs/rad-gyms-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar 
-
-          loaders: ${{ matrix.loader }}
-
-          game-versions: 1.21.1
-          java: 21
-
           dependencies: |
-            structureplacerapi(embedded){ignore:curseforge}{modrinth:sSdng0L4}
             architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
-            cobblemon@1.7.0(required){curseforge:687131}{modrinth:MdwFAVRL}
-            radical-cobblemon-trainers-api@0.14.7-beta(required){curseforge:1152792}{modrinth:CBfM2yw7}
+            cobblemon@${{ env.cobblemon }}(required){curseforge:687131}{modrinth:MdwFAVRL}
+            radical-cobblemon-trainers-api@${{ env.rctapi }}(required){curseforge:1152792}{modrinth:CBfM2yw7}
