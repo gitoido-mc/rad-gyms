@@ -61,6 +61,7 @@ object TrainerSpawner {
             trainer.npc.yaw,
             npc.xRot,
         )
+
         npc.setYBodyRot(trainer.npc.yaw)
         npc.npc = npcClass
         npc.initialize(trainer.trainer.team.first().level)

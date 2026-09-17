@@ -8,6 +8,7 @@
 package lol.gito.radgyms.common
 
 import com.cobblemon.mod.common.Environment
+import com.cobblemon.mod.common.util.server
 import lol.gito.radgyms.common.api.data.DataProvider
 import lol.gito.radgyms.common.api.data.DataRegistry
 import lol.gito.radgyms.common.api.data.ServerJsonDataRegistry
