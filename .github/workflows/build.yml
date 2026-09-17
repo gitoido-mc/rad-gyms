@@ -84,8 +84,8 @@ jobs:
           loaders: ${{ matrix.loader }}
 
           files: |
-            x-${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
-            x-${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar
+            ${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
+            ${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar
 
           version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
           version-type: release
