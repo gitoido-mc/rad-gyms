@@ -146,8 +146,8 @@ object RadGymsFabric : RadGymsImplementation {
         reloaderFactory: (HolderLookup.Provider) -> PreparableReloadListener,
     ) {
         if (type == PackType.SERVER_DATA) {
-            val resourceLoader = ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
-            resourceLoader.registerReloadListener(identifier, {
+            val resourceLoader = ResourceManagerHelper.get(PackType.SERVER_DATA)
+            resourceLoader.registerReloadListener(identifier) {
                 object : IdentifiableResourceReloadListener {
                     override fun reload(
                         synchronizer: PreparableReloadListener.PreparationBarrier,
@@ -167,7 +167,7 @@ object RadGymsFabric : RadGymsImplementation {
 
                     override fun getFabricId() = identifier
                 }
-            })
+            }
         } else {
             val resourceLoader = ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
             resourceLoader.registerReloadListener(object : IdentifiableResourceReloadListener {
