@@ -7,9 +7,9 @@
 
 plugins {
     id("java")
+    alias(libs.plugins.rg.base)
     alias(libs.plugins.architectury.dev)
     alias(libs.plugins.architectury.plugin)
-    alias(libs.plugins.rg.base)
 }
 
 loom {

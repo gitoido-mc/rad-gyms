@@ -1,3 +1,4 @@
+import java.nio.file.Files
 
 /*
  * Copyright (c) 2025-2026. gitoido-mc
@@ -107,30 +108,33 @@ val buildMod = project.tasks.register("buildMod") {
     description = "Assemble the jars"
 
     dependsOn(":x-common:assemble")
-//    dependsOn(":x-fabric:assemble")
-//    dependsOn(":x-neoforge:assemble")
+    dependsOn(":x-fabric:assemble")
+    dependsOn(":x-neoforge:assemble")
+
+    val distDir = file("build/libs")
 
     doLast {
         logger.info("Preparing $version jars")
 
-        layout.buildDirectory.file("libs").get().asFile.delete()
+        Files.deleteIfExists(distDir.toPath())
+        Files.createDirectory(distDir.toPath())
 
         listOf(
             ":x-common",
-//            ":x-fabric",
-//            ":x-neoforge"
+            ":x-fabric",
+            ":x-neoforge",
         ).forEach { mod ->
             val modProject = project(mod)
             val jars = listOf(
-                "${project.name}-${modProject.name}-${modProject.version}.jar",
-                "${project.name}-${modProject.name}-${modProject.version}-sources.jar",
+                "${rootProject.name}-${modProject.property("build.sourceset")}-${modProject.version}.jar",
+                "${rootProject.name}-${modProject.property("build.sourceset")}-${modProject.version}-sources.jar",
             )
 
             jars.forEach {
-                val dest = project.layout.buildDirectory.file("libs/$it").get().asFile
+                val dest = file("build/libs/$it")
                 dest.createNewFile()
 
-                modProject.layout.buildDirectory.file("libs/$it").get().asFile.renameTo(dest)
+                modProject.file("build/libs/$it").renameTo(dest)
             }
         }
     }

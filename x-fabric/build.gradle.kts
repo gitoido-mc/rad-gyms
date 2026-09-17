@@ -75,16 +75,12 @@ repositories {
     maven("https://maven.su5ed.dev/releases") // wiki
 }
 
-@Suppress("AvoidDuplicateDependencies")
 dependencies {
     modCompileOnly(libs.aether.fabric)
 
-    modRuntimeOnly(libs.wikiExporter)
+    modRuntimeOnly(libs.bundles.fabric.dev)
+    minecraftServerLibraries(libs.icu4j)
 
-    libs.structurePlacerApi.fabric.let {
-        modImplementation(it)
-        include(it)
-    }
     modImplementation(libs.architectury.fabric)
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
@@ -135,9 +131,9 @@ tasks {
                 mapOf(
                     "version" to project.version,
                     "mod_id" to project.property("mod_id"),
-                    "minecraft_version" to project.property("minecraft_version"),
-                    "fabric_loader_version" to project.property("fabric_loader_version"),
-                    "cobblemon_version" to project.property("cobblemon_version"),
+                    "minecraft_version" to libs.versions.minecraft.get(),
+                    "fabric_loader_version" to libs.versions.fabric.loader.get(),
+                    "cobblemon_version" to libs.versions.cobblemon.get().split("+").first(),
                     "rctapi_min_version" to project.property("rctapi_min_version"),
                 ),
             )
@@ -156,14 +152,5 @@ tasks {
         injectAccessWidener = true
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
-
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
-    }
-
-    remapSourcesJar {
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
-        archiveClassifier.set("sources")
     }
 }

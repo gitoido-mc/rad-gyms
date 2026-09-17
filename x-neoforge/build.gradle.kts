@@ -48,11 +48,6 @@ dependencies {
         exclude("net.neoforged.fancymodloader", "loader")
     }
 
-    libs.structurePlacerApi.neoforge.let {
-        modImplementation(it)
-        include(it)
-    }
-
     modCompileOnly(libs.aether.neoforge)
 
     modImplementation(libs.architectury.neoforge)
@@ -102,9 +97,9 @@ tasks {
                 mapOf(
                     "version" to project.version,
                     "mod_id" to project.property("mod_id"),
-                    "minecraft_version" to project.property("minecraft_version"),
-                    "neoforge_version" to project.property("neoforge_version"),
-                    "cobblemon_version" to project.property("cobblemon_version"),
+                    "minecraft_version" to libs.versions.minecraft.get(),
+                    "neoforge_version" to libs.versions.neoforge.loader.get(),
+                    "cobblemon_version" to libs.versions.cobblemon.get().split("+").first(),
                     "rctapi_min_version" to project.property("rctapi_min_version"),
                 ),
             )
@@ -131,14 +126,5 @@ tasks {
     remapJar {
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
-
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
-    }
-
-    remapSourcesJar {
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveVersion.set("${project.version}")
-        archiveClassifier.set("sources")
     }
 }

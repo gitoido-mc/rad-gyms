@@ -12,8 +12,8 @@ scmVersion {
     versionCreator("simple")
 
     tag {
-        prefix = "${project.property("cobblemon_version")}+"
-        fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+")
+        prefix = libs.versions.cobblemon.get().split("+").first()
+        fallbackPrefixes = listOf("1.6.1+", "1.7.0+", "1.7.1+", "1.7.2+", "1.7.3+")
     }
 
     branchVersionCreator.put("hotfix/.*", "simple")

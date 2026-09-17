@@ -3,9 +3,9 @@
   "id": "${mod_id}",
   "version": "${version}",
   "name": "Rad Gyms",
-  "description": "Roguelike datapackable gyms in Cobblemon!",
+  "description": "Roguelike gyms for Cobblemon!",
   "authors": [
-    "Gitoido <corpa@gito.lol>"
+    "Gito <corpa@gito.lol>"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -52,7 +52,7 @@
     "fabric-language-kotlin": "*",
     "architectury": ">=13.0.8",
     "rctapi": ">=${rctapi_min_version}",
-    "cobblemon": ">=${cobblemon_version}+1.21.1 <1.8.0+1.21.1"
+    "cobblemon": ">=${cobblemon_version} <1.9.0"
   },
   "custom": {
     "mc-publish": {
