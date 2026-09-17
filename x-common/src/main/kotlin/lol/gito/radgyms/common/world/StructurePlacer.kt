@@ -7,27 +7,56 @@
 
 package lol.gito.radgyms.common.world
 
-import lol.gito.radgyms.common.api.compat.StructurePlacerImplementation
+import lol.gito.radgyms.common.RadGyms.LOGGER
+import lol.gito.radgyms.common.RadGyms.debug
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.WorldGenLevel
-import java.util.ServiceLoader
+import net.minecraft.world.level.block.Mirror
+import net.minecraft.world.level.block.Rotation
+import net.minecraft.world.level.levelgen.LegacyRandomSource
+import net.minecraft.world.level.levelgen.WorldgenRandom
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 
 object StructurePlacer {
-    val structurePlacer: StructurePlacerImplementation
+    private const val STRUCTURE_FLAGS = 18
+    private const val WORLDGEN_FEATURE_RANDOM_SHIFT_BITS = 4
 
-    init {
-        with(ServiceLoader.load(StructurePlacerImplementation::class.java).findFirst()) {
-            if (this.isEmpty) {
-                throw RuntimeException("Cannot load structure placer service")
-            }
-            this@StructurePlacer.structurePlacer = this.get()
-        }
-    }
-
-    fun placeStructure(world: WorldGenLevel, pos: BlockPos, structureId: String): Boolean {
+    fun placeStructure(
+        world: WorldGenLevel,
+        pos: BlockPos,
+        structureId: String,
+    ): Boolean {
         val structureResource = ResourceLocation.parse(structureId)
-        structurePlacer.initialize(world, structureResource, pos)
-        return structurePlacer.loadStructure()
+        val structTemplateManager = world.server?.structureManager
+        val structureTemplate = structTemplateManager?.get(structureResource)
+
+        if (structureTemplate != null) {
+            val structPlacementData =
+                StructurePlaceSettings()
+                    .setIgnoreEntities(true)
+                    .setMirror(Mirror.NONE)
+                    .setRotation(Rotation.NONE)
+                    .setKnownShape(true)
+
+            val random = WorldgenRandom(LegacyRandomSource(0L))
+            random.setLargeFeatureSeed(
+                world.seed,
+                pos.x shr WORLDGEN_FEATURE_RANDOM_SHIFT_BITS,
+                pos.z shr WORLDGEN_FEATURE_RANDOM_SHIFT_BITS,
+            )
+
+            if (!structureTemplate.get().placeInWorld(world, pos, pos, structPlacementData, random, STRUCTURE_FLAGS)) {
+                LOGGER.warn("Error placing structure: $structureResource")
+                return false
+            } else {
+                structTemplateManager.remove(structureResource)
+                debug("Successfully placed structure: $structureId at ${pos.x},${pos.y},${pos.z}")
+                return true
+            }
+        }
+        LOGGER.warn("Failed to load structure: $structureResource")
+
+        return false
     }
 }
