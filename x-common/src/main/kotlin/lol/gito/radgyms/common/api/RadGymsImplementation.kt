@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.ModAPI
 import com.cobblemon.mod.common.NetworkManager
 import com.mojang.brigadier.arguments.ArgumentType
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
+import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.packs.PackType
@@ -44,9 +45,9 @@ interface RadGymsImplementation {
 
     fun registerResourceReloader(
         identifier: ResourceLocation,
-        reloader: PreparableReloadListener,
         type: PackType,
         dependencies: Collection<ResourceLocation>,
+        reloaderFactory: (HolderLookup.Provider) -> PreparableReloadListener,
     )
 
     fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(

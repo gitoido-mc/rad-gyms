@@ -9,37 +9,17 @@ plugins {
     id("java")
     alias(libs.plugins.architectury.dev)
     alias(libs.plugins.architectury.plugin)
-    alias(libs.plugins.rg.shared)
+    alias(libs.plugins.rg.base)
 }
 
-repositories {
-    maven("${rootProject.rootDir}/deps") // cobbled molang
-    maven("https://artefacts.cobblemon.com/releases") // cobblemon
-    maven("https://maven.azuredoom.com/mods")
-    maven {
-        url = uri("https://www.cursemaven.com")
-        content {
-            includeGroup("curse.maven")
-        }
-    }
-    maven {
-        url = uri("https://api.modrinth.com/maven")
-        content {
-            includeGroup("maven.modrinth")
-        }
-    }
+loom {
+    silentMojangMappingsLicense()
+    accessWidenerPath.set(project(":x-common").file("src/main/resources/${project.property("mod_id")}.accesswidener"))
+}
 
-    // Aether compat
-    maven("https://maven.wispforest.io/releases/")
-    maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
-    maven {
-        url = uri("https://packages.aether-mod.net/The-Aether")
-        content {
-            includeGroup("com.aetherteam.aether")
-            includeGroup("com.aetherteam.cumulus")
-            includeGroup("com.aetherteam.nitrogen")
-        }
-    }
+dependencies {
+    minecraft(libs.minecraft)
+    mappings(loom.officialMojangMappings())
 }
 
 tasks {

@@ -19,15 +19,8 @@ sourceSets {
     }
 }
 
-loom {
-    silentMojangMappingsLicense()
-    accessWidenerPath = file("src/main/resources/${rootProject.property("mod_id")}.accesswidener")
-}
-
 dependencies {
     // Core deps
-    minecraft(libs.minecraft)
-    mappings(loom.officialMojangMappings())
     compileOnly(libs.bundles.common.mixin)
     annotationProcessor(libs.mixin.extras)
 

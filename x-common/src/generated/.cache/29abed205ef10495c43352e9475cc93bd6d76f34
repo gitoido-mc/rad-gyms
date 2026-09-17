@@ -1,5 +1,0 @@
-// 1.21.1	2026-09-07T03:08:16.389450308	Rad Gyms/Block Loot Tables
-10ae25478b51c938c4c91f3f7226999fcb4157aa data/rad_gyms/loot_table/blocks/shard_block_rare.json
-b3eff4d855bca9c63ada87d9cf16599d697e587b data/rad_gyms/loot_table/blocks/shard_block_uncommon.json
-26e810fb77c50be4c447070cdda8dc567573bd80 data/rad_gyms/loot_table/blocks/shard_block_common.json
-2f91bd208d66ff6a332fc174ce6c8ed4b3539306 data/rad_gyms/loot_table/blocks/shard_block_epic.json

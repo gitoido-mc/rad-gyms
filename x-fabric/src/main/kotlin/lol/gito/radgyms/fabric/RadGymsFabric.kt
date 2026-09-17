@@ -36,7 +36,9 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -139,12 +141,56 @@ object RadGymsFabric : RadGymsImplementation {
 
     override fun registerResourceReloader(
         identifier: ResourceLocation,
-        reloader: PreparableReloadListener,
         type: PackType,
         dependencies: Collection<ResourceLocation>,
-    ) = ResourceManagerHelper
-        .get(type)
-        .registerReloadListener(RadGymsReloadListener(identifier, reloader, dependencies))
+        reloaderFactory: (HolderLookup.Provider) -> PreparableReloadListener,
+    ) {
+        if (type == PackType.SERVER_DATA) {
+            val resourceLoader = ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
+            resourceLoader.registerReloadListener(identifier, {
+                object : IdentifiableResourceReloadListener {
+                    override fun reload(
+                        synchronizer: PreparableReloadListener.PreparationBarrier,
+                        manager: ResourceManager,
+                        prepareProfiler: ProfilerFiller,
+                        applyProfiler: ProfilerFiller,
+                        prepareExecutor: Executor,
+                        applyExecutor: Executor,
+                    ): CompletableFuture<Void> = reloaderFactory.invoke(it).reload(
+                        synchronizer,
+                        manager,
+                        prepareProfiler,
+                        applyProfiler,
+                        prepareExecutor,
+                        applyExecutor,
+                    )
+
+                    override fun getFabricId() = identifier
+                }
+            })
+        } else {
+            val resourceLoader = ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
+            resourceLoader.registerReloadListener(object : IdentifiableResourceReloadListener {
+                override fun reload(
+                    synchronizer: PreparableReloadListener.PreparationBarrier,
+                    manager: ResourceManager,
+                    prepareProfiler: ProfilerFiller,
+                    applyProfiler: ProfilerFiller,
+                    prepareExecutor: Executor,
+                    applyExecutor: Executor,
+                ): CompletableFuture<Void> = reloaderFactory.invoke(RegistryAccess.EMPTY).reload(
+                    synchronizer,
+                    manager,
+                    prepareProfiler,
+                    applyProfiler,
+                    prepareExecutor,
+                    applyExecutor,
+                )
+
+                override fun getFabricId() = identifier
+            })
+        }
+    }
 
     override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(
         identifier: ResourceLocation,

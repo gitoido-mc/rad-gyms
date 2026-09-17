@@ -6,6 +6,10 @@
  * you can obtain one at https://github.com/gitoido-mc/rad-gyms/blob/main/LICENSE.
  */
 
+plugins {
+    alias(libs.plugins.rg.root)
+}
+
 // architectury {
 //    minecraft = project.property("minecraft_version") as String
 // }
