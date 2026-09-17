@@ -42,11 +42,6 @@ object RadGymsItemGroups {
     }
 
     @JvmStatic
-    val DECOR_GROUP_KEY = this.create(modId("decor"), this::decorEntries) {
-        ItemStack(RadGymsItems.TYPE_GEM_BLOCK_NORMAL)
-    }
-
-    @JvmStatic
     val GENERAL_GROUP get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(GENERAL_GROUP_KEY)
 
     @JvmStatic
@@ -54,9 +49,6 @@ object RadGymsItemGroups {
 
     @JvmStatic
     val CACHES_GROUP get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(CACHES_GROUP_KEY)
-
-    @JvmStatic
-    val DECOR_GROUP get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(DECOR_GROUP_KEY)
 
     @Suppress("Unused")
     @JvmStatic
@@ -94,34 +86,9 @@ object RadGymsItemGroups {
         entries.accept(RadGymsItems.SHARD_BLOCK_UNCOMMON)
         entries.accept(RadGymsItems.SHARD_BLOCK_EPIC)
         entries.accept(RadGymsItems.SHARD_BLOCK_RARE)
-    }
-
-    private fun decorEntries(
-        @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
-        entries: CreativeModeTab.Output,
-    ) {
         entries.accept(RadGymsItems.DECORATIVE_END_PORTAL)
         entries.accept(RadGymsItems.DECORATIVE_WET_SPONGE)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_BUG)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_DARK)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_DRAGON)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_ELECTRIC)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_FAIRY)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_FIGHTING)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_FIRE)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_FLYING)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_GHOST)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_GRASS)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_GROUND)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_ICE)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_NORMAL)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_POISON)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_PSYCHIC)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_ROCK)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_STEEL)
-        entries.accept(RadGymsItems.TYPE_GEM_BLOCK_WATER)
     }
-
     private fun keyEntries(
         @Suppress("unused") displayContext: CreativeModeTab.ItemDisplayParameters,
         entries: CreativeModeTab.Output,

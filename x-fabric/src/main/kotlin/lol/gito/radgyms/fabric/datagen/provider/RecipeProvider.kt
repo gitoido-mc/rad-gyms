@@ -48,7 +48,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes.PSYCHIC
 import com.cobblemon.mod.common.api.types.ElementalTypes.ROCK
 import com.cobblemon.mod.common.api.types.ElementalTypes.STEEL
 import com.cobblemon.mod.common.api.types.ElementalTypes.WATER
-import com.cobblemon.mod.common.item.CobblemonItem
+import com.cobblemon.mod.common.item.GemItem
 import com.cobblemon.mod.common.item.PokeBallItem
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.modId
@@ -70,24 +70,6 @@ import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_COMMON
 import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_EPIC
 import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_RARE
 import lol.gito.radgyms.common.registry.RadGymsItems.SHARD_UNCOMMON
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_BUG
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_DARK
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_DRAGON
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_ELECTRIC
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_FAIRY
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_FIGHTING
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_FIRE
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_FLYING
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_GHOST
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_GRASS
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_GROUND
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_ICE
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_NORMAL
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_POISON
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_PSYCHIC
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_ROCK
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_STEEL
-import lol.gito.radgyms.common.registry.RadGymsItems.TYPE_GEM_BLOCK_WATER
 import lol.gito.radgyms.fabric.datagen.json.builder.ShapelessWithComponentRecipeJsonBuilder
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
@@ -97,7 +79,6 @@ import net.minecraft.core.component.DataComponents.RARITY
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.data.recipes.ShapedRecipeBuilder
-import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items.AIR
 import net.minecraft.world.item.Items.CRAFTING_TABLE
@@ -123,7 +104,6 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
         ElementalTypes.all().forEach { type ->
             buildAttunedGymKey(type, recipeExporter)
             buildAttunedPokeCaches(type, recipeExporter)
-            buildTypeBlock(type, recipeExporter)
         }
 
         Rarity.entries.forEach { rarity ->
@@ -141,7 +121,7 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
 
     @Suppress("CyclomaticComplexMethod")
     @Throws(NotImplementedError::class)
-    private fun elementalTypeKeyConfig(type: ElementalType): Pair<GymKey, CobblemonItem> = when (type) {
+    private fun elementalTypeKeyConfig(type: ElementalType): Pair<GymKey, GemItem> = when (type) {
         BUG -> GYM_KEY to BUG_GEM
 
         DARK -> GYM_KEY to DARK_GEM
@@ -184,51 +164,7 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
     }
 
     @Suppress("CyclomaticComplexMethod")
-    @Throws(NotImplementedError::class)
-    private fun elementalTypeBlockConfig(type: ElementalType): Pair<BlockItem, CobblemonItem> = when (type) {
-        BUG -> TYPE_GEM_BLOCK_BUG to BUG_GEM
-
-        DARK -> TYPE_GEM_BLOCK_DARK to DARK_GEM
-
-        DRAGON -> TYPE_GEM_BLOCK_DRAGON to DRAGON_GEM
-
-        ELECTRIC -> TYPE_GEM_BLOCK_ELECTRIC to ELECTRIC_GEM
-
-        FAIRY -> TYPE_GEM_BLOCK_FAIRY to FAIRY_GEM
-
-        FIGHTING -> TYPE_GEM_BLOCK_FIGHTING to FIGHTING_GEM
-
-        FIRE -> TYPE_GEM_BLOCK_FIRE to FIRE_GEM
-
-        FLYING -> TYPE_GEM_BLOCK_FLYING to FLYING_GEM
-
-        GHOST -> TYPE_GEM_BLOCK_GHOST to GHOST_GEM
-
-        GRASS -> TYPE_GEM_BLOCK_GRASS to GRASS_GEM
-
-        GROUND -> TYPE_GEM_BLOCK_GROUND to GROUND_GEM
-
-        ICE -> TYPE_GEM_BLOCK_ICE to ICE_GEM
-
-        NORMAL -> TYPE_GEM_BLOCK_NORMAL to NORMAL_GEM
-
-        POISON -> TYPE_GEM_BLOCK_POISON to POISON_GEM
-
-        PSYCHIC -> TYPE_GEM_BLOCK_PSYCHIC to PSYCHIC_GEM
-
-        ROCK -> TYPE_GEM_BLOCK_ROCK to ROCK_GEM
-
-        STEEL -> TYPE_GEM_BLOCK_STEEL to STEEL_GEM
-
-        WATER -> TYPE_GEM_BLOCK_WATER to WATER_GEM
-
-        else -> {
-            throw NotImplementedError("No keys found for $type")
-        }
-    }
-
-    @Suppress("CyclomaticComplexMethod")
-    private fun elementalTypeCacheConfig(cache: PokeCache, type: ElementalType): Pair<PokeCache, CobblemonItem> = when (type) {
+    private fun elementalTypeCacheConfig(cache: PokeCache, type: ElementalType): Pair<PokeCache, GemItem> = when (type) {
         BUG -> cache to BUG_GEM
 
         DARK -> cache to DARK_GEM
@@ -394,23 +330,4 @@ class RecipeProvider(output: FabricDataOutput, lookup: CompletableFuture<HolderL
         .group("multi_bench")
         .unlockedBy(getHasName(POKE_BALL.item()), has(CRAFTING_TABLE))
         .save(recipeExporter)
-
-    private fun buildTypeBlock(type: ElementalType, recipeExporter: RecipeOutput) {
-        val typeGemPair = elementalTypeBlockConfig(type)
-        ShapedRecipeBuilder
-            .shaped(RecipeCategory.MISC, typeGemPair.first, 1)
-            .pattern("sss")
-            .pattern("sss")
-            .pattern("sss")
-            .define('s', typeGemPair.second)
-            .group("multi_bench")
-            .unlockedBy(getHasName(typeGemPair.second), has(CRAFTING_TABLE))
-            .save(recipeExporter, modId("type_gem_to_block_${type.showdownId}"))
-
-        ShapelessWithComponentRecipeJsonBuilder(RecipeCategory.MISC, typeGemPair.second.asItem(), BLOCK_TO_SHARD_AMOUNT)
-            .define(typeGemPair.first)
-            .group("multi_bench")
-            .unlockedBy(getHasName(typeGemPair.second), has(typeGemPair.first))
-            .save(recipeExporter, modId("block_to_type_gems_${type.showdownId}"))
-    }
 }
