@@ -45,7 +45,7 @@ class ServerConfig(
         "gmax",
     ),
 
-    val trainerTeamShinyChance: Int = 10,
+    val trainerTeamShinyChance: Int = 128,
 ) {
     val boosterMap: Map<Item, Int> by lazy {
         this.cacheBoosters.mapKeys {
@@ -69,11 +69,5 @@ class ServerConfig(
             minLevel = minLevel,
             maxLevel = maxLevel,
         )
-    }
-
-    fun warmupBoosters() {
-//        if (!this::boosterMap.isInitialized) {
-//            this.boosterMap =
-//        }
     }
 }
