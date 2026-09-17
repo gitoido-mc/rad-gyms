@@ -57,10 +57,9 @@ dependencies {
     }
 
     shadowCommon(project(":x-common", configuration = "transformProductionNeoForge"))
-    @Suppress("AvoidDuplicateDependencies")
     project(":x-common", configuration = "namedElements").let {
         implementation(it)
-        "developmentNeoForge"(it)
+        "developmentNeoForge"(it) { isTransitive = false }
     }
 }
 

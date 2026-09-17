@@ -91,10 +91,9 @@ dependencies {
     }
 
     shadowCommon(project(":x-common", configuration = "transformProductionFabric"))
-    @Suppress("AvoidDuplicateDependencies")
     project(":x-common", configuration = "namedElements").let {
         implementation(it)
-        "developmentFabric"(it)
+        "developmentFabric"(it) { isTransitive = false }
     }
 }
 
