@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on modified [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [ZeroVer](https://0ver.org).
 
+## [Unreleased]
+
+### <!-- 0 --> Features
+- Cobblemon 1.8.2 support
+
+### <!-- 3 --> Optimizations
+- Optimize translation helper utils
+- Get rid of async teleportation
+- Extract bst predicate
+
 ## [1.8.1+0.5.0] - 2026-09-17
 
 ### <!-- 0 --> Features
@@ -28,7 +38,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Added new generic gym key model
 - Added new generic gym interior
 - Simplified teleport logic
-- Changed serialization to gson and refactored config load in [#133](https://github.com/gitoido-mc/rad-gyms/pull/133)
+- Changed serialization to gson and refactored config load
 
 ## [1.7.3+0.4.4] - 2026-02-25
 
@@ -38,20 +48,20 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 2 --> Bug Fixes
 - Rollback mirrored gradle repo for cobblemon
 - Fix translations defaulting to minecraft namespace again
-- Add missing fairy type to defaultElementalTypes in [#128](https://github.com/gitoido-mc/rad-gyms/pull/128)
+- Add missing fairy type to defaultElementalTypes
 - Refactor type checks to use defaultElementalType list
-- Add check for custom trainer texture in [#127](https://github.com/gitoido-mc/rad-gyms/pull/127)
+- Add check for custom trainer texture
 - Fix more GUI translations defaulting to minecraft namespace after TranslationHelper update
 - Fix translations defaulting to minecraft namespace after TranslationHelper update
 - Ensure i18n provider generates translation keys in proper namespace
 
 ### <!-- 3 --> Optimizations
-- Detekt checks, code flow optimizations, reintroduced snapshot switch in [#126](https://github.com/gitoido-mc/rad-gyms/pull/126)
+- Detekt checks, code flow optimizations, reintroduced snapshot switch
 
 ## [1.7.3+0.4.3] - 2026-02-20
 
 ### <!-- 2 --> Bug Fixes
-- More detekt cleanup + msd compat fixes in [#125](https://github.com/gitoido-mc/rad-gyms/pull/125)
+- More detekt cleanup + msd compat fixes
 
 ## [1.7.3+0.4.2] - 2026-02-18
 
@@ -59,7 +69,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Added missing translations
 
 ### <!-- 3 --> Optimizations
-- Changed custom stats registration on world init in [#124](https://github.com/gitoido-mc/rad-gyms/pull/124)
+- Changed custom stats registration on world init
 
 ## [1.7.3+0.4.1] - 2026-02-17
 
@@ -69,8 +79,8 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ## [1.7.3+0.4.0] - 2026-02-17
 
 ### <!-- 0 --> Features
-- Implemented custom gym stats in [#119](https://github.com/gitoido-mc/rad-gyms/pull/119)
-- Implement gym persistence in [#115](https://github.com/gitoido-mc/rad-gyms/pull/115)
+- Implemented custom gym stats
+- Implement gym persistence
 
 ### <!-- 2 --> Bug Fixes
 - Added missing mega aspect to ignored species
@@ -82,15 +92,12 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ## [1.7.0+0.4.0-alpha] - 2026-02-04
 
 ### <!-- 0 --> Features
-- Implement custom fabric datagen in [#114](https://github.com/gitoido-mc/rad-gyms/pull/114)
-- SCM versioning via gradle plugin, proper mixin and aw propagation, updated docs build, added pull request workflow in [#113](https://github.com/gitoido-mc/rad-gyms/pull/113)
-- New `Fixed` and `Pool` type team generators. Serialization codecs for most of the gym classes. in [#112](https://github.com/gitoido-mc/rad-gyms/pull/112)
+- Implement custom fabric datagen
+- SCM versioning via gradle plugin, proper mixin and aw propagation, updated docs build, added pull request workflow
+- New `Fixed` and `Pool` type team generators. Serialization codecs for most of the gym classes.
 
 ### <!-- 3 --> Optimizations
 - DX - annotate logger methods, modId helper and RadGymsState companion object methods as @JvmStatic
-
-### New Contributors
-* @github-actions[bot] made their first contribution
 
 ## [1.7.0+0.3.1] - 2026-02-03
 
@@ -107,11 +114,8 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - GymEnterScreen now uses proper translation string
 
 ### <!-- 3 --> Optimizations
-- Humanize level thresholds in gym definitions in [#111](https://github.com/gitoido-mc/rad-gyms/pull/111)
+- Humanize level thresholds in gym definitions
 - Alot of updates
-
-### New Contributors
-* @landonjw made their first contribution
 
 ## [1.7.0+0.3.0-stable] - 2025-12-04
 
@@ -313,9 +317,6 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### <!-- 3 --> Optimizations
 - DataSaver player mixin slight refactor
 
-### New Contributors
-* @KaptainWutax made their first contribution
-
 ## [1.6.1+0.1.13-stable] - 2025-05-20
 
 ### <!-- 0 --> Features
@@ -369,9 +370,6 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Fix forms and aspects not being applied correctly
 - Use TeleportTarget instead of player.teleport
 
-### New Contributors
-* @Brzjomo made their first contribution
-
 ## [1.6.1+0.1.6-stable] - 2025-02-15
 
 ### <!-- 0 --> Features
@@ -386,15 +384,17 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Creative checks and additional player notifications when Gym key being used by player
 - Default values in trainer DTO
 
+## [1.6.1+0.1.5-stable] - 2025-02-13
+
+### <!-- 2 --> Bug Fixes
+- OnBattleFainted condition fix
+
 ## [1.6.1+0.1.4-stable] - 2025-02-13
 
 ### <!-- 0 --> Features
 - Config file
 - Major code cleanup
 - Dynamic keys
-
-### <!-- 2 --> Bug Fixes
-- OnBattleFainted condition fix
 
 ## [1.6.1+0.1.3-stable] - 2025-02-11
 
@@ -429,39 +429,38 @@ and this project adheres to [ZeroVer](https://0ver.org).
 - Gym entrances functionality and nbt in structures, misc reworks
 - Player NBT data, gym generation progress
 
-### New Contributors
-* @gitoido made their first contribution
-
-[1.8.1+0.5.0]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.4...1.8.1+0.5.0
-[1.7.3+0.4.4]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.3...1.7.3+0.4.4
-[1.7.3+0.4.3]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.2...1.7.3+0.4.3
-[1.7.3+0.4.2]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.1...1.7.3+0.4.2
-[1.7.3+0.4.1]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.0...1.7.3+0.4.1
-[1.7.3+0.4.0]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.0+0.4.0-alpha...1.7.3+0.4.0
-[1.7.0+0.4.0-alpha]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.0+0.3.1...1.7.0+0.4.0-alpha
-[1.7.0+0.3.1]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.0+0.3.0-stable...1.7.0+0.3.1
-[1.7.0+0.3.0-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.3.0-beta1...1.7.0+0.3.0-stable
-[1.6.1+0.3.0-beta1]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.3.0-alpha1...1.6.1+0.3.0-beta1
-[1.6.1+0.3.0-alpha1]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-beta6...1.6.1+0.3.0-alpha1
-[1.6.1+0.2.0-beta6]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-beta5...1.6.1+0.2.0-beta6
-[1.6.1+0.2.0-beta5]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-beta4...1.6.1+0.2.0-beta5
-[1.6.1+0.2.0-beta4]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-beta3...1.6.1+0.2.0-beta4
-[1.6.1+0.2.0-beta3]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-beta2...1.6.1+0.2.0-beta3
-[1.6.1+0.2.0-beta2]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-beta1...1.6.1+0.2.0-beta2
-[1.6.1+0.2.0-beta1]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-alpha3...1.6.1+0.2.0-beta1
-[1.6.1+0.2.0-alpha3]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-alpha2...1.6.1+0.2.0-alpha3
-[1.6.1+0.2.0-alpha2]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.2.0-alpha1...1.6.1+0.2.0-alpha2
-[1.6.1+0.2.0-alpha1]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.13-stable1...1.6.1+0.2.0-alpha1
-[1.6.1+0.1.13-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.12-stable...1.6.1+0.1.13-stable
-[1.6.1+0.1.11-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.10-stable...1.6.1+0.1.11-stable
-[1.6.1+0.1.10-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.9-stable...1.6.1+0.1.10-stable
-[1.6.1+0.1.9-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.8-stableb...1.6.1+0.1.9-stable
-[1.6.1+0.1.8-stableb]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.8-stable...1.6.1+0.1.8-stableb
-[1.6.1+0.1.8-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.7-stable...1.6.1+0.1.8-stable
-[1.6.1+0.1.7-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.6-stable...1.6.1+0.1.7-stable
-[1.6.1+0.1.6-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.5-stable...1.6.1+0.1.6-stable
-[1.6.1+0.1.4-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.3-stable...1.6.1+0.1.4-stable
-[1.6.1+0.1.3-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.2-stable...1.6.1+0.1.3-stable
-[1.6.1+0.1.2-stable]: https://github.com/gitoido-mc/rad-gyms/compare/1.6.1+0.1.1-beta...1.6.1+0.1.2-stable
+[unreleased]: https://github.com///compare/1.8.1+0.5.0...HEAD
+[1.8.1+0.5.0]: https://github.com///compare/1.7.3+0.4.4...1.8.1+0.5.0
+[1.7.3+0.4.4]: https://github.com///compare/1.7.3+0.4.3...1.7.3+0.4.4
+[1.7.3+0.4.3]: https://github.com///compare/1.7.3+0.4.2...1.7.3+0.4.3
+[1.7.3+0.4.2]: https://github.com///compare/1.7.3+0.4.1...1.7.3+0.4.2
+[1.7.3+0.4.1]: https://github.com///compare/1.7.3+0.4.0...1.7.3+0.4.1
+[1.7.3+0.4.0]: https://github.com///compare/1.7.0+0.4.0-alpha...1.7.3+0.4.0
+[1.7.0+0.4.0-alpha]: https://github.com///compare/1.7.0+0.3.1...1.7.0+0.4.0-alpha
+[1.7.0+0.3.1]: https://github.com///compare/1.7.0+0.3.0-stable...1.7.0+0.3.1
+[1.7.0+0.3.0-stable]: https://github.com///compare/1.6.1+0.3.0-beta1...1.7.0+0.3.0-stable
+[1.6.1+0.3.0-beta1]: https://github.com///compare/1.6.1+0.3.0-alpha1...1.6.1+0.3.0-beta1
+[1.6.1+0.3.0-alpha1]: https://github.com///compare/1.6.1+0.2.0-beta6...1.6.1+0.3.0-alpha1
+[1.6.1+0.2.0-beta6]: https://github.com///compare/1.6.1+0.2.0-beta5...1.6.1+0.2.0-beta6
+[1.6.1+0.2.0-beta5]: https://github.com///compare/1.6.1+0.2.0-beta4...1.6.1+0.2.0-beta5
+[1.6.1+0.2.0-beta4]: https://github.com///compare/1.6.1+0.2.0-beta3...1.6.1+0.2.0-beta4
+[1.6.1+0.2.0-beta3]: https://github.com///compare/1.6.1+0.2.0-beta2...1.6.1+0.2.0-beta3
+[1.6.1+0.2.0-beta2]: https://github.com///compare/1.6.1+0.2.0-beta1...1.6.1+0.2.0-beta2
+[1.6.1+0.2.0-beta1]: https://github.com///compare/1.6.1+0.2.0-alpha3...1.6.1+0.2.0-beta1
+[1.6.1+0.2.0-alpha3]: https://github.com///compare/1.6.1+0.2.0-alpha2...1.6.1+0.2.0-alpha3
+[1.6.1+0.2.0-alpha2]: https://github.com///compare/1.6.1+0.2.0-alpha1...1.6.1+0.2.0-alpha2
+[1.6.1+0.2.0-alpha1]: https://github.com///compare/1.6.1+0.1.13-stable1...1.6.1+0.2.0-alpha1
+[1.6.1+0.1.13-stable]: https://github.com///compare/1.6.1+0.1.12-stable...1.6.1+0.1.13-stable
+[1.6.1+0.1.11-stable]: https://github.com///compare/1.6.1+0.1.10-stable...1.6.1+0.1.11-stable
+[1.6.1+0.1.10-stable]: https://github.com///compare/1.6.1+0.1.9-stable...1.6.1+0.1.10-stable
+[1.6.1+0.1.9-stable]: https://github.com///compare/1.6.1+0.1.8-stableb...1.6.1+0.1.9-stable
+[1.6.1+0.1.8-stableb]: https://github.com///compare/1.6.1+0.1.8-stable...1.6.1+0.1.8-stableb
+[1.6.1+0.1.8-stable]: https://github.com///compare/1.6.1+0.1.7-stable...1.6.1+0.1.8-stable
+[1.6.1+0.1.7-stable]: https://github.com///compare/1.6.1+0.1.6-stable...1.6.1+0.1.7-stable
+[1.6.1+0.1.6-stable]: https://github.com///compare/1.6.1+0.1.5-stable...1.6.1+0.1.6-stable
+[1.6.1+0.1.5-stable]: https://github.com///compare/1.6.1+0.1.4-stable...1.6.1+0.1.5-stable
+[1.6.1+0.1.4-stable]: https://github.com///compare/1.6.1+0.1.3-stable...1.6.1+0.1.4-stable
+[1.6.1+0.1.3-stable]: https://github.com///compare/1.6.1+0.1.2-stable...1.6.1+0.1.3-stable
+[1.6.1+0.1.2-stable]: https://github.com///compare/1.6.1+0.1.1-beta...1.6.1+0.1.2-stable
 
 <!-- generated by git-cliff -->
