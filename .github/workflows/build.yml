@@ -10,6 +10,7 @@ env:
   project_slug: rad-gyms
   curseforge_id: 1196570
   modrinth_id: eF8kqlHd
+  minecraft: 1.21.1
   cobblemon: 1.8.2
   rctapi: 0.16.2-beta
 
@@ -51,8 +52,8 @@ jobs:
         uses: Kira-NT/mc-publish@v3.3
         with:
           name: "Rad Gyms ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon ${{ env.cobblemon }}"
-          java: 21
-          game-versions: 1.21.1
+          java: ${{ matrix.java }}
+          game-versions: ${{ env.minecraft }}
           loaders: ${{ matrix.loader }}
 
           files: |
@@ -79,9 +80,9 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         uses: Kira-NT/mc-publish@v3.3
         with:
-          name: "Rad Gyms ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon ${{ env.cobblemon }}"
-          java: 21
-          game-versions: 1.21.1
+          name: "Nightly ${{ steps.version.outputs.MOD_VERSION }}"
+          java: ${{ matrix.java }}
+          game-versions: ${{ env.minecraft }}
           loaders: ${{ matrix.loader }}
 
           github-prerelease: true
