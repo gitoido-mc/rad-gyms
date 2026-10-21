@@ -43,10 +43,10 @@ jobs:
         uses: burrunan/gradle-cache-action@v3
         with:
           read-only: true
-          arguments: :x-${{ matrix.loader }}:build
+          arguments: :x-${{ matrix.loader }}:assemble
       - name: Save version output
         id: version
-        run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
+        run: echo "MOD_VERSION=$(./gradlew currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
       - name: "Publish on platforms"
         if: github.event_name == 'release'
         uses: Kira-NT/mc-publish@v3.3
@@ -57,8 +57,8 @@ jobs:
           loaders: ${{ matrix.loader }}
 
           files: |
-            ${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
-            ${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
 
           version: "${{ env.cobblemon }}_${{ steps.version.outputs.MOD_VERSION }}"
           version-type: release
@@ -87,6 +87,7 @@ jobs:
 
           github-prerelease: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-tag: 'nightly'
           files: |
-            ${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
-            ${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
