@@ -26,11 +26,11 @@ architectury-api = "13.0.8"
 
 # Mod dependencies
 molang = "1.1.20"
-cobblemon = "1.8.1+1.21.1"
+cobblemon = "1.8.2+1.21.1"
 
-rctapi-common = "8826242"
-rctapi-neoforge = "8826267"
-rctapi-fabric = "8826280"
+rctapi-common = "9149406"
+rctapi-neoforge = "9149463"
+rctapi-fabric = "9149488"
 aether-fabric = "1.21.1-1.5.8-fabric"
 aether-neoforge = "1.21.1-1.5.8-neoforge"
 graalvm = "22.3.0"

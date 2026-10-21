@@ -10,8 +10,8 @@ env:
   project_slug: rad-gyms
   curseforge_id: 1196570
   modrinth_id: eF8kqlHd
-  cobblemon: 1.8.1
-  rctapi: 0.16.0-beta
+  cobblemon: 1.8.2
+  rctapi: 0.16.2-beta
 
 jobs:
   build:
