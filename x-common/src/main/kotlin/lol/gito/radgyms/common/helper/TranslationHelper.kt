@@ -58,7 +58,7 @@ object ElementalTypeTranslationHelper {
     fun buildTypeText(elementalType: ElementalType? = null): C = buildTypeText(elementalType?.showdownId)
 
     fun buildTypeText(type: String? = null): C = when {
-        (type == null) ->
+        (type == null) || (type == "chaos") ->
             tl(modId("item.component.type.chaos")).withStyle {
                 it.applyFormat(ChatFormatting.OBFUSCATED).applyFormat(ChatFormatting.DARK_GRAY)
             }
@@ -66,11 +66,6 @@ object ElementalTypeTranslationHelper {
         (ElementalTypes.get(type) != null) ->
             tlc("type.$type").withStyle {
                 it.applyFormat(ChatFormatting.DARK_PURPLE)
-            }
-
-        (type == "chaos") ->
-            tl(modId("item.component.type.chaos")).withStyle {
-                it.applyFormat(ChatFormatting.DARK_GRAY).applyFormat(ChatFormatting.OBFUSCATED)
             }
 
         else ->
