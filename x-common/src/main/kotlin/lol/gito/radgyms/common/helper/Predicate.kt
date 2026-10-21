@@ -12,8 +12,10 @@ import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
+import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.gitlab.srcmc.rctapi.api.battle.BattleManager.TrainerEntityBattleActor
+import lol.gito.radgyms.common.api.dto.SpeciesWithForm
 
 @Suppress("FunctionName")
 fun TrainerCheckerPredicate(actor: BattleActor): Boolean {
@@ -33,3 +35,8 @@ fun hasGymTrainers(event: BattleVictoryEvent): Boolean = event.battle.actors
 
 fun hasGymTrainers(event: BattleStartedEvent.Pre): Boolean = event.battle.actors
     .any(::TrainerCheckerPredicate)
+
+fun bstSort(form: SpeciesWithForm): Int = form.form.baseStats
+    .filterKeys { key -> key.type == Stat.Type.PERMANENT }
+    .values
+    .sum()
