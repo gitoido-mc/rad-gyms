@@ -5,13 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on modified [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [ZeroVer](https://0ver.org).
 
-## [Unreleased]
+## [1.8.2+0.5.1] - 2026-10-21
 
 ### <!-- 0 --> Features
 - Cobblemon 1.8.2 support
 
 ### <!-- 2 --> Bug Fixes
-- Player gamemode switch on teleportation
+- Player gamemode switch on teleportation in [#149](https://github.com/gitoido-mc/rad-gyms/pull/149)
 
 ### <!-- 3 --> Optimizations
 - Optimize translation helper utils
@@ -447,7 +447,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### New Contributors
 * @gitoido made their first contribution
 
-[unreleased]: https://github.com/gitoido-mc/rad-gyms/compare/1.8.1+0.5.0...HEAD
+[1.8.2+0.5.1]: https://github.com/gitoido-mc/rad-gyms/compare/1.8.1+0.5.0...1.8.2+0.5.1
 [1.8.1+0.5.0]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.4...1.8.1+0.5.0
 [1.7.3+0.4.4]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.3...1.7.3+0.4.4
 [1.7.3+0.4.3]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.2...1.7.3+0.4.3
