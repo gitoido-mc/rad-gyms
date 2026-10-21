@@ -67,8 +67,8 @@ object GymTeardownService {
             preloadPos,
         )
 
-        GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, preloadDim, preloadPos, postTeleport = {
-            if (!RadGymsConfigs.server.debug) it.setGameMode(GameType.SURVIVAL)
+        GymTeleportScheduler.scheduleTeleportWithCountdown(serverPlayer, preloadDim, preloadPos, postTeleport = { player ->
+            if (!RadGymsConfigs.server.debug && !player.isCreative) player.setGameMode(GameType.SURVIVAL)
         })
     }
 
