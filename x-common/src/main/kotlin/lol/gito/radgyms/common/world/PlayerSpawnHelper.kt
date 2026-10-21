@@ -12,7 +12,6 @@ import lol.gito.radgyms.common.GYM_SPACING_IN_DIMENSION
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.registry.RadGymsDimensions
-import lol.gito.radgyms.common.threading.ThreadManager
 import lol.gito.radgyms.common.world.state.RadGymsState
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel

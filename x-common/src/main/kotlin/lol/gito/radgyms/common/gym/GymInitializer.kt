@@ -113,7 +113,7 @@ class GymInitializer(
                 dest,
                 gymTemplate.playerYaw,
             ) { player ->
-                if (!RadGymsConfigs.server.debug) player.setGameMode(GameType.ADVENTURE)
+                if (!RadGymsConfigs.server.debug && !player.isCreative) player.setGameMode(GameType.ADVENTURE)
             }
         }
     }
