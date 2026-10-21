@@ -4,9 +4,6 @@ on:
   release:
     types:
       - published
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 env:
@@ -31,10 +28,7 @@ jobs:
         loader: [
           fabric,
           neoforge,
-          common,
         ]
-    outputs:
-      version: ${{ steps.version.outputs.MOD_VERSION }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -53,41 +47,20 @@ jobs:
       - name: Save version output
         id: version
         run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
-      - name: Capture build artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: artifacts-${{ matrix.loader }}
-          path: |
-            x-${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
-            x-${{ matrix.loader }}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
-
-  publish:
-    if: github.event_name == 'release'
-    name: "Publish artifacts on platforms"
-    needs: build
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        loader: [
-          fabric,
-          neoforge,
-        ]
-    steps:
-      - name: Retrieve build artifacts
-        uses: actions/download-artifact@v8
-      - name: Publish ${{ matrix.loader }} version (CurseForge/Modrinth)
+      - name: "Publish on platforms"
+        if: github.event_name == 'release'
         uses: Kira-NT/mc-publish@v3.3
         with:
-          name: "Rad Gyms ${{ needs.build.outputs.version }} for Cobblemon ${{ env.cobblemon }}"
+          name: "Rad Gyms ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon ${{ env.cobblemon }}"
           java: 21
           game-versions: 1.21.1
           loaders: ${{ matrix.loader }}
 
           files: |
-            ${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
-            ${{ env.project_slug }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar
+            ${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            ${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
 
-          version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
+          version: "${{ env.cobblemon }}_${{ steps.version.outputs.MOD_VERSION }}"
           version-type: release
           environment: client | server
 
@@ -103,3 +76,17 @@ jobs:
             architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
             cobblemon@${{ env.cobblemon }}(required){curseforge:687131}{modrinth:MdwFAVRL}
             radical-cobblemon-trainers-api@${{ env.rctapi }}(required){curseforge:1152792}{modrinth:CBfM2yw7}
+      - name: "Publish on GitHub"
+        if: github.event_name == 'workflow_dispatch'
+        uses: Kira-NT/mc-publish@v3.3
+        with:
+          name: "Rad Gyms ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon ${{ env.cobblemon }}"
+          java: 21
+          game-versions: 1.21.1
+          loaders: ${{ matrix.loader }}
+
+          github-prerelease: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            ${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            ${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
