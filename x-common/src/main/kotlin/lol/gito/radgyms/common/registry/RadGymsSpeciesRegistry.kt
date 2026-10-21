@@ -8,7 +8,6 @@
 package lol.gito.radgyms.common.registry
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.FormData
@@ -18,6 +17,7 @@ import lol.gito.radgyms.common.api.dto.SpeciesWithForm
 import lol.gito.radgyms.common.cache.CacheDTO
 import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.exception.RadGymsSpeciesListEmptyException
+import lol.gito.radgyms.common.helper.bstSort
 
 private typealias SpeciesWithForms = List<SpeciesWithForm>
 
@@ -46,11 +46,12 @@ object RadGymsSpeciesRegistry {
         return this.species == other.species.resourceIdentifier.path
     }
 
-    private fun mapToSpeciesWithForms(list: List<Species>, type: ElementalType? = null): SpeciesWithForms {
+    private fun mapToSpeciesWithForms(species: List<Species>, type: ElementalType? = null): SpeciesWithForms {
         val ignored = RadGymsConfigs.server.ignoredSpecies.map { PokemonProperties.parse(it) }
 
         val filtered =
-            list // Make a copy
+            species
+                .toMutableList()
                 .filterNot { it.resourceIdentifier.path in RadGymsConfigs.server.ignoredSpecies }
                 .associateWith { associateSpecies ->
                     val forms = mutableListOf<FormData>()
@@ -78,12 +79,7 @@ object RadGymsSpeciesRegistry {
                     }
 
                     return@filter true
-                }.sortedBy {
-                    it.form.baseStats
-                        .filterKeys { key -> key.type == Stat.Type.PERMANENT }
-                        .values
-                        .sum()
-                }
+                }.sortedBy(::bstSort)
 
         return filtered
     }
