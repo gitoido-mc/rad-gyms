@@ -52,7 +52,7 @@ object PlayerSpawnHelper {
         }
     }
 
-    fun teleportPlayer(serverPlayer: ServerPlayer, serverWorld: ServerLevel, pos: BlockPos, yaw: Float, pitch: Float) = ThreadManager.teleportExecutor.execute {
+    fun teleportPlayer(serverPlayer: ServerPlayer, serverWorld: ServerLevel, pos: BlockPos, yaw: Float, pitch: Float) {
         // Fix experience just in case
         val xpLevels: Int = serverPlayer.experienceLevel
         val xpProgress: Float = serverPlayer.experienceProgress
