@@ -11,7 +11,7 @@ env:
   curseforge_id: 1196570
   modrinth_id: eF8kqlHd
   minecraft: 1.21.1
-  cobblemon: 1.8.2
+  cobblemon: 1.8.3
   rctapi: 0.16.2-beta
 
 jobs:
