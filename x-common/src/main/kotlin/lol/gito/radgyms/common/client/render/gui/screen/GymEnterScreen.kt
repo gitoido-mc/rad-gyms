@@ -37,7 +37,7 @@ class GymEnterScreen(
 ) : AbstractGymScreen(
     when (type) {
         null, "chaos", in defaultElementalTypes -> tl(
-            modId("gui.common.set-gym-level"),
+            modId("gui.common.set_gym_level"),
             buildTypeText(type),
         )
 
@@ -215,11 +215,11 @@ class GymEnterScreen(
 
         val message =
             when (pos) {
-                null -> tl(modId("gui.common.set-gym-level"), buildTypeText(type))
+                null -> tl(modId("gui.common.set_gym_level"), buildTypeText(type))
 
                 else ->
                     tl(
-                        modId("gui.common.set-gym-level-entry"),
+                        modId("gui.common.set_gym_level_entry"),
                         buildTypeText(type),
                         usesLeft,
                     )

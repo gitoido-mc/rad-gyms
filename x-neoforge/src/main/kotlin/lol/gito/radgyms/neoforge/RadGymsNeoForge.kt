@@ -242,7 +242,7 @@ class RadGymsNeoForge : RadGymsImplementation {
         if (e.state.block == RadGymsBlocks.GYM_ENTRANCE) {
             if (!e.player.isShiftKeyDown) {
                 e.player.displayClientMessage(tl("message.info.gym_entrance_breaking"))
-                e.player.displayClientMessage(tl("message.error.gym_entrance.not-sneaking"))
+                e.player.displayClientMessage(tl("message.error.gym_entrance.not_sneaking"))
                 e.isCanceled = false
             } else {
                 e.isCanceled = true

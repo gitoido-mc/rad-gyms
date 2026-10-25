@@ -46,7 +46,7 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
                 stack.consume(1, player)
                 player.awardStat(getStat(RadGyms.statistics.KEYS_USED))
             } else {
-                player.displayClientMessage(tl(modId("message.error.key.not-in-main-hand")))
+                player.displayClientMessage(tl(modId("message.error.key.not_in_main_hand")))
             }
         }
 

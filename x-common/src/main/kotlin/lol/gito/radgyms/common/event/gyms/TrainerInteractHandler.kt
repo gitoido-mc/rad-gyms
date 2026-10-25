@@ -98,13 +98,13 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
                     event.player.uuid,
                     event.trainer.uuid,
                 )
-                handleBattleStartError(modId("message.error.battle_start_invalid_entity"), event.player)
+                handleBattleStartError(modId("message.error.interact.npc.battle_start_invalid_entity"), event.player)
                 true
             }
 
             (gym == null) -> {
                 warn("Player {} tried to initialize battle without proper gym instance", event.player.uuid)
-                handleBattleStartError(modId("message.error.player_gym_state_empty"), event.player)
+                handleBattleStartError(modId("message.error.interact.npc.gym_state_absent"), event.player)
                 true
             }
 
@@ -114,7 +114,7 @@ class TrainerInteractHandler(val event: GymEvents.TrainerInteractEvent) {
                     event.player.uuid,
                     event.trainer.uuid,
                 )
-                handleBattleStartError(modId("message.error.missing_trainer_id_gym_state"), event.player)
+                handleBattleStartError(modId("message.error.interact.npc.instance_missing_trainer_info"), event.player)
                 true
             }
 

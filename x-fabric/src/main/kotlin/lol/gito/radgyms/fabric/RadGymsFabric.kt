@@ -211,7 +211,7 @@ object RadGymsFabric : RadGymsImplementation {
 
             true -> {
                 player.displayClientMessage(tl("message.info.gym_entrance_breaking"))
-                player.displayClientMessage(tl("message.error.gym_entrance.not-sneaking"))
+                player.displayClientMessage(tl("message.error.gym_entrance.not_sneaking"))
                 false
             }
         }
