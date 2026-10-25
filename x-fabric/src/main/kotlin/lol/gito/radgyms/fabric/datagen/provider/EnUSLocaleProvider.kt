@@ -108,11 +108,11 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         tlk(modId("message.error.command.debug_reward.no_template")) to "Cannot find template provided",
         tlk(modId("message.error.command.debug_reward.no_player")) to "Command was not executed by player",
         tlk(modId("message.error.interact.npc.battle_start_invalid_entity")) to
-                "This trainer is not tracked by Rad Gyms trainer registry",
+            "This trainer is not tracked by Rad Gyms trainer registry",
         tlk(modId("message.error.interact.npc.gym_state_absent")) to
-                "This trainer doesn't have a gym configuration attached",
+            "This trainer doesn't have a gym configuration attached",
         tlk(modId("message.error.interact.npc.instance_missing_trainer_info")) to
-                "Trainer is not attached to gym instance, reach to the mod devs to solve the issue",
+            "Trainer is not attached to gym instance, reach to the mod devs to solve the issue",
     )
 
     private fun objectTranslations(): Map<String, String> = mapOf(
