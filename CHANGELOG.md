@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on modified [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [ZeroVer](https://0ver.org).
 
+## [1.8.3+0.5.2] - 2026-10-26
+
+### <!-- 0 --> Features
+- Cobblemon 1.8.3 support
+
+### <!-- 2 --> Bug Fixes
+- Added missing i18n
+
 ## [1.8.2+0.5.1] - 2026-10-21
 
 ### <!-- 0 --> Features
@@ -447,6 +455,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### New Contributors
 * @gitoido made their first contribution
 
+[1.8.3+0.5.2]: https://github.com/gitoido-mc/rad-gyms/compare/1.8.2+0.5.1...1.8.3+0.5.2
 [1.8.2+0.5.1]: https://github.com/gitoido-mc/rad-gyms/compare/1.8.1+0.5.0...1.8.2+0.5.1
 [1.8.1+0.5.0]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.4...1.8.1+0.5.0
 [1.7.3+0.4.4]: https://github.com/gitoido-mc/rad-gyms/compare/1.7.3+0.4.3...1.7.3+0.4.4
