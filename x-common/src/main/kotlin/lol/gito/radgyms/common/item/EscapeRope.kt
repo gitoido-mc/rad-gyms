@@ -34,7 +34,7 @@ class EscapeRope : CobblemonItem(Properties()) {
 
         when (level.dimension()) {
             RadGymsDimensions.GYM_DIMENSION -> OpenGymLeaveScreenS2C().sendToPlayer(player as ServerPlayer)
-            else -> player.displayClientMessage(tl(modId("${ESCAPE_ROPE.descriptionId}.failed")))
+            else -> player.displayClientMessage(tlr("${this.descriptionId}.failed"))
         }
 
         player.cooldowns.addCooldown(this, TELEPORT_COOLDOWN)

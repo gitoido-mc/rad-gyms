@@ -67,7 +67,7 @@ object KickCommand : CommandInterface {
 
         if (shouldReturn) return -1
 
-        player!!.displayClientMessage(tl(modId("message.info.command.op_kick")))
+        player!!.displayClientMessage(tl(modId("message.info.command.kick.failed")))
 
         RadGymsState.getGymForPlayer(player)?.let {
             GYM_LEAVE.emit(

@@ -103,7 +103,7 @@ class GymLeaveScreen : AbstractGymScreen(tl(modId("gui.common.leave"))) {
         )
         drawScaledText(
             context = context,
-            text = tl(modId("gui.common.leave-gym")),
+            text = tl(modId("gui.common.leave_gym")),
             x = x + (BASE_WIDTH / 2),
             y = middleY - 16,
             centered = true,
@@ -111,7 +111,7 @@ class GymLeaveScreen : AbstractGymScreen(tl(modId("gui.common.leave"))) {
         )
         drawScaledText(
             context = context,
-            text = tl(modId("gui.common.leave-gym-reward")),
+            text = tl(modId("gui.common.leave_gym_reward")),
             x = x + (BASE_WIDTH / 2),
             y = middleY - 4,
             centered = true,

@@ -91,7 +91,7 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         tlk(modId("message.info.gym_init")) to "Mysterious forces are teleporting you to %s trial",
         tlk(modId("message.info.gym_complete")) to "An exit appeared somewhere in gym",
         tlk(modId("message.info.command.config_reloaded")) to "Rad Gyms config reloaded!",
-        tlk(modId("message.info.command.op_kick")) to "Mysterious forces are forcibly extracting you out from trial",
+        tlk(modId("message.info.command.kick.failed")) to "Mysterious forces are forcibly extracting you out from trial",
         tlk(modId("message.info.command.debug_reward")) to
             "Generated rewards for gym template %s with poke typing %s with level %s",
         tlk(modId("message.info.poke_cache.shiny")) to "SHINY ",
@@ -99,14 +99,20 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
     )
 
     private fun errorTranslations(): Map<String, String> = mapOf(
-        tlk(modId("message.error.common.no-response")) to "Cannot acquire server response, try again",
-        tlk(modId("message.error.key.not-in-main-hand")) to "Gym key must be in your main hand",
-        tlk(modId("message.error.gym_entrance.not-sneaking")) to "You need to sneak to break gym entrance",
-        tlk(modId("message.error.command.op_kick")) to "Cannot kick player %s from gym",
+        tlk(modId("message.error.common.no_response")) to "Cannot acquire server response, try again",
+        tlk(modId("message.error.key.not_in_main_hand")) to "Gym key must be in your main hand",
+        tlk(modId("message.error.gym_entrance.not_sneaking")) to "You need to sneak to break gym entrance",
+        tlk(modId("message.error.command.kick.failed")) to "Cannot kick player %s from gym",
         tlk(modId("message.error.command.kick.wrong_dim")) to "Target is not in the gym dimension",
         tlk(modId("message.error.command.kick.no_player")) to "There is no such player currently online",
         tlk(modId("message.error.command.debug_reward.no_template")) to "Cannot find template provided",
         tlk(modId("message.error.command.debug_reward.no_player")) to "Command was not executed by player",
+        tlk(modId("message.error.interact.npc.battle_start_invalid_entity")) to
+                "This trainer is not tracked by Rad Gyms trainer registry",
+        tlk(modId("message.error.interact.npc.gym_state_absent")) to
+                "This trainer doesn't have a gym configuration attached",
+        tlk(modId("message.error.interact.npc.instance_missing_trainer_info")) to
+                "Trainer is not attached to gym instance, reach to the mod devs to solve the issue",
     )
 
     private fun objectTranslations(): Map<String, String> = mapOf(
@@ -135,10 +141,10 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
         tlk(modId("label.rarity.${Rarity.RARE.name.lowercase()}")) to "Rare",
         tlk(modId("label.rarity.${Rarity.EPIC.name.lowercase()}")) to "Epic",
         tlk(modId("label.rarity.${Rarity.EPIC.name.lowercase()}")) to "Epic",
-        tlk(modId("gui.common.set-gym-level")) to "Select desirable %s gym level",
-        tlk(modId("gui.common.set-gym-level-entry")) to "Select desirable %s gym level (Uses left: %s)",
-        tlk(modId("gui.common.leave-gym")) to "You want to leave?",
-        tlk(modId("gui.common.leave-gym-reward")) to "Rewards will be lost if leader is not defeated.",
+        tlk(modId("gui.common.set_gym_level")) to "Select desirable %s gym level",
+        tlk(modId("gui.common.set_gym_level_entry")) to "Select desirable %s gym level (Uses left: %s)",
+        tlk(modId("gui.common.leave_gym")) to "You want to leave?",
+        tlk(modId("gui.common.leave_gym_reward")) to "Rewards will be lost if leader is not defeated.",
         tlk(modId("gui.common.leave")) to "Leave Gym",
         tlk(modId("gui.common.uses_left")) to "Entrance uses left: %s",
     )
@@ -154,8 +160,8 @@ class EnUSLocaleProvider(dataOutput: FabricDataOutput, registryLookup: Completab
     )
 
     override fun generateTranslations(wrapperLookup: HolderLookup.Provider, translationBuilder: TranslationBuilder) {
-        for (item in provideTranslations()) {
-            translationBuilder.add(item.key, item.value)
+        for ((key, value) in provideTranslations()) {
+            translationBuilder.add(key, value)
         }
     }
 }
