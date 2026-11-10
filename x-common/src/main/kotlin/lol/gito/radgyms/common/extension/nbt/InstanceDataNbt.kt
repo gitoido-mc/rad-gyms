@@ -7,6 +7,7 @@
 
 package lol.gito.radgyms.common.extension.nbt
 
+import lol.gito.radgyms.common.DEFAULT_GYM_TYPE
 import lol.gito.radgyms.common.RadGyms
 import lol.gito.radgyms.common.api.dto.gym.Gym
 import lol.gito.radgyms.common.gym.GymTemplate
@@ -14,9 +15,9 @@ import lol.gito.radgyms.common.registry.RadGymsTemplates
 import net.minecraft.nbt.CompoundTag
 import java.util.*
 
-fun CompoundTag.getRadGymsInstanceData(key: String): Gym? {
-    val tag = this.getCompound(key) ?: return null
-    val template = RadGymsTemplates.templates[tag.getString("Template")]!!
+fun CompoundTag.getRadGymsInstanceData(key: String): Gym {
+    val tag = this.getCompound(key)
+    val template = RadGymsTemplates.templates[tag.getString("Template")] ?: RadGymsTemplates.templates[DEFAULT_GYM_TYPE]!!
     val player = RadGyms
         .implementation
         .server()!!

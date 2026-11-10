@@ -53,11 +53,11 @@ class RadGymsState : SavedData() {
 
             playersCompound.allKeys.forEach { uuidString ->
                 val uuid = UUID.fromString(uuidString)
-                state.playerDataMap.putIfAbsent(uuid, playersCompound.getRadGymsPlayerData(uuidString)!!)
+                state.playerDataMap.putIfAbsent(uuid, playersCompound.getRadGymsPlayerData(uuidString))
             }
             gymsCompound.allKeys.forEach { uuidString ->
                 val uuid = UUID.fromString(uuidString)
-                state.gymInstanceMap.putIfAbsent(uuid, gymsCompound.getRadGymsInstanceData(uuidString)!!)
+                state.gymInstanceMap.putIfAbsent(uuid, gymsCompound.getRadGymsInstanceData(uuidString))
             }
 
             return state

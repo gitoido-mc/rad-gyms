@@ -11,8 +11,8 @@ import lol.gito.radgyms.common.world.state.dto.PlayerData
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 
-fun CompoundTag.getRadGymsPlayerData(key: String): PlayerData? {
-    val tag = this.getCompound(key) ?: return null
+fun CompoundTag.getRadGymsPlayerData(key: String): PlayerData {
+    val tag = this.getCompound(key)
 
     val playerData = PlayerData()
 
