@@ -122,7 +122,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         val team = mutableListOf<PokemonModel>()
         GENERATE_TEAM.post(event) { generated ->
             generated.team.forEach { props ->
-                if (rollShiny) {
+                if (rollShiny && props.shiny == false) {
                     val teamShinyChance = RadGymsConfigs.server.trainerTeamShinyChance.coerceAtLeast(1)
                     props.shiny = (teamShinyChance > 0 && (Random.nextFloat() < 1 / teamShinyChance))
                 }
