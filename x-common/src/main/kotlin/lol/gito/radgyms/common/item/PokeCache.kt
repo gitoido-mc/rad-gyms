@@ -64,7 +64,9 @@ open class PokeCache(private val rarity: Rarity) : CobblemonItem(Properties().ra
                 else -> stack.getOrDefault(RG_GYM_TYPE_COMPONENT, defaultElementalTypes.random())
             }
             val poke: Pokemon = CacheHandler.getPoke(type, rarity, user as ServerPlayer, boost)
+
             CACHE_ROLL_POKE.emit(GymEvents.CacheRollPokeEvent(user, poke, type, rarity, boost))
+            stack.shrink(1)
 
             success(user.getItemInHand(hand))
         }
