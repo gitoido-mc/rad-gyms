@@ -10,32 +10,22 @@ package lol.gito.radgyms.common.gym.team
 import com.gitlab.srcmc.rctapi.api.models.PokemonModel
 import lol.gito.radgyms.common.api.dto.trainer.Trainer
 import lol.gito.radgyms.common.api.event.GymEvents
-import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import net.minecraft.server.level.ServerPlayer
 
 object FixedTeamGenerator : GenericTeamGenerator() {
     fun generateTeam(player: ServerPlayer?, trainer: Trainer, level: Int): MutableList<PokemonModel> {
         val rawTeam = rawTeam(trainer, level)
 
-        @Suppress("DuplicatedCode")
-        val team = mutableListOf<PokemonModel>()
+        val event = GymEvents.GenerateTeamEvent(
+            player,
+            listOf(),
+            level,
+            trainer.id,
+            trainer.leader,
+            rawTeam,
+            trainer.possibleFormats.toMutableList(),
+        )
 
-        GENERATE_TEAM.post(
-            GymEvents.GenerateTeamEvent(
-                player,
-                listOf(),
-                level,
-                trainer.id,
-                trainer.leader,
-                rawTeam,
-                trainer.possibleFormats.toMutableList(),
-            ),
-        ) { generated ->
-            generated.team.forEach { props ->
-                team.add(createPokemonModel(props))
-            }
-        }
-
-        return team
+        return generateTeamPost(mutableListOf(), event, false)
     }
 }

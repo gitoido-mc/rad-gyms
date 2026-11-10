@@ -21,6 +21,7 @@ import lol.gito.radgyms.common.api.enumeration.GymBattleFormat
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GENERATE_TEAM
 import lol.gito.radgyms.common.api.team.TeamGeneratorInterface
+import lol.gito.radgyms.common.config.RadGymsConfigs
 import lol.gito.radgyms.common.registry.RadGymsSpeciesRegistry.speciesByType
 import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
@@ -69,14 +70,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
             possibleFormats = mutableListOf(GymBattleFormat.SINGLES),
         )
 
-        val team = mutableListOf<PokemonModel>()
-
-        GENERATE_TEAM.post(event) { generated ->
-            generated.team.forEach { props ->
-                team.add(createPokemonModel(props))
-            }
-        }
-        return team
+        return generateTeamPost(mutableListOf(), event)
     }
 
     override fun generatePokemon(level: Int, amount: Int, type: ElementalType): Pokemon {
@@ -126,6 +120,19 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
 
     protected fun rawTeam(trainer: Trainer, level: Int): MutableList<PokemonProperties> = trainer.team!!
         .map { setLevel(level, it) }
-        .apply { this.forEach { it.updateAspects() } }
+        .onEach { it.updateAspects() }
         .toMutableList()
+
+    protected fun generateTeamPost(team: MutableList<PokemonModel>, event: GymEvents.GenerateTeamEvent, rollShiny: Boolean = true): MutableList<PokemonModel> {
+        GENERATE_TEAM.post(event) { generated ->
+            generated.team.forEach { props ->
+                if (rollShiny) {
+                    val teamShinyChance = RadGymsConfigs.server.trainerTeamShinyChance.coerceAtLeast(1)
+                    props.shiny = (teamShinyChance > 0 && (Random.nextFloat() < 1 / teamShinyChance))
+                }
+                team.add(createPokemonModel(props))
+            }
+        }
+        return team
+    }
 }
