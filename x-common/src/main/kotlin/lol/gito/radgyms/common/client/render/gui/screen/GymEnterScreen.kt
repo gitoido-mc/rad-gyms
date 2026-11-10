@@ -10,7 +10,6 @@ package lol.gito.radgyms.common.client.render.gui.screen
 import com.cobblemon.mod.common.client.render.drawScaledText
 import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
 import lol.gito.radgyms.common.RadGyms.modId
-import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.ENTER_SCREEN_CLOSE
 import lol.gito.radgyms.common.client.render.gui.widget.LevelSliderWidget
@@ -20,7 +19,6 @@ import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper.buildTypeTe
 import lol.gito.radgyms.common.helper.tl
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
 
@@ -89,7 +87,6 @@ class GymEnterScreen(
         ),
     )
 
-    @Suppress("DuplicatedCode", "LongMethod")
     override fun init() {
         val levelSelectSlider =
             LevelSliderWidget(
@@ -149,31 +146,7 @@ class GymEnterScreen(
             this.addRenderableWidget(it)
         }
 
-        createButton(
-            CommonComponents.GUI_PROCEED,
-            Vec2i(GUI_PROCEED_WIDTH, GUI_PROCEED_HEIGHT),
-            Vec2i(
-                leftX + GUI_PROCEED_OFFSET_X,
-                topY + (BASE_HEIGHT - GUI_PROCEED_OFFSET_Y),
-            ),
-        ) {
-            onClose(GuiScreenCloseChoice.PROCEED)
-        }.also {
-            this.addRenderableWidget(it)
-        }
-
-        createButton(
-            CommonComponents.GUI_CANCEL,
-            Vec2i(GUI_CANCEL_WIDTH, GUI_CANCEL_HEIGHT),
-            Vec2i(
-                leftX + (BASE_WIDTH - GUI_CANCEL_OFFSET_X),
-                topY + (BASE_HEIGHT - GUI_CANCEL_OFFSET_Y),
-            ),
-        ) {
-            onClose(GuiScreenCloseChoice.CANCEL)
-        }.also {
-            this.addRenderableWidget(it)
-        }
+        addDecisionButtons()
 
         super.init()
     }

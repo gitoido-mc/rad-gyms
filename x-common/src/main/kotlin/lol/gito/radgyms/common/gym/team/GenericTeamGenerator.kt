@@ -27,10 +27,6 @@ import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
 
 abstract class GenericTeamGenerator : TeamGeneratorInterface {
-    companion object {
-        const val GENERATOR_SHINY_ODDS = 10
-    }
-
     protected fun setLevel(level: Int, params: String): PokemonProperties = when (params.contains("level=")) {
         true -> PokemonProperties.parse(params)
         false -> PokemonProperties.parse("level=$level $params")
@@ -70,7 +66,7 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
             possibleFormats = mutableListOf(GymBattleFormat.SINGLES),
         )
 
-        return generateTeamPost(mutableListOf(), event)
+        return generateTeamPost(event)
     }
 
     override fun generatePokemon(level: Int, amount: Int, type: ElementalType): Pokemon {
@@ -82,7 +78,6 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
     protected fun getPokemon(speciesWithForm: SpeciesWithForm, level: Int) = with(speciesWithForm.species.create(level)) {
         form = speciesWithForm.form
         forcedAspects = speciesWithForm.form.aspects.toSet()
-        shiny = (Random.nextInt(1, GENERATOR_SHINY_ODDS) == 1)
         updateAspects()
 
         return@with this
@@ -123,7 +118,8 @@ abstract class GenericTeamGenerator : TeamGeneratorInterface {
         .onEach { it.updateAspects() }
         .toMutableList()
 
-    protected fun generateTeamPost(team: MutableList<PokemonModel>, event: GymEvents.GenerateTeamEvent, rollShiny: Boolean = true): MutableList<PokemonModel> {
+    protected fun generateTeamPost(event: GymEvents.GenerateTeamEvent, rollShiny: Boolean = true): MutableList<PokemonModel> {
+        val team = mutableListOf<PokemonModel>()
         GENERATE_TEAM.post(event) { generated ->
             generated.team.forEach { props ->
                 if (rollShiny) {

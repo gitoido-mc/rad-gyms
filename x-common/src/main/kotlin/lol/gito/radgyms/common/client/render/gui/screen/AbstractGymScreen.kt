@@ -14,6 +14,7 @@ import lol.gito.radgyms.common.extension.math.Vec2i
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import org.lwjgl.glfw.GLFW
@@ -96,5 +97,33 @@ abstract class AbstractGymScreen(heading: Component) :
             width = BASE_WIDTH,
             height = BASE_HEIGHT,
         )
+    }
+
+    fun addDecisionButtons() {
+        createButton(
+            CommonComponents.GUI_PROCEED,
+            Vec2i(GUI_PROCEED_WIDTH, GUI_PROCEED_HEIGHT),
+            Vec2i(
+                leftX + GUI_PROCEED_OFFSET_X,
+                topY + (BASE_HEIGHT - GUI_PROCEED_OFFSET_Y),
+            ),
+        ) {
+            onClose(GuiScreenCloseChoice.PROCEED)
+        }.also {
+            this.addRenderableWidget(it)
+        }
+
+        createButton(
+            CommonComponents.GUI_CANCEL,
+            Vec2i(GUI_CANCEL_WIDTH, GUI_CANCEL_HEIGHT),
+            Vec2i(
+                leftX + (BASE_WIDTH - GUI_CANCEL_OFFSET_X),
+                topY + (BASE_HEIGHT - GUI_CANCEL_OFFSET_Y),
+            ),
+        ) {
+            onClose(GuiScreenCloseChoice.CANCEL)
+        }.also {
+            this.addRenderableWidget(it)
+        }
     }
 }

@@ -26,6 +26,6 @@ object FixedTeamGenerator : GenericTeamGenerator() {
             trainer.possibleFormats.toMutableList(),
         )
 
-        return generateTeamPost(mutableListOf(), event, false)
+        return generateTeamPost(event, false)
     }
 }

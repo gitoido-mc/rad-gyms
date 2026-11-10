@@ -43,6 +43,6 @@ object PoolTeamGenerator : GenericTeamGenerator() {
             trainer.possibleFormats.toMutableList(),
         )
 
-        return generateTeamPost(mutableListOf(), event)
+        return generateTeamPost(event)
     }
 }
