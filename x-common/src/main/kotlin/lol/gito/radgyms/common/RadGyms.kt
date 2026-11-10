@@ -7,6 +7,7 @@
 
 package lol.gito.radgyms.common
 
+import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.gitlab.srcmc.rctapi.api.RCTApi
 import lol.gito.radgyms.common.api.RadGymsImplementation
@@ -45,27 +46,11 @@ object RadGyms {
     lateinit var implementation: RadGymsImplementation
     lateinit var gymInitializer: GymInitializer
 
-    val defaultElementalTypes = setOf(
-        ElementalTypes.BUG.showdownId,
-        ElementalTypes.DARK.showdownId,
-        ElementalTypes.DRAGON.showdownId,
-        ElementalTypes.ELECTRIC.showdownId,
-        ElementalTypes.FAIRY.showdownId,
-        ElementalTypes.FLYING.showdownId,
-        ElementalTypes.FIGHTING.showdownId,
-        ElementalTypes.FIRE.showdownId,
-        ElementalTypes.FLYING.showdownId,
-        ElementalTypes.GHOST.showdownId,
-        ElementalTypes.GRASS.showdownId,
-        ElementalTypes.GROUND.showdownId,
-        ElementalTypes.ICE.showdownId,
-        ElementalTypes.NORMAL.showdownId,
-        ElementalTypes.POISON.showdownId,
-        ElementalTypes.PSYCHIC.showdownId,
-        ElementalTypes.ROCK.showdownId,
-        ElementalTypes.STEEL.showdownId,
-        ElementalTypes.WATER.showdownId,
-    )
+    val defaultElementalTypes = ElementalTypes.all()
+        .sortedBy(ElementalType::order)
+        .filter { it.order in 0..17 }
+        .map { it.showdownId }
+        .toSet()
 
     fun preInitialize(implementation: RadGymsImplementation) {
         this.implementation = implementation
