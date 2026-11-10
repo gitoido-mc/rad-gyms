@@ -10,6 +10,7 @@ package lol.gito.radgyms.common.config
 import com.google.gson.GsonBuilder
 import lol.gito.radgyms.common.CONFIG_050
 import lol.gito.radgyms.common.RadGyms.MOD_ID
+import lol.gito.radgyms.common.RadGyms.warn
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -60,7 +61,9 @@ object RadGymsConfigs {
             val parsed: T? = gson.fromJson(r, type)
             return parsed ?: defaults
         }
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+        warn("Failed to load config at {}, falling back to defaults: {}", path, e.toString())
+
         return defaults
     }
 
