@@ -228,7 +228,7 @@ class RadGymsNeoForge : RadGymsImplementation {
     }
 
     private fun onBlockBreak(e: BlockEvent.BreakEvent) {
-        if (e.level is ServerLevel) return
+        if (e.level !is ServerLevel) return
 
         if (
             (e.level as ServerLevel).dimension() == GYM_DIMENSION &&
