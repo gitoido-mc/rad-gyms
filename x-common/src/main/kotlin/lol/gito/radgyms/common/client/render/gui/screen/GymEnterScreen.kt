@@ -23,7 +23,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
-import org.lwjgl.glfw.GLFW
 
 @Suppress("LongParameterList")
 class GymEnterScreen(
@@ -45,22 +44,6 @@ class GymEnterScreen(
     },
 ) {
     companion object {
-        // Screen root widget params
-        const val BASE_WIDTH = 300
-        const val BASE_HEIGHT = 80
-
-        // Proceed button widget params
-        const val GUI_PROCEED_WIDTH = 50
-        const val GUI_PROCEED_HEIGHT = 20
-        const val GUI_PROCEED_OFFSET_X = 10
-        const val GUI_PROCEED_OFFSET_Y = 30
-
-        // Cancel button widget params
-        const val GUI_CANCEL_WIDTH = 50
-        const val GUI_CANCEL_HEIGHT = 20
-        const val GUI_CANCEL_OFFSET_X = 60
-        const val GUI_CANCEL_OFFSET_Y = 30
-
         // +1 button widget params
         const val GUI_INC1_WIDTH = 20
         const val GUI_INC1_HEIGHT = 20
@@ -94,12 +77,17 @@ class GymEnterScreen(
         private val panelResource = modId("textures/gui/gym_enter.png")
     }
 
-    val leftX: Int
-        get() = middleX - BASE_WIDTH / 2
-    val topY: Int
-        get() = middleY - BASE_HEIGHT / 2
-
     var level: Int = this.selectedLevel.coerceIn(this.minLevel, this.maxLevel)
+
+    override fun onClose() = ENTER_SCREEN_CLOSE.emit(
+        GymEvents.GymEnterScreenCloseEvent(
+            this.closeReason,
+            this.key,
+            this.level,
+            this.type,
+            this.pos,
+        ),
+    )
 
     @Suppress("DuplicatedCode", "LongMethod")
     override fun init() {
@@ -188,26 +176,6 @@ class GymEnterScreen(
         }
 
         super.init()
-    }
-
-    override fun onClose() {
-        ENTER_SCREEN_CLOSE.emit(
-            GymEvents.GymEnterScreenCloseEvent(
-                this.closeReason,
-                this.key,
-                this.level,
-                this.type,
-                this.pos,
-            ),
-        )
-    }
-
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
-            this.onClose(GuiScreenCloseChoice.CANCEL)
-            return true
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {

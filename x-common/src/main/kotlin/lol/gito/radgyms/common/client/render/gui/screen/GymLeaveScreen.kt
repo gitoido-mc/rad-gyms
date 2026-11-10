@@ -18,33 +18,13 @@ import lol.gito.radgyms.common.helper.tl
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.util.CommonColors
-import org.lwjgl.glfw.GLFW
 
 class GymLeaveScreen : AbstractGymScreen(tl(modId("gui.common.leave"))) {
     companion object {
-        // Screen root widget params
-        const val BASE_WIDTH = 300
-        const val BASE_HEIGHT = 80
-
-        // Proceed button widget params
-        const val GUI_PROCEED_WIDTH = 50
-        const val GUI_PROCEED_HEIGHT = 20
-        const val GUI_PROCEED_OFFSET_X = 10
-        const val GUI_PROCEED_OFFSET_Y = 30
-
-        // Cancel button widget params
-        const val GUI_CANCEL_WIDTH = 50
-        const val GUI_CANCEL_HEIGHT = 20
-        const val GUI_CANCEL_OFFSET_X = 60
-        const val GUI_CANCEL_OFFSET_Y = 30
-
         private val panelResource = modResource("textures/gui/gym_leave.png")
     }
 
-    val leftX: Int
-        get() = middleX - BASE_WIDTH / 2
-    val topY: Int
-        get() = middleY - BASE_HEIGHT / 2
+    override fun onClose() = LEAVE_SCREEN_CLOSE.emit(GymEvents.GymLeaveScreenCloseEvent(this.closeReason))
 
     @Suppress("DuplicatedCode")
     override fun init() {
@@ -75,16 +55,6 @@ class GymLeaveScreen : AbstractGymScreen(tl(modId("gui.common.leave"))) {
         }
 
         super.init()
-    }
-
-    override fun onClose() = LEAVE_SCREEN_CLOSE.emit(GymEvents.GymLeaveScreenCloseEvent(this.closeReason))
-
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
-            this.onClose(GuiScreenCloseChoice.CANCEL)
-            return true
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
