@@ -10,22 +10,45 @@ package lol.gito.radgyms.common.client.render.gui.screen
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import lol.gito.radgyms.common.api.enumeration.GuiScreenCloseChoice
-import lol.gito.radgyms.common.client.render.gui.screen.GymEnterScreen.Companion.BASE_HEIGHT
-import lol.gito.radgyms.common.client.render.gui.screen.GymEnterScreen.Companion.BASE_WIDTH
 import lol.gito.radgyms.common.extension.math.Vec2i
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import org.lwjgl.glfw.GLFW
 
 abstract class AbstractGymScreen(heading: Component) :
     Screen(heading),
     CobblemonRenderable {
+    companion object {
+        // Screen root widget params
+        const val BASE_WIDTH = 300
+        const val BASE_HEIGHT = 80
+
+        // Proceed button widget params
+        const val GUI_PROCEED_WIDTH = 50
+        const val GUI_PROCEED_HEIGHT = 20
+        const val GUI_PROCEED_OFFSET_X = 10
+        const val GUI_PROCEED_OFFSET_Y = 30
+
+        // Cancel button widget params
+        const val GUI_CANCEL_WIDTH = 50
+        const val GUI_CANCEL_HEIGHT = 20
+        const val GUI_CANCEL_OFFSET_X = 60
+        const val GUI_CANCEL_OFFSET_Y = 30
+    }
+
+    protected var closeReason: GuiScreenCloseChoice = GuiScreenCloseChoice.CANCEL
+
     val middleX: Int
         get() = this.minecraft!!.window.guiScaledWidth / 2
     val middleY: Int
         get() = this.minecraft!!.window.guiScaledHeight / 2
+    val leftX: Int
+        get() = middleX - BASE_WIDTH / 2
+    val topY: Int
+        get() = middleY - BASE_HEIGHT / 2
 
     // Disabling blurs
     override fun renderBlurredBackground(delta: Float) = Unit
@@ -33,7 +56,13 @@ abstract class AbstractGymScreen(heading: Component) :
     // Disabling background
     override fun renderMenuBackground(context: GuiGraphics) = Unit
 
-    protected var closeReason: GuiScreenCloseChoice = GuiScreenCloseChoice.CANCEL
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
+            this.onClose(GuiScreenCloseChoice.CANCEL)
+            return true
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
 
     fun onClose(reason: GuiScreenCloseChoice) {
         this.closeReason = reason
