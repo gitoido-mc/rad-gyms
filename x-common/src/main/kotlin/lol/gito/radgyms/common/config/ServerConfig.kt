@@ -47,6 +47,7 @@ class ServerConfig(
 
     val trainerTeamShinyChance: Int = 128,
 ) {
+    @delegate:Transient
     val boosterMap: Map<Item, Int> by lazy {
         this.cacheBoosters.mapKeys {
             BuiltInRegistries.ITEM.get(ResourceLocation.parse(it.key))
