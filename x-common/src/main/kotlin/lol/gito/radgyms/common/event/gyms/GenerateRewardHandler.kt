@@ -55,8 +55,6 @@ class GenerateRewardHandler(val event: GymEvents.GenerateRewardEvent) {
                 event.level in it.minLevel..it.maxLevel
             }
 
-        event.player.server.sendSystemMessage(Component.literal("say test"))
-
         handleCommandRewards(currentLevelRewards.filterIsInstance<CommandReward>())
         handleLootRewards(currentLevelRewards.filterIsInstance<LootTableReward>())
         handlePokemonRewards(currentLevelRewards.filterIsInstance<PokemonReward>())
