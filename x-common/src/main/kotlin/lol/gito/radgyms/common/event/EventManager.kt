@@ -156,8 +156,6 @@ object EventManager {
     private fun onPlayerDisconnect(event: ServerPlayerEvent) {
         debug("Removing player ${event.player.name} from RCT trainer mod registry")
         RCT.trainerRegistry.unregisterById(event.player.uuid.toString())
-
-        if (RadGymsState.getGymForPlayer(event.player) == null) return
     }
 
     private fun onSpeciesUpdate(species: PokemonSpecies) {

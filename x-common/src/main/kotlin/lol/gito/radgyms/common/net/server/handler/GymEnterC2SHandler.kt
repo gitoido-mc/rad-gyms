@@ -8,9 +8,12 @@
 package lol.gito.radgyms.common.net.server.handler
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
 import lol.gito.radgyms.common.RadGyms.defaultElementalTypes
+import lol.gito.radgyms.common.RadGyms.gymInitializer
 import lol.gito.radgyms.common.RadGyms.modId
+import lol.gito.radgyms.common.RadGyms.statistics
+import lol.gito.radgyms.common.RadGyms.warn
 import lol.gito.radgyms.common.block.entity.GymEntranceEntity
 import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.ElementalTypeTranslationHelper
@@ -24,7 +27,7 @@ import net.minecraft.server.level.ServerPlayer
 
 object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
     override fun handle(packet: GymEnterC2S, server: MinecraftServer, player: ServerPlayer) {
-        RadGyms.debug("Using key? : ${packet.key}")
+        debug("Using key? : ${packet.key}")
         var message = tl(modId("message.info.gym_init"), ElementalTypeTranslationHelper.buildTypeText(packet.type))
 
         val type: String = when (packet.type) {
@@ -39,24 +42,35 @@ object GymEnterC2SHandler : ServerNetworkPacketHandler<GymEnterC2S> {
                 val stackType = stack.components
                     .getOrDefault(RadGymsDataComponents.RG_GYM_TYPE_COMPONENT, "chaos")
                     .let { it ?: packet.type }
-                RadGyms.debug("Gym key type : $stackType")
+                debug("Gym key type : $stackType")
 
                 message = tl(modId("message.info.gym_init"), ElementalTypeTranslationHelper.buildTypeText(stackType))
 
                 stack.consume(1, player)
-                player.awardStat(getStat(RadGyms.statistics.KEYS_USED))
+                player.awardStat(getStat(statistics.KEYS_USED))
             } else {
                 player.displayClientMessage(tl(modId("message.error.key.not_in_main_hand")))
+                return
             }
         }
 
         if (packet.pos != null) {
-            val gymEntrance: GymEntranceEntity = player.serverLevel().getBlockEntity(packet.pos) as GymEntranceEntity
+            val gymEntrance = player.serverLevel().getBlockEntity(packet.pos) as? GymEntranceEntity
+
+            if (gymEntrance == null) {
+                warn(
+                    "Player {} tried to enter gym via invalid entrance block at {}",
+                    player.uuid,
+                    packet.pos,
+                )
+                return
+            }
+
             gymEntrance.incrementPlayerUseCount(player)
-            player.awardStat(getStat(RadGyms.statistics.ENTRANCES_USED))
+            player.awardStat(getStat(statistics.ENTRANCES_USED))
         }
 
         player.displayClientMessage(message)
-        RadGyms.gymInitializer.initInstance(player, player.serverLevel(), packet.level, type, packet.key)
+        gymInitializer.initInstance(player, player.serverLevel(), packet.level, type, packet.key)
     }
 }
