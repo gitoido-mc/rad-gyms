@@ -140,6 +140,8 @@ tasks {
     }
 
     shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
         configurations = listOf(shadowCommon)
 
         archiveBaseName.set("${rootProject.name}-${project.name}")

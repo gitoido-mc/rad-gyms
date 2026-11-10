@@ -112,6 +112,8 @@ tasks {
     }
 
     shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
         exclude("fabric.mod.json")
         exclude("architectury.common.json")
 
