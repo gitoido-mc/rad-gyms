@@ -10,14 +10,12 @@ package lol.gito.radgyms.common.command
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.exceptions.CommandSyntaxException
 import lol.gito.radgyms.common.COMMANDS_PREFIX
 import lol.gito.radgyms.common.RadGyms.modId
 import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
-import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.world.state.RadGymsState
@@ -43,31 +41,38 @@ object KickCommand : CommandInterface {
     }
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
-        var shouldReturn = false
-
-        val player = try {
+        val player = runCatching {
             context.getArgument(PLAYER_ARG, EntitySelector::class.java).findSinglePlayer(context.source)
-        } catch (_: CommandSyntaxException) {
-            context.source.sendFailure(tl(modId("message.error.command.kick.no_player"), context.source.player!!.name))
-            shouldReturn = true
-            null
+        }.getOrNull().also { player ->
+            if (player == null) {
+                context.source.sendFailure(
+                    tl(modId("message.error.command.kick.no_player"))
+                )
+            }
         }
 
-        if (player != null && player.level().dimension() != GYM_DIMENSION) {
+        if (player == null) {
+            if (context.source.isPlayer) {
+                context.source.sendFailure(
+                    tl(modId("message.info.command.kick.failed"))
+                )
+            }
+
+            return -1
+        }
+
+        if (player.level().dimension() != GYM_DIMENSION) {
             if (context.source.isPlayer) {
                 context.source.sendFailure(
                     tl(
                         modId("message.error.command.kick.wrong_dim"),
-                        context.source.player!!.name,
+                        player.name,
                     ),
                 )
             }
-            shouldReturn = false
+
+            return -1
         }
-
-        if (shouldReturn) return -1
-
-        player!!.displayClientMessage(tl(modId("message.info.command.kick.failed")))
 
         RadGymsState.getGymForPlayer(player)?.let {
             GYM_LEAVE.emit(
