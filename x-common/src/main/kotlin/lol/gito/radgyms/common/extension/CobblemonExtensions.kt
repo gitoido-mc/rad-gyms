@@ -11,7 +11,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.ShinyChanceCalculationEvent
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.radgyms.common.RadGyms
+import lol.gito.radgyms.common.RadGyms.debug
 import net.minecraft.server.level.ServerPlayer
 import kotlin.random.Random
 
@@ -23,9 +23,9 @@ fun shinyRoll(poke: Pokemon, player: ServerPlayer, shinyBoost: Int? = 0) {
         // adding positive modifier decreases the chances instead
         this.addModifier(-(shinyBoost!!.coerceIn(0, (shinyRate - 1).toInt())).toFloat())
         CobblemonEvents.SHINY_CHANCE_CALCULATION.post(this) {
-            RadGyms.LOGGER.info("Checking shiny for cache used by ${player.uuid}")
+            debug("Checking shiny for cache used by ${player.uuid}")
             shinyRate = this.calculate(player)
-            RadGyms.LOGGER.info("Derived rate is $shinyRate")
+            debug("Derived rate is $shinyRate")
         }
 
         // yoinked from cobblemon, it was private there
