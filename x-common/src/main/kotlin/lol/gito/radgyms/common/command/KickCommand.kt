@@ -16,6 +16,7 @@ import lol.gito.radgyms.common.api.command.CommandInterface
 import lol.gito.radgyms.common.api.enumeration.GymLeaveReason
 import lol.gito.radgyms.common.api.event.GymEvents
 import lol.gito.radgyms.common.api.event.GymEvents.GYM_LEAVE
+import lol.gito.radgyms.common.extension.displayClientMessage
 import lol.gito.radgyms.common.helper.tl
 import lol.gito.radgyms.common.registry.RadGymsDimensions.GYM_DIMENSION
 import lol.gito.radgyms.common.world.state.RadGymsState
@@ -73,6 +74,8 @@ object KickCommand : CommandInterface {
 
             return -1
         }
+
+        player.displayClientMessage(tl(modId("message.info.command.kick.failed")))
 
         RadGymsState.getGymForPlayer(player)?.let {
             GYM_LEAVE.emit(
